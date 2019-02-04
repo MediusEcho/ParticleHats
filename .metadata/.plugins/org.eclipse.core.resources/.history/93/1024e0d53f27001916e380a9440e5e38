@@ -1,6 +1,0 @@
-package com.mediusecho.particlehats.editor;
-
-public interface EditorItemStackCallback {
-
-	void onMaterialSelect ()
-}

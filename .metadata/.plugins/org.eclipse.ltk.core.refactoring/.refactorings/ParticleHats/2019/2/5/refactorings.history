@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename type &apos;com.mediusecho.particlehats.editor.EditorItemStackCallback&apos; to &apos;EditorMaterialCallback&apos;&#x0D;&#x0A;- Original project: &apos;ParticleHats&apos;&#x0D;&#x0A;- Original element: &apos;com.mediusecho.particlehats.editor.EditorItemStackCallback&apos;&#x0D;&#x0A;- Renamed element: &apos;com.mediusecho.particlehats.editor.EditorMaterialCallback&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;EditorItemStackCallback&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;com.mediusecho.particlehats.editor{EditorItemStackCallback.java[EditorItemStackCallback" matchStrategy="1" name="EditorMaterialCallback" qualified="false" references="true" similarDeclarations="false" stamp="1549149102170" textual="false" version="1.0"/>
-</session>

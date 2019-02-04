@@ -1,5 +1,0 @@
-package com.mediusecho.particlehats.particles.properties;
-
-public enum IconDisplayMode {
-
-}
