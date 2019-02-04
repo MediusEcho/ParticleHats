@@ -1,0 +1,6 @@
+package com.mediusecho.particlehats.particles.properties;
+
+public interface PropertyInterface {
+
+	public PropertyInterface fromID (int id);
+}

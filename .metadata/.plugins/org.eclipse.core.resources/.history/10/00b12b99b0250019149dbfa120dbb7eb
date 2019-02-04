@@ -1,0 +1,26 @@
+package com.mediusecho.particlehats.editor.menus;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.editor.EditorMenu;
+import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.locale.Message;
+
+public class EditorDurationMenu extends EditorMenu {
+
+	public EditorDurationMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	{
+		super(core, owner, menuBuilder, true);
+		
+		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_DURATION_MENU_TITLE.getValue());
+	}
+
+	@Override
+	protected void buildMenu() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -1,0 +1,43 @@
+package com.mediusecho.particlehats.editor.menus;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.editor.EditorMenu;
+import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.locale.Message;
+
+public class EditorSlotMenu extends EditorMenu {
+
+	public EditorSlotMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	{
+		super(core, owner, menuBuilder, true);
+		
+		inventory = Bukkit.createInventory(null, menuBuilder.getEditingMenu().getInventory().getSize(), Message.EDITOR_SLOT_MENU_TITlE.getValue());
+		buildMenu();
+	}
+
+	@Override
+	protected void buildMenu() 
+	{
+		int targetSlot = menuBuilder.getTargetSlot();
+		inventory.setContents(menuBuilder.getEditingMenu().getInventory().getContents());
+		
+		final EditorAction emptyAction = (event, slot) ->
+		{
+			
+		};
+		
+		for (int i = 0; i < inventory.getSize(); i++)
+		{
+			ItemStack item = inventory.getItem(i);
+			if (item == null) 
+			{
+				
+			}
+		}
+	}
+
+}

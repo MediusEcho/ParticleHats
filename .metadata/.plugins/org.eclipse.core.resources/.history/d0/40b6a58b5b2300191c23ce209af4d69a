@@ -1,0 +1,68 @@
+package com.mediusecho.particlehats.editor.menus;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
+import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.editor.EditorMenu;
+import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.StringUtil;
+
+public class EditorIconMenu extends EditorMenu {
+
+	private final EditorMainMenu editorIconOverviewMenu;
+	
+	public EditorIconMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorIconOverviewMenu editorIconOverviewMenu) 
+	{
+		super(core, owner, menuBuilder, false);
+		this.editorIconOverviewMenu = editorMainMenu;
+		
+		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_ICON_MENU_TITLE.getValue());
+		buildMenu();
+	}
+	
+	/**
+	 * Called any time we click outside of this menu
+	 */
+	@Override
+	public boolean onClickOutside (InventoryClickEvent event, final int slot)
+	{
+		Hat hat = menuBuilder.getBaseHat();
+		Material material = event.getCurrentItem().getType();
+		
+		hat.setMaterial(material);
+		editorMainMenu.onIconChange(material);
+		menuBuilder.getEditingMenu().setItemMaterial(menuBuilder.getTargetSlot(), material);
+		
+		menuBuilder.goBack();
+		return true;
+	}
+
+	@Override
+	protected void buildMenu() 
+	{
+		ItemStack info = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_ICON_MENU_INFO_TITLE);
+		ItemUtil.setItemDescription(info, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_INFO_DESCRIPTION.getValue()));
+		
+		for (int i = 0; i < inventory.getSize(); i++)
+		{
+			if (i == 13) {
+				continue;
+			}
+			setItem(i, info);
+		}
+		
+		setButton(13, backButton, (clickEvent, slot) ->
+		{
+			menuBuilder.goBack();
+			return true;
+		});
+	}
+
+}

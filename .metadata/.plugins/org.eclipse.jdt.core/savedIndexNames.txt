@@ -1,0 +1,23 @@
+INDEX VERSION 1.127+D:\My Documents\Projects\WorkSpaces\ParticleHatsReloaded\.metadata\.plugins\org.eclipse.jdt.core
+2585328351.index
+2474304018.index
+1910228820.index
+2164123280.index
+997666006.index
+882139543.index
+3483249457.index
+1063230161.index
+1492968368.index
+4210772659.index
+3951094714.index
+2690812869.index
+1755913921.index
+1269277382.index
+2445747412.index
+3383392487.index
+1387854458.index
+919737581.index
+249459504.index
+3449116704.index
+2265617865.index
+52205867.index

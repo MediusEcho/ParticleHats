@@ -1,0 +1,26 @@
+package com.mediusecho.particlehats.particles.properties;
+
+public enum ParticleAction {
+
+	EQUIP                (0),
+	TOGGLE               (1),
+	CLOSE                (2),
+	DUMMY                (3),
+	OVERRIDE             (4),
+	CLEAR                (5),
+	COMMAND              (6),
+	OPEN_MENU            (7),
+	OPEN_MENU_PERMISSION (8),
+	PURCHASE_CONFIRM     (9),
+	PURCHASE_DENY        (10),
+	PURCHASE_ITEM        (11),
+	MIMIC                (12),
+	DEMO                 (13);
+	
+	private final int id;
+	
+	private ParticleAction (final int id)
+	{
+		this.id = id;
+	}
+}

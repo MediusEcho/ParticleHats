@@ -1,0 +1,9 @@
+package com.mediusecho.particlehats.editor;
+
+import org.bukkit.Material;
+
+@Functional
+public interface EditorMaterialCallback {
+
+	void onMaterialSelect (Material material);
+}

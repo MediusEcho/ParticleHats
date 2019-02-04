@@ -1,0 +1,10 @@
+package com.mediusecho.particlehats.particles.properties;
+
+public interface PropertyInterface {
+
+	public Iterable fromID (int id);
+	
+	public String getDisplayName ();
+	
+	public String getDescription ();
+}

@@ -1,0 +1,7 @@
+package com.mediusecho.particlehats.commands.subcommands;
+
+import com.mediusecho.particlehats.commands.Command;
+
+public class DebugDeleteMenu extends Command {
+
+}

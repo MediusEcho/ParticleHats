@@ -1,0 +1,19 @@
+package com.mediusecho.particlehats.particles.properties;
+
+public enum ParticleAction {
+
+	EQUIP (0),
+	TOGGLE (1),
+	CLOSE,
+	DUMMY,
+	OVERRIDE,
+	CLEAR,
+	COMMAND,
+	OPEN_MENU,
+	OPEN_MENU_PERMISSION,
+	PURCHASE_CONFIRM,
+	PURCHASE_DENY,
+	PURCHASE_ITEM,
+	MIMIC,
+	DEMO;
+}

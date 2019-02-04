@@ -1,0 +1,5 @@
+package com.mediusecho.particlehats.tasks;
+
+public class ParticleTask {
+
+}
