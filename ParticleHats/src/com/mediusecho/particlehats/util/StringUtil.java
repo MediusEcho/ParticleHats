@@ -232,13 +232,8 @@ public class StringUtil {
 		return desc;
 	}
 	
-	public static String getParseValue (String description, String regex)
-	{		
-		String[] parse = parseValue(description, regex);
-		if (parse != null) {
-			return parse[1];
-		}
-		return null;
+	public static String getParseValue (String description, String regex) {		
+		return parseValue(description, regex)[1];
 	}
 	
 	/**
@@ -261,14 +256,11 @@ public class StringUtil {
 			patternCache.put(regex, pattern);
 		}
 		
-		if (pattern != null)
-		{
-			Matcher matcher = pattern.matcher(string);
-			if (matcher.find()) {
-				return new String[] {matcher.group(0), matcher.group(1)};
-			}
+		Matcher matcher = pattern.matcher(string);
+		if (matcher.find()) {
+			return new String[] {matcher.group(0), matcher.group(1)};
 		}
-		return null;
+		return new String[]{"", ""};
 	}
 	
 	/**
