@@ -69,4 +69,8 @@ public abstract class Database {
 	 * @return
 	 */
 	public abstract List<String> getMenus (boolean forceUpdate);
+	
+	public abstract void saveMenuTitle (String menuName, String title);
+	
+	public abstract void saveMenuSize (String menuName, int rows);
 }
