@@ -16,7 +16,9 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
+import com.mediusecho.particlehats.tasks.PromptTask;
 
+@SuppressWarnings("unused")
 public class Core extends JavaPlugin {
 
 	public static Core instance;
@@ -32,14 +34,25 @@ public class Core extends JavaPlugin {
 	// Player State
 	private Map<UUID, PlayerState> playerState;
 	
+	// Lets us know we can use the BaseComponent class from the bungee api
+	private boolean supportsBaseComponent = true;
+	
 	// Tasks
 	private MenuTask menuTask;
+	private PromptTask promptTask;
 	
 	@Override
 	public void onEnable ()
 	{
 		instance = this;	
 		logger = getServer().getLogger();
+		
+		// Check to see if we're running on Spigot
+		try {
+			Class.forName("net.md_5.bungee.api.chat.BaseComponent");
+		} catch (ClassNotFoundException e) {
+			supportsBaseComponent = false;
+		}
 		
 		// Save default config
 		saveDefaultConfig();
@@ -61,9 +74,12 @@ public class Core extends JavaPlugin {
 			Metrics metrics = new Metrics(this);
 			metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> databaseType.toString().toLowerCase()));
 			
-			// Create our menu task
+			// Create our tasks
 			menuTask = new MenuTask(this);
 			menuTask.runTaskTimer(this, 0, 5);
+			
+			promptTask = new PromptTask(this);
+			promptTask.runTaskTimer(this, 0, 40);
 		}
 		log("" + this.getDescription().getVersion() + " loaded");
 	}
@@ -110,6 +126,14 @@ public class Core extends JavaPlugin {
 			
 			return state;
 		}
+	}
+	
+	/**
+	 * Check to see if we can use the bungee BaseComponent class
+	 * @return
+	 */
+	public Boolean canUseBungee () {
+		return supportsBaseComponent;
 	}
 	
 	/**
