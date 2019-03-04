@@ -22,7 +22,7 @@ public class CreateCommand extends Command {
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
 			Database database = core.getDatabase();
 			
-			if (database.getMenus(true).contains(menuName))
+			if (database.menuExists(menuName))
 			{
 				sender.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS);
 				return false;

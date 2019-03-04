@@ -25,7 +25,7 @@ public class OpenCommand extends Command {
 	@Override
 	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
 	{
-		return database.getMenus(false);
+		return new ArrayList<String>(database.getMenus(false).keySet());
 	}
 	
 	@Override
