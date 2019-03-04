@@ -23,7 +23,9 @@ import com.mediusecho.particlehats.util.StringUtil;
 public class EditorBaseMenu extends EditorMenu {
 
 	private MenuInventory menuInventory;
+	
 	private boolean isModified = false;
+	private boolean isLive = true;
 	
 	private final ItemStack emptyItem;
 	
@@ -101,16 +103,19 @@ public class EditorBaseMenu extends EditorMenu {
 	@Override
 	public void onTick (int ticks)
 	{		
-		for (Entry<Integer, Hat> set : menuInventory.getHats().entrySet())
+		if (isLive)
 		{
-			int slot = set.getKey();
-			Hat hat = set.getValue();
-			
-			if (hat != null)
+			for (Entry<Integer, Hat> set : menuInventory.getHats().entrySet())
 			{
-				IconData iconData = hat.getIconData();
-				if (iconData.isLive()) {
-					getItem(slot).setType(iconData.getNextMaterial(ticks));
+				int slot = set.getKey();
+				Hat hat = set.getValue();
+				
+				if (hat != null)
+				{
+					IconData iconData = hat.getIconData();
+					if (iconData.isLive()) {
+						getItem(slot).setType(iconData.getNextMaterial(ticks));
+					}
 				}
 			}
 		}
@@ -256,6 +261,14 @@ public class EditorBaseMenu extends EditorMenu {
 	
 	public String getTitle ()  {
 		return menuInventory.getTitle();
+	}
+	
+	public void toggleLive () {
+		isLive = !isLive;
+	}
+	
+	public boolean isLive () {
+		return isLive;
 	}
 	
 	/**
