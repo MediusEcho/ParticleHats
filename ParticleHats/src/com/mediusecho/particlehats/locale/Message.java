@@ -396,7 +396,7 @@ public enum Message {
 	EDITOR_ICON_MENU_ITEM_PREFIX                  ("&b"),
 	
 	EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION ("/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
-	EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION     ("/n&8• {1}/n&7» &e{2}/n/n{3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
+	EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION     ("/n&8• {1}/n&7» &e{2}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	EDITOR_ICON_MENU_ITEM_DESCRIPTION             ("&3Left Click to Change/n&cShift Right Click to Delete"),
 	
 	// Offset Menu
