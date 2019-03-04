@@ -18,6 +18,7 @@ import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -35,12 +36,13 @@ public class Hat {
 	private String rightClickArgument      = "";
 	private String label                   = "";
 	
-	private ParticleLocation location   = ParticleLocation.HEAD;
-	private ParticleAction leftAction   = ParticleAction.EQUIP;
-	private ParticleAction rightAction  = ParticleAction.MIMIC;
-	private ParticleMode mode           = ParticleMode.ACTIVE;
-	private ParticleType type           = ParticleType.NONE;
-	private ParticleAnimation animation = ParticleAnimation.STATIC;
+	private ParticleLocation location       = ParticleLocation.HEAD;
+	private ParticleAction leftAction       = ParticleAction.EQUIP;
+	private ParticleAction rightAction      = ParticleAction.MIMIC;
+	private ParticleMode mode               = ParticleMode.ACTIVE;
+	private ParticleType type               = ParticleType.NONE;
+	private ParticleAnimation animation     = ParticleAnimation.STATIC;
+	private ParticleTracking trackingMethod = ParticleTracking.TRACK_NOTHING;
 	
 	private CustomEffect customEffect;
 	
@@ -404,6 +406,14 @@ public class Hat {
 	}
 	
 	/**
+	 * Gets this Hats ParticleType effect
+	 * @return
+	 */
+	public Effect getEffect () {
+		return type.getEffect();
+	}
+	
+	/**
 	 * Set this hats ParticleAnimation value
 	 * @param animation
 	 */
@@ -419,6 +429,24 @@ public class Hat {
 	 */
 	public ParticleAnimation getAnimation () {
 		return animation;
+	}
+	
+	/**
+	 * Set this hats ParticleTracking method
+	 * @param trackingMethod
+	 */
+	public void setTrackingMethod (ParticleTracking trackingMethod)
+	{
+		this.trackingMethod = trackingMethod;
+		setProperty("tracking", Integer.toString(trackingMethod.getID()));
+	}
+	
+	/**
+	 * Get this hats ParticleTracking method
+	 * @return
+	 */
+	public ParticleTracking getTrackingMethod () {
+		return trackingMethod;
 	}
 	
 	/**
