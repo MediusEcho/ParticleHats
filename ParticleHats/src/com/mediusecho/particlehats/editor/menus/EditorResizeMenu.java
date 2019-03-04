@@ -21,11 +21,11 @@ public class EditorResizeMenu extends EditorMenu {
 		super(core, owner, menuBuilder);
 		
 		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_RESIZE_MENU_TITLE.getValue());
-		buildMenu();
+		build();
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
 		final EditorAction setRowAction = (event, slot) ->
 		{

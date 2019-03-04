@@ -1,5 +1,6 @@
 package com.mediusecho.particlehats.editor.menus;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,8 +13,10 @@ import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 
@@ -25,14 +28,14 @@ public class EditorMainMenu extends EditorMenu {
 	
 	public EditorMainMenu(Core core, Player owner, MenuBuilder menuBuilder) 
 	{
-		super(core, owner, menuBuilder, true);
+		super(core, owner, menuBuilder);
 		
 		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_MAIN_MENU_TITLE.getValue());
-		buildMenu();
+		build();
 	}
 	
 	@Override
-	public void onClose ()
+	public void onClose (boolean forced)
 	{
 		Hat hat = menuBuilder.getTargetHat();
 		if (hat.isModified())
@@ -40,36 +43,79 @@ public class EditorMainMenu extends EditorMenu {
 			MySQLDatabase database = (MySQLDatabase)core.getDatabase();
 			String sqlQuery = hat.getSQLUpdateQuery();
 			
-			Core.log("saving hat with query: " + sqlQuery);
+			Core.debug("saving hat with query: " + sqlQuery);
 			
 			database.saveIncremental(menuBuilder.getEditingMenu().getName(), menuBuilder.getTargetSlot(), hat.getSQLUpdateQuery());
 			hat.clearPropertyChanges();
 		}
 	}
+	
+//	/**
+//	 * Updates the main menu to reflex a type property update
+//	 */
+//	public void onTypeChange ()
+//	{
+//		
+//	}
+	
+	/**
+	 * Updates the main menu to reflect an offset property update
+	 */
+	private void onOffsetChange () {
+		EditorLore.updateVectorDescription(getItem(25), menuBuilder.getTargetHat().getOffset(), Message.EDITOR_MAIN_MENU_VECTOR_DESCRIPTION);
+	}
+	
+	/**
+	 * Updates the main menu to reflect an angle property update
+	 */
+	private void onAngleChange () {
+		EditorLore.updateVectorDescription(getItem(24), menuBuilder.getTargetHat().getAngle(), Message.EDITOR_MAIN_MENU_VECTOR_DESCRIPTION);
+	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
 		Hat targetHat = menuBuilder.getTargetHat();
 		
 		// Main Menu
-		setItem(46, mainMenuButton);
-		setAction(46, (clickEvent, slot) ->
-		{
-			menuBuilder.goBack();
-			return true;
-		});
+		setButton(46, mainMenuButton, backAction);
 		
 		// Equip
 		setButton(52, ItemUtil.createItem(Material.DIAMOND_HELMET, Message.EDITOR_MISC_EQUIP), (event, slot) ->
 		{
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Type
-		setButton(10, ItemUtil.createItem(Material.CYAN_DYE, Message.EDITOR_MAIN_MENU_SET_TYPE), (event, slot) ->
+		ItemStack typeItem = ItemUtil.createItem(Material.CYAN_DYE, Message.EDITOR_MAIN_MENU_SET_TYPE);
+		EditorLore.updateTypeDescription(typeItem, targetHat);
+		setButton(10, typeItem, (event, slot) ->
 		{
-			return true;
+			if (!event.isShiftClick())
+			{
+				EditorTypeMenu editorTypeMenu = new EditorTypeMenu(core, owner, menuBuilder, () ->
+				{
+					ParticleType type = targetHat.getType();
+					if (!type.supportsAnimation() && targetHat.getAnimation().equals(ParticleAnimation.ANIMATED)) {
+						targetHat.setAnimation(ParticleAnimation.STATIC);
+					}
+					
+					// Update our tracking methods for this type
+					
+					EditorLore.updateTypeDescription(getItem(10), targetHat);
+				});
+				menuBuilder.addMenu(editorTypeMenu);
+				editorTypeMenu.open();
+			}
+			
+			else
+			{
+				int id = targetHat.getAnimation().getID();
+				ParticleAnimation animation = ParticleAnimation.fromID(MathUtil.wrap(id + 1, ParticleAnimation.values().length, 0));
+				targetHat.setAnimation(animation);
+				EditorLore.updateTypeDescription(getItem(10), targetHat);
+			}
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Location
@@ -83,13 +129,29 @@ public class EditorMainMenu extends EditorMenu {
 			
 			targetHat.setLocation(location);
 			EditorLore.updateLocationDescription(getItem(11), location, Message.EDITOR_MAIN_MENU_LOCATION_DESCRIPTION);
-			return true;
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		// Meta
-		setButton(13, ItemUtil.createItem(Material.SIGN, Message.EDITOR_MAIN_MENU_SET_META), (event, slot) ->
+		ItemStack metaItem = ItemUtil.createItem(Material.SIGN, Message.EDITOR_MAIN_MENU_SET_META);
+		EditorLore.updateGenericDescription(metaItem, Message.EDITOR_MAIN_MENU_META_DESCRIPTION);
+		setButton(13, metaItem, (event, slot) ->
 		{
-			return true;
+			if (event.isLeftClick())
+			{
+				EditorMetaMenu editorMetaMenu = new EditorMetaMenu(core, owner, menuBuilder);
+				menuBuilder.addMenu(editorMetaMenu);
+				editorMetaMenu.open();
+			}
+			
+			else if (event.isRightClick())
+			{
+				EditorDescriptionMenu editorDescriptionMenu = new EditorDescriptionMenu(core, owner, menuBuilder, true);
+				menuBuilder.addMenu(editorDescriptionMenu);
+				editorDescriptionMenu.open();
+			}
+			
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Price
@@ -102,7 +164,7 @@ public class EditorMainMenu extends EditorMenu {
 			
 			targetHat.setPrice(price);
 			EditorLore.updatePriceDescription(getItem(15), price, Message.EDITOR_MAIN_MENU_PRICE_DESCRIPTION);
-			return true;
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		// Speed
@@ -115,7 +177,7 @@ public class EditorMainMenu extends EditorMenu {
 			
 			targetHat.setSpeed(speed);
 			EditorLore.updateIntegerDescription(getItem(16), speed, Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
-			return true;
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		// Action
@@ -123,10 +185,13 @@ public class EditorMainMenu extends EditorMenu {
 		EditorLore.updateGenericActionDescription(actionItem, targetHat);
 		setButton(19, actionItem, (event, slot) ->
 		{
-			EditorActionOverviewMenu editorActionOverviewMenu = new EditorActionOverviewMenu(core, owner, menuBuilder, this);
+			EditorActionOverviewMenu editorActionOverviewMenu = new EditorActionOverviewMenu(core, owner, menuBuilder, () ->
+			{
+				EditorLore.updateGenericActionDescription(getItem(19), menuBuilder.getBaseHat());
+			});
 			menuBuilder.addMenu(editorActionOverviewMenu);
 			editorActionOverviewMenu.open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Mode
@@ -140,7 +205,7 @@ public class EditorMainMenu extends EditorMenu {
 			
 			targetHat.setMode(mode);
 			EditorLore.updateModeDescription(getItem(20), mode, Message.EDITOR_MAIN_MENU_MODE_DESCRIPTION);
-			return true;
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		// Frequency
@@ -153,7 +218,7 @@ public class EditorMainMenu extends EditorMenu {
 			
 			targetHat.setUpdateFrequency(frequency);
 			EditorLore.updateFrequencyDescription(getItem(22), frequency, Message.EDITOR_MAIN_MENU_UPDATE_FREQUENCY_DESCRIPTION);
-			return true;
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		// Angle
@@ -163,7 +228,10 @@ public class EditorMainMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				EditorAngleMenu editorAngleMenu = new EditorAngleMenu(core, owner, menuBuilder, this);
+				EditorAngleMenu editorAngleMenu = new EditorAngleMenu(core, owner, menuBuilder, () ->
+				{
+					EditorLore.updateVectorDescription(getItem(24), menuBuilder.getTargetHat().getAngle(), Message.EDITOR_MAIN_MENU_VECTOR_DESCRIPTION);
+				});
 				menuBuilder.addMenu(editorAngleMenu);
 				editorAngleMenu.open();
 			}
@@ -173,7 +241,7 @@ public class EditorMainMenu extends EditorMenu {
 				targetHat.setAngle(0, 0, 0);
 				onAngleChange();
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Offset
@@ -183,7 +251,10 @@ public class EditorMainMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				EditorOffsetMenu editorOffsetMenu = new EditorOffsetMenu(core, owner, menuBuilder, this);
+				EditorOffsetMenu editorOffsetMenu = new EditorOffsetMenu(core, owner, menuBuilder, () ->
+				{
+					EditorLore.updateVectorDescription(getItem(25), menuBuilder.getTargetHat().getOffset(), Message.EDITOR_MAIN_MENU_VECTOR_DESCRIPTION);
+				});
 				menuBuilder.addMenu(editorOffsetMenu);
 				editorOffsetMenu.open();
 			}
@@ -193,25 +264,39 @@ public class EditorMainMenu extends EditorMenu {
 				targetHat.setOffset(0, 0, 0);
 				onOffsetChange();
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Sound
 		ItemStack soundItem = ItemUtil.createItem(Material.MUSIC_DISC_STRAD, Message.EDITOR_MAIN_MENU_SET_SOUND);
-		//
+		EditorLore.updateSoundItemDescription(soundItem, targetHat);
 		setButton(28, soundItem, (event, slot) ->
 		{
-			EditorSoundMenu editorSoundMenu = new EditorSoundMenu(core, owner, menuBuilder);
-			menuBuilder.addMenu(editorSoundMenu);
-			editorSoundMenu.open();
-			return true;
+			if (event.isLeftClick())
+			{
+				EditorSoundMenu editorSoundMenu = new EditorSoundMenu(core, owner, menuBuilder, (sound) ->
+				{
+					targetHat.setSound(sound);
+					EditorLore.updateSoundItemDescription(getItem(28), targetHat);
+					menuBuilder.goBack();
+				});
+				menuBuilder.addMenu(editorSoundMenu);
+				editorSoundMenu.open();
+			}
+			
+			else if (event.isShiftRightClick()) 
+			{
+				targetHat.removeSound();
+				EditorLore.updateSoundItemDescription(getItem(28), targetHat);
+			}
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Tracking
 		ItemStack trackingItem = ItemUtil.createItem(Material.COMPASS, Message.EDITOR_MAIN_MENU_SET_TRACKING_METHOD); 
 		setButton(trackingItemSlot, trackingItem, (event, slot) ->
 		{
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Count
@@ -224,7 +309,7 @@ public class EditorMainMenu extends EditorMenu {
 			
 			targetHat.setCount(count);
 			EditorLore.updateIntegerDescription(getItem(33), count, Message.EDITOR_MAIN_MENU_COUNT_DESCRIPTION);
-			return true;
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		// Slot
@@ -234,7 +319,7 @@ public class EditorMainMenu extends EditorMenu {
 			EditorSlotMenu editorSlotMenu = new EditorSlotMenu(core, owner, menuBuilder);
 			menuBuilder.addMenu(editorSlotMenu);
 			editorSlotMenu.open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Particle
@@ -244,46 +329,20 @@ public class EditorMainMenu extends EditorMenu {
 			EditorParticleSelectionMenu editorParticleMenu = new EditorParticleSelectionMenu(core, owner, menuBuilder);
 			menuBuilder.addMenu(editorParticleMenu);
 			editorParticleMenu.open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Icon
 		ItemStack iconItem = ItemUtil.createItem(targetHat.getMaterial(), Message.EDITOR_MAIN_MENU_SET_ICON, Message.EDITOR_MAIN_MENU_ICON_DESCRIPTION);
 		setButton(41, iconItem, (event, slot) ->
 		{
-			EditorIconOverviewMenu editorIconOverviewMenu = new EditorIconOverviewMenu(core, owner, menuBuilder, this);
+			EditorIconOverviewMenu editorIconOverviewMenu = new EditorIconOverviewMenu(core, owner, menuBuilder, (item) ->
+			{
+				getItem(41).setType(item.getType());
+			});
 			menuBuilder.addMenu(editorIconOverviewMenu);
 			editorIconOverviewMenu.open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
-	}
-	
-	/**
-	 * Updates our icon material
-	 * @param material
-	 */
-	public void onIconChange (Material material) {
-		getItem(41).setType(material);
-	}
-	
-	/**
-	 * Updates the main menu to reflect an offset property update
-	 */
-	public void onOffsetChange () {
-		EditorLore.updateVectorDescription(getItem(25), menuBuilder.getTargetHat().getOffset(), Message.EDITOR_MAIN_MENU_VECTOR_DESCRIPTION);
-	}
-	
-	/**
-	 * Updates the main menu to reflect an angle property update
-	 */
-	public void onAngleChange () {
-		EditorLore.updateVectorDescription(getItem(24), menuBuilder.getTargetHat().getAngle(), Message.EDITOR_MAIN_MENU_VECTOR_DESCRIPTION);
-	}
-	
-	/**
-	 * Updates the main menu to reflect an action property update
-	 */
-	public void onActionChange () {
-		EditorLore.updateGenericActionDescription(getItem(19), menuBuilder.getBaseHat());
 	}
 }

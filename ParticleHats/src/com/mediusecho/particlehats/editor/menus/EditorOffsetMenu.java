@@ -17,65 +17,27 @@ import com.mediusecho.particlehats.util.MathUtil;
 
 public class EditorOffsetMenu extends EditorMenu {
 
-	protected final EditorMainMenu editorMainMenu;
+	protected final EditorGenericCallback callback;
 	
-	public EditorOffsetMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
+	public EditorOffsetMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
 	{
-		super(core, owner, menuBuilder, true);
-		this.editorMainMenu = editorMainMenu;
+		super(core, owner, menuBuilder);
+		this.callback = callback;
 		
 		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_OFFSET_MENU_TITLE.getValue());
 		Bukkit.createInventory(owner, 27);
-		buildMenu();
+		build();
 	}
 	
 	@Override
-	public void onClose ()
+	public void onClose (boolean forced)
 	{
-		editorMainMenu.onOffsetChange();
+		if (!forced) {
+			callback.onExecute();
+		}
 	}
 
-	@Override
-	protected void buildMenu() 
-	{
-		Hat targetHat = menuBuilder.getTargetHat();
-		
-		// X Offset
-		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_X);
-		EditorLore.updateVectorDescription(xItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
-		setButton(14, xItem, (event, slot) ->
-		{
-			updateOffset(event, targetHat, VectorAxis.X);
-			return true;
-		});
-		
-		// Y Offset
-		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Y);
-		EditorLore.updateVectorDescription(yItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
-		setButton(15, yItem, (event, slot) ->
-		{
-			updateOffset(event, targetHat, VectorAxis.Y);
-			return true;
-		});
-		
-		// Z Offset
-		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Z);
-		EditorLore.updateVectorDescription(zItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
-		setButton(16, zItem, (event, slot) ->
-		{
-			updateOffset(event, targetHat, VectorAxis.Z);
-			return true;
-		});
-		
-		// Back
-		setButton(10, backButton, (event, slot) ->
-		{
-			menuBuilder.goBack();
-			return true;
-		});
-	}
-
-	private void updateOffset (EditorClickEvent event, Hat hat, VectorAxis axis)
+	private EditorClickType updateOffset (EditorClickEvent event, Hat hat, VectorAxis axis)
 	{
 		double normalClick    = event.isLeftClick() ? 0.1f : -0.1f;
 		double shiftClick     = event.isShiftClick() ? 10 : 1;
@@ -102,6 +64,47 @@ public class EditorOffsetMenu extends EditorMenu {
 		EditorLore.updateVectorDescription(getItem(14), offset, Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
 		EditorLore.updateVectorDescription(getItem(15), offset, Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
 		EditorLore.updateVectorDescription(getItem(16), offset, Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
+		
+		if (event.isMiddleClick()) {
+			return EditorClickType.NEUTRAL;
+		}
+		
+		else {
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
+		}
+	}
+	
+	@Override
+	protected void build() 
+	{
+		Hat targetHat = menuBuilder.getTargetHat();
+		
+		// X Offset
+		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_X);
+		EditorLore.updateVectorDescription(xItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
+		setButton(14, xItem, (event, slot) ->
+		{
+			return updateOffset(event, targetHat, VectorAxis.X);
+		});
+		
+		// Y Offset
+		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Y);
+		EditorLore.updateVectorDescription(yItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
+		setButton(15, yItem, (event, slot) ->
+		{
+			return updateOffset(event, targetHat, VectorAxis.Y);
+		});
+		
+		// Z Offset
+		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Z);
+		EditorLore.updateVectorDescription(zItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
+		setButton(16, zItem, (event, slot) ->
+		{
+			return updateOffset(event, targetHat, VectorAxis.Z);
+		});
+		
+		// Back
+		setButton(10, backButton, backAction);
 	}
 	
 	protected enum VectorAxis 

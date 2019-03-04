@@ -1,25 +1,17 @@
 package com.mediusecho.particlehats.editor.menus;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import com.mediusecho.particlehats.Core;
-import com.mediusecho.particlehats.database.type.DatabaseType;
-import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase;
+import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.Database.DataType;
+import com.mediusecho.particlehats.editor.EditorListMenu;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
@@ -30,14 +22,12 @@ import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorIconOverviewMenu extends EditorMenu {
+// TODO: Fix editing item title
+
+public class EditorIconOverviewMenu extends EditorListMenu {
 
 	private final Hat targetHat;
-	private final EditorMainMenu editorMainMenu;
-	
-	private final ItemStack addItem;
-	private final EditorAction addItemAction;
-	private final EditorAction editItemAction;
+	private final EditorItemCallback callback;
 	
 	private boolean isModified = false;
 	private int editingIndex = 0;
@@ -45,27 +35,29 @@ public class EditorIconOverviewMenu extends EditorMenu {
 	private final Message iconTitle = Message.EDITOR_ICON_MENU_TITLE;
 	private final Message iconDescription = Message.EDITOR_ICON_MENU_INFO_DESCRIPTION;
 	
-	public EditorIconOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
+	public EditorIconOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorItemCallback callback) 
 	{
-		super(core, owner, menuBuilder, true);
-		this.editorMainMenu = editorMainMenu;
+		super(core, owner, menuBuilder);
+		this.callback = callback;
 		targetHat = menuBuilder.getBaseHat();
 		
 		addItem = ItemUtil.createItem(Material.TURTLE_HELMET, Message.EDITOR_ICON_MENU_ADD_ICON);
-		addItemAction = (event, slot) ->
+		addAction = (event, slot) ->
 		{
 			editingIndex = getClampedIndex(slot, 10, 2);
 			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconDescription, (item) ->
 			{
-				addItem(slot, item);
+				onAdd(slot, item);
 			});
 			
 			menuBuilder.addMenu(editorIconMenu);
 			editorIconMenu.open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
-		editItemAction = (event, slot) ->
+		//this.addAction = addItemAction;
+		
+		editAction = (event, slot) ->
 		{
 			editingIndex = getClampedIndex(slot, 10, 2);
 			if (event.isLeftClick())
@@ -86,14 +78,16 @@ public class EditorIconOverviewMenu extends EditorMenu {
 				editorIconMenu.open();
 			}
 			
-			else if (event.isShiftRightClick()) {
-				deleteItem(slot);
+			else if (event.isShiftRightClick()) 
+			{
+				onDelete(slot);
+				return EditorClickType.NEGATIVE;
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
 		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_ICON_OVERVIEW_MENU_TITLE.getValue());
-		buildMenu();
+		build();
 	}
 	
 	@Override
@@ -110,26 +104,35 @@ public class EditorIconOverviewMenu extends EditorMenu {
 	}
 	
 	@Override
-	public void onClose ()
+	public void onClose (boolean forced)
 	{
 		if (isModified)
 		{
-			DatabaseType databaseType = core.getDatabaseType();
-			if (databaseType == DatabaseType.MYSQL)
-			{
-				MySQLDatabase database = (MySQLDatabase)core.getDatabase();
-				database.saveIconData(menuBuilder.getEditingMenu().getName(), targetHat);
-			}
+			Database database = core.getDatabase();
+			String menuName = menuBuilder.getEditingMenu().getName();
+			
+			database.saveMetaData(menuName, targetHat, DataType.ICON);
 		}
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
-		setButton(46, backButton, (event, slot) ->
+		super.build();
+		
+		setButton(46, backButton, backAction);
+		
+		setButton(52, addItem, (event, slot) ->
 		{
-			menuBuilder.goBack();
-			return true;
+			editingIndex = getClampedIndex(slot, 10, 2);
+			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconDescription, (item) ->
+			{
+				onAdd(slot, item);
+			});
+			
+			menuBuilder.addMenu(editorIconMenu);
+			editorIconMenu.open();
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Set Main Icon
@@ -144,12 +147,13 @@ public class EditorIconOverviewMenu extends EditorMenu {
 				menuBuilder.getEditingMenu().setItemMaterial(menuBuilder.getTargetSlot(), material);
 				
 				getItem(10).setType(material);
-				editorMainMenu.onIconChange(material);
+				callback.onSelect(item);
+				//editorMainMenu.onIconChange(material);
 				targetHat.setMaterial(material);
 			});
 			menuBuilder.addMenu(editorIconMenu);
 			editorIconMenu.open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Preview Icon
@@ -158,28 +162,28 @@ public class EditorIconOverviewMenu extends EditorMenu {
 		// Display Mode 48
 		ItemStack displayItem = ItemUtil.createItem(Material.ROSE_RED, Message.EDITOR_ICON_MENU_SET_DISPLAY_MODE);
 		EditorLore.updateDisplayModeDescription(displayItem, targetHat.getIconData().getDisplayMode(), Message.EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION);
-		setButton(52, displayItem, (event, slot) ->
+		setButton(50, displayItem, (event, slot) ->
 		{			
 			final int increment = event.isLeftClick() ? 1 : -1;
 			final int modeID = MathUtil.wrap(targetHat.getDisplayMode().getID() + increment, ParticleMode.values().length, 0);
 			final IconDisplayMode mode = IconDisplayMode.fromId(modeID);
 			
 			targetHat.setDisplayMode(mode);
-			EditorLore.updateDisplayModeDescription(getItem(52), mode, Message.EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION);
-			return true;
+			EditorLore.updateDisplayModeDescription(getItem(50), mode, Message.EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION);
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Update Frequency
 		ItemStack frequencyItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ICON_MENU_SET_UPDATE_FREQUENCY);
 		EditorLore.updateFrequencyDescription(frequencyItem, targetHat.getIconUpdateFrequency(), Message.EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION);
-		setButton(50, frequencyItem, (event, slot) ->
+		setButton(49, frequencyItem, (event, slot) ->
 		{
 			final int increment = event.isLeftClick() ? 1 : -1;
 			final int frequency = (int) MathUtil.clamp(targetHat.getIconUpdateFrequency() + increment, 1, 63);
 			
 			targetHat.setIconUpdateFrequency(frequency);
-			EditorLore.updateFrequencyDescription(getItem(50), frequency, Message.EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION);
-			return true;
+			EditorLore.updateFrequencyDescription(getItem(49), frequency, Message.EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION);
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Add Item
@@ -191,21 +195,12 @@ public class EditorIconOverviewMenu extends EditorMenu {
 			
 			int index = getNormalIndex(i, 10, 2);
 			setItem(index, ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue())));
-			setAction(index, editItemAction);
+			//setAction(index, editAction);
 		}
 		
-		if (materials.size() <= 20) {
-			setItem(getNormalIndex(materials.size(), 10, 2), addItem);
-		}
-		
-		// Add Item Action
-		for (int i = 1; i < 21; i++) 
-		{
-			int index = getNormalIndex(i, 10, 2);
-			if (getAction(index) == null) {
-				setAction(index, addItemAction);
-			}
-		}
+//		for (int i = 1; i <= 27; i++) {
+//			setAction(getNormalIndex(i, 10, 2), editAction);
+//		}
 	}
 	
 	/**
@@ -213,100 +208,60 @@ public class EditorIconOverviewMenu extends EditorMenu {
 	 * @param slot
 	 * @param material
 	 */
-	private void addItem (int slot, ItemStack item)
+	private void onAdd (int slot, ItemStack item)
 	{		
-		Material material = item.getType();
-		ItemStack i = getItem(slot);
-		i.setType(material);
-		
-		ItemMeta meta = item.getItemMeta();
-		if (meta instanceof PotionMeta)
+		int size = targetHat.getIconData().getMaterials().size();
+		if (size <= 27)
 		{
-			PotionMeta pm = (PotionMeta)meta;
-			pm.addItemFlags(ItemFlag.values());
-			i.setItemMeta(pm);
-		}
-		
-		if (meta instanceof SkullMeta)
-		{
-			SkullMeta sm = (SkullMeta)meta;
-			sm.addItemFlags(ItemFlag.values());
-			i.setItemMeta(sm);
+			Material material = item.getType();
 			
-//			if (sm.hasOwner())
-//			{
-//				OfflinePlayer skullOwner = sm.getOwningPlayer();
-//				Core.log(skullOwner.getUniqueId());
-//			}
+			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
+			ItemUtil.setNameAndDescription(item, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue()));
+		
+			targetHat.getIconData().addMaterial(material);
+			setItem(getNormalIndex(size, 10, 2), item);
+			
+			isModified = true;
+		}
+//		super.onAdd(slot);
+//		
+//		Material material = item.getType();
+//		ItemStack i = getItem(slot);
+//		i.setType(material);
+//		
+//		String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
+//		ItemUtil.setNameAndDescription(i, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue()));
+//		
+//		targetHat.getIconData().addMaterial(material);
+//		
+//		isModified = true;
+		
+//		List<String> description = getDescription();
+//		int size = description.size();
+//		
+//		if (size <= 27)
+//		{
+//			ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(size + 1)));
 //			
-//			else {
-//				Core.log(sm.toString());
-//			}
-			
-			Map<String, Object> info = sm.serialize();
-			for (Entry<String, Object> entry : info.entrySet())
-			{
-				String key = entry.getKey();
-				Core.log(key);
-			}
-			Core.log(info.get("internal"));
-		}
-		
-		String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
-		ItemUtil.setNameAndDescription(i, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue()));
-		
-		targetHat.getIconData().addMaterial(material);
-
-		// Change the action to our editing action
-		setAction(slot, editItemAction);
-		
-		// Add a new add action
-		int wrappedIndex = getWrappedIndex(slot + 1, 10, 2);
-		if (wrappedIndex <= 34) {
-			setButton(wrappedIndex, addItem, addItemAction);
-		}
-		
-		isModified = true;
+//			description.add("");
+//			EditorLore.updatePreviewDecription(getItem(49), getDescription());
+//			
+//			setLineDescription(item, "");
+//			setItem(getNormalIndex(size, 10, 2), item);
+//		}
 	}
 	
 	/**
 	 * Removes a material at the given slot
 	 * @param slot
 	 */
-	private void deleteItem (int slot)
+	@Override
+	protected void onDelete (int slot)
 	{
-		int clampedIndex = getClampedIndex(slot, 10, 2);
-		
-		// Remove the current slot
-		setItem(slot, null);
+		super.onDelete(slot);
 		
 		// Remove the material in this slot
-		targetHat.getIconData().removeMaterial(clampedIndex);
-		
-		for (int i = clampedIndex + 1; i < 22; i++) 
-		{
-			int normalIndex = getNormalIndex(i, 10, 2);
-			int shiftedIndex = getNormalIndex(i - 1, 10, 2);
-			
-			ItemStack item = getItem(normalIndex);
-			if (item == null) {
-				break;
-			}
-			
-			EditorAction currentAction = getAction(normalIndex);
-			setButton(normalIndex, null, null);
-			setButton(shiftedIndex, item, currentAction);
-			
-			if (currentAction == addItemAction) {
-				break;
-			}
-			
-			// We've deleted the last element and need to add our new item back in
-			if (normalIndex == 34) {
-				setButton(34, addItem, addItemAction);
-			}
-		}
-		
+		targetHat.getIconData().removeMaterial(getClampedIndex(slot, 10, 2));
 		isModified = true;
 	}
 }

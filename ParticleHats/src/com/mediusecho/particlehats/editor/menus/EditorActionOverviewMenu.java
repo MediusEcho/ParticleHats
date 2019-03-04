@@ -9,6 +9,7 @@ import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -16,21 +17,24 @@ import com.mediusecho.particlehats.util.ItemUtil;
 
 public class EditorActionOverviewMenu extends EditorMenu {
 
-	private final EditorMainMenu editorMainMenu;
+	private final EditorGenericCallback callback;
+	//private final EditorMainMenu editorMainMenu;
 	private final Hat targetHat;
 	
-	public EditorActionOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
+//	public EditorActionOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
+	public EditorActionOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
 	{
-		super(core, owner, menuBuilder, true);
-		this.editorMainMenu = editorMainMenu;
+		super(core, owner, menuBuilder);
+		this.callback = callback;
+		//this.editorMainMenu = editorMainMenu;
 		this.targetHat = menuBuilder.getBaseHat();
 		
 		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_ACTION_OVERVIEW_MENU_TITlE.getValue());
-		buildMenu();
+		build();
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
 		setButton(10, backButton, backAction);
 		
@@ -41,12 +45,10 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		{
 			if (event.isLeftClick()) {
 				openActionMenu(true);
-			}
-			
-			else if (event.isRightClick()) {
+			} else if (event.isRightClick()) {
 				openPropertiesMenu(true);
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Right Click
@@ -56,18 +58,26 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		{
 			if (event.isLeftClick()) {
 				openActionMenu(false);
-			}
-			
-			else if (event.isRightClick()) {
+			} else if (event.isRightClick()) {
 				openPropertiesMenu(false);
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 	}
 	
 	private void openActionMenu (boolean leftClick)
 	{
-		EditorActionMenu editorActionMenu = new EditorActionMenu(core, owner, menuBuilder, this, leftClick);
+		EditorActionMenu editorActionMenu = new EditorActionMenu(core, owner, menuBuilder, leftClick, (action) ->
+		{
+			if (leftClick) {
+				targetHat.setLeftClickAction(action);
+			} else {
+				targetHat.setRightClickAction(action);
+			}
+			
+			onActionChange(leftClick);
+			menuBuilder.goBack();
+		});
 		menuBuilder.addMenu(editorActionMenu);
 		editorActionMenu.open();
 	}
@@ -80,13 +90,15 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		case OPEN_MENU_PERMISSION:
 		case OPEN_MENU:
 		{
-			
+			// TODO: Finish Menu Description
 		}
 		break;
 		
 		case COMMAND:
 		{
-			
+			targetHat.setEditingAction(leftClick ? 1 : 2);
+			menuBuilder.setOwnerState(MetaState.HAT_COMMAND);
+			owner.closeInventory();
 		}
 		break;
 		
@@ -106,13 +118,13 @@ public class EditorActionOverviewMenu extends EditorMenu {
 	 * Called any time an action is changed
 	 * @param isLeftClick
 	 */
-	public void onActionChange (ParticleAction action, boolean isLeftClick)
+	public void onActionChange (boolean isLeftClick)
 	{
-		if (isLeftClick) {
-			EditorLore.updateSpecificActionDescription(getItem(14), targetHat, targetHat.getLeftClickAction(), targetHat.getLeftClickArgument());
-		} else {
-			EditorLore.updateSpecificActionDescription(getItem(16), targetHat, targetHat.getRightClickAction(), targetHat.getRightClickArgument());
-		}
-		editorMainMenu.onActionChange();
+		ParticleAction action = isLeftClick ? targetHat.getLeftClickAction() : targetHat.getRightClickAction();
+		String argument = isLeftClick ? targetHat.getLeftClickArgument() : targetHat.getRightClickArgument();
+		ItemStack item = isLeftClick ? getItem(14) : getItem(16);
+		
+		EditorLore.updateSpecificActionDescription(item, targetHat, action, argument);
+		callback.onExecute();
 	}
 }

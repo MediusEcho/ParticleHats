@@ -79,9 +79,9 @@ public class EditorSoundMenu extends EditorMenu {
 			Sound.ITEM_ELYTRA_FLYING,
 			Sound.ENTITY_ENDER_DRAGON_DEATH);
 	
-	public EditorSoundMenu(Core core, Player owner, MenuBuilder menuBuilder)
+	public EditorSoundMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorSoundCallback soundCallback)
 	{
-		super(core, owner, menuBuilder, true);
+		super(core, owner, menuBuilder);
 		this.targetHat = menuBuilder.getBaseHat();
 		
 		menus = new HashMap<Integer, Inventory>();
@@ -103,10 +103,8 @@ public class EditorSoundMenu extends EditorMenu {
 			Sound sound = sounds.get(index);
 			if (sound != null)
 			{
-				if (event.isLeftClick())
-				{
-					targetHat.setSound(sound);
-					menuBuilder.goBack();
+				if (event.isLeftClick()) {
+					soundCallback.onSelect(sound);
 				}
 				
 				else if (event.isRightClick())
@@ -117,14 +115,14 @@ public class EditorSoundMenu extends EditorMenu {
 					
 					currentPlayingSound = sound;
 					owner.playSound(owner.getLocation(), sound, (float) targetHat.getSoundVolume(), (float) targetHat.getSoundPitch());
-					return false;
+					return EditorClickType.NONE;
 				}
 			}
 			
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 
-		buildMenu();
+		build();
 	}
 	
 	@Override
@@ -134,20 +132,29 @@ public class EditorSoundMenu extends EditorMenu {
 	
 	public void openMenu (Map<Integer, Inventory> menus, int currentPage)
 	{
-		Inventory menu = menus.get(currentPage);
-		if (menu != null)
+		if (menus.containsKey(currentPage))
 		{
+			Inventory inv = menus.get(currentPage);
+			
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
-			
-			menu.setItem(52, volumeItem);
-			menu.setItem(53, pitchItem);
-			
-			owner.openInventory(menu);
+			inv.setItem(52, volumeItem);
+			inv.setItem(53, pitchItem);
+			owner.openInventory(inv);
 		}
+//		Inventory menu = menus.get(currentPage);
+//		if (menu != null)
+//		{
+//			menuBuilder.setOwnerState(MenuState.SWITCHING);
+//			
+//			menu.setItem(52, volumeItem);
+//			menu.setItem(53, pitchItem);
+//			
+//			owner.openInventory(menu);
+//		}
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{		
 		blockSounds  = new ArrayList<Sound>();
 		entitySounds = new ArrayList<Sound>();
@@ -192,7 +199,7 @@ public class EditorSoundMenu extends EditorMenu {
 		setAction(49, (event, slot) ->
 		{
 			menuBuilder.goBack();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Misc Filter
@@ -200,7 +207,7 @@ public class EditorSoundMenu extends EditorMenu {
 		{
 			currentFilter = 0;
 			openMenu(menus, currentMiscPage);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Block Filter
@@ -208,7 +215,7 @@ public class EditorSoundMenu extends EditorMenu {
 		{
 			currentFilter = 1;
 			openMenu(blockMenus, currentBlockPage);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Entity Filter
@@ -216,7 +223,7 @@ public class EditorSoundMenu extends EditorMenu {
 		{
 			currentFilter = 2;
 			openMenu(entityMenus, currentEntityPage);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Previous Page
@@ -227,7 +234,7 @@ public class EditorSoundMenu extends EditorMenu {
 			currentPage -= 1;
 			setCurrentFilterPage(currentPage);
 			openMenu(menus, currentPage);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Next Page
@@ -238,7 +245,7 @@ public class EditorSoundMenu extends EditorMenu {
 			currentPage += 1;
 			setCurrentFilterPage(currentPage);
 			openMenu(menus, currentPage);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Fill in our main inventory
@@ -255,7 +262,7 @@ public class EditorSoundMenu extends EditorMenu {
 			targetHat.setSoundVolume(volume);
 			EditorLore.updateDoubleDescription(volumeItem, volume, Message.EDITOR_SOUND_MENU_VOLUME_DESCRIPTION);
 			getOpenMenu().setItem(52, volumeItem);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Pitch
@@ -267,7 +274,7 @@ public class EditorSoundMenu extends EditorMenu {
 			targetHat.setSoundPitch(pitch);
 			EditorLore.updateDoubleDescription(pitchItem, pitch, Message.EDITOR_SOUND_MENU_PITCH_DESCRIPTION);
 			getOpenMenu().setItem(53, pitchItem);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 	}
 
@@ -286,8 +293,6 @@ public class EditorSoundMenu extends EditorMenu {
 			
 			// Controls
 			menu.setItem(49, backButton);
-//			menu.setItem(52, volumeItem);
-//			menu.setItem(53, pitchItem);
 			
 			switch (categoryIndex)
 			{

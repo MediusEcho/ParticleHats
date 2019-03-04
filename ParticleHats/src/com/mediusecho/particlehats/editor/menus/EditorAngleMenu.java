@@ -16,61 +16,15 @@ import com.mediusecho.particlehats.util.MathUtil;
 
 public class EditorAngleMenu extends EditorOffsetMenu {
 	
-	public EditorAngleMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
+	public EditorAngleMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
 	{
-		super(core, owner, menuBuilder, editorMainMenu);
+		super(core, owner, menuBuilder, callback);
 
 		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_ANGLE_MENU_TITLE.getValue());
-		buildMenu();
+		build();
 	}
 	
-	@Override
-	public void onClose () 
-	{
-		editorMainMenu.onAngleChange();
-	}
-	
-	@Override
-	protected void buildMenu() 
-	{
-		Hat targetHat = menuBuilder.getTargetHat();
-		
-		// X Angle
-		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_X);
-		EditorLore.updateVectorDescription(xItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION);
-		setButton(14, xItem, (event, slot) ->
-		{
-			updateAngle(event, targetHat, VectorAxis.X);
-			return true;
-		});
-		
-		// Y Angle
-		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Y);
-		EditorLore.updateVectorDescription(yItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION);
-		setButton(15, yItem, (event, slot) ->
-		{
-			updateAngle(event, targetHat, VectorAxis.Y);
-			return true;
-		});
-		
-		// Z Angle
-		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Z);
-		EditorLore.updateVectorDescription(zItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION);
-		setButton(16, zItem, (event, slot) ->
-		{
-			updateAngle(event, targetHat, VectorAxis.Z);
-			return true;
-		});
-		
-		// Back
-		setButton(10, backButton, (event, slot) ->
-		{
-			menuBuilder.goBack();
-			return true;
-		});
-	}
-	
-	private void updateAngle (EditorClickEvent event, Hat hat, VectorAxis axis)
+	private EditorClickType updateAngle (EditorClickEvent event, Hat hat, VectorAxis axis)
 	{
 		final double normalClick    = event.isLeftClick() ? 0.1f : -0.1f;
 		final double shiftClick     = event.isShiftClick() ? 10 : 1;
@@ -97,5 +51,46 @@ public class EditorAngleMenu extends EditorOffsetMenu {
 		EditorLore.updateVectorDescription(getItem(14), angle, Message.EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION);
 		EditorLore.updateVectorDescription(getItem(15), angle, Message.EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION);
 		EditorLore.updateVectorDescription(getItem(16), angle, Message.EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION);
+		
+		if (event.isMiddleClick()) {
+			return EditorClickType.NEUTRAL;
+		}
+		
+		else {
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
+		}
+	}
+	
+	@Override
+	protected void build() 
+	{
+		Hat targetHat = menuBuilder.getTargetHat();
+		
+		// X Angle
+		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_X);
+		EditorLore.updateVectorDescription(xItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION);
+		setButton(14, xItem, (event, slot) ->
+		{
+			return updateAngle(event, targetHat, VectorAxis.X);
+		});
+		
+		// Y Angle
+		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Y);
+		EditorLore.updateVectorDescription(yItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION);
+		setButton(15, yItem, (event, slot) ->
+		{
+			return updateAngle(event, targetHat, VectorAxis.Y);
+		});
+		
+		// Z Angle
+		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Z);
+		EditorLore.updateVectorDescription(zItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION);
+		setButton(16, zItem, (event, slot) ->
+		{
+			return updateAngle(event, targetHat, VectorAxis.Z);
+		});
+		
+		// Back
+		setButton(10, backButton, backAction);
 	}
 }

@@ -25,13 +25,20 @@ public class EditorBaseMenu extends EditorMenu {
 	private MenuInventory menuInventory;
 	private boolean isModified = false;
 	
+	private final ItemStack emptyItem;
+	
 	private final EditorAction emptyParticleAction;
 	private final EditorAction existingParticleAction;
 	
+	private int rows = 0;
+	
 	public EditorBaseMenu(Core core, Player owner, MenuBuilder menuBuilder, MenuInventory menuInventory) 
 	{
-		super(core, owner, menuBuilder, true);
+		super(core, owner, menuBuilder);
 		this.menuInventory = menuInventory;
+		
+		rows = menuInventory.getSize() / 9;
+		emptyItem = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
 		
 		String title = ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + menuInventory.getTitle()));
 		inventory = Bukkit.createInventory(null, menuInventory.getSize(), title);
@@ -53,7 +60,7 @@ public class EditorBaseMenu extends EditorMenu {
 			else if (event.isRightClick()) {
 				openSettings();
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
 		existingParticleAction = (event, slot) ->
@@ -76,22 +83,24 @@ public class EditorBaseMenu extends EditorMenu {
 				}
 			}
 			
-			else if (event.isShiftRightClick()) {
+			else if (event.isShiftRightClick()) 
+			{
 				deleteHat(slot);
+				return EditorClickType.NEGATIVE;
 			}
 			
 			else if (event.isRightClick()) {
 				openSettings();
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
-		buildMenu();
+		build();
 	}
 	
 	@Override
 	public void onTick (int ticks)
-	{
+	{		
 		for (Entry<Integer, Hat> set : menuInventory.getHats().entrySet())
 		{
 			int slot = set.getKey();
@@ -100,28 +109,25 @@ public class EditorBaseMenu extends EditorMenu {
 			if (hat != null)
 			{
 				IconData iconData = hat.getIconData();
-				if (iconData.isLive())
-				{
-					Material mat = iconData.getNextMaterial(ticks);
-					if (mat != null) {
-						getItem(slot).setType(mat);
-					}
+				if (iconData.isLive()) {
+					getItem(slot).setType(iconData.getNextMaterial(ticks));
+//					Material mat = iconData.getNextMaterial(ticks);
+//					if (mat != null) {
+//						getItem(slot).setType(mat);
+//					}
 				}
 			}
 		}
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
 		int size = menuInventory.getSize();
 		for (int i = 0; i < size; i++)
 		{
-			ItemStack item = getItem(i);
-			if (item == null || item.getType().equals(Material.AIR))
-			{		
-				setItem(i, createEmptyItem());
-				setAction(i, emptyParticleAction);
+			if (!itemExists(i)) {
+				setButton(i, emptyItem, emptyParticleAction);
 			}
 			
 			else {
@@ -189,18 +195,71 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
-	 * Saves this menu
-	 */
-	public void save () {
-		core.getDatabase().saveInventory(this);
-	}
-	
-	/**
 	 * Get this menus inventory
 	 * @return
 	 */
 	public Inventory getInventory () {
 		return inventory;
+	}
+	
+	/**
+	 * Set this menus title
+	 * @param title
+	 */
+	public void setTitle (String title)
+	{
+		menuInventory.setTitle(title);
+		String editingTitle = ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + title));
+		
+		Inventory replacementInventory = Bukkit.createInventory(null, inventory.getSize(), editingTitle);
+		replacementInventory.setContents(inventory.getContents());
+		inventory = replacementInventory;
+		
+		core.getDatabase().saveMenuTitle(getName(), title);
+	}
+	
+	/**
+	 * Set this menus size
+	 * @param rows How many rows this menu will have (chest = 3, double chest = 6)
+	 */
+	public void resize (int rows)
+	{
+		if (this.rows != rows)
+		{
+			Inventory replacementInventory = Bukkit.createInventory(null, 9 * rows, menuInventory.getTitle());
+			
+			// inventory.setContents() only works when resizing the menus to a smaller size. so we need to use a loop to account for the other option
+			for (int i = 0; i < replacementInventory.getSize(); i++)
+			{
+				try {
+					replacementInventory.setItem(i, inventory.getItem(i));
+				} catch (ArrayIndexOutOfBoundsException e) {}
+			}
+			
+			// Fill in any empty slots
+			if (rows > this.rows)
+			{
+				for (int i = inventory.getSize(); i < replacementInventory.getSize(); i++) {
+					replacementInventory.setItem(i, emptyItem);
+				}
+			}
+			
+			inventory = replacementInventory;
+			this.rows = rows;
+			core.getDatabase().saveMenuSize(getName(), rows);
+		}
+	}
+	
+	/**
+	 * Get how many rows are in this menu
+	 * @return
+	 */
+	public int getRowCount () {
+		return rows;
+	}
+	
+	public String getTitle ()  {
+		return menuInventory.getTitle();
 	}
 	
 	/**
@@ -229,16 +288,15 @@ public class EditorBaseMenu extends EditorMenu {
 		
 		setButton(currentSlot, swappingItem, swappingAction);
 		setButton(newSlot, currentItem, currentAction);
-		
-		//setItem(currentSlot, swappingItem);
-		//setItem(newSlot, currentItem);
-		//setAction(currentSlot, swappingAction);
-		//setAction(newSlot, currentAction);
 		setHat(newSlot, currentHat);
 		
 		menuBuilder.setTargetSlot(newSlot);
 		
 		core.getDatabase().changeSlot(getName(), currentSlot, newSlot, swapping);
+	}
+	
+	public void onHatNameChange (Hat hat, int slot) {
+		ItemUtil.setItemName(getItem(slot), hat.getDisplayName());
 	}
 	
 	/**
@@ -266,18 +324,10 @@ public class EditorBaseMenu extends EditorMenu {
 	 */
 	private void deleteHat (int slot)
 	{
-		setButton(slot, createEmptyItem(), emptyParticleAction);
+		setButton(slot, emptyItem, emptyParticleAction);
 		menuInventory.removeHat(slot);
 
 		core.getDatabase().deleteHat(menuInventory.getName(), slot);
-	}
-	
-	private ItemStack createEmptyItem ()
-	{
-		ItemStack emptyItem = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 
-				"&bEmpty Slot",
-				"&3Left Click to Edit", "&3Right Click for Settings");
-		return emptyItem;
 	}
 	
 	private void openSettings ()

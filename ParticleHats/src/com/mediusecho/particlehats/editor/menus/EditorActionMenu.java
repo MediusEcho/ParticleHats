@@ -33,11 +33,10 @@ public class EditorActionMenu extends EditorMenu {
 	
 	private final EditorAction selectAction;
 	
-	public EditorActionMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorActionOverviewMenu editorActionOverviewMenu, boolean isLeftClick) 
+	public EditorActionMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean isLeftClick, EditorActionCallback actionCallback) 
 	{
-		super(core, owner, menuBuilder, true);
+		super(core, owner, menuBuilder);
 		
-		//this.editorActionOverviewMenu = editorActionOverviewMenu;
 		targetHat = menuBuilder.getBaseHat();
 		menus = new HashMap<Integer, Inventory>();
 		actions = new ArrayList<ParticleAction>();
@@ -46,37 +45,31 @@ public class EditorActionMenu extends EditorMenu {
 		
 		selectAction = (event, slot) ->
 		{
-			ParticleAction action = actions.get(this.getClampedIndex(slot, 10, 2));
-			if (action != null)
-			{
-				if (isLeftClick) {
-					targetHat.setLeftClickAction(action);
-				} else {
-					targetHat.setRightClickAction(action);
-				}
-				
-				editorActionOverviewMenu.onActionChange(action, isLeftClick);
-				menuBuilder.goBack();
+			int index = getClampedIndex(slot, 10, 2);
+			ParticleAction action = actions.get(index);
+			if (action == null) {
+				action = ParticleAction.EQUIP;
 			}
-			return true;
+			
+			actionCallback.onSelect(action);
+			return EditorClickType.NEUTRAL;
 		};
 		
-		buildMenu();
+		build();
 	}
 	
 	@Override
 	public void open ()
 	{
-		Inventory menu = menus.get(currentPage);
-		if (menu != null)
+		if (menus.containsKey(currentPage))
 		{
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
-			owner.openInventory(menu);
+			owner.openInventory(menus.get(currentPage));
 		}
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{		
 		// Setup actions
 		setAction(49, backAction);
@@ -90,7 +83,6 @@ public class EditorActionMenu extends EditorMenu {
 			Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
 			
 			menu.setItem(49, backButton);
-			
 			menus.put(i, menu);
 		}
 		
@@ -115,22 +107,16 @@ public class EditorActionMenu extends EditorMenu {
 			String[] selectInfo = StringUtil.parseValue(description, "3");
 			
 			ParticleAction currentAction = isLeftClick ? targetHat.getLeftClickAction() : targetHat.getRightClickAction();
-			if (selectedInfo != null && selectInfo != null)
-			{
-				if (currentAction.equals(action)) {
-					description = description.replace(selectedInfo[0], selectedInfo[1]).replace(selectInfo[0], "");
-				}
-				
-				else {
-					description = description.replace(selectInfo[0], selectInfo[1]).replace(selectedInfo[0], "");
-				}
-			}
-			
-			// Highlight our item
-			if (currentAction.equals(action))
+			if (currentAction.equals(action)) 
 			{
 				item.setType(Material.GUNPOWDER);
 				ItemUtil.highlightItem(item);
+				
+				description = description.replace(selectedInfo[0], selectedInfo[1]).replace(selectInfo[0], "");
+			} 
+			
+			else {
+				description = description.replace(selectInfo[0], selectInfo[1]).replace(selectedInfo[0], "");
 			}
 			
 			description = description.replace("{1}", action.getDescription());

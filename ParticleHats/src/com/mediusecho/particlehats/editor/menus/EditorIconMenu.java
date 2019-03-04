@@ -20,27 +20,27 @@ public class EditorIconMenu extends EditorMenu {
 	
 	public EditorIconMenu(Core core, Player owner, MenuBuilder menuBuilder, Message title, Message description, EditorItemCallback itemCallback) 
 	{
-		super(core, owner, menuBuilder, false);
+		super(core, owner, menuBuilder);
 		this.description = description;
 		this.itemCallback = itemCallback;
 		
 		inventory = Bukkit.createInventory(null, 27, title.getValue());
-		buildMenu();
+		build();
 	}
 	
 	/**
 	 * Called any time we click outside of this menu
 	 */
 	@Override
-	public boolean onClickOutside (InventoryClickEvent event, final int slot)
+	public EditorClickType onClickOutside (InventoryClickEvent event, final int slot)
 	{
 		itemCallback.onSelect(event.getCurrentItem());	
 		menuBuilder.goBack();
-		return true;
+		return EditorClickType.NEUTRAL;
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
 		ItemStack info = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_ICON_MENU_INFO_TITLE);
 		ItemUtil.setItemDescription(info, StringUtil.parseDescription(description.getValue()));
@@ -53,11 +53,7 @@ public class EditorIconMenu extends EditorMenu {
 			setItem(i, info);
 		}
 		
-		setButton(13, backButton, (clickEvent, slot) ->
-		{
-			menuBuilder.goBack();
-			return true;
-		});
+		setButton(13, backButton, backAction);
 	}
 
 }

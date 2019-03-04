@@ -21,49 +21,39 @@ public class EditorSlotMenu extends EditorMenu {
 	
 	public EditorSlotMenu(Core core, Player owner, MenuBuilder menuBuilder) 
 	{
-		super(core, owner, menuBuilder, true);
+		super(core, owner, menuBuilder);
 		
 		editorBaseMenu = menuBuilder.getEditingMenu();
 		size = editorBaseMenu.getInventory().getSize();
 		
 		inventory = Bukkit.createInventory(null, size, Message.EDITOR_SLOT_MENU_TITlE.getValue());
-		buildMenu();
+		build();
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
 		EditorBaseMenu editorBaseMenu = menuBuilder.getEditingMenu();
 		int targetSlot = menuBuilder.getTargetSlot();
-		
-//		for (int i = 0; i < size; i++)
-//		{
-//			Hat hat = editorBaseMenu.getHat(i);
-//			if (hat != null) {
-//				inventory.setItem(i, ItemUtil.createItem(hat.getMaterial(), 1));
-//			}
-//		}
-		
-		//inventory.setContents(editorBaseMenu.getInventory().getContents());
-		
+
 		final EditorAction cancelAction = (event, slot) ->
 		{
 			menuBuilder.goBack();
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
 		final EditorAction selectAction = (event, slot) ->
 		{
 			editorBaseMenu.changeSlots(menuBuilder.getTargetSlot(), slot, false);
 			menuBuilder.goBack();
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
 		final EditorAction swapAction = (event, slot) ->
 		{
 			editorBaseMenu.changeSlots(menuBuilder.getTargetSlot(), slot, true);
 			menuBuilder.goBack();
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
 		for (int i = 0; i < size; i++)

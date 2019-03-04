@@ -36,7 +36,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 	
 	public EditorParticleSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder) 
 	{
-		super(core, owner, menuBuilder, true);
+		super(core, owner, menuBuilder);
 		
 		menus = new HashMap<Integer, Inventory>();
 		totalPages = (int) Math.ceil((double) ParticleEffect.values().length / 45D);
@@ -47,22 +47,27 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		dataFilterMenu   = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_DATA_FILTER_TITLE.getValue());
 		recentFilterMenu = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_RECENT_FILTER_TITLE.getValue());
 		
-		buildMenu();
+		build();
 	}
 	
 	@Override
 	public void open ()
 	{
-		Inventory menu = menus.get(currentPage);
-		if (menu != null)
+		if (menus.containsKey(currentPage))
 		{
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
-			owner.openInventory(menu);
+			owner.openInventory(menus.get(currentPage));
 		}
+//		Inventory menu = menus.get(currentPage);
+//		if (menu != null)
+//		{
+//			menuBuilder.setOwnerState(MenuState.SWITCHING);
+//			owner.openInventory(menu);
+//		}
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{		
 		// Create our main menus
 		for (int i = 0; i < totalPages; i++)
@@ -111,7 +116,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		setAction(49, (clickEvent, slot) ->
 		{
 			menuBuilder.goBack();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// All Particles
@@ -119,7 +124,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		{
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(menus.get(currentPage));
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Color Filter
@@ -127,7 +132,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		{
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(colorFilterMenu);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Data Filter
@@ -135,7 +140,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		{
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(dataFilterMenu);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Recent Filter
@@ -143,7 +148,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		{
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(recentFilterMenu);
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Previous Page
@@ -151,7 +156,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		{
 			currentPage--;
 			open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
 		// Next Page
@@ -159,12 +164,12 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		{
 			currentPage++;
 			open();
-			return true;
+			return EditorClickType.NEUTRAL;
 		});
 		
-		EditorAction particleAction = (clickEvent, slot) ->
+		EditorAction particleAction = (event, slot) ->
 		{
-			ItemMeta meta = clickEvent.getEvent().getCurrentItem().getItemMeta();
+			ItemMeta meta = event.getEvent().getCurrentItem().getItemMeta();
 			if (meta != null)
 			{
 				CustomItemTagContainer container = meta.getCustomTagContainer();
@@ -177,7 +182,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 					Core.log("Clicking on " + pe.getName());
 				}
 			}
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 		
 		for (int i = 0; i < 45; i++) {

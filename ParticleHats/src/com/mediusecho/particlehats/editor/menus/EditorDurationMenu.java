@@ -11,7 +11,6 @@ import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 
@@ -24,24 +23,25 @@ public class EditorDurationMenu extends EditorMenu {
 	
 	public EditorDurationMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorActionOverviewMenu editorActionOverviewMenu, boolean leftClick)
 	{
-		super(core, owner, menuBuilder, true);
+		super(core, owner, menuBuilder);
 		this.editorActionOverviewMenu = editorActionOverviewMenu;
 		this.leftClick = leftClick;
 		this.targetHat = menuBuilder.getBaseHat();
 		
 		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_DURATION_MENU_TITLE.getValue());
-		buildMenu();
+		build();
 	}
 	
 	@Override
-	public void onClose ()
+	public void onClose (boolean forced)
 	{
-		ParticleAction action = leftClick ? targetHat.getLeftClickAction() : targetHat.getRightClickAction();
-		editorActionOverviewMenu.onActionChange(action, leftClick);
+		if (!forced) {
+			editorActionOverviewMenu.onActionChange(leftClick);
+		}
 	}
 
 	@Override
-	protected void buildMenu() 
+	protected void build() 
 	{
 		setButton(12, backButton, backAction);
 		
@@ -57,7 +57,7 @@ public class EditorDurationMenu extends EditorMenu {
 			targetHat.setDemoDuration(duration);
 			
 			EditorLore.updateDurationDescription(getItem(14), duration);
-			return true;
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 	}
 
