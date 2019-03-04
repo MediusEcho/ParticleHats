@@ -37,7 +37,9 @@ currency: $
 #
 # Let menus dynamically update their content (Cosmetic only)
 live-menus: true
-live-menu-update-frequency: 1
+#
+# Set how often menus are updated (1 = fastest)
+live-menu-update-frequency: 5
 #
 database:
   #
@@ -123,6 +125,9 @@ editor:
   # If this is disabled, then input will be notified via chat
   use-actionbar: true
   #
+  # Set how long to wait before canceling a meta edit
+  meta-time-limit: 30
+  #
   sound:
     #
     enabled: true
@@ -134,3 +139,6 @@ editor:
     #
     # Ranges from 0.0 to 2.0
     pitch: 1.0
+    #
+    # Some menus will alter the sound to reflect the current action (eg: increasing / decreasing a value, deleting an item)
+    modifier: 0.25
