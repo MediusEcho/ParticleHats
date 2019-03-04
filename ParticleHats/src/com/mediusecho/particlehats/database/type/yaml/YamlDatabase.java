@@ -8,6 +8,7 @@ import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.MenuInventory;
 
+// TODO: Implement yml database
 public class YamlDatabase implements Database {
 
 	@Override
@@ -30,31 +31,26 @@ public class YamlDatabase implements Database {
 
 	@Override
 	public void createEmptyMenu(String menuName) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void createHat(String menuName, int slot) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteHat(String menuName, int slot) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void loadHatData(String menuName, int slot, Hat hat) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public boolean menuExists(String menuName) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -66,37 +62,31 @@ public class YamlDatabase implements Database {
 
 	@Override
 	public void changeSlot(String menuName, int previousSlot, int newSlot, boolean swapping) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteMenu(String menuName) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void saveMenuTitle(String menuName, String title) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void saveMenuSize(String menuName, int rows) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public boolean labelExists(String menuName, String label) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void saveMetaData(String menuName, Hat hat, DataType type) {
-		// TODO Auto-generated method stub
 		
 	}
 
