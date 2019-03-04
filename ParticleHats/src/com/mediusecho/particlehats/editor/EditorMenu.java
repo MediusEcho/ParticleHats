@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,8 +16,10 @@ import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.ui.MenuState;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 
 public abstract class EditorMenu {
 
@@ -24,9 +27,8 @@ public abstract class EditorMenu {
 	protected final Player owner;
 	protected final MenuBuilder menuBuilder;
 	
-	// Let's us know that this menu only responds to clicks inside its own inventory
-	// Some menus will need to respond to clicks in the players inventory so we add this
-	protected final boolean localOnly;
+	protected final static EditorAction emptyAction = (event, slot) -> { Core.debug("empty action"); return EditorClickType.NONE; };
+	private final ItemStack emptyItem = new ItemStack(Material.STONE);
 	
 	protected final Map<Integer, EditorAction> actions;
 	protected final Map<Integer, Hat> hats;
@@ -36,12 +38,16 @@ public abstract class EditorMenu {
 	protected final ItemStack backButton;
 	protected final EditorAction backAction;
 	
-	public EditorMenu (Core core, Player owner, final MenuBuilder menuBuilder, final boolean localOnly)
+	private long buildTime = 0L;
+	private boolean buildLogged = false;
+	
+	public EditorMenu (Core core, Player owner, final MenuBuilder menuBuilder)
 	{
+		buildTime = System.nanoTime();
+		
 		this.core = core;
 		this.owner = owner;
 		this.menuBuilder = menuBuilder;	
-		this.localOnly = localOnly;
 		
 		actions = new HashMap<Integer, EditorAction>();
 		hats = new HashMap<Integer, Hat>();
@@ -52,7 +58,7 @@ public abstract class EditorMenu {
 		backAction = (event, slot) ->
 		{
 			menuBuilder.goBack();
-			return true;
+			return EditorClickType.NEUTRAL;
 		};
 	}
 
@@ -63,20 +69,15 @@ public abstract class EditorMenu {
 	 * @param inMenu
 	 * @return
 	 */
-	public boolean onClick (InventoryClickEvent event, final int slot, final boolean inMenu)
+	public EditorClickType onClick (InventoryClickEvent event, final int slot, final boolean inMenu)
 	{
-		if (inMenu)
-		{
-			EditorAction action = getAction(slot);
-			if (action != null) {
-				return action.onClick(new EditorClickEvent(event), slot);
-			}
+		if (inMenu) {
+			return getAction(slot).onClick(new EditorClickEvent(event), slot);
 		}
 		
 		else {
 			return onClickOutside(event, slot);
 		}
-		return false;
 	}
 	
 	/**
@@ -85,20 +86,23 @@ public abstract class EditorMenu {
 	 * @param slot
 	 * @return
 	 */
-	public boolean onClickOutside (InventoryClickEvent event, final int slot) { return true; }
+	public EditorClickType onClickOutside (InventoryClickEvent event, final int slot) { return EditorClickType.NONE; }
 	
 	/**
 	 * Builds this menu
 	 */
-	protected abstract void buildMenu ();
+	protected abstract void build ();
 	
 	/**
+	 * Optional<br>
 	 * Called before the menu is closed
+	 * @param forced Set to true when all menus are forced to close
 	 */
-	protected void onClose () {}
+	protected void onClose (boolean forced) {}
 	
 	/**
-	 * Lets us dynamically update this menu
+	 * Optional<br>
+	 * Update this menu
 	 */
 	protected void onTick (int ticks) {}
 	
@@ -107,8 +111,12 @@ public abstract class EditorMenu {
 	 * @param slot
 	 * @return
 	 */
-	protected EditorAction getAction (int slot) {
-		return actions.get(slot);
+	protected EditorAction getAction (int slot) 
+	{
+		if (actionExists(slot)) {
+			return actions.get(slot);
+		}
+		return emptyAction;
 	}
 	
 	/**
@@ -121,12 +129,33 @@ public abstract class EditorMenu {
 	}
 	
 	/**
+	 * Returns true if an action exists in the current slot
+	 * @param slot
+	 */
+	protected boolean actionExists (int slot) {
+		return actions.containsKey(slot);
+	}
+	
+	/**
 	 * Returns the item found at this slot
 	 * @param slot
 	 * @return
 	 */
-	protected ItemStack getItem (int slot) {
-		return inventory.getItem(slot);
+	protected ItemStack getItem (int slot) 
+	{
+		if (itemExists(slot)) {
+			return inventory.getItem(slot);
+		}
+		return emptyItem;
+	}
+	
+	/**
+	 * Checks to see if an item exists in this slot
+	 * @param slot
+	 * @return
+	 */
+	protected boolean itemExists (int slot) {
+		return inventory.getItem(slot) != null;
 	}
 	
 	/**
@@ -169,24 +198,31 @@ public abstract class EditorMenu {
 	}
 	
 	/**
-	 * Returns whether this menus listens for clicks outside of its inventory
-	 * @return
-	 */
-	public boolean isLocalOnly () {
-		return localOnly;
-	}
-	
-	/**
 	 * Opens this menu
 	 */
 	public void open ()
 	{
 		menuBuilder.setOwnerState(MenuState.SWITCHING);
 		owner.openInventory(inventory);
+		
+		logBuildTime();
 	}
 	
 	/**
-	 * Returns an index relative to 0 starting at the startingIndex
+	 * Logs how long this menu took to open
+	 */
+	protected void logBuildTime () 
+	{
+		if (!buildLogged)
+		{
+			Core.debug("menu took " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - buildTime) + "ms to open");
+			buildLogged = true;
+		}
+	}
+	
+	/**
+	 * Returns an index relative to 0 starting at the startingIndex<br>
+	 * eg: (10, 10, 2) -> 0, (11, 10, 2) -> 1, (17, 10, 2) -> 7
 	 * @param slot Slot in inventory
 	 * @param startingIndex Where to start clamping in the inventory
 	 * @param offset How many slots to ignore in each row
@@ -197,7 +233,8 @@ public abstract class EditorMenu {
 	}
 	
 	/**
-	 * 
+	 * Returns an inventory slot relative to 0 starting at startingIndex<br>
+	 * eg: (0, 10, 2) -> 10, (7, 10, 2) -> 19
 	 * @param slot Clamped index
 	 * @param startingIndex Which slot 0 is relative to
 	 * @param offset How many slots are ignored in each row
@@ -214,7 +251,7 @@ public abstract class EditorMenu {
 	/**
 	 * Plays the EDITOR_SOUND_ID found in config.yml
 	 */
-	public void playSound ()
+	public void playSound (EditorClickType clickType)
 	{
 		if (SettingsManager.EDITOR_SOUND_ENABLED.getBoolean())
 		{
@@ -223,22 +260,69 @@ public abstract class EditorMenu {
 			{
 				float volume = SettingsManager.EDITOR_SOUND_VOLUME.getFloat();
 				float pitch = SettingsManager.EDITOR_SOUND_PITCH.getFloat();
+				float modifier = clickType.getModifier();
+				float p = (float) MathUtil.clamp(pitch + modifier, 0, 2);
 				
-				owner.playSound(owner.getLocation(), sound, volume, pitch);
+				owner.playSound(owner.getLocation(), sound, volume, p);
 			}
 		}
 	}
 	
+	/**
+	 * Action to perform when clicking on this item inside an EditorMenu
+	 * @author MediusEcho
+	 *
+	 */
 	@FunctionalInterface
 	protected interface EditorAction {
-		public boolean onClick (EditorClickEvent event, int slot);
+		public EditorClickType onClick (EditorClickEvent event, int slot);
 	}
 	
+	/**
+	 * Action to perform when selecting an item
+	 * @author MediusEcho
+	 *
+	 */
 	@FunctionalInterface
 	protected interface EditorItemCallback {
 		public void onSelect (ItemStack item);
 	}
 	
+	/**
+	 * Action to perform when selecting a ParticleAction
+	 * @author MediusEcho
+	 *
+	 */
+	@FunctionalInterface
+	protected interface EditorActionCallback {
+		public void onSelect (ParticleAction action);
+	}
+	
+	/**
+	 * Action to perform when selecting a Sound
+	 * @author MediusEcho
+	 *
+	 */
+	@FunctionalInterface
+	protected interface EditorSoundCallback {
+		public void onSelect (Sound sound);
+	}
+	
+	/**
+	 * Action to perform when a menu has performed an action
+	 * @author MediusEcho
+	 *
+	 */
+	@FunctionalInterface
+	protected interface EditorGenericCallback {
+		public void onExecute ();
+	}
+	
+	/**
+	 * Adds some shortcut methods for determining click types
+	 * @author MediusEcho
+	 *
+	 */
 	protected class EditorClickEvent
 	{
 		private final InventoryClickEvent event;
@@ -310,6 +394,44 @@ public abstract class EditorMenu {
 		 */
 		public boolean isMiddleClick () {
 			return isMiddleClick;
+		}
+	}
+	
+	/**
+	 * Used to provide feedback for when a player is editing properties
+	 * @author MediusEcho
+	 *
+	 */
+	protected enum EditorClickType {
+		
+		/**
+		 * The player is not clicking inside a menu
+		 */
+		NONE,
+		
+		/**
+		 * The player is clicking inside a menu
+		 */
+		NEUTRAL,
+		
+		/**
+		 * The player is increasing a value inside a menu
+		 */
+		POSITIVE,
+		
+		/**
+		 * The player is decreasing a value inside a menu
+		 */
+		NEGATIVE;
+		
+		public float getModifier ()
+		{
+			if (this == NONE || this == NEUTRAL) {
+				return 0;
+			}
+			
+			float mod = SettingsManager.EDITOR_SOUND_MODIFIER.getFloat();
+			return mod * (this == POSITIVE ? 1f : -1f);
 		}
 	}
 }
