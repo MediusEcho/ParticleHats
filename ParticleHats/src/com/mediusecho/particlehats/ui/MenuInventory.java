@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.util.StringUtil;
 
 public class MenuInventory {
 
@@ -24,7 +24,7 @@ public class MenuInventory {
 		this.name = name;
 		this.title = title;
 		
-		inventory = Bukkit.createInventory(null, rows * 9, ChatColor.translateAlternateColorCodes('&', title));
+		inventory = Bukkit.createInventory(null, rows * 9, StringUtil.colorize(title));
 		hats = new HashMap<Integer, Hat>();
 	}
 	
@@ -42,8 +42,11 @@ public class MenuInventory {
 	 * @param slot
 	 * @param item
 	 */
-	public void setItem (int slot, ItemStack item) {
-		inventory.setItem(slot, item);
+	public void setItem (int slot, ItemStack item) 
+	{
+		if (slot < inventory.getSize()) {
+			inventory.setItem(slot, item);
+		}
 	}
 	
 	/**
@@ -68,6 +71,14 @@ public class MenuInventory {
 	 */
 	public String getTitle () {
 		return title;
+	}
+	
+	/**
+	 * Set this menus inventory title
+	 * @param title
+	 */
+	public void setTitle (String title) {
+		this.title = title;
 	}
 	
 	/**
