@@ -22,7 +22,7 @@ public class IconData {
 	public IconData ()
 	{
 		materials = new ArrayList<Material>();
-		materials.add(Material.SUNFLOWER);
+		setMainMaterial(Material.SUNFLOWER);
 	}
 	
 	/**
@@ -39,6 +39,10 @@ public class IconData {
 			materials.add(material);
 		} else {
 			materials.set(0, material);
+		}
+		
+		if (previousMaterial == null) {
+			previousMaterial = material;
 		}
 	}
 	
