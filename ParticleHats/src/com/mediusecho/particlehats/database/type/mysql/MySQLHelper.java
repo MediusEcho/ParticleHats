@@ -36,7 +36,7 @@ public class MySQLHelper {
 			{
 				String menuTable = "CREATE TABLE IF NOT EXISTS menus ("
 						+ "name VARCHAR(128) PRIMARY KEY,"
-						+ "title VARCHAR(40) NOT NULL,"
+						+ "title VARCHAR(40) NOT NULL DEFAULT '',"
 						+ "size TINYINT(3) NOT NULL DEFAULT 6"
 						+ ")";
 				try (PreparedStatement menuStatement = connection.prepareStatement(menuTable)) {
