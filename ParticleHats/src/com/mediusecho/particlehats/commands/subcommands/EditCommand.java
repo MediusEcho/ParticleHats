@@ -12,6 +12,7 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
+import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditCommand extends Command {
 
@@ -31,18 +32,21 @@ public class EditCommand extends Command {
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
 	{
-		if (!sender.isPlayer())
+		if (!sender.isPlayer()) 
 		{
+			sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
 			return false;
 		}
 		
-		if (args.size() != 1)
+		if (args.size() != 1) 
 		{
+			String error = Message.COMMAND_ERROR_ARGUMENTS.getValue().replace("{1}", Message.COMMAND_EDIT_USAGE.getValue());
+			sender.sendMessage(StringUtil.parseDescription(error));
 			return false;
 		}
 		
 		String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
-		if (!core.getDatabase().getMenus(false).contains(menuName))
+		if (!core.getDatabase().getMenus(true).contains(menuName))
 		{
 			sender.sendMessage("&cThis menu does not exist");
 			return false;
