@@ -1,13 +1,14 @@
 package com.mediusecho.particlehats.database.type.yaml;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map;
 
 import com.mediusecho.particlehats.database.Database;
-import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.MenuInventory;
 
-public class YamlDatabase extends Database {
+public class YamlDatabase implements Database {
 
 	@Override
 	public void onDisable() 
@@ -29,12 +30,6 @@ public class YamlDatabase extends Database {
 
 	@Override
 	public void createEmptyMenu(String menuName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void saveInventory(EditorBaseMenu menu) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -62,6 +57,12 @@ public class YamlDatabase extends Database {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public Map<String, BufferedImage> getImages (boolean forceUpdate)
+	{
+		return null;
+	}
 
 	@Override
 	public void changeSlot(String menuName, int previousSlot, int newSlot, boolean swapping) {
@@ -71,6 +72,30 @@ public class YamlDatabase extends Database {
 
 	@Override
 	public void deleteMenu(String menuName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveMenuTitle(String menuName, String title) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveMenuSize(String menuName, int rows) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean labelExists(String menuName, String label) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void saveMetaData(String menuName, Hat hat, DataType type) {
 		// TODO Auto-generated method stub
 		
 	}
