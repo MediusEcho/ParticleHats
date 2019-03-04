@@ -178,6 +178,7 @@ public class ItemUtil {
 		
 		itemMeta.setDisplayName(StringUtil.colorize(name));
 		itemMeta.setLore(description);
+		itemMeta.addItemFlags(ItemFlag.values());
 		
 		item.setItemMeta(itemMeta);
 	}
