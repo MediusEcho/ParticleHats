@@ -76,6 +76,7 @@ public class EditorSettingsMenu extends EditorMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
+		// TODO: Toggle Live Updates
 		// Toggle Live Updates
 		ItemStack liveItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SETTINGS_MENU_TOGGLE_LIVE_MENU);
 		setButton(30, liveItem, (event, slot) ->
@@ -83,6 +84,7 @@ public class EditorSettingsMenu extends EditorMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
+		// TODO: Sync icon animation
 		// Sync Icons
 		ItemStack syncItem = ItemUtil.createItem(Material.CONDUIT, Message.EDITOR_SETTINGS_MENU_SYNC_ICONS);
 		setButton(32, syncItem, (event, slot) ->
