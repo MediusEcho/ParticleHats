@@ -65,6 +65,14 @@ public enum ParticleType {
 	}
 	
 	/**
+	 * Get this ParticleTypes Effect
+	 * @return
+	 */
+	public Effect getEffect () {
+		return effect;
+	}
+	
+	/**
 	 * Set all particle location data for this type
 	 * @param f
 	 */
