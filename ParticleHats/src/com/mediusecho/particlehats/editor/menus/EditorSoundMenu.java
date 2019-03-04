@@ -141,16 +141,6 @@ public class EditorSoundMenu extends EditorMenu {
 			inv.setItem(53, pitchItem);
 			owner.openInventory(inv);
 		}
-//		Inventory menu = menus.get(currentPage);
-//		if (menu != null)
-//		{
-//			menuBuilder.setOwnerState(MenuState.SWITCHING);
-//			
-//			menu.setItem(52, volumeItem);
-//			menu.setItem(53, pitchItem);
-//			
-//			owner.openInventory(menu);
-//		}
 	}
 
 	@Override
