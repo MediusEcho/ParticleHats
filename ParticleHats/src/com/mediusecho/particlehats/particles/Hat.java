@@ -1,6 +1,8 @@
 package com.mediusecho.particlehats.particles;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -9,11 +11,14 @@ import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
+import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public class Hat {
@@ -28,11 +33,16 @@ public class Hat {
 	private String equipMessage            = "";
 	private String leftClickArgument       = "";
 	private String rightClickArgument      = "";
+	private String label                   = "";
 	
-	private ParticleLocation location  = ParticleLocation.HEAD;
-	private ParticleAction leftAction  = ParticleAction.EQUIP;
-	private ParticleAction rightAction = ParticleAction.MIMIC;
-	private ParticleMode mode          = ParticleMode.ACTIVE;
+	private ParticleLocation location   = ParticleLocation.HEAD;
+	private ParticleAction leftAction   = ParticleAction.EQUIP;
+	private ParticleAction rightAction  = ParticleAction.MIMIC;
+	private ParticleMode mode           = ParticleMode.ACTIVE;
+	private ParticleType type           = ParticleType.NONE;
+	private ParticleAnimation animation = ParticleAnimation.STATIC;
+	
+	private CustomEffect customEffect;
 	
 	private boolean isVanished      = false;
 	private boolean isAnimated      = false;
@@ -40,13 +50,17 @@ public class Hat {
 	private boolean isPermanent     = true;
 	private boolean isLoaded        = false;
 	
-	private int referenceID         = 0;
+	//private int referenceID         = 0;
 	private int updateFrequency     = 2;
 	private int price               = 0;
 	private int speed               = 0;
 	private int count               = 1;
 	private int slot                = -1;
 	private int demoDuration        = 200; // (10 Seconds in ticks)
+	private int editingAction       = -1;
+	
+	private List<String> normalDescription;
+	private List<String> permissionDescription;
 	
 	private Sound sound;
 	private double volume = 1D;
@@ -56,17 +70,19 @@ public class Hat {
 	private IconData iconData;
 	
 	// Particle Size
-	private double size = 1f;
+	private double particleScale = 1f;
 	
 	private Vector offset;
 	private Vector angle;
 	
 	public Hat ()
 	{
-		modifiedProperties = new HashMap<String, String>();
-		offset = new Vector();
-		angle = new Vector();
-		iconData = new IconData();
+		modifiedProperties    = new HashMap<String, String>();
+		offset                = new Vector();
+		angle                 = new Vector();
+		iconData              = new IconData();
+		normalDescription     = new ArrayList<String>();
+		permissionDescription = new ArrayList<String>();
 	}
 	
 	/**
@@ -85,6 +101,8 @@ public class Hat {
 	{
 		this.name = name;
 		this.displayName = StringUtil.colorize(name);
+		
+		setProperty("title", "'" + name + "'");
 	}
 	
 	/**
@@ -135,8 +153,8 @@ public class Hat {
 	 */
 	public void setPermissionDeniedMessage (String permissionDeniedMessage) 
 	{
-		this.permissionDeniedMessage = StringUtil.colorize(permissionDeniedMessage);
-		setProperty("perm_denied_message", "'" + permissionDeniedMessage + "'");
+		this.permissionDeniedMessage = permissionDeniedMessage;
+		setProperty("permission_denied", "'" + permissionDeniedMessage + "'");
 	}
 	
 	/**
@@ -145,6 +163,23 @@ public class Hat {
 	 */
 	public String getPermissionDeniedMessage () {
 		return permissionDeniedMessage;
+	}
+	
+	/**
+	 * Get this hats permission denied message with color codes translated
+	 * @return
+	 */
+	public String getPermissionDeniedDisplayMessage () {
+		return StringUtil.colorize(permissionDeniedMessage);
+	}
+	
+	/**
+	 * Removes this hats permission denied message
+	 */
+	public void removePermissionDeniedMessage () 
+	{
+		this.permissionDeniedMessage = "";
+		setProperty("permission_denied", "NULL");
 	}
 	
 	/**
@@ -169,7 +204,7 @@ public class Hat {
 	 */
 	public void setEquipMessage (String equipMessage) 
 	{
-		this.equipMessage = StringUtil.colorize(equipMessage);
+		this.equipMessage = equipMessage;
 		setProperty("equip_message", "'" + equipMessage + "'");
 	}
 	
@@ -182,16 +217,30 @@ public class Hat {
 	}
 	
 	/**
+	 * Get this hats equip message with color codes translated
+	 * @return
+	 */
+	public String getEquipDisplayMessage () {
+		return StringUtil.colorize(equipMessage);
+	}
+	
+	/**
+	 * Removes this hats equip message
+	 */
+	public void removeEquipMessage ()
+	{
+		this.equipMessage = "";
+		setProperty("equip_message", "NULL");
+	}
+	
+	/**
 	 * Set this hats left click argument
 	 * @param leftClickArgument
 	 */
 	public void setLeftClickArgument (String leftClickArgument)
 	{
-		if (leftClickArgument != null)
-		{
-			this.leftClickArgument = leftClickArgument;
-			setProperty("left_argument", "'" + leftClickArgument + "'");
-		}
+		this.leftClickArgument = leftClickArgument;
+		setProperty("left_argument", "'" + leftClickArgument + "'");
 	}
 	
 	/**
@@ -208,11 +257,8 @@ public class Hat {
 	 */
 	public void setRightClickArgument (String rightClickArgument)
 	{
-		if (rightClickArgument != null)
-		{
-			this.rightClickArgument = rightClickArgument;
-			setProperty("right_argument", "'" + rightClickArgument + "'");
-		}
+		this.rightClickArgument = rightClickArgument;
+		setProperty("right_argument", "'" + rightClickArgument + "'");
 	}
 	
 	/**
@@ -221,6 +267,50 @@ public class Hat {
 	 */
 	public String getRightClickArgument () {
 		return rightClickArgument;
+	}
+	
+	/**
+	 * Set the left / right click action argument depending on the editing action value
+	 * @param argument
+	 */
+	public void setArgument (String argument)
+	{
+		switch (editingAction)
+		{
+		case 1:
+			setLeftClickArgument(argument);
+			break;
+		case 2:
+			setRightClickArgument(argument);
+			break;
+			default: break;
+		}
+		editingAction = -1;
+	}
+	
+	/**
+	 * Set this hats label
+	 * @param label
+	 */
+	public void setLabel (String label)
+	{
+		this.label = label;
+		setProperty("label", "'" + label + "'");
+	}
+	
+	/**
+	 * Get this hats label<br>
+	 * Labels are used in commands to reference this hat
+	 * @return
+	 */
+	public String getLabel () {
+		return label;
+	}
+	
+	public void removeLabel ()
+	{
+		this.label = "";
+		setProperty("label", "NULL");
 	}
 	
 	/**
@@ -293,6 +383,60 @@ public class Hat {
 	 */
 	public ParticleMode getMode () {
 		return mode;
+	}
+	
+	/**
+	 * Set this hats ParticleType
+	 * @param type
+	 */
+	public void setType (ParticleType type)
+	{
+		this.type = type;
+		setProperty("type", Integer.toString(type.getID()));
+	}
+	
+	/**
+	 * Get this hats ParticleType
+	 * @return
+	 */
+	public ParticleType getType () {
+		return type;
+	}
+	
+	/**
+	 * Set this hats ParticleAnimation value
+	 * @param animation
+	 */
+	public void setAnimation (ParticleAnimation animation)
+	{
+		this.animation = animation;
+		setProperty("animation", Integer.toString(animation.getID()));
+	}
+	
+	/**
+	 * Get this hats ParticleAnimation value
+	 * @return
+	 */
+	public ParticleAnimation getAnimation () {
+		return animation;
+	}
+	
+	/**
+	 * Set this hats custom effect
+	 * @param customEffect
+	 */
+	public void setCustomType (CustomEffect customEffect)
+	{
+		this.customEffect = customEffect;
+		setProperty("custom_type", "'" + customEffect.getImageName() + "'");
+	}
+	
+	/**
+	 * Get this hats custom effect, null if nothing is set
+	 * @return
+	 */
+	public CustomEffect getCustomEffect () {
+		return customEffect;
 	}
 	
 	/**
@@ -404,6 +548,15 @@ public class Hat {
 	}
 	
 	/**
+	 * Check to see if we can display another frame of this hats ParticleType
+	 * @param ticks
+	 * @return
+	 */
+	public boolean canDisplay (int ticks) {
+		return ticks % updateFrequency == 0;
+	}
+	
+	/**
 	 * Set how often this hat changes icons
 	 * @param iconUpdateFrequency
 	 */
@@ -419,6 +572,25 @@ public class Hat {
 	 */
 	public int getIconUpdateFrequency () {
 		return iconData.getUpdateFrequency();
+	}
+	
+	/**
+	 * Set the scale particles are displayed at<br>
+	 * Only certain particles obey this value
+	 * @param particleScale
+	 */
+	public void setParticleScale (double particleScale)
+	{
+		this.particleScale = particleScale;
+		setProperty("particle_scale", Double.toString(particleScale));
+	}
+	
+	/**
+	 * Get how large particles are displayed at
+	 * @return
+	 */
+	public double getParticleScale () {
+		return particleScale;
 	}
 	
 	/**
@@ -511,6 +683,46 @@ public class Hat {
 	}
 	
 	/**
+	 * Set which actions argument will be edited (1 = left click, 2 = right click)
+	 * @param editingAction
+	 */
+	public void setEditingAction (int editingAction) {
+		this.editingAction = editingAction;
+	}
+	
+	/**
+	 * Set this hats description
+	 * @param description
+	 */
+	public void setDescription (List<String> description) {
+		this.normalDescription = description;
+	}
+	
+	/**
+	 * Get this hats description
+	 * @return
+	 */
+	public List<String> getDescription () {
+		return normalDescription;
+	}
+	
+	/**
+	 * Set the description players will see if they don't have permission to equip this hat
+	 * @param description
+	 */
+	public void setPermissionDescription (List<String> description) {
+		this.permissionDescription = description;
+	}
+	
+	/**
+	 * Get the description players will see if they don't have permission to equip this hat
+	 * @return
+	 */
+	public List<String> getPermissionDescription () {
+		return permissionDescription;
+	}
+	
+	/**
 	 * Set the sound this hat will play when clicked
 	 * @param sound
 	 */
@@ -518,6 +730,12 @@ public class Hat {
 	{
 		this.sound = sound;
 		setProperty("sound", "'" + sound.toString() + "'");
+	}
+	
+	public void removeSound () 
+	{
+		this.sound = null;
+		setProperty("sound", "NULL");
 	}
 	
 	/**
@@ -642,6 +860,29 @@ public class Hat {
 	 */
 	public Vector getOffset () {
 		return offset;
+	}
+	
+	/**
+	 * Returns this hats offset including location offset
+	 * @return
+	 */
+	public Vector getTotalOffset ()
+	{
+		double y = 0;
+		switch (location)
+		{
+		case HEAD:
+			y = 2.3;
+			break;
+		case WAIST:
+			y = 0.9f;
+			break;
+		default:
+			y = 0;
+			break;
+		}
+		
+		return new Vector(offset.getX(), offset.getY() + y, offset.getZ());
 	}
 	
 	/**
