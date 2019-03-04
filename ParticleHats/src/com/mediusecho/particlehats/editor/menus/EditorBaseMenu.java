@@ -111,10 +111,6 @@ public class EditorBaseMenu extends EditorMenu {
 				IconData iconData = hat.getIconData();
 				if (iconData.isLive()) {
 					getItem(slot).setType(iconData.getNextMaterial(ticks));
-//					Material mat = iconData.getNextMaterial(ticks);
-//					if (mat != null) {
-//						getItem(slot).setType(mat);
-//					}
 				}
 			}
 		}
