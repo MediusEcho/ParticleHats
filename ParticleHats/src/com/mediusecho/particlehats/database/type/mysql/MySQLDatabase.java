@@ -31,6 +31,7 @@ import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -386,6 +387,7 @@ public class MySQLDatabase implements Database {
 					hat.setLocation(ParticleLocation.fromId(set.getInt("location")));
 					hat.setMode(ParticleMode.fromId(set.getInt("mode")));
 					hat.setAnimation(ParticleAnimation.fromID(set.getInt("animation")));
+					hat.setTrackingMethod(ParticleTracking.fromID(set.getInt("tracking")));
 					String label = set.getString("label");
 					if (label != null) {
 						hat.setLabel(label);
