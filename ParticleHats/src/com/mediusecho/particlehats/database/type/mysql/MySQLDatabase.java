@@ -1,11 +1,17 @@
 package com.mediusecho.particlehats.database.type.mysql;
 
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,21 +22,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.database.Database;
-import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
-import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
+import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.StringUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class MySQLDatabase extends Database {
+public class MySQLDatabase implements Database {
 
 	private HikariDataSource dataSource;
 	private MySQLHelper helper;
@@ -41,14 +49,27 @@ public class MySQLDatabase extends Database {
 	private final String port     = SettingsManager.DATABASE_PORT.asString();
 	private final String database = SettingsManager.DATABASE_DATABASE.getString();
 	
-	private List<String> menuCache;
-	private final long UPDATE_INTERVAL = 30000L; // Fetch MySQL changes every 30 seconds
-	private Long lastUpdate = 0L;
+	public final int TYPE_DESCRIPTION            = 1;
+	public final int TYPE_PERMISSION_DESCRIPTION = 2;
+	public final int TYPE_ICON                   = 3;
+	public final int TYPE_TAGS                   = 4;
+	public final int TYPE_PARTICLES              = 5;
 	
-	public MySQLDatabase ()
+	private List<String> menuCache;
+	private Map<String, BufferedImage> imageCache;
+	
+	private long lastMenuUpdate = 0L;
+	private long lastImageUpdate = 0L;
+	
+	// Fetch MySQL changes every 30 seconds
+	private final long UPDATE_INTERVAL = 30000L;
+	
+	public MySQLDatabase (Core core)
 	{
-		helper = new MySQLHelper(this);
 		menuCache = new ArrayList<String>();
+		imageCache = new HashMap<String, BufferedImage>();
+		
+		helper = new MySQLHelper(this);
 		
 		HikariConfig config = new HikariConfig();
 		config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database + "?useSSL=false");
@@ -57,7 +78,7 @@ public class MySQLDatabase extends Database {
 		
 		try {
 			dataSource = new HikariDataSource(config);
-			helper.initDatabase();
+			helper.initDatabase(core);
 		}
 		
 		catch (Exception e)
@@ -65,26 +86,6 @@ public class MySQLDatabase extends Database {
 			Core.log("There was an error connecting to the MySQL database");
 			e.printStackTrace();
 		}
-		
-//		dataSource = new HikariDataSource();
-//		dataSource.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database + "?verifyServerCertificate=false&useSSL=false");
-//		dataSource.setUsername(username);
-//		dataSource.setPassword(password);
-		
-//		try 
-//		{
-//			Connection connection = dataSource.getConnection();
-//			
-//			Core.log("Connected to MySQL database");
-//			helper.initDatabase(connection);
-//		} 
-//		
-//		catch (SQLException e) 
-//		{
-//			Core.log("There was an issue connecting to the MySQL database");
-//			e.printStackTrace();
-//			return;
-//		}
 	}
 	
 	public boolean init ()
@@ -99,7 +100,7 @@ public class MySQLDatabase extends Database {
 	}
 
 	@Override
-	public MenuInventory loadInventory(String menuName) 
+	public MenuInventory loadInventory(String menuName) // Throw Exception
 	{		
 		try (Connection connection = dataSource.getConnection())
 		{
@@ -116,68 +117,97 @@ public class MySQLDatabase extends Database {
 					final MenuInventory inventory = new MenuInventory(menuName, menuTitle, menuSize);
 					
 					// Load this menus items
-					String itemQuery = "SELECT slot, id, title, icon_update_frequency, display_mode FROM menu_" + menuName + "_items";
+					String itemQuery = helper.getShallowHatQuery(menuName);
 					try (PreparedStatement itemStatement = connection.prepareStatement(itemQuery))
 					{
 						ResultSet itemSet = itemStatement.executeQuery();
 						
 						while (itemSet.next())
 						{
-							//int referenceID  = itemResult.getInt("reference");
 							int itemSlot     = itemSet.getInt("slot");
 							String itemID    = itemSet.getString("id");
 							String itemTitle = ChatColor.translateAlternateColorCodes('&', itemSet.getString("title"));
 							
 							ItemStack item = ItemUtil.createItem(Material.valueOf(itemID), 1);
 							ItemMeta meta = item.getItemMeta();
-							if (meta != null) {
-								meta.setDisplayName(itemTitle);
-							}
-							
-							// Create our item descriptions
-							String descriptionQuery = "SELECT value FROM menu_" + menuName + "_desc WHERE slot = ? ORDER BY line ASC";
-							try (PreparedStatement descStatement = connection.prepareStatement(descriptionQuery))
-							{
-								descStatement.setInt(1, itemSlot);
-								
-								List<String> description = new ArrayList<String>();
-								ResultSet descResult = descStatement.executeQuery();
-								
-								while (descResult.next())
-								{
-									String entry = ChatColor.translateAlternateColorCodes('&', descResult.getString("value"));	
-									description.add(entry);
-								}
-								
-								if (meta != null) {
-									meta.setLore(description);
-								}
-							}
+							meta.setDisplayName(itemTitle);
 							
 							Hat hat = new Hat();
 							hat.setMaterial(item.getType());
 							hat.setIconUpdateFrequency(itemSet.getInt("icon_update_frequency"));
 							hat.setDisplayMode(IconDisplayMode.fromId(itemSet.getInt("display_mode")));
 							
-							// Create our icons
-							//String iconQuery = "SELECT * FROM menu_" + menuName + "_"";
+							String permissionDenied = itemSet.getString("permission_denied");
+							if (permissionDenied != null) {
+								hat.setPermissionDeniedMessage(permissionDenied);
+							}
 							
-							// Create our icons
-							String materialQuery = "SELECT material FROM menu_" + menuName + "_icons WHERE slot = ? ORDER BY index_num ASC";
-							try (PreparedStatement materialStatement = connection.prepareStatement(materialQuery))
+							String equipMessage = itemSet.getString("equip_message");
+							if (equipMessage != null) {
+								hat.setEquipMessage(equipMessage);
+							}
+							
+							hat.setLeftClickAction(ParticleAction.fromId(itemSet.getInt("left_action")));
+							hat.setRightClickAction(ParticleAction.fromId(itemSet.getInt("right_action")));
+							
+							String leftArgument = itemSet.getString("left_argument");
+							if (leftArgument != null) {
+								hat.setLeftClickArgument(leftArgument);
+							}
+							
+							String rightArgument = itemSet.getString("right_argument");
+							if (rightArgument != null) {
+								hat.setRightClickArgument(rightArgument);
+							}
+							
+							// Create our description
+							String query = "SELECT type, value FROM menu_" + menuName + "_meta WHERE slot = ? ORDER BY line ASC";
+							try (PreparedStatement descriptionStatement = connection.prepareStatement(query))
 							{
-								materialStatement.setInt(1, itemSlot);
-								ResultSet set = materialStatement.executeQuery();
+								descriptionStatement.setInt(1, itemSlot);
+								
+								ResultSet set = descriptionStatement.executeQuery();
+								int type = 0;
+								
+								List<String> description = new ArrayList<String>();
+								List<String> permissionDescription = new ArrayList<String>();
 								IconData data = hat.getIconData();
 								
-								while (set.next())
+								while (set.next()) 
 								{
-									Material mat = Material.valueOf(set.getString("material"));
-									if (mat != null) {
-										data.addMaterial(mat);
+									type = set.getInt("type");
+									switch (type)
+									{
+									
+									case TYPE_DESCRIPTION:
+										description.add(set.getString("value"));
+										break;
+										
+									case TYPE_PERMISSION_DESCRIPTION:
+										permissionDescription.add(set.getString("value"));
+										break;
+										
+									case TYPE_ICON:
+										Material mat = Material.getMaterial(set.getString("value"));
+										if (mat != null) {
+											data.addMaterial(mat);
+										}
+										break;
 									}
 								}
+								
+								if (description.size() > 0) 
+								{
+									meta.setLore(StringUtil.colorize(description));
+									hat.setDescription(description);
+								}
+								
+								if (permissionDescription.size() > 0) {
+									hat.setPermissionDescription(permissionDescription);
+								}
 							}
+							
+							hat.clearPropertyChanges();
 							
 							item.setItemMeta(meta);
 							inventory.setItem(itemSlot, item);
@@ -193,34 +223,14 @@ public class MySQLDatabase extends Database {
 		}
 		return null;
 	}
-	
-	@Override
-	public void saveInventory (EditorBaseMenu menu)
-	{
-//		Map<Integer, Hat> hats = menu.getHats();
-//		boolean canSave = false;
-//		
-//		String saveQuery = "INSERT INTO ";// +
-//		
-//		for (Entry<Integer, Hat> entry : hats.entrySet())
-//		{
-//			int slot = entry.getKey();
-//			Hat hat = entry.getValue();
-//			
-//			if (hat.isModified())
-//			{
-//				
-//			}
-//		}
-	}
 
 	@Override
 	public List<String> getMenus(boolean forceUpdate) 
 	{	
 		// Only refresh our menu cache every UPDATE_INTERVAL to prevent spamming
-		if (forceUpdate || (System.currentTimeMillis() - lastUpdate) > UPDATE_INTERVAL)
+		if (forceUpdate || (System.currentTimeMillis() - lastMenuUpdate) > UPDATE_INTERVAL)
 		{
-			lastUpdate = System.currentTimeMillis();
+			lastMenuUpdate = System.currentTimeMillis();
 			menuCache.clear();
 			connect((connection) -> 
 			{
@@ -248,71 +258,22 @@ public class MySQLDatabase extends Database {
 				String createMenuStatement= "INSERT INTO menus VALUES(?, ?, ?)";
 				try (PreparedStatement statement = connection.prepareStatement(createMenuStatement))
 				{
-					statement.setString(1, menuName);
-					statement.setString(2, menuName);
+					statement.setString(1, menuName); // Name
+					statement.setString(2, menuName); // Title (Same until title is changed)
 					statement.setInt(3, 6);
 					
 					if (statement.executeUpdate() > 0)
 					{
 						// Items Table
-						String createMenuItemsTable = "CREATE TABLE IF NOT EXISTS  menu_" + menuName + "_items ("
-								//+ "reference INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,"
-								+ "slot TINYINT PRIMARY KEY,"
-								+ "id VARCHAR(64) NOT NULL DEFAULT 'SUNFLOWER',"
-								+ "title VARCHAR(128) NOT NULL DEFAULT '" + Message.EDITOR_MISC_NEW_PARTICLE.getRawValue() + "',"
-								+ "permission VARCHAR(64) NOT NULL DEFAULT 'all',"
-								+ "permission_denied VARCHAR(128),"
-								+ "type TINYINT NOT NULL DEFAULT 0,"
-								+ "location TINYINT NOT NULL DEFAULT 0,"
-								+ "mode TINYINT NOT NULL DEFAULT 0,"
-								+ "label VARCHAR(128),"
-								+ "equip_message VARCHAR(128),"
-								+ "offset_x DOUBLE NOT NULL DEFAULT 0,"
-								+ "offset_y DOUBLE NOT NULL DEFAULT 0,"
-								+ "offset_z DOUBLE NOT NULL DEFAULT 0,"
-								+ "angle_x DOUBLE NOT NULL DEFAULT 0,"
-								+ "angle_y DOUBLE NOT NULL DEFAULT 0,"
-								+ "angle_z DOUBLE NOT NULL DEFAULT 0,"
-								+ "update_frequency TINYINT NOT NULL DEFAULT 2,"
-								+ "icon_update_frequency TINYINT NOT NULL DEFAULT 1,"
-								+ "speed TINYINT NOT NULL DEFAULT 0,"
-								+ "count TINYINT NOT NULL DEFAULT 1,"
-								+ "price INT NOT NULL DEFAULT 0,"
-								+ "sound VARCHAR(64),"
-								+ "volume DOUBLE NOT NULL DEFAULT 1,"
-								+ "pitch DOUBLE NOT NULL DEFAULT 1,"
-								+ "left_action TINYINT NOT NULL DEFAULT 0,"
-								+ "right_action TINYINT NOT NULL DEFAULT 12,"
-								+ "left_argument VARCHAR(128),"
-								+ "right_argument VARCHAR(128),"
-								+ "duration MEDIUMINT NOT NULL DEFAULT 20"
-								+ ")";
+						String createMenuItemsTable = helper.getItemTableQuery(menuName);
 						try (PreparedStatement itemsStatement = connection.prepareStatement(createMenuItemsTable)) {
 							itemsStatement.execute();
 						}
 						
-						// Description Table
-						String createMenuDescriptionTable = "CREATE TABLE IF NOT EXISTS menu_" + menuName + "_desc ("
-								+ "slot TINYINT,"
-								+ "line TINYINT,"
-								+ "value VARCHAR(128),"
-								+ "PRIMARY KEY(slot, line),"
-								+ "FOREIGN KEY(slot) REFERENCES menu_" + menuName + "_items(slot) ON DELETE CASCADE ON UPDATE CASCADE"
-								+ ")";
-						try (PreparedStatement descStatement = connection.prepareStatement(createMenuDescriptionTable)) {
-							descStatement.execute();
-						}
-						
-						// Icons Table
-						String createMenuIconTable = "CREATE TABLE IF NOT EXISTS menu_" + menuName + "_icons ("
-								+ "slot TINYINT,"
-								+ "index_num TINYINT,"
-								+ "material VARCHAR(64) NOT NULL DEFAULT 'SUNFLOWER',"
-								+ "PRIMARY KEY(slot, index_num),"
-								+ "FOREIGN KEY(slot) REFERENCES menu_" + menuName + "_items(slot) ON DELETE CASCADE ON UPDATE CASCADE"
-								+ ")";
-						try (PreparedStatement iconStatement = connection.prepareStatement(createMenuIconTable)) {
-							iconStatement.execute();
+						// Meta Table
+						String createMenuMetaTable = helper.getMetaTableQuery(menuName);
+						try (PreparedStatement metaStatement = connection.prepareStatement(createMenuMetaTable)) {
+							metaStatement.execute();
 						}
 					}
 				}
@@ -331,6 +292,33 @@ public class MySQLDatabase extends Database {
 		{
 			connect((connection) ->
 			{
+				String deleteQuery = "DELETE FROM menus WHERE name = ?";
+				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
+				{
+					deleteStatement.setString(1, menuName);
+					if (deleteStatement.executeUpdate() >= 1)
+					{
+						String dropQuery = "DROP TABLE IF EXISTS "
+								+ "menu_" + menuName + "_meta,"
+								+ "menu_" + menuName + "_items";
+						
+						try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery)) {
+							dropStatement.executeUpdate();
+						}
+//						String dropQuery = "DROP TABLE IF EXISTS ?";
+//						try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery))
+//						{
+//							dropStatement.setString(1, "menu_" + menuName + "_meta");
+//							dropStatement.addBatch();
+//							
+//							dropStatement.setString(1, "menu_" + menuName + "_items");
+//							dropStatement.addBatch();
+//							
+//							dropStatement.executeBatch();
+//						}
+					}
+				}
+				
 //				String dropQuery = "DROP TABLE IF EXISTS "
 //						+ "menu_" + menuName + "_icons,"
 //						+ "menu_" + menuName + "_desc,"
@@ -391,15 +379,17 @@ public class MySQLDatabase extends Database {
 				{
 					//hat.setReferenceID(set.getInt("reference"));
 					hat.setSlot(set.getInt("slot"));
-					// ID
-					// Title
+					hat.setName(set.getString("title"));
 					hat.setPermission(set.getString("permission"));	
 					// Permission Denied
-					// Type
+					hat.setType(ParticleType.fromID(set.getInt("type")));
 					hat.setLocation(ParticleLocation.fromId(set.getInt("location")));
 					hat.setMode(ParticleMode.fromId(set.getInt("mode")));
-					// Label
-					// Equip Message
+					hat.setAnimation(ParticleAnimation.fromID(set.getInt("animation")));
+					String label = set.getString("label");
+					if (label != null) {
+						hat.setLabel(label);
+					}
 					hat.setOffset(set.getDouble("offset_x"), set.getDouble("offset_y"), set.getDouble("offset_z"));
 					hat.setAngle(set.getDouble("angle_x"), set.getDouble("angle_y"), set.getDouble("angle_z"));
 					hat.setUpdateFrequency(set.getInt("update_frequency"));		
@@ -410,35 +400,30 @@ public class MySQLDatabase extends Database {
 					}
 					hat.setSoundVolume(set.getDouble("volume"));
 					hat.setSoundPitch(set.getDouble("pitch"));
-					hat.setLeftClickAction(ParticleAction.fromId(set.getInt("left_action")));
-					hat.setRightClickAction(ParticleAction.fromId(set.getInt("right_action")));
-					hat.setLeftClickArgument(set.getString("left_argument"));
-					hat.setRightClickArgument(set.getString("right_argument"));
 					hat.setDemoDuration(set.getInt("duration"));
+					hat.setParticleScale(set.getDouble("particle_scale"));
+					
+					String customTypeName = set.getString("custom_type");
+					if (customTypeName != null)
+					{
+						Map<String, BufferedImage> images = getImages(false);
+						if (images.containsKey(customTypeName)) {
+							hat.setCustomType(new CustomEffect(images.get(customTypeName), customTypeName, 0.2));
+						}
+					}
 					
 					hat.clearPropertyChanges();
 					hat.setLoaded(true);
 				}
 			}
-			
-//			String itemQuery = "SELECT material FROM menu_" + menuName + "_icons WHERE slot = ? ORDER BY index_num ASC";
-//			try (PreparedStatement itemStatement = connection.prepareStatement(itemQuery))
-//			{
-//				itemStatement.setInt(1, slot);
-//				ResultSet set = itemStatement.executeQuery();
-//				IconData data = hat.getIconData();
-//				
-//				while (set.next())
-//				{
-//					Material mat = Material.valueOf(set.getString("material"));
-//					if (mat != null) {
-//						data.addMaterial(mat);
-//					}
-//				}
-//			}
 		});
 	}
 
+	/**
+	 * 
+	 * @param menuName
+	 * @param slot
+	 */
 	@Override
 	public void deleteHat(String menuName, int slot) 
 	{
@@ -456,6 +441,13 @@ public class MySQLDatabase extends Database {
 		});
 	}
 	
+	/**
+	 * 
+	 * @param menuName
+	 * @param previousSlot
+	 * @param newSlot
+	 * @param swapping
+	 */
 	@Override
 	public void changeSlot (String menuName, int previousSlot, int newSlot, boolean swapping)
 	{
@@ -526,41 +518,240 @@ public class MySQLDatabase extends Database {
 		});
 	}
 	
-	public void saveIconData (String menuName, Hat hat)
+	@Override
+	public Map<String, BufferedImage> getImages (boolean forceUpdate)
 	{
-		Core.log("deleting from slot " + hat.getSlot());
-		List<String> materials = hat.getIconData().getMaterialsAsStringList();
-		
-		// Remove our first entry since that one is saved in the _items table
-		if (materials.size() > 0) {
-			materials.remove(0);
+		if (forceUpdate || (System.currentTimeMillis() - lastImageUpdate) > UPDATE_INTERVAL)
+		{
+			lastImageUpdate = System.currentTimeMillis();
+			imageCache.clear();
+			connect((connection) -> 
+			{
+				String imageQuery = "SELECT * FROM images";
+				try (PreparedStatement imageStatement = connection.prepareStatement(imageQuery))
+				{
+					ResultSet set = imageStatement.executeQuery();
+					while (set.next())
+					{
+						String name = set.getString("name");
+						InputStream stream = set.getBinaryStream("image");
+						
+						try 
+						{
+							BufferedImage image = ImageIO.read(stream);
+							imageCache.put(name, image);
+							
+						} catch (Exception e) {}
+					}
+				}
+			});
 		}
+		return new HashMap<String, BufferedImage>(imageCache);
+	}
+	
+	@Override
+	public void saveMetaData (String menuName, Hat hat, DataType type)
+	{
 		async(() ->
 		{
 			connect((connection) ->
 			{
-				// Delete our existing entries
-				String deleteQuery = "DELETE FROM menu_" + menuName + "_icons WHERE slot = ?";
+				String deleteQuery = "DELETE FROM menu_" + menuName + "_meta WHERE slot = ? AND type = ?";
 				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
 				{
 					deleteStatement.setInt(1, hat.getSlot());
+					deleteStatement.setInt(2, type.getID());
 					deleteStatement.execute();
 				}
 				
-				String insertQuery = "INSERT INTO menu_" + menuName + "_icons VALUES(?,?,?)";
+				String insertQuery = "INSERT INTO menu_" + menuName + "_meta VALUES(?,?,?,?)";
 				try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery))
 				{
-					int index_num = 1;
 					int slot = hat.getSlot();
-					for (String mat : materials)
+					switch (type)
 					{
-						insertStatement.setInt(1, slot);
-						insertStatement.setInt(2, index_num++);
-						insertStatement.setString(3, mat);
-						insertStatement.addBatch();
+						case PERMISSION_DESCRIPTION:
+						case DESCRIPTION:
+						{
+							List<String> description = type == DataType.DESCRIPTION ? hat.getDescription() : hat.getPermissionDescription();
+							
+							int index_num = 1;
+							for (String s : description)
+							{
+								insertStatement.setInt(1, slot);
+								insertStatement.setInt(2, type.getID());
+								insertStatement.setInt(3, index_num++);
+								insertStatement.setString(4, s);
+								insertStatement.addBatch();
+							}
+							
+							insertStatement.executeBatch();	
+							break;
+						}
+						
+						case ICON:
+						{
+							List<String> materials = hat.getIconData().getMaterialsAsStringList();
+							
+							// Remove our first entry since that one is saved in the _items table
+							if (materials.size() > 0) {
+								materials.remove(0);
+							}
+							
+							int index_num = 1;
+							for (String mat : materials)
+							{
+								insertStatement.setInt(1, slot);
+								insertStatement.setInt(2, TYPE_ICON);
+								insertStatement.setInt(3, index_num++);
+								insertStatement.setString(4, mat);
+								insertStatement.addBatch();
+							}
+							
+							insertStatement.executeBatch();
+							
+							break;
+						}
+						
+						case TAGS:
+						{
+							break;
+						}
+						
+						case PARTICLES:
+						{
+							break;
+						}
 					}
-					
-					insertStatement.executeBatch();
+
+				}
+			});
+		});
+	}
+	
+//	public void saveIconData (String menuName, Hat hat)
+//	{
+//		List<String> materials = hat.getIconData().getMaterialsAsStringList();
+//		
+//		// Remove our first entry since that one is saved in the _items table
+//		if (materials.size() > 0) {
+//			materials.remove(0);
+//		}
+//		async(() ->
+//		{
+//			connect((connection) ->
+//			{
+//				// Delete our existing entries
+//				String deleteQuery = "DELETE FROM menu_" + menuName + "_meta WHERE slot = ? AND type = ?";
+//				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
+//				{
+//					deleteStatement.setInt(1, hat.getSlot());
+//					deleteStatement.setInt(2, TYPE_ICON);
+//					deleteStatement.execute();
+//				}
+//				
+//				String insertQuery = "INSERT INTO menu_" + menuName + "_meta VALUES(?,?,?,?)";
+//				try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery))
+//				{
+//					int index_num = 1;
+//					int slot = hat.getSlot();
+//					for (String mat : materials)
+//					{
+//						insertStatement.setInt(1, slot);
+//						insertStatement.setInt(2, TYPE_ICON);
+//						insertStatement.setInt(3, index_num++);
+//						insertStatement.setString(4, mat);
+//						insertStatement.addBatch();
+//					}
+//					
+//					insertStatement.executeBatch();
+//				}
+//			});
+//		});
+//	}
+	
+//	public void saveDescriptionData (String menuName, int slot, List<String> description)
+//	{
+//		async(() ->
+//		{
+//			connect((connection) ->
+//			{
+//				String deleteQuery = "DELETE FROM menu_" + menuName + "_meta WHERE slot = ? AND type = ?";
+//				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
+//				{
+//					deleteStatement.setInt(1, slot);
+//					deleteStatement.setInt(2, TYPE_DESCRIPTION);
+//					deleteStatement.execute();
+//				}
+//				
+//				String insertQuery = "INSERT INTO menu_" + menuName + "_meta VALUES(?,?,?,?)";
+//				try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery))
+//				{
+//					int index_num = 1;
+//					for (String s : description)
+//					{
+//						insertStatement.setInt(1, slot);
+//						insertStatement.setInt(2, TYPE_DESCRIPTION);
+//						insertStatement.setInt(3, index_num++);
+//						insertStatement.setString(4, s);
+//						insertStatement.addBatch();
+//					}
+//					
+//					insertStatement.executeBatch();
+//				}
+//			});
+//		});
+//	}
+	
+	/**
+	 * Updates the menu title in the database
+	 * @param menuName
+	 * @param title
+	 */
+	@Override
+	public void saveMenuTitle(String menuName, String title) 
+	{
+		async(() ->
+		{
+			connect((connection) ->
+			{
+				String titleQuery = "UPDATE menus SET title = ? WHERE name = ?";
+				try (PreparedStatement titleStatement = connection.prepareStatement(titleQuery))
+				{
+					titleStatement.setString(1, title);
+					titleStatement.setString(2, menuName);
+					titleStatement.executeUpdate();
+				}
+			});
+		});
+	}
+	
+	/**
+	 * Updates the menu size in the database<br>
+	 * Deletes any particles that are placed outside of the resized menu
+	 * @param menuName
+	 * @param rows
+	 */
+	@Override
+	public void saveMenuSize(String menuName, int rows) 
+	{
+		async(() ->
+		{
+			connect((connection) ->
+			{
+				String sizeQuery = "UPDATE menus SET size = ? WHERE name = ?";
+				try (PreparedStatement sizeStatement = connection.prepareStatement(sizeQuery))
+				{
+					sizeStatement.setInt(1, rows);
+					sizeStatement.setString(2, menuName);
+					sizeStatement.executeUpdate();
+				}
+				
+				String deleteQuery = "DELETE FROM menu_" + menuName + "_items WHERE slot >= ?";
+				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
+				{
+					deleteStatement.setInt(1, rows * 9);
+					deleteStatement.execute();
 				}
 			});
 		});
@@ -577,7 +768,7 @@ public class MySQLDatabase extends Database {
 		}
 	}
 	
-	public void async (Sync callback)
+	public void async (TaskCallback callback)
 	{
 		new BukkitRunnable()
 		{
@@ -587,7 +778,7 @@ public class MySQLDatabase extends Database {
 		}.runTaskAsynchronously(Core.instance);
 	}
 	
-	public void sync (Sync callback)
+	public void sync (TaskCallback callback)
 	{
 		new BukkitRunnable()
 		{
@@ -602,12 +793,13 @@ public class MySQLDatabase extends Database {
 	}
 	
 	@FunctionalInterface
-	public static interface Sync {
+	public static interface TaskCallback {
 		public void execute();
 	}
-	
-	@FunctionalInterface
-	public static interface ConfigurationCallback<T> {
-		public void execute (T obj);
+
+	@Override
+	public boolean labelExists(String menuName, String label) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

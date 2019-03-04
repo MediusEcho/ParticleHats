@@ -3,6 +3,7 @@ package com.mediusecho.particlehats.database.type;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase;
 import com.mediusecho.particlehats.database.type.yaml.YamlDatabase;
@@ -22,12 +23,12 @@ public enum DatabaseType {
 	 * Returns the Database object of this type
 	 * @return
 	 */
-	public Database getDatabase ()
+	public Database getDatabase (Core core)
 	{
 		switch (this)
 		{	
 		case MYSQL:
-			return new MySQLDatabase();
+			return new MySQLDatabase(core);
 		default:
 			return new YamlDatabase();
 		}
