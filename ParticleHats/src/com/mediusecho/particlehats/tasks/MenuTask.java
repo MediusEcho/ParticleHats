@@ -32,14 +32,16 @@ public class MenuTask extends BukkitRunnable {
 				PlayerState playerState = core.getPlayerState(player.getUniqueId());
 				MenuState menuState = playerState.getMenuState();
 				
-				//Core.log(menuState.toString());
-				
 				// Skip this player if they don't have a menu open
 				if (!menuState.equals(MenuState.OPEN) && !menuState.equals(MenuState.BUILDING)) {
 					continue;
 				}
 				
 				menuState.onTick(playerState, ticks);
+			}
+			
+			if (ticks < 0) {
+				ticks = 0;
 			}
 		}
 	}
