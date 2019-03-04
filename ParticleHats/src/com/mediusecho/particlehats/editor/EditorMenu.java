@@ -309,6 +309,16 @@ public abstract class EditorMenu {
 	}
 	
 	/**
+	 * Action to perform when selected a String
+	 * @author MediusEcho
+	 *
+	 */
+	@FunctionalInterface
+	protected interface EditorStringCallback {
+		public void onSelect (String string);
+	}
+	
+	/**
 	 * Action to perform when a menu has performed an action
 	 * @author MediusEcho
 	 *
