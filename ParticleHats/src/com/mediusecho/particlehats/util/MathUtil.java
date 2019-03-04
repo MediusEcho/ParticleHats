@@ -24,7 +24,7 @@ public class MathUtil {
 	 * @param offset Where to start wrapping
 	 * @return
 	 */
-	public static int wrap (int value, int length,  int offset) {
+	public static int wrap (int value, int length, int offset) {
 		return (((value - offset) % length) + length) % length;
 	}
 	
