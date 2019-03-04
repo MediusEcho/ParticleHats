@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -9,6 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.database.type.DatabaseType;
+import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase;
+import com.mediusecho.particlehats.editor.EditorMenu.EditorClickType;
 import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -48,18 +52,9 @@ public class MenuBuilder {
 		EditorMenu em = activeMenus.peekLast();
 		if (em != null)
 		{
-			if (inMenu)
-			{
-				if (em.onClick(event, event.getRawSlot(), inMenu)) {
-					em.playSound();
-				}
-			}
-		
-			else if (!em.isLocalOnly())
-			{
-				if (em.onClick(event, event.getRawSlot(), inMenu)) {
-					em.playSound();
-				}
+			EditorClickType ct = em.onClick(event, event.getRawSlot(), inMenu);
+			if (ct != EditorClickType.NONE) {
+				em.playSound(ct);
 			}
 		}
 	}
@@ -69,6 +64,33 @@ public class MenuBuilder {
 		EditorMenu em = activeMenus.peekLast();
 		if (em != null) {
 			em.onTick(ticks);
+		}
+	}
+		
+	public void onClose ()
+	{
+		DatabaseType databaseType = core.getDatabaseType();
+		if (databaseType == DatabaseType.MYSQL)
+		{
+			MySQLDatabase mysqlDatabase = (MySQLDatabase)core.getDatabase();
+			
+			for (Entry<Integer, Hat> hats : editorMenu.getHats().entrySet())
+			{
+				Hat hat = hats.getValue();
+				if (hat.isModified())
+				{
+					String sqlQuery = hat.getSQLUpdateQuery();
+					Core.debug("saving hat with query: " + sqlQuery);
+					
+					mysqlDatabase.saveIncremental(getEditingMenu().getName(), hats.getKey(), hat.getSQLUpdateQuery());
+					hat.clearPropertyChanges();
+				}
+			}
+		}
+		
+		// Forces every open menu to close and save changes
+		for (EditorMenu em : activeMenus) {
+			em.onClose(true);
 		}
 	}
 	
@@ -88,6 +110,22 @@ public class MenuBuilder {
 	 */
 	public void setOwnerState (MenuState state) {
 		ownerState.setMenuState(state);
+	}
+	
+	/**
+	 * Set the owners <b>MetaState</b>
+	 * @param state
+	 */
+	public void setOwnerState (MetaState state) {
+		ownerState.setMetaState(state);
+	}
+	
+	/**
+	 * Returns the PlayerState object belonging to the menu builder owner
+	 * @return
+	 */
+	public PlayerState getOwnerState () {
+		return ownerState;
 	}
 	
 	/**
@@ -158,8 +196,15 @@ public class MenuBuilder {
 	public void goBack ()
 	{
 		if (activeMenus.size() > 1) {
-			activeMenus.pollLast().onClose();
+			activeMenus.pollLast().onClose(false);
 		}
+		activeMenus.getLast().open();
+	}
+	
+	/**
+	 * Opens the most current menu in our queue
+	 */
+	public void openCurrentMenu () {
 		activeMenus.getLast().open();
 	}
 	
@@ -169,5 +214,9 @@ public class MenuBuilder {
 	 */
 	public EditorBaseMenu getEditingMenu () {
 		return editorMenu;
+	}
+	
+	public void onHatNameChange () {
+		editorMenu.onHatNameChange(targetHat, targetSlot);
 	}
 }
