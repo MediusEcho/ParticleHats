@@ -90,7 +90,18 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		case OPEN_MENU_PERMISSION:
 		case OPEN_MENU:
 		{
-			// TODO: Finish Menu Description
+			EditorMenuSelectionMenu editorMenuSelectionMenu = new EditorMenuSelectionMenu(core, owner, menuBuilder, (string) ->
+			{
+				Core.log(string);
+				if (leftClick) {
+					targetHat.setLeftClickArgument(string);
+				} else {
+					targetHat.setRightClickArgument(string);
+				}
+				onActionChange(leftClick);
+			});
+			menuBuilder.addMenu(editorMenuSelectionMenu);
+			editorMenuSelectionMenu.open();
 		}
 		break;
 		
