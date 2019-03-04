@@ -1,6 +1,8 @@
 package com.mediusecho.particlehats.editor.menus;
 
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +18,7 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
@@ -49,14 +52,6 @@ public class EditorMainMenu extends EditorMenu {
 			hat.clearPropertyChanges();
 		}
 	}
-	
-//	/**
-//	 * Updates the main menu to reflex a type property update
-//	 */
-//	public void onTypeChange ()
-//	{
-//		
-//	}
 	
 	/**
 	 * Updates the main menu to reflect an offset property update
@@ -101,6 +96,7 @@ public class EditorMainMenu extends EditorMenu {
 					}
 					
 					// Update our tracking methods for this type
+					EditorLore.updateTrackingDescription(getItem(trackingItemSlot), targetHat);
 					
 					EditorLore.updateTypeDescription(getItem(10), targetHat);
 				});
@@ -294,9 +290,18 @@ public class EditorMainMenu extends EditorMenu {
 		
 		// Tracking
 		ItemStack trackingItem = ItemUtil.createItem(Material.COMPASS, Message.EDITOR_MAIN_MENU_SET_TRACKING_METHOD); 
+		EditorLore.updateTrackingDescription(trackingItem, targetHat);
 		setButton(trackingItemSlot, trackingItem, (event, slot) ->
 		{
-			return EditorClickType.NEUTRAL;
+			List<ParticleTracking> methods = targetHat.getEffect().getSupportedTrackingMethods();
+			
+			final int increment = event.isLeftClick() ? 1 : -1;
+			final int size = methods.size();
+			final int index = MathUtil.wrap(methods.indexOf(targetHat.getTrackingMethod()) + increment, size, 0);
+			
+			targetHat.setTrackingMethod(methods.get(index));
+			EditorLore.updateTrackingDescription(getItem(trackingItemSlot), targetHat);
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		// Count
@@ -344,5 +349,9 @@ public class EditorMainMenu extends EditorMenu {
 			editorIconOverviewMenu.open();
 			return EditorClickType.NEUTRAL;
 		});
+		
+		// TODO: Move to new menu
+		// TODO: Clone option
+		// TODO: Node Editor
 	}
 }
