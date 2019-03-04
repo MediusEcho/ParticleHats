@@ -264,6 +264,49 @@ public class StringUtil {
 	}
 	
 	/**
+	 * Returns a compiled pattern from this regex
+	 * @param regex
+	 * @return
+	 */
+	public static Pattern getPattern (String regex) 
+	{
+		if (patternCache.containsKey(regex)) {
+			return patternCache.get(regex);
+		}
+		
+		Pattern pattern = Pattern.compile(regex);
+		patternCache.put(regex, pattern);
+		
+		return pattern;
+	}
+	
+	/**
+	 * Parses a string for any #__# values and returns the matches in an array
+	 * @param string
+	 * @return
+	 */
+	public static String[] parseSpaces (String string)
+	{
+		String regex = "%(.*?)%";
+		Pattern pattern;
+		if (patternCache.containsKey(regex)) {
+			pattern = patternCache.get(regex);
+		}
+		
+		else
+		{
+			pattern = Pattern.compile(regex);
+			patternCache.put(regex, pattern);
+		}
+		
+		Matcher matcher = pattern.matcher(string);
+		if (matcher.find()) {
+			return new String[] {matcher.group(0), matcher.group(1)};
+		}
+		return new String[]{"", ""};
+	}
+	
+	/**
 	 * Creates and returns a new list with the appropriate ChatColor and any {} or %%'s replaced
 	 * @param list
 	 * @param hat
