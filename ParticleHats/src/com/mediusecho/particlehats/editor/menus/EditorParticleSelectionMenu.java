@@ -58,12 +58,6 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 			menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(menus.get(currentPage));
 		}
-//		Inventory menu = menus.get(currentPage);
-//		if (menu != null)
-//		{
-//			menuBuilder.setOwnerState(MenuState.SWITCHING);
-//			owner.openInventory(menu);
-//		}
 	}
 
 	@Override
