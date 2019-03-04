@@ -284,7 +284,7 @@ public enum Message {
 	 */
 	TRACK_NOTHING_NAME       ("Don't Follow Movement"),
 	TRACK_HEAD_MOVEMENT_NAME ("Follow Head Movement"),
-	TRACK_BODY_MOVEMENT_NAME ("Follow Body Rotation"),
+	TRACK_BODY_ROTATION_NAME ("Follow Body Rotation"),
 	
 	/**
 	 * Animation
