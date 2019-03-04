@@ -62,11 +62,11 @@ public abstract class Command {
 		
 		else
 		{
-			Command subCommand = subCommands.get(args.get(0));
-			if (subCommand != null)
+			String cmd = args.get(0);
+			if (subCommands.containsKey(cmd))
 			{
 				args.remove(0);
-				return subCommand.tabCompelete(core, sender, label, args);
+				return subCommands.get(cmd).tabCompelete(core, sender, label, args);
 			}
 		}
 		return Arrays.asList("");
