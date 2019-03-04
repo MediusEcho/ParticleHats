@@ -81,6 +81,7 @@ public class EditorSettingsMenu extends EditorMenu {
 		ItemStack liveItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SETTINGS_MENU_TOGGLE_LIVE_MENU);
 		setButton(30, liveItem, (event, slot) ->
 		{
+			menuBuilder.getEditingMenu().toggleLive();
 			return EditorClickType.NEUTRAL;
 		});
 		
