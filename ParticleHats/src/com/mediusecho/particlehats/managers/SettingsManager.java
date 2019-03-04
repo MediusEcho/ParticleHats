@@ -25,6 +25,7 @@ public enum SettingsManager {
 	CLOSE_MENU_ON_EQUIP        ("close-menu-on-equip",        Type.BOOLEAN,     true),
 	CURRENCY                   ("currency",                   Type.STRING,      "$"),
 	LIVE_MENUS                 ("live-menus",                 Type.BOOLEAN,     true),
+	LIVE_MENU_UPDATE_FREQUENCY ("live-menu-update-frequency", Type.INT,         5),
 	
 	/**
 	 * Database properties
@@ -69,10 +70,13 @@ public enum SettingsManager {
 	/**
 	 * Editor Properties
 	 */
-	EDITOR_SOUND_ENABLED ("editor.sound.enabled", Type.BOOLEAN, true),
-	EDITOR_SOUND_ID      ("editor.sound.id",      Type.SOUND,   Sound.BLOCK_METAL_PLACE),
-	EDITOR_SOUND_VOLUME  ("editor.sound.volume",  Type.FLOAT,   1.0),
-	EDITOR_SOUND_PITCH   ("editor.sound.pitch",   Type.FLOAT,   1.0);
+	EDITOR_USE_ACTION_BAR  ("editor.use-actionbar",   Type.BOOLEAN, true),
+	EDITOR_META_TIME_LIMIT ("editor.meta-time-limit", Type.INT,     30),
+	EDITOR_SOUND_ENABLED   ("editor.sound.enabled",   Type.BOOLEAN, true),
+	EDITOR_SOUND_ID        ("editor.sound.id",        Type.SOUND,   Sound.BLOCK_METAL_PLACE),
+	EDITOR_SOUND_VOLUME    ("editor.sound.volume",    Type.FLOAT,   1.0),
+	EDITOR_SOUND_PITCH     ("editor.sound.pitch",     Type.FLOAT,   1.0),
+	EDITOR_SOUND_MODIFIER  ("editor.sound.modifier",  Type.FLOAT,   0.25);
 	
 	
 	private final String key;
