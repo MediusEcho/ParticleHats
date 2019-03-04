@@ -494,6 +494,14 @@ public enum Message {
 	EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION    ("/n&8» &r{1=&cEmpty}/n/n&3Left Click to Edit/n&cShift Right Click to Delete"),
 	EDITOR_DESCRIPTION_MENU_PREVIEW_DESCRIPTION ("{1=&cEmpty}{2=/n&cShift Right Click to Clear}"),
 	
+	// Menu Selection
+	EDITOR_MENU_SELECTION_TITLE            ("Select a Menu {1}/{2}"),
+	EDITOR_MENU_SELECTION_CREATE           ("&bCreate a Menu"),
+	EDITOR_MENU_SELECTION_REFRESH          (false, "&bRefresh"),
+	EDITOR_MENU_SELECTION_MENU_PREFIX      ("&bName: &e"),
+	
+	EDITOR_MENU_SELECTION_MENU_DESCRIPTION ("&8Title: {1}"),
+	
 	/**
 	 * Command Arguments
 	 */
@@ -501,10 +509,17 @@ public enum Message {
 	COMMAND_ARGUMENT_EDIT ("");
 	
 	private final String defaultValue;
+	private final boolean showInFile;
 	
 	private Message (String defaultValue)
 	{
+		this(true, defaultValue);
+	}
+	
+	private Message (boolean showInFile, String defaultValue)
+	{
 		this.defaultValue = defaultValue;
+		this.showInFile = showInFile;
 	}
 	
 	/**
