@@ -56,7 +56,7 @@ public class MySQLDatabase implements Database {
 	public final int TYPE_TAGS                   = 4;
 	public final int TYPE_PARTICLES              = 5;
 	
-	private List<String> menuCache;
+	private Map<String, String> menuCache;
 	private Map<String, BufferedImage> imageCache;
 	
 	private long lastMenuUpdate = 0L;
@@ -67,7 +67,7 @@ public class MySQLDatabase implements Database {
 	
 	public MySQLDatabase (Core core)
 	{
-		menuCache = new ArrayList<String>();
+		menuCache = new HashMap<String, String>();
 		imageCache = new HashMap<String, BufferedImage>();
 		
 		helper = new MySQLHelper(this);
@@ -226,7 +226,7 @@ public class MySQLDatabase implements Database {
 	}
 
 	@Override
-	public List<String> getMenus(boolean forceUpdate) 
+	public Map<String, String> getMenus(boolean forceUpdate) 
 	{	
 		// Only refresh our menu cache every UPDATE_INTERVAL to prevent spamming
 		if (forceUpdate || (System.currentTimeMillis() - lastMenuUpdate) > UPDATE_INTERVAL)
@@ -235,11 +235,11 @@ public class MySQLDatabase implements Database {
 			menuCache.clear();
 			connect((connection) -> 
 			{
-				try (PreparedStatement statement = connection.prepareStatement("SELECT name FROM menus"))
+				try (PreparedStatement statement = connection.prepareStatement("SELECT name, title FROM menus"))
 				{
 					ResultSet set = statement.executeQuery();
 					while (set.next()) {
-						menuCache.add(set.getString("name"));
+						menuCache.put(set.getString("name"), set.getString("title"));
 					}
 				}
 			});
@@ -344,8 +344,8 @@ public class MySQLDatabase implements Database {
 	@Override
 	public boolean menuExists(String menuName) 
 	{
-		List<String> menus = getMenus(true);
-		return menus.contains(menuName);
+		Map<String, String> menus = getMenus(true);
+		return menus.containsKey(menuName);
 	}
 	
 	@Override

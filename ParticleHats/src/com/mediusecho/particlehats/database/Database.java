@@ -45,7 +45,7 @@ public interface Database {
 	 * @param forceUpdate Forces the menu cache to be updated
 	 * @return
 	 */
-	public List<String> getMenus (boolean forceUpdate);
+	public Map<String, String> getMenus (boolean forceUpdate);
 	
 	/**
 	 * Checks to see if this label has already been used in the database

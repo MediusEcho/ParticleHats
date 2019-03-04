@@ -23,7 +23,7 @@ public class YamlDatabase implements Database {
 	}
 
 	@Override
-	public List<String> getMenus(boolean forceUpdate) 
+	public Map<String, String> getMenus(boolean forceUpdate) 
 	{
 		return null;
 	}
