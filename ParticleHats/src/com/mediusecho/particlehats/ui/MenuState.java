@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
 import com.mediusecho.particlehats.player.PlayerState;
 
@@ -76,18 +77,17 @@ public enum MenuState {
 			default: break;
 			case BUILDING:
 			{
-				MenuBuilder menuBuilder = playerState.getMenuBuilder();
-				if (menuBuilder != null)
+				// Remove this menuBuilder if the players MetaState is NONE
+				if (playerState.getMetaState() == MetaState.NONE)
 				{
-					EditorBaseMenu editorMenu = menuBuilder.getEditingMenu();
-					if (editorMenu.isModified())
-					{
-						
+					MenuBuilder menuBuilder = playerState.getMenuBuilder();
+					if (menuBuilder != null) {
+						menuBuilder.onClose();
 					}
+					
+					playerState.setMenuState(MenuState.CLOSED);
+					playerState.setMenuBuilder(null);
 				}
-				
-				playerState.setMenuState(MenuState.CLOSED);
-				playerState.setMenuBuilder(null);
 			}
 			break;
 		}
