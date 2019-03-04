@@ -123,6 +123,7 @@ public class MySQLHelper {
 				+ "location TINYINT NOT NULL DEFAULT 0,"
 				+ "mode TINYINT NOT NULL DEFAULT 0,"
 				+ "animation TINYINT NOT NULL DEFAULT 0,"
+				+ "tracking TINYINT NOT NULL DEFAULT 0,"
 				+ "label VARCHAR(128),"
 				+ "equip_message VARCHAR(128),"
 				+ "offset_x DOUBLE NOT NULL DEFAULT 0,"
