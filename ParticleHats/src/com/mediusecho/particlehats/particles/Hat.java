@@ -443,9 +443,19 @@ public class Hat {
 	
 	/**
 	 * Get this hats ParticleTracking method
-	 * @return
+	 * @return A tracking method compatible with this hats Type
 	 */
-	public ParticleTracking getTrackingMethod () {
+	public ParticleTracking getTrackingMethod () 
+	{
+		List<ParticleTracking> methods = getEffect().getSupportedTrackingMethods();
+		return methods.contains(trackingMethod) ? trackingMethod : getEffect().getDefaultTrackingMethod();
+	}
+	
+	/**
+	 * Get this hats ParticleTracking method
+	 * @return A tracking method that may or may not be compatible with this hats Type
+	 */
+	public ParticleTracking getSavedTrackingMethod () {
 		return trackingMethod;
 	}
 	
