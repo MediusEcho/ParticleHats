@@ -17,6 +17,7 @@ import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
@@ -165,7 +166,6 @@ public class EditorLore {
 		String s = description.getValue()
 				.replace("{1}", IconDisplayMode.fromId(MathUtil.wrap(id - 1, length, 0)).getDisplayName())
 				.replace("{2}", displayMode.getDisplayName())
-				//.replace("{3}", IconDisplayMode.fromId(MathUtil.wrap(id + 1, length, 0)).getDisplayName())
 				.replace("{3}", displayMode.getDescription());
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));	
 	}
@@ -553,6 +553,39 @@ public class EditorLore {
 		
 		s = s.replace(clearInfo[0], description.isEmpty() ? "" : clearInfo[1]);
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+	}
+	
+	/**
+	 * Applies a description to this ItemStack using a hats supported tracking methods
+	 * @param item
+	 * @param hat
+	 */
+	public static void updateTrackingDescription (ItemStack item, Hat hat)
+	{
+		String description = "";
+		
+		List<ParticleTracking> methods = hat.getEffect().getSupportedTrackingMethods();
+		ParticleTracking method =  hat.getTrackingMethod();
+		
+		int index = methods.indexOf(method);
+		int size = methods.size();
+		
+		if (size == 1)
+		{
+			String desc = Message.EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_SINGLE.getValue();
+			description = desc.replace("{1}", method.getDisplayName());
+		}
+		
+		else
+		{
+			String desc = Message.EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_MULTIPLE.getValue();
+			description = desc
+				.replace("{1}", methods.get(MathUtil.wrap(index - 1, size, 0)).getDisplayName())
+				.replace("{2}", method.getDisplayName())
+				.replace("{3}", methods.get(MathUtil.wrap(index + 1, size, 0)).getDisplayName());
+		}
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
 	
 	public static void updateHatDescription (ItemStack item, Hat hat)
