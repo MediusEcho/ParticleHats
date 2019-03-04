@@ -1,16 +1,17 @@
 package com.mediusecho.particlehats.commands;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.locale.Message;
 
 import net.md_5.bungee.api.ChatColor;
 
 /**
- * Represends both a CommandSender and Player
+ * Represents both a CommandSender and Player
  * @author MediusEcho
  *
  */
@@ -86,6 +87,25 @@ public class Sender {
 			commandSender.sendMessage(message);
 		} else {
 			playerSender.sendMessage(message);
+		}
+	}
+	
+	/**
+	 * Sends this Sender a message
+	 * @param message
+	 */
+	public void sendMessage (Message message) {
+		sendMessage(message.getValue());
+	}
+	
+	/**
+	 * Sends this Sender a message
+	 * @param message
+	 */
+	public void sendMessage (List<String> message)
+	{
+		for (String m : message) {
+			sendMessage(m);
 		}
 	}
 }
