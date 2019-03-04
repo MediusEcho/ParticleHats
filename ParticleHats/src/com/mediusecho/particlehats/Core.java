@@ -41,6 +41,9 @@ public class Core extends JavaPlugin {
 	private MenuTask menuTask;
 	private PromptTask promptTask;
 	
+	// Debugging
+	private static final boolean debugging = true;
+	
 	@Override
 	public void onEnable ()
 	{
@@ -61,7 +64,7 @@ public class Core extends JavaPlugin {
 		{		
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
-			database = databaseType.getDatabase();
+			database = databaseType.getDatabase(this);
 			
 			// Initialize our player state map
 			playerState = new HashMap<UUID, PlayerState>();
@@ -75,9 +78,12 @@ public class Core extends JavaPlugin {
 			metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> databaseType.toString().toLowerCase()));
 			
 			// Create our tasks
-			menuTask = new MenuTask(this);
-			menuTask.runTaskTimer(this, 0, 5);
 			
+			// Handles menu updates
+			menuTask = new MenuTask(this);
+			menuTask.runTaskTimer(this, 0, SettingsManager.LIVE_MENU_UPDATE_FREQUENCY.getInt());
+			
+			// Handles meta editing prompts
 			promptTask = new PromptTask(this);
 			promptTask.runTaskTimer(this, 0, 40);
 		}
@@ -90,6 +96,7 @@ public class Core extends JavaPlugin {
 		database.onDisable();
 		
 		menuTask.cancel();
+		promptTask.cancel();
 	}
 	
 	/**
@@ -119,13 +126,10 @@ public class Core extends JavaPlugin {
 			return playerState.get(id);
 		}
 		
-		else
-		{
-			PlayerState state = new PlayerState();
-			playerState.put(id, state);
-			
-			return state;
-		}
+		PlayerState state = new PlayerState();
+		playerState.put(id, state);
+		
+		return state;
 	}
 	
 	/**
@@ -142,5 +146,16 @@ public class Core extends JavaPlugin {
 	 */
 	public static void log (Object obj) {
 		logger.log(Level.INFO, "[ParticleHats] " + obj.toString());
+	}
+	
+	/**
+	 * Logs a debug message to the server console if debugging is enabled
+	 * @param obj
+	 */
+	public static void debug (Object obj) 
+	{
+		if (debugging) {
+			logger.log(Level.INFO, "[ParticleHats] " + obj.toString());
+		}
 	}
 }
