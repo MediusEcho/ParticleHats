@@ -26,6 +26,10 @@ public enum ParticleTracking {
 		this.id = id;
 	}
 	
+	public int getID () {
+		return id;
+	}
+	
 	/**
 	 * Get the name of this ParticleTracking
 	 * @return The name of this tracking as defined in the current messages.yml file
