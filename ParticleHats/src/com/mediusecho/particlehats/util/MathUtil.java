@@ -17,6 +17,17 @@ public class MathUtil {
 	}
 	
 	/**
+	 * Clamps a value keeping it within min and max
+	 * @param value Current value
+	 * @param min Minimum value that can be returned
+	 * @param max Maximum value that can be returned
+	 * @return
+	 */
+	public static int clamp (int value, int min, int max) {
+		return Math.min(Math.max(value, min), max);
+	}
+	
+	/**
 	 * Wraps a value between the offset and length repeating<br>
 	 * eg: (offset = 4, length = 10): value(3) = 9, value(4) = 0, (value(5) = 1
 	 * @param value Value to wrap
