@@ -156,6 +156,10 @@ public enum ParticleEffect {
 		return hasBlockData() || hasItemData() || property.equals(ParticleProperty.ITEMSTACK_DATA);
 	}
 	
+	/**
+	 * Get the id of this ParticleEffect
+	 * @return
+	 */
 	public int getID () {
 		return id;
 	}
@@ -204,6 +208,11 @@ public enum ParticleEffect {
 		return material;
 	}
 	
+	/**
+	 * Get the Particle that is associated with this ParticleEffect
+	 * @param value
+	 * @return
+	 */
 	private Particle getParticle (String value)
 	{
 		try {
@@ -211,6 +220,14 @@ public enum ParticleEffect {
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * Get this ParticleEffects ParticleProperty
+	 * @return
+	 */
+	public ParticleProperty getProperty () {
+		return property;
 	}
 	
 	/**
