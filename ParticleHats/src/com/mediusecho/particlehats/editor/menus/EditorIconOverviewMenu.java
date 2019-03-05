@@ -22,8 +22,6 @@ import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-// TODO: Fix editing item title
-
 public class EditorIconOverviewMenu extends EditorListMenu {
 
 	private final Hat targetHat;
@@ -55,8 +53,6 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 			return EditorClickType.NEUTRAL;
 		};
 		
-		//this.addAction = addItemAction;
-		
 		editAction = (event, slot) ->
 		{
 			editingIndex = getClampedIndex(slot, 10, 2);
@@ -69,7 +65,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 					ItemStack i = getItem(slot);
 				
 					i.setType(material);
-					ItemUtil.setItemName(item, displayName);
+					ItemUtil.setItemName(i, displayName);
 					
 					targetHat.getIconData().updateMaterial(editingIndex, material);
 					isModified = true;
@@ -148,7 +144,6 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 				
 				getItem(10).setType(material);
 				callback.onSelect(item);
-				//editorMainMenu.onIconChange(material);
 				targetHat.setMaterial(material);
 			});
 			menuBuilder.addMenu(editorIconMenu);
@@ -197,10 +192,6 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 			setItem(index, ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue())));
 			//setAction(index, editAction);
 		}
-		
-//		for (int i = 1; i <= 27; i++) {
-//			setAction(getNormalIndex(i, 10, 2), editAction);
-//		}
 	}
 	
 	/**
@@ -214,41 +205,14 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		if (size <= 27)
 		{
 			Material material = item.getType();
-			
 			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
-			ItemUtil.setNameAndDescription(item, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue()));
+			ItemStack i = ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue()));
 		
 			targetHat.getIconData().addMaterial(material);
-			setItem(getNormalIndex(size, 10, 2), item);
+			setItem(getNormalIndex(size, 10, 2), i);
 			
 			isModified = true;
 		}
-//		super.onAdd(slot);
-//		
-//		Material material = item.getType();
-//		ItemStack i = getItem(slot);
-//		i.setType(material);
-//		
-//		String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
-//		ItemUtil.setNameAndDescription(i, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue()));
-//		
-//		targetHat.getIconData().addMaterial(material);
-//		
-//		isModified = true;
-		
-//		List<String> description = getDescription();
-//		int size = description.size();
-//		
-//		if (size <= 27)
-//		{
-//			ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(size + 1)));
-//			
-//			description.add("");
-//			EditorLore.updatePreviewDecription(getItem(49), getDescription());
-//			
-//			setLineDescription(item, "");
-//			setItem(getNormalIndex(size, 10, 2), item);
-//		}
 	}
 	
 	/**
