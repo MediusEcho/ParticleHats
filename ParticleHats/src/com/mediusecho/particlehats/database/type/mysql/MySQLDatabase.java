@@ -101,7 +101,7 @@ public class MySQLDatabase implements Database {
 	}
 
 	@Override
-	public MenuInventory loadInventory(String menuName) // Throw Exception
+	public MenuInventory loadInventory(String menuName)
 	{		
 		try (Connection connection = dataSource.getConnection())
 		{
@@ -250,7 +250,6 @@ public class MySQLDatabase implements Database {
 	@Override
 	public void createEmptyMenu(String menuName) 
 	{
-		Core.log("Creating empty menu");
 		async(() ->
 		{
 			connect((connection) ->
@@ -276,6 +275,8 @@ public class MySQLDatabase implements Database {
 						try (PreparedStatement metaStatement = connection.prepareStatement(createMenuMetaTable)) {
 							metaStatement.execute();
 						}
+						
+						// TODO: Update cache manually?
 					}
 				}
 			});
@@ -759,6 +760,32 @@ public class MySQLDatabase implements Database {
 		});
 	}
 	
+	/**
+	 * Checks to see if a table exists in the database
+	 * @param tableName
+	 * @return
+	 */
+	private boolean tableExists (String tableName)
+	{
+		try (Connection connection = dataSource.getConnection())
+		{
+			String tableQuery = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_name = ?";
+			try (PreparedStatement statement = connection.prepareStatement(tableQuery))
+			{
+				statement.setString(1, tableName);
+				ResultSet set = statement.executeQuery();
+				while (set.next()) {
+					return set.getInt("count") > 0;
+				}
+				return false;
+			}
+		}
+		
+		catch (SQLException e) {
+			return false;
+		}
+	}
+	
 	public void connect (ConnectionCallback callback)
 	{
 		try (Connection connection = dataSource.getConnection()) {
@@ -801,7 +828,7 @@ public class MySQLDatabase implements Database {
 
 	@Override
 	public boolean labelExists(String menuName, String label) {
-		// TODO Auto-generated method stub
+		// TODO Add label exists data
 		return false;
 	}
 }
