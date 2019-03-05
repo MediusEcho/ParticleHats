@@ -16,6 +16,7 @@ import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.ui.MenuState;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -316,6 +317,26 @@ public abstract class EditorMenu {
 	@FunctionalInterface
 	protected interface EditorStringCallback {
 		public void onSelect (String string);
+	}
+	
+	/**
+	 * Action to perform when selecting a ParticleEffect
+	 * @author MediusEcho
+	 *
+	 */
+	@FunctionalInterface
+	protected interface EditorParticleCallback {
+		public void onSelect (ParticleEffect effect);
+	}
+	
+	/**
+	 * Action to perform when selecting an Object
+	 * @author MediusEcho
+	 *
+	 */
+	@FunctionalInterface
+	protected interface EditorObjectCallback {
+		public void onSelect (Object obj);
 	}
 	
 	/**
