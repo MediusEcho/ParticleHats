@@ -195,4 +195,19 @@ public class ItemUtil {
 		
 		item.setItemMeta(itemMeta);
 	}
+	
+	/**
+	 * Returns a Material matching the materialName, or the fallback material if that fails
+	 * @param materialName
+	 * @param fallbackMaterial
+	 * @return
+	 */
+	public static Material materialFromString (String materialName, Material fallbackMaterial)
+	{
+		try {
+			return Material.valueOf(materialName);
+		} catch (IllegalArgumentException e) {
+			return fallbackMaterial;
+		}
+	}
 }
