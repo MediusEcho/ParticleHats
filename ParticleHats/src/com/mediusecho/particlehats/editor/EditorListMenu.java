@@ -65,7 +65,7 @@ public abstract class EditorListMenu extends EditorMenu {
 			// Grab our item and action before setting this slot null
 			ItemStack item = getItem(normalIndex);
 			
-			this.setItem(normalIndex, null);
+			setItem(normalIndex, null);
 			setItem(shiftedIndex, item);
 		}
 	}
