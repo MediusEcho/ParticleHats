@@ -4,6 +4,8 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public enum Message {
 	
+	UNKNOWN ("&cUnknown Message"),
+	
 	/**
 	 * Commands
 	 */
@@ -312,6 +314,14 @@ public enum Message {
 	EDITOR_MISC_NEXT_PAGE     ("&3Next Page"),
 	EDITOR_MISC_PREVIOUS_PAGE ("&3Previous Page"),
 	
+	// Particles
+	EDITOR_PARTICLE_MISC_DESCRIPTION         ("/n&8Current:/n&8» {1}/n/n&3Left Click to Change Particle"),
+	EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION    ("/n&8Current:/n&8» {1}/n/n&8Color:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
+	EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION ("/n&8Current:/n&8» {1}/n/n&8Color:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
+	EDITOR_PARTICLE_MISC_COLOR_DESCRIPTION   ("/n&8Current:/n&8» {1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
+	EDITOR_PARTICLE_BLOCK_DESCRIPTION        ("/n&8Current:/n&8» {1}/n/n&8Block:/n&8» {2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
+	EDITOR_PARTICLE_ITEM_DESCRIPTION         ("/n&8Current:/n&8» {1}/n/n&8Item:/n&8» {2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
+	
 	// Base Menu
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
 	EDITOR_SLOT_DESCRIPTION        ("&3Left Click to Edit/n&3Right Click for Settings"),
@@ -373,6 +383,8 @@ public enum Message {
 	EDITOR_MAIN_MENU_ANIMATION_DESCRIPTION                ("/n/n&8Animation:/n&8» {1}/n{2}"),
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_SINGLE   ("&8» &e{1}"),
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_MULTIPLE ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
+	
+	EDITOR_MAIN_MENU_NO_PARTICLES_DESCRIPTION             ("&8Select a Type that supports particles"),
 	
 	// Type Menu
 	EDITOR_TYPE_MENU_TITLE                   ("Select a Type {1}/{2}"),
@@ -498,9 +510,41 @@ public enum Message {
 	EDITOR_MENU_SELECTION_TITLE            ("Select a Menu {1}/{2}"),
 	EDITOR_MENU_SELECTION_CREATE           ("&bCreate a Menu"),
 	EDITOR_MENU_SELECTION_REFRESH          (false, "&bRefresh"),
-	EDITOR_MENU_SELECTION_MENU_PREFIX      ("&bName: &e"),
+	EDITOR_MENU_SELECTION_MENU_PREFIX      ("&bMenu: &e"),
 	
 	EDITOR_MENU_SELECTION_MENU_DESCRIPTION ("&8Title: {1}"),
+	
+	// Color Menu
+	EDITOR_COLOR_MENU_TITLE           ("Select or Crete a Color"),
+	EDITOR_COLOR_MENU_SET_WHITE       ("&bWhite"),
+	EDITOR_COLOR_MENU_SET_RED         ("&bRed"),
+	EDITOR_COLOR_MENU_SET_LIME        ("&bLime"),
+	EDITOR_COLOR_MENU_SET_LIGHT_BLUE  ("&bLight Blue"),
+	EDITOR_COLOR_MENU_SET_PINK        ("&bPink"),
+	EDITOR_COLOR_MENU_SET_GRAY        ("&bGrey"),
+	EDITOR_COLOR_MENU_SET_ORANGE      ("&bOrange"),
+	EDITOR_COLOR_MENU_SET_GREEN       ("&bGreen"),
+	EDITOR_COLOR_MENU_SET_BLUE        ("&bBlue"),
+	EDITOR_COLOR_MENU_SET_MAGENTA     ("&bMagenta"),
+	EDITOR_COLOR_MENU_SET_BLACK       ("&bBlack"),
+	EDITOR_COLOR_MENU_SET_YELLOW      ("&bYellow"),
+	EDITOR_COLOR_MENU_SET_BROWN       ("&bBrown"),
+	EDITOR_COLOR_MENU_SET_PURPLE      ("&bPurple"),
+	EDITOR_COLOR_MENU_SET_CYAN        ("&bCyan"),
+	EDITOR_COLOR_MENU_SET_RED_VALUE   ("&bSet Red Value"),
+	EDITOR_COLOR_MENU_SET_GREEN_VALUE ("&bSet Green Value"),
+	EDITOR_COLOR_MENU_SET_BLUE_VALUE  ("&bSet Blue Value"),
+	EDITOR_COLOR_MENU_SET_RANDOM      ("&bRandom Colors"),
+	EDITOR_COLOR_MENU_SET_SIZE        ("&bSet Size"),
+	
+	EDITOR_COLOR_MENU_PRESET_DESCRIPTION ("&8Set this particles/n&8color to {1}/n/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}"),
+	EDITOR_COLOR_MENU_R_DESCRIPTION ("/n&e» R: {1}/n&8• G: &7{2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOR_MENU_G_DESCRIPTION ("/n&8• R: &7{1}/n&e» G: {2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOR_MENU_B_DESCRIPTION ("/n&8• R: &7{1}/n&8• G: &7{2}/n&e» B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOR_MENU_RANDOM_SUFFIX ("Random"),
+
+	EDITOR_COLOR_MENU_RANDOM_DESCRIPTION ("&8Give this particle random colors"),
+
 	
 	/**
 	 * Command Arguments
@@ -537,5 +581,20 @@ public enum Message {
 	 */
 	public String getRawValue () {
 		return defaultValue;
+	}
+	
+	/**
+	 * Get the message that matches the messageName<br>
+	 * Returns UNKNOWN if the messageName has no match
+	 * @param messageName
+	 * @return
+	 */
+	public static Message fromString (String messageName)
+	{
+		try {
+			return Message.valueOf(messageName);
+		} catch (IllegalArgumentException e) {
+			return Message.UNKNOWN;
+		}
 	}
 }
