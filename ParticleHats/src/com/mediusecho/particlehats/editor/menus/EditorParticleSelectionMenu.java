@@ -17,6 +17,7 @@ import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.ui.MenuState;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -30,18 +31,40 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 	private Inventory recentFilterMenu;
 	
 	private final NamespacedKey key;
+	private final EditorAction particleSelectAction;
+	private final int particleIndex;
+	private final Hat targetHat;
 	
 	private final int totalPages;
 	private int currentPage = 0;
 	
-	public EditorParticleSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorParticleSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorParticleCallback callback) 
 	{
 		super(core, owner, menuBuilder);
+		this.particleIndex = particleIndex;
+		this.targetHat = menuBuilder.getTargetHat();
 		
 		menus = new HashMap<Integer, Inventory>();
 		totalPages = (int) Math.ceil((double) ParticleEffect.values().length / 45D);
 		
 		key = new NamespacedKey(core, "particleID");
+		
+		particleSelectAction = (event, slot) ->
+		{
+			ItemMeta meta = event.getEvent().getCurrentItem().getItemMeta();
+			if (meta != null)
+			{
+				CustomItemTagContainer container = meta.getCustomTagContainer();
+				
+				if (container.hasCustomTag(key, ItemTagType.INTEGER)) 
+				{
+					int id = container.getCustomTag(key, ItemTagType.INTEGER);
+					ParticleEffect pe = ParticleEffect.fromID(id);
+					callback.onSelect(pe);
+				}
+			}
+			return EditorClickType.NEUTRAL;
+		};
 		
 		colorFilterMenu  = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_COLOR_FILTER_TITLE.getValue());
 		dataFilterMenu   = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_DATA_FILTER_TITLE.getValue());
@@ -161,26 +184,8 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		EditorAction particleAction = (event, slot) ->
-		{
-			ItemMeta meta = event.getEvent().getCurrentItem().getItemMeta();
-			if (meta != null)
-			{
-				CustomItemTagContainer container = meta.getCustomTagContainer();
-				
-				if (container.hasCustomTag(key, ItemTagType.INTEGER)) 
-				{
-					int id = container.getCustomTag(key, ItemTagType.INTEGER);
-					ParticleEffect pe = ParticleEffect.fromID(id);
-					
-					Core.log("Clicking on " + pe.getName());
-				}
-			}
-			return EditorClickType.NEUTRAL;
-		};
-		
 		for (int i = 0; i < 45; i++) {
-			setAction(i, particleAction);
+			setAction(i, particleSelectAction);
 		}
 		
 		// Add each particle that this server supports
@@ -189,12 +194,18 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		int colorIndex = 0;
 		int dataIndex = 0;
 		
+		ParticleEffect currentEffect = targetHat.getParticle(particleIndex);
+		
 		for (ParticleEffect pe : ParticleEffect.values())
 		{
 			Material material = pe.getMaterial();
 			String name = pe.getName();
 			ItemStack item = ItemUtil.createItem(material, name);
 			item.getItemMeta().getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, pe.getID());
+			
+			if (pe.equals(currentEffect)) {
+				ItemUtil.highlightItem(item);
+			}
 			
 			if (pe.hasColorData()) {
 				colorFilterMenu.setItem(colorIndex++, item);
