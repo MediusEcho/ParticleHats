@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.locale.Message;
@@ -16,6 +19,7 @@ import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
+import com.mediusecho.particlehats.particles.properties.ParticleColor;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
@@ -64,6 +68,10 @@ public class Hat {
 	private List<String> normalDescription;
 	private List<String> permissionDescription;
 	
+	private Map<Integer, ParticleEffect> particleIndex;
+	private Map<Integer, ParticleColor> particleColorData;
+	private Map<Integer, ItemStack> particleItemData;
+	
 	private Sound sound;
 	private double volume = 1D;
 	private double pitch  = 1D;
@@ -85,6 +93,8 @@ public class Hat {
 		iconData              = new IconData();
 		normalDescription     = new ArrayList<String>();
 		permissionDescription = new ArrayList<String>();
+		particleIndex         = new HashMap<Integer, ParticleEffect>();
+		particleColorData     = new HashMap<Integer, ParticleColor>();
 	}
 	
 	/**
@@ -758,6 +768,95 @@ public class Hat {
 	 */
 	public List<String> getPermissionDescription () {
 		return permissionDescription;
+	}
+	
+	/**
+	 * Assign a particle to an index
+	 * @param index
+	 * @param particle
+	 */
+	public void setParticle (int index, ParticleEffect particle) {
+		particleIndex.put(index, particle);
+	}
+	
+	/**
+	 * Get the ParticleEffect that exists at this index
+	 * @param index
+	 * @return
+	 */
+	public ParticleEffect getParticle (int index) 
+	{
+		if (particleIndex.containsKey(index)) {
+			return particleIndex.get(index);
+		}
+		return ParticleEffect.NONE;
+	}
+	
+	/**
+	 * Get all particles the hat currently has
+	 * @return
+	 */
+	public Map<Integer, ParticleEffect> getParticles ()
+	{
+		final Map<Integer, ParticleEffect> particles = new HashMap<Integer, ParticleEffect>(particleIndex);
+		return particles;
+	}
+	
+	public Set<Entry<Integer, ParticleEffect>> getParticlesIterator () {
+		return particleIndex.entrySet();
+	}
+	
+	/**
+	 * Check to see if this hat has any particles
+	 * @return
+	 */
+	public boolean hasParticles () {
+		return particleIndex.size() > 0;
+	}
+	
+	/**
+	 * Set the color of the Particle at index
+	 * @param index
+	 * @param particleColor
+	 */
+	public void setParticleColor (int index, ParticleColor particleColor) {
+		particleColorData.put(index, particleColor);
+	}
+	
+	/**
+	 * Set the color of the Particle at index
+	 * @param index
+	 * @param color
+	 */
+	public void setParticleColor (int index, Color color) 
+	{
+		if (particleColorData.containsKey(index)) {
+			particleColorData.get(index).setColor(color);
+		} else {
+			particleColorData.put(index, new ParticleColor(color));
+		}
+	}
+	
+	/**
+	 * Get any ParticleColor that exists at this index
+	 * @param index
+	 * @return
+	 */
+	public ParticleColor getParticleColor (int index) 
+	{
+		if (particleColorData.containsKey(index)) {
+			return particleColorData.get(index);
+		}
+		return new ParticleColor(Color.WHITE, true);
+	}
+	
+	/**
+	 * Check to see if color data exists at this index
+	 * @param index
+	 * @return
+	 */
+	public boolean hasColorData (int index) {
+		return particleColorData.containsKey(index);
 	}
 	
 	/**
