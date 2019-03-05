@@ -3,6 +3,7 @@ package com.mediusecho.particlehats.editor;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -11,10 +12,12 @@ import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
+import com.mediusecho.particlehats.particles.properties.ParticleColor;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
@@ -183,6 +186,26 @@ public class EditorLore {
 			.replace("{2}", Double.toString(vector.getY()))
 			.replace("{3}", Double.toString(vector.getZ()));
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+	}
+	
+	/**
+	 * Applies a description to this ItemStack using Color data
+	 * @param item
+	 * @param color
+	 * @param description
+	 */
+	public static void updateColorDescription (ItemStack item, Color color, boolean random, Message description)
+	{
+		String rs = Message.EDITOR_COLOR_MENU_RANDOM_SUFFIX.getValue();
+		String r = random ? rs : Integer.toString(color.getRed());
+		String g = random ? rs : Integer.toString(color.getGreen());
+		String b = random ? rs : Integer.toString(color.getBlue());
+		
+		String s = description.getValue()
+				.replace("{1}", r)
+				.replace("{2}", g)
+				.replace("{3}", b);
+			ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
 	/**
@@ -586,6 +609,50 @@ public class EditorLore {
 		}
 		
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
+	}
+	
+	public static void updateParticleDescription (ItemStack item, Hat hat, int particleIndex)
+	{
+		ParticleEffect particle = hat.getParticle(particleIndex);
+		switch (particle.getProperty())
+		{
+			case COLOR:
+			{
+				if (hat.hasColorData(particleIndex))
+				{
+					ParticleColor color = hat.getParticleColor(particleIndex);
+					if (color.isRandom())
+					{
+						//"/n&8Current:/n&8» {1}/n/n&8Color:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"
+						String description = Message.EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION.getValue();
+						String s = description
+								.replace("{1}", particle.getName());
+						ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+					}
+					
+					else
+					{
+						//"/n&7Current:/n&8» {1}/n/n&8Color:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"
+						String description = Message.EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION.getValue();
+						Color c = color.getColor();
+						String s = description
+								.replace("{1}", particle.getName())
+								.replace("{2}", Integer.toString(c.getRed()))
+								.replace("{3}", Integer.toString(c.getGreen()))
+								.replace("{4}", Integer.toString(c.getBlue()));
+						ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+					}
+				}
+				
+				else
+				{
+					String description = Message.EDITOR_PARTICLE_MISC_COLOR_DESCRIPTION.getValue();
+					String s = description.replace("{1}", particle.getName());
+					ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+				}
+				break;
+			}
+		}
 	}
 	
 	public static void updateHatDescription (ItemStack item, Hat hat)
