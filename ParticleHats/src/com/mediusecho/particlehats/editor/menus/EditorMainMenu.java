@@ -4,9 +4,7 @@ package com.mediusecho.particlehats.editor.menus;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -95,8 +93,10 @@ public class EditorMainMenu extends EditorMenu {
 						
 						EditorIconMenu editorBlockMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, blockTitle, blockDescription, (item) ->
 						{
-							if (item.getType().isBlock()) {
+							if (item.getType().isBlock()) 
+							{
 								targetHat.setParticleBlock(0, item.getType());
+								EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
 							}
 						});
 						menuBuilder.addMenu(editorBlockMenu);
@@ -112,8 +112,10 @@ public class EditorMainMenu extends EditorMenu {
 						
 						EditorIconMenu editorItemMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, itemTitle, itemDescription, (item) ->
 						{
-							if (item.getType().isItem()) {
+							if (!item.getType().isBlock()) 
+							{
 								targetHat.setParticleItem(0, item);
+								EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
 							}
 						});
 						menuBuilder.addMenu(editorItemMenu);
@@ -243,7 +245,7 @@ public class EditorMainMenu extends EditorMenu {
 					setButton(particleItemSlot, particleItem, getParticleAction());
 					
 					if (targetHat.getEffect().getParticlesSupported() == 1) {
-						EditorLore.updateParticleDescription(particleItem, targetHat, 0);
+						EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
 					}
 				});
 				menuBuilder.addMenu(editorTypeMenu);
