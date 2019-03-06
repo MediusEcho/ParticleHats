@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -83,8 +85,16 @@ public class EditorMetaMenu extends EditorMenu {
 			
 			else if (event.isShiftRightClick())
 			{
-				targetHat.getDescription().clear();
-				EditorLore.updateDescriptionDescription(getItem(11), targetHat.getDescription());
+				if (!targetHat.getDescription().isEmpty())
+				{
+					targetHat.getDescription().clear();
+					
+					Database database = core.getDatabase();
+					String menuName = menuBuilder.getEditingMenu().getName();
+					database.saveMetaData(menuName, targetHat, DataType.DESCRIPTION);
+					
+					EditorLore.updateDescriptionDescription(getItem(11), targetHat.getDescription());
+				}
 			}
 			return EditorClickType.NEUTRAL;
 		});
@@ -102,8 +112,16 @@ public class EditorMetaMenu extends EditorMenu {
 			
 			else if (event.isShiftRightClick())
 			{
-				targetHat.getPermissionDescription().clear();
-				EditorLore.updateDescriptionDescription(getItem(19), targetHat.getPermissionDescription());
+				if (!targetHat.getPermissionDescription().isEmpty())
+				{
+					targetHat.getPermissionDescription().clear();
+					
+					Database database = core.getDatabase();
+					String menuName = menuBuilder.getEditingMenu().getName();
+					database.saveMetaData(menuName, targetHat, DataType.PERMISSION_DESCRIPTION);
+					
+					EditorLore.updateDescriptionDescription(getItem(19), targetHat.getPermissionDescription());
+				}
 			}
 			return EditorClickType.NEUTRAL;
 		});

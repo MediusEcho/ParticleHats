@@ -139,6 +139,8 @@ public class EditorDescriptionMenu extends EditorListMenu {
 			isEmpty = false;
 			removeEmptyItem();
 		}
+		
+		isModified = true;
 	}
 	
 	@Override
@@ -195,6 +197,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 				
 				EditorLore.updatePreviewDecription(getItem(49), getDescription());
 				insertEmptyItem();
+				isModified = true;
 				
 				return EditorClickType.NEGATIVE;
 			}
