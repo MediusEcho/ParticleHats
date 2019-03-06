@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.particles.Effect;
@@ -102,6 +103,14 @@ public enum ParticleType {
 	 */
 	public String getDisplayName () {
 		return effect.getDisplayName();
+	}
+	
+	/**
+	 * Get this effects display name without color
+	 * @return
+	 */
+	public String getStrippedName () {
+		return ChatColor.stripColor(effect.getDisplayName());
 	}
 	
 	/**
