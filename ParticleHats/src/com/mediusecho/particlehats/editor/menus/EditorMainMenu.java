@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +17,7 @@ import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
@@ -23,6 +25,8 @@ import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
+
+// TODO: Update particle description after switching types
 
 public class EditorMainMenu extends EditorMenu {
 	
@@ -66,12 +70,62 @@ public class EditorMainMenu extends EditorMenu {
 			
 			else if (event.isRightClick())
 			{
-				EditorColorMenu editorColorMenu = new EditorColorMenu(core, owner, menuBuilder, 0, () ->
+				ParticleEffect particle = targetHat.getParticle(0);
+				switch (particle.getProperty())
 				{
-					EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
-				});
-				menuBuilder.addMenu(editorColorMenu);
-				editorColorMenu.open();
+					case NO_DATA:
+						break;
+				
+					case COLOR:
+					{
+						EditorColorMenu editorColorMenu = new EditorColorMenu(core, owner, menuBuilder, 0, () ->
+						{
+							EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
+						});
+						menuBuilder.addMenu(editorColorMenu);
+						editorColorMenu.open();
+						break;
+					}
+					
+					case BLOCK_DATA:
+					{
+						Message menuTitle = Message.EDITOR_ICON_MENU_BLOCK_TITLE;
+						Message blockTitle = Message.EDITOR_ICON_MENU_BLOCK_INFO;
+						Message blockDescription = Message.EDITOR_ICON_MENU_BLOCK_DESCRIPTION;
+						
+						EditorIconMenu editorBlockMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, blockTitle, blockDescription, (item) ->
+						{
+							if (item.getType().isBlock()) {
+								targetHat.setParticleBlock(0, item.getType());
+							}
+						});
+						menuBuilder.addMenu(editorBlockMenu);
+						editorBlockMenu.open();
+						break;
+					}
+					
+					case ITEM_DATA:
+					{
+						Message menuTitle = Message.EDITOR_ICON_MENU_ITEM_TITLE;
+						Message itemTitle = Message.EDITOR_ICON_MENU_ITEM_INFO;
+						Message itemDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
+						
+						EditorIconMenu editorItemMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, itemTitle, itemDescription, (item) ->
+						{
+							if (item.getType().isItem()) {
+								targetHat.setParticleItem(0, item);
+							}
+						});
+						menuBuilder.addMenu(editorItemMenu);
+						editorItemMenu.open();
+						break;
+					}
+					 
+					case ITEMSTACK_DATA:
+					{
+						break;
+					}
+				}
 			}
 			
 			return EditorClickType.NEUTRAL;
