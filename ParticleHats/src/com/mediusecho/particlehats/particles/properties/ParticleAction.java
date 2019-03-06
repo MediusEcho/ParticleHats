@@ -3,6 +3,8 @@ package com.mediusecho.particlehats.particles.properties;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
+
 import com.mediusecho.particlehats.locale.Message;
 
 public enum ParticleAction {
@@ -67,6 +69,14 @@ public enum ParticleAction {
 		} catch (IllegalArgumentException e) {
 			return "";
 		}
+	}
+	
+	/**
+	 * Get the name of this ParticleAction without color codes
+	 * @return
+	 */
+	public String getStrippedName () {
+		return ChatColor.stripColor(getDisplayName());
 	}
 	
 	/**
