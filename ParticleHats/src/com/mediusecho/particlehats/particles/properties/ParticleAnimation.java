@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.mediusecho.particlehats.locale.Message;
 
+import net.md_5.bungee.api.ChatColor;
+
 public enum ParticleAnimation {
 
 	STATIC (0, "static"),
@@ -59,6 +61,14 @@ public enum ParticleAnimation {
 		} catch (IllegalArgumentException e) {
 			return "";
 		}
+	}
+	
+	/**
+	 * Get the display name of this ParticleAnimation without color codes
+	 * @return
+	 */
+	public String getStrippedName () {
+		return ChatColor.stripColor(getDisplayName());
 	}
 	
 	/**
