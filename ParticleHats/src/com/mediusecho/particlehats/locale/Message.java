@@ -315,12 +315,12 @@ public enum Message {
 	EDITOR_MISC_PREVIOUS_PAGE ("&3Previous Page"),
 	
 	// Particles
-	EDITOR_PARTICLE_MISC_DESCRIPTION         ("/n&8Current:/n&8» {1}/n/n&3Left Click to Change Particle"),
-	EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION    ("/n&8Current:/n&8» {1}/n/n&8Color:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
-	EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION ("/n&8Current:/n&8» {1}/n/n&8Color:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
-	EDITOR_PARTICLE_MISC_COLOR_DESCRIPTION   ("/n&8Current:/n&8» {1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
-	EDITOR_PARTICLE_BLOCK_DESCRIPTION        ("/n&8Current:/n&8» {1}/n/n&8Block:/n&8» {2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
-	EDITOR_PARTICLE_ITEM_DESCRIPTION         ("/n&8Current:/n&8» {1}/n/n&8Item:/n&8» {2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
+	EDITOR_PARTICLE_MISC_DESCRIPTION         ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle"),
+	EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION    ("/n&8Current:/n&8» &e{1}/n/n&8Color:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
+	EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION ("/n&8Current:/n&8» &e{1}/n/n&8Color:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
+	EDITOR_PARTICLE_MISC_COLOR_DESCRIPTION   ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
+	EDITOR_PARTICLE_BLOCK_DESCRIPTION        ("/n&8Current:/n&8» &e{1}/n/n&8Block:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
+	EDITOR_PARTICLE_ITEM_DESCRIPTION         ("/n&8Current:/n&8» &e{1}/n/n&8Item:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
 	
 	// Base Menu
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
@@ -379,8 +379,8 @@ public enum Message {
 	EDITOR_MAIN_MENU_SLOT_DESCRIPTION                     ("&8Change where this hat will be/n&8inside this menu"),
 	EDITOR_MAIN_MENU_ACTION_DESCRIPTION                   ("/n&8Left Click Action:/n{1}/n/n&8Right Click Action:/n{2}/n/n&3Click to Change Actions"),
 	EDITOR_MAIN_MENU_META_DESCRIPTION                     ("&8Edit various meta properties/n/n&3Left Click to Open/n&3Right Click for Description Shortcut"),
-	EDITOR_MAIN_MENU_TYPE_DESCRIPTION                     ("/n&8Current:/n&8» {1=/n&8» }{2}/n/n&3Left Click to Change Type/n{3=&cShift Click to Change Animation}"),
-	EDITOR_MAIN_MENU_ANIMATION_DESCRIPTION                ("/n/n&8Animation:/n&8» {1}/n{2}"),
+	EDITOR_MAIN_MENU_TYPE_DESCRIPTION                     ("/n&8Current:/n&8» &e{1=/n&8» }{2}/n/n&3Left Click to Change Type/n{3=&cShift Click to Change Animation}"),
+	EDITOR_MAIN_MENU_ANIMATION_DESCRIPTION                ("/n/n&8Animation:/n&8» &e{1}/n{2}"),
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_SINGLE   ("&8» &e{1}"),
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_MULTIPLE ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	
@@ -388,7 +388,7 @@ public enum Message {
 	
 	// Type Menu
 	EDITOR_TYPE_MENU_TITLE                   ("Select a Type {1}/{2}"),
-	EDITOR_TYPE_MENU_TYPE_PREFIX             ("&b"),
+	EDITOR_TYPE_MENU_TYPE_PREFIX             ("&e"),
 	EDITOR_TYPE_MENU_TYPE_DESCRIPTION        ("{1=/n/n}&8Supports &3{2} &8Particle{3=s}/n/n{4=&3Click to Select}{5=&3Selected}"),
 	EDITOR_TYPE_MENU_CUSTOM_TYPE_DESCRIPTION ("{1=&3Click to Select}{2=&3Selected}"),
 	EDITOR_TYPE_MENU_INCLUDED_FILTER         ("&bIncluded Types"),
@@ -397,9 +397,6 @@ public enum Message {
 	
 	// Icon Menu
 	EDITOR_ICON_OVERVIEW_MENU_TITLE               ("Add or Remove Items"),
-	EDITOR_ICON_MENU_TITLE                        ("Select a new Item"),
-	EDITOR_ICON_MENU_INFO_TITLE                   ("&bSelect an Item"),
-	EDITOR_ICON_MENU_INFO_DESCRIPTION             ("&8Select an Item from your/n&8inventory to set as/n&8this hats icon"),
 	EDITOR_ICON_MENU_SET_MAIN_ICON                ("&bSet Main Item"),
 	EDITOR_ICON_MENU_ADD_ICON                     ("&bAdd an Item"),
 	EDITOR_ICON_MENU_PREVIEW                      ("&bPreview"),
@@ -407,9 +404,16 @@ public enum Message {
 	EDITOR_ICON_MENU_SET_UPDATE_FREQUENCY         ("&bSet Update Frequency"),
 	EDITOR_ICON_MENU_ITEM_PREFIX                  ("&b"),
 	
+	EDITOR_ICON_MENU_ITEM_TITLE                   ("Select an Item"),
+	EDITOR_ICON_MENU_ITEM_INFO                    ("&bSelect an Item"),
+	EDITOR_ICON_MENU_ITEM_DESCRIPTION             ("&8Select an Item from your inventory"),
+	EDITOR_ICON_MENU_BLOCK_TITLE                  ("Select a Block"),
+	EDITOR_ICON_MENU_BLOCK_INFO                   ("&bSelect a Block"),
+	EDITOR_ICON_MENU_BLOCK_DESCRIPTION            ("&8Select a Block from your inventory"),
+	
 	EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION ("/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
 	EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION     ("/n&8• {1}/n&7» &e{2}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
-	EDITOR_ICON_MENU_ITEM_DESCRIPTION             ("&3Left Click to Change/n&cShift Right Click to Delete"),
+	EDITOR_ICON_MENU_ICON_DESCRIPTION             ("&3Left Click to Change/n&cShift Right Click to Delete"),
 	
 	// Offset Menu
 	EDITOR_OFFSET_MENU_TITLE                ("Set Offset"),
@@ -459,10 +463,10 @@ public enum Message {
 	EDITOR_ACTION_OVERVIEW_MENU_SET_RIGHT_CLICK    ("&bSet Right Click Action"),
 	EDITOR_ACTION_OVERVIEW_MENU_ACTION_DESCRIPTION ("/n&8Current:/n{1}/n/n&3Left Click to Change Action{2=/n&cRight Click to Change Argument}"),
 	EDITOR_ACTION_MENU_TITLE                       ("Select a {1} Action {2}/{3}"),
-	EDITOR_ACTION_MENU_MISC_DESCRIPTION            ("&8» {1}"),
-	EDITOR_ACTION_MENU_MENU_DESCRIPTION            ("&8» {1}/n&8» &7{2=&cNot Set}"),
-	EDITOR_ACTION_MENU_COMMAND_DESCRIPTION         ("&8» {1}/n&8» &7{2=&cNot Set}"),
-	EDITOR_ACTION_MENU_DEMO_DESCRIPTION            ("&8» {1}/n&8» &7{2} second{3=s}"),
+	EDITOR_ACTION_MENU_MISC_DESCRIPTION            ("&8» &e{1}"),
+	EDITOR_ACTION_MENU_MENU_DESCRIPTION            ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
+	EDITOR_ACTION_MENU_COMMAND_DESCRIPTION         ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
+	EDITOR_ACTION_MENU_DEMO_DESCRIPTION            ("&8» &e{1}/n&8» &7{2} second{3=s}"),
 	EDITOR_ACTION_MENU_ACTION_DESCRIPTION          ("{1}{2=/n/n&3Selected}{3=/n/n&3Click to Select}"),
 	
 	// Slot Menu
