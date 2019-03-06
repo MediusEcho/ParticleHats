@@ -13,6 +13,7 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
+import com.mediusecho.particlehats.particles.ParticleEffect.ParticleProperty;
 import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -52,10 +53,9 @@ public class EditorLore {
 		if (type.supportsAnimation())
 		{
 			ParticleAnimation animation = hat.getAnimation();
-			//"/n/n&8Animation:/n&8» {1}/n{2}"
 			animationDescription = Message.EDITOR_MAIN_MENU_ANIMATION_DESCRIPTION.getValue();
 			animationDescription = animationDescription
-					.replace("{1}", animation.getDisplayName())
+					.replace("{1}", animation.getStrippedName())
 					.replace("{2}", animation.getDescription());
 		}
 		
@@ -75,7 +75,7 @@ public class EditorLore {
 		}
 		
 		description = description
-				.replace(typeInfo[0], type.getDisplayName() + custom)
+				.replace(typeInfo[0], type.getStrippedName() + custom)
 				.replace("{2}", animationDescription)
 				.replace(toggleInfo[0], toggle);
 		
@@ -382,7 +382,7 @@ public class EditorLore {
 			String[] menuInfo = StringUtil.parseValue(description, "2");
 			String menu = argument.equals("") || !core.getDatabase().menuExists(argument) ? menuInfo[1] : argument;
 			
-			description = description.replace("{1}", action.getDisplayName())
+			description = description.replace("{1}", action.getStrippedName())
 					.replace(menuInfo[0], menu);
 			
 			return description;
@@ -394,7 +394,7 @@ public class EditorLore {
 			String[] commandInfo = StringUtil.parseValue(description, "2");
 			String command = argument.equals("") ? commandInfo[1] : "/" + argument;
 			
-			description = description.replace("{1}", action.getDisplayName())
+			description = description.replace("{1}", action.getStrippedName())
 					.replace(commandInfo[0], command);
 			
 			return description;
@@ -410,7 +410,7 @@ public class EditorLore {
 			double time = duration / 20D;
 			String suffix = time == 1 ? "" : suffixInfo[1];
 			
-			description = description.replace("{1}", action.getDisplayName())
+			description = description.replace("{1}", action.getStrippedName())
 					.replace(suffixInfo[0], suffix);
 			
 			description = description.replace("{2}", df.format(time));
@@ -420,7 +420,7 @@ public class EditorLore {
 		default:
 		{
 			String description = Message.EDITOR_ACTION_MENU_MISC_DESCRIPTION.getValue();
-			description = description.replace("{1}", action.getDisplayName());
+			description = description.replace("{1}", action.getStrippedName());
 			return description;
 		}
 		}
@@ -614,43 +614,57 @@ public class EditorLore {
 	public static void updateParticleDescription (ItemStack item, Hat hat, int particleIndex)
 	{
 		ParticleEffect particle = hat.getParticle(particleIndex);
-		switch (particle.getProperty())
+		ParticleProperty property = particle.getProperty();
+		String particleName = particle.getStrippedName();
+		
+		Core.debug(property.toString());
+		
+		switch (property)
 		{
 			case COLOR:
 			{
-				if (hat.hasColorData(particleIndex))
+				ParticleColor color = hat.getParticleColor(particleIndex);
+				if (color.isRandom())
 				{
-					ParticleColor color = hat.getParticleColor(particleIndex);
-					if (color.isRandom())
-					{
-						//"/n&8Current:/n&8» {1}/n/n&8Color:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"
-						String description = Message.EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION.getValue();
-						String s = description
-								.replace("{1}", particle.getName());
-						ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
-					}
-					
-					else
-					{
-						//"/n&7Current:/n&8» {1}/n/n&8Color:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"
-						String description = Message.EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION.getValue();
-						Color c = color.getColor();
-						String s = description
-								.replace("{1}", particle.getName())
-								.replace("{2}", Integer.toString(c.getRed()))
-								.replace("{3}", Integer.toString(c.getGreen()))
-								.replace("{4}", Integer.toString(c.getBlue()));
-						ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
-					}
+					String description = Message.EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION.getValue();
+					String s = description
+							.replace("{1}", particleName);
+					ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 				}
 				
 				else
 				{
-					String description = Message.EDITOR_PARTICLE_MISC_COLOR_DESCRIPTION.getValue();
-					String s = description.replace("{1}", particle.getName());
+					String description = Message.EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION.getValue();
+					Color c = color.getColor();
+					String s = description
+							.replace("{1}", particleName)
+							.replace("{2}", Integer.toString(c.getRed()))
+							.replace("{3}", Integer.toString(c.getGreen()))
+							.replace("{4}", Integer.toString(c.getBlue()));
 					ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 				}
 				break;
+			}
+			
+			case ITEM_DATA:
+			case BLOCK_DATA:
+			{
+				boolean isBlock = property == ParticleProperty.BLOCK_DATA;
+				
+				String description = isBlock? Message.EDITOR_PARTICLE_BLOCK_DESCRIPTION.getValue() : Message.EDITOR_PARTICLE_ITEM_DESCRIPTION.getValue();
+				String name = isBlock ? hat.getParticleBlock(particleIndex).getMaterial().toString() : hat.getParticleItem(particleIndex).getType().toString();
+				String s = description
+						.replace("{1}", particleName)
+						.replace("{2}", StringUtil.capitalizeFirstLetter(name.toLowerCase()));
+				ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+				break;
+			}
+			
+			default:
+			{
+				String description = Message.EDITOR_PARTICLE_MISC_DESCRIPTION.getValue();
+				String s = description.replace("{1}", particleName);
+				ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 			}
 		}
 	}
