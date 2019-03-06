@@ -30,8 +30,9 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 	private boolean isModified = false;
 	private int editingIndex = 0;
 	
-	private final Message iconTitle = Message.EDITOR_ICON_MENU_TITLE;
-	private final Message iconDescription = Message.EDITOR_ICON_MENU_INFO_DESCRIPTION;
+	private final Message iconTitle = Message.EDITOR_ICON_MENU_ITEM_TITLE;
+	private final Message iconName = Message.EDITOR_ICON_MENU_ITEM_INFO;
+	private final Message iconDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
 	
 	public EditorIconOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorItemCallback callback) 
 	{
@@ -43,7 +44,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		addAction = (event, slot) ->
 		{
 			editingIndex = getClampedIndex(slot, 10, 2);
-			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconDescription, (item) ->
+			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconName, iconDescription, (item) ->
 			{
 				onAdd(slot, item);
 			});
@@ -58,7 +59,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 			editingIndex = getClampedIndex(slot, 10, 2);
 			if (event.isLeftClick())
 			{
-				EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconDescription, (item) ->
+				EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconName, iconDescription, (item) ->
 				{
 					Material material = item.getType();
 					String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
@@ -121,7 +122,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		setButton(52, addItem, (event, slot) ->
 		{
 			editingIndex = getClampedIndex(slot, 10, 2);
-			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconDescription, (item) ->
+			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconName, iconDescription, (item) ->
 			{
 				onAdd(slot, item);
 			});
@@ -136,7 +137,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		setButton(10, mainItem, (event, slot) ->
 		{
 			editingIndex = 0;
-			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconDescription, (item) ->
+			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconName, iconDescription, (item) ->
 			{
 				Material material = item.getType();
 				targetHat.setMaterial(material);
@@ -189,7 +190,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.capitalizeFirstLetter(material.toString().toLowerCase());
 			
 			int index = getNormalIndex(i, 10, 2);
-			setItem(index, ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue())));
+			setItem(index, ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue())));
 			//setAction(index, editAction);
 		}
 	}
@@ -206,7 +207,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		{
 			Material material = item.getType();
 			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
-			ItemStack i = ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION.getValue()));
+			ItemStack i = ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue()));
 		
 			targetHat.getIconData().addMaterial(material);
 			setItem(getNormalIndex(size, 10, 2), i);
