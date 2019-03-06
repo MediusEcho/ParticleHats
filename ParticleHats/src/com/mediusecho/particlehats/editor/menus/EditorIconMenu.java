@@ -16,12 +16,15 @@ import com.mediusecho.particlehats.util.StringUtil;
 public class EditorIconMenu extends EditorMenu {
 
 	private final EditorItemCallback itemCallback;
-	private final Message description;
 	
-	public EditorIconMenu(Core core, Player owner, MenuBuilder menuBuilder, Message title, Message description, EditorItemCallback itemCallback) 
+	private final Message itemName;
+	private final Message itemDescription;
+	
+	public EditorIconMenu(Core core, Player owner, MenuBuilder menuBuilder, Message title, Message name, Message description, EditorItemCallback itemCallback) 
 	{
 		super(core, owner, menuBuilder);
-		this.description = description;
+		this.itemName = name;
+		this.itemDescription = description;
 		this.itemCallback = itemCallback;
 		
 		inventory = Bukkit.createInventory(null, 27, title.getValue());
@@ -42,8 +45,8 @@ public class EditorIconMenu extends EditorMenu {
 	@Override
 	protected void build() 
 	{
-		ItemStack info = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_ICON_MENU_INFO_TITLE);
-		ItemUtil.setItemDescription(info, StringUtil.parseDescription(description.getValue()));
+		ItemStack info = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, itemName);
+		ItemUtil.setItemDescription(info, StringUtil.parseDescription(itemDescription.getValue()));
 		
 		for (int i = 0; i < inventory.getSize(); i++)
 		{
