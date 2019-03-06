@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +25,7 @@ import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
@@ -417,6 +419,33 @@ public class MySQLDatabase implements Database {
 					
 					hat.clearPropertyChanges();
 					hat.setLoaded(true);
+				}
+			}
+			
+			// Load particles
+			String particleQuery = "SELECT * FROM menu_" + menuName + "_particles WHERE slot = ? ORDER BY particle_index ASC";
+			try (PreparedStatement particleStatement = connection.prepareStatement(particleQuery))
+			{
+				particleStatement.setInt(1, slot);
+				ResultSet set = particleStatement.executeQuery();
+				
+				int index = 0;
+				while (set.next())
+				{
+					hat.setParticle(index, ParticleEffect.fromID(set.getInt("particle_id")));
+					hat.setParticleColor(index, Color.fromRGB(set.getInt("color")));
+					hat.getParticleColor(index).setRandom(set.getBoolean("random"));
+					hat.setParticleScale(index, set.getDouble("scale"));
+					
+					String itemData = set.getString("item_data");
+					if (itemData != null) {
+						hat.setParticleItem(index, new ItemStack(ItemUtil.materialFromString(itemData, Material.APPLE)));
+					}
+					
+					String blockData = set.getString("block_data");
+					if (blockData != null) {
+						hat.setParticleBlock(index, ItemUtil.materialFromString(blockData, Material.STONE));
+					}
 				}
 			}
 		});
