@@ -137,44 +137,6 @@ public class IconData {
 				return previousMaterial;
 			}		
 		}
-		
-//		if (materials.size() > 1)
-//		{
-//			if (ticks % updateFrequency == 0)
-//			{
-//				switch (displayMode)
-//				{
-//				case DISPLAY_RANDOMLY:
-//				{
-//					int attempts = 0;
-//					Material nextMaterial = materials.get(random.nextInt(materials.size()));
-//					while (nextMaterial == previousMaterial && attempts < 50) 
-//					{
-//						nextMaterial = materials.get(random.nextInt(materials.size()));
-//						attempts++;
-//					}
-//					previousMaterial = nextMaterial;
-//					return nextMaterial;
-//				}
-//					
-//				case DISPLAY_IN_ORDER:
-//				{
-//					previousMaterial = materials.get(MathUtil.wrap(index++, materials.size(), 0));
-//					return previousMaterial;
-//				}
-//				
-//				default: return previousMaterial;
-//				}
-//			} 
-//			
-//			else {
-//				return previousMaterial;
-//			}
-//		}
-//		
-//		else {
-//			return materials.get(0);
-//		}
 	}
 	
 	/**
@@ -209,6 +171,9 @@ public class IconData {
 		return displayMode;
 	}
 	
+	/**
+	 * Resets the icon animation index to 0
+	 */
 	public void reset () {
 		index = 0;
 	}
