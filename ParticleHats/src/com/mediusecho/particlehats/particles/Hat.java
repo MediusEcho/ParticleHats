@@ -5,14 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconData;
@@ -20,6 +21,7 @@ import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleColor;
+import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
@@ -51,8 +53,8 @@ public class Hat {
 	private CustomEffect customEffect;
 	
 	private boolean isVanished      = false;
-	private boolean isAnimated      = false;
-	private boolean hasLockedName   = false;
+	//private boolean isAnimated      = false;
+	//private boolean hasLockedName   = false;
 	private boolean isPermanent     = true;
 	private boolean isLoaded        = false;
 	
@@ -68,9 +70,7 @@ public class Hat {
 	private List<String> normalDescription;
 	private List<String> permissionDescription;
 	
-	private Map<Integer, ParticleEffect> particleIndex;
-	private Map<Integer, ParticleColor> particleColorData;
-	private Map<Integer, ItemStack> particleItemData;
+	private Map<Integer, ParticleData> particleData;
 	
 	private Sound sound;
 	private double volume = 1D;
@@ -80,7 +80,7 @@ public class Hat {
 	private IconData iconData;
 	
 	// Particle Size
-	private double particleScale = 1f;
+	//private double particleScale = 1f;
 	
 	private Vector offset;
 	private Vector angle;
@@ -93,8 +93,7 @@ public class Hat {
 		iconData              = new IconData();
 		normalDescription     = new ArrayList<String>();
 		permissionDescription = new ArrayList<String>();
-		particleIndex         = new HashMap<Integer, ParticleEffect>();
-		particleColorData     = new HashMap<Integer, ParticleColor>();
+		particleData          = new HashMap<Integer, ParticleData>();
 	}
 	
 	/**
@@ -627,18 +626,19 @@ public class Hat {
 	 * Only certain particles obey this value
 	 * @param particleScale
 	 */
-	public void setParticleScale (double particleScale)
-	{
-		this.particleScale = particleScale;
-		setProperty("particle_scale", Double.toString(particleScale));
+	public void setParticleScale (int index, double scale) {
+		getParticleData(index).setScale(scale);
+		//this.particleScale = particleScale;
+		//setProperty("particle_scale", Double.toString(particleScale));
 	}
 	
 	/**
 	 * Get how large particles are displayed at
 	 * @return
 	 */
-	public double getParticleScale () {
-		return particleScale;
+	public double getParticleScale (int index) {
+		return getParticleData(index).getScale();
+		//return particleScale;
 	}
 	
 	/**
@@ -771,12 +771,31 @@ public class Hat {
 	}
 	
 	/**
+	 * Get the ParticleData found at this index
+	 * @param index
+	 * @return
+	 */
+	public ParticleData getParticleData (int index)
+	{
+		if (particleData.containsKey(index)) {
+			return particleData.get(index);
+		}
+		
+		Core.debug("creating new particle data for index: " + index);
+		
+		ParticleData data = new ParticleData();
+		particleData.put(index, data);
+		
+		return data;
+	}
+	
+	/**
 	 * Assign a particle to an index
 	 * @param index
 	 * @param particle
 	 */
 	public void setParticle (int index, ParticleEffect particle) {
-		particleIndex.put(index, particle);
+		getParticleData(index).setParticle(particle);
 	}
 	
 	/**
@@ -784,12 +803,8 @@ public class Hat {
 	 * @param index
 	 * @return
 	 */
-	public ParticleEffect getParticle (int index) 
-	{
-		if (particleIndex.containsKey(index)) {
-			return particleIndex.get(index);
-		}
-		return ParticleEffect.NONE;
+	public ParticleEffect getParticle (int index) {
+		return getParticleData(index).getParticle();
 	}
 	
 	/**
@@ -798,12 +813,11 @@ public class Hat {
 	 */
 	public Map<Integer, ParticleEffect> getParticles ()
 	{
-		final Map<Integer, ParticleEffect> particles = new HashMap<Integer, ParticleEffect>(particleIndex);
+		final Map<Integer, ParticleEffect> particles = new HashMap<Integer, ParticleEffect>();
+		for (Entry<Integer, ParticleData> data : particleData.entrySet()) {
+			particles.put(data.getKey(), data.getValue().getParticle());
+		}
 		return particles;
-	}
-	
-	public Set<Entry<Integer, ParticleEffect>> getParticlesIterator () {
-		return particleIndex.entrySet();
 	}
 	
 	/**
@@ -811,7 +825,7 @@ public class Hat {
 	 * @return
 	 */
 	public boolean hasParticles () {
-		return particleIndex.size() > 0;
+		return particleData.size() > 0;
 	}
 	
 	/**
@@ -819,8 +833,7 @@ public class Hat {
 	 * @param index
 	 * @param particleColor
 	 */
-	public void setParticleColor (int index, ParticleColor particleColor) {
-		particleColorData.put(index, particleColor);
+	public void setParticleColor (int index, ParticleColor color) {
 	}
 	
 	/**
@@ -828,13 +841,8 @@ public class Hat {
 	 * @param index
 	 * @param color
 	 */
-	public void setParticleColor (int index, Color color) 
-	{
-		if (particleColorData.containsKey(index)) {
-			particleColorData.get(index).setColor(color);
-		} else {
-			particleColorData.put(index, new ParticleColor(color));
-		}
+	public void setParticleColor (int index, Color color) {
+		getParticleData(index).setColor(new ParticleColor(color));
 	}
 	
 	/**
@@ -842,22 +850,63 @@ public class Hat {
 	 * @param index
 	 * @return
 	 */
-	public ParticleColor getParticleColor (int index) 
-	{
-		if (particleColorData.containsKey(index)) {
-			return particleColorData.get(index);
-		}
-		return new ParticleColor(Color.WHITE, true);
+	public ParticleColor getParticleColor (int index) {
+		return getParticleData(index).getColor();
 	}
 	
 	/**
-	 * Check to see if color data exists at this index
+	 * Set this hats particle item data
+	 * @param index
+	 * @param item
+	 */
+	public void setParticleItem (int index, ItemStack item) {
+		getParticleData(index).setItem(item);
+	}
+	
+	/**
+	 * Get this hats particle icon data 
 	 * @param index
 	 * @return
 	 */
-	public boolean hasColorData (int index) {
-		return particleColorData.containsKey(index);
+	public ItemStack getParticleItem (int index) {
+		return getParticleData(index).getItem();
 	}
+	
+	/**
+	 * Set this hats particle block data
+	 * @param index
+	 * @param block
+	 */
+	public void setParticleBlock (int index, BlockData block) {
+		getParticleData(index).setBlock(block);
+	}
+	
+	/**
+	 * Set this hats particle block data
+	 * @param index
+	 * @param block
+	 */
+	public void setParticleBlock (int index, Material block) {
+		getParticleData(index).setBlock(block);
+	}
+	
+	/**
+	 * Get this hats particle block data
+	 * @param index
+	 * @return
+	 */
+	public BlockData getParticleBlock (int index) {
+		return getParticleData(index).getBlock();
+	}
+	
+//	/**
+//	 * Check to see if color data exists at this index
+//	 * @param index
+//	 * @return
+//	 */
+//	public boolean hasColorData (int index) {
+//		return particleColorData.containsKey(index);
+//	}
 	
 	/**
 	 * Set the sound this hat will play when clicked
@@ -1114,6 +1163,29 @@ public class Hat {
 	 */
 	public void clearPropertyChanges () {
 		modifiedProperties.clear();
+	}
+	
+	/**
+	 * Returns a copy of this object with only data necessary for displaying particles
+	 * @return
+	 */
+	public Hat essentialCopy ()
+	{
+		Hat hat = new Hat();
+		
+		hat.setLocation(location);
+		hat.setMode(mode);
+		hat.setType(type);
+		hat.setAnimation(animation);
+		hat.setTrackingMethod(trackingMethod);
+		
+		hat.setUpdateFrequency(updateFrequency);
+		hat.setCount(count);
+		hat.setSpeed(speed);
+		hat.setOffset(offset);
+		hat.setAngle(angle);
+		
+		return hat;
 	}
 	
 	/**
