@@ -14,6 +14,7 @@ public class ParticleData {
 	private ItemStack item;
 	private BlockData block;
 	private double scale;
+	private ItemStackData stackData;
 	
 	public ParticleData ()
 	{
@@ -22,6 +23,7 @@ public class ParticleData {
 		item = new ItemStack(Material.APPLE);
 		block = Material.STONE.createBlockData();
 		scale = 1;
+		stackData = new ItemStackData();
 	}
 	
 	/**
@@ -110,5 +112,13 @@ public class ParticleData {
 	 */
 	public double getScale () {
 		return scale;
+	}
+	
+	public void setItemStackData (ItemStackData data) {
+		this.stackData = data;
+	}
+	
+	public ItemStackData getItemStackData () {
+		return stackData;
 	}
 }
