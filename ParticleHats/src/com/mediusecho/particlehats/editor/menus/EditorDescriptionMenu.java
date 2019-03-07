@@ -96,7 +96,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 			DataType type = editingDescription ? DataType.DESCRIPTION : DataType.PERMISSION_DESCRIPTION;
 			String menuName = menuBuilder.getEditingMenu().getName();
 			
-			database.saveMetaData(menuName, targetHat, type);
+			database.saveMetaData(menuName, targetHat, type, 0);
 		}
 	}
 
