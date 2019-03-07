@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -125,6 +126,9 @@ public class EditorMainMenu extends EditorMenu {
 					 
 					case ITEMSTACK_DATA:
 					{
+						EditorItemStackMenu editorItemStackMenu = new EditorItemStackMenu(core, owner, menuBuilder, 0);
+						menuBuilder.addMenu(editorItemStackMenu);
+						editorItemStackMenu.open();
 						break;
 					}
 				}
@@ -135,7 +139,9 @@ public class EditorMainMenu extends EditorMenu {
 		
 		editParticleAction = (event, slot) ->
 		{
-			Core.debug("no no no, not yet");
+			EditorParticleOverviewMenu editorParticleOverviewMenu = new EditorParticleOverviewMenu(core, owner, menuBuilder);
+			menuBuilder.addMenu(editorParticleOverviewMenu);
+			editorParticleOverviewMenu.open();
 			return EditorClickType.NEUTRAL;
 		};
 		
@@ -155,6 +161,13 @@ public class EditorMainMenu extends EditorMenu {
 			
 			database.saveIncremental(menuBuilder.getEditingMenu().getName(), menuBuilder.getTargetSlot(), hat.getSQLUpdateQuery());
 			hat.clearPropertyChanges();
+		}
+		
+		// Save any particle data if the hat only supports one particle
+		if (hat.getType().getParticlesSupported() == 1)
+		{
+			Database database = core.getDatabase();
+			database.saveParticleData(menuBuilder.getEditingMenu().getName(), targetHat, 0);
 		}
 	}
 	
