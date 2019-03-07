@@ -29,20 +29,6 @@ public abstract class EditorListMenu extends EditorMenu {
 			setAction(getNormalIndex(i, 10, 2), editAction);
 		}	
 	}
-
-//	/**
-//	 * Moves the add action to the end of the list in the menu
-//	 * @param slot
-//	 */
-//	protected void onAdd (int slot)
-//	{
-//		int wrappedIndex = getWrappedIndex(slot + 1, 10, 2);
-//		if (wrappedIndex <= 34) {
-//			setButton(wrappedIndex, addItem, addAction);
-//		}
-//		
-//		setAction(slot, editAction);
-//	}
 	
 	/**
 	 * Deletes the current slot, and shifts all elements left starting at the slot
