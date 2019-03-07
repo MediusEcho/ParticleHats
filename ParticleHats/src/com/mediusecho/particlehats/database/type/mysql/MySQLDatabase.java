@@ -178,24 +178,29 @@ public class MySQLDatabase implements Database {
 								
 								while (set.next()) 
 								{
-									type = set.getInt("type");
+									DataType type = DataType.fromID(set.getInt("type"));
 									switch (type)
-									{
-									
-									case TYPE_DESCRIPTION:
-										description.add(set.getString("value"));
-										break;
-										
-									case TYPE_PERMISSION_DESCRIPTION:
-										permissionDescription.add(set.getString("value"));
-										break;
-										
-									case TYPE_ICON:
-										Material mat = Material.getMaterial(set.getString("value"));
-										if (mat != null) {
-											data.addMaterial(mat);
+									{	
+										case DESCRIPTION:
+										{
+											description.add(set.getString("value"));
+											break;
 										}
-										break;
+										
+										case PERMISSION_DESCRIPTION:
+										{
+											permissionDescription.add(set.getString("value"));
+											break;
+										}
+										
+										case ICON:
+										{
+											Material mat = Material.getMaterial(set.getString("value"));
+											if (mat != null) {
+												data.addMaterial(mat);
+											}
+											break;
+										}
 									}
 								}
 								
