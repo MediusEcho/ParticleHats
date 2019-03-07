@@ -283,11 +283,18 @@ public class MySQLDatabase implements Database {
 							metaStatement.execute();
 						}
 						
-						// TODO: Update cache manually?
+						// Particle Table
+						String createMenuParticleTable = helper.getParticleTableQuery(menuName);
+						try (PreparedStatement particleStatement = connection.prepareCall(createMenuParticleTable)) {
+							particleStatement.execute();
+						}
 					}
 				}
 			});
 		});
+		
+		// TODO cache update didn't work, probably due to async method
+		updateMenuCache();
 	}
 	
 	/**
