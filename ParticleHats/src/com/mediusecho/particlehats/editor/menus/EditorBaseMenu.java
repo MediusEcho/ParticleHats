@@ -196,6 +196,14 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
+	 * Removes the hat at this slot
+	 * @param slot
+	 */
+	public void removeHat (int slot) {
+		menuInventory.removeHat(slot);
+	}
+	
+	/**
 	 * Get this menus inventory
 	 * @return
 	 */
@@ -286,7 +294,6 @@ public class EditorBaseMenu extends EditorMenu {
 		
 		Hat currentHat = getHat(currentSlot);
 		currentHat.setSlot(newSlot);
-		setHat(currentSlot, null);
 		
 		if (swapping)
 		{
@@ -294,6 +301,21 @@ public class EditorBaseMenu extends EditorMenu {
 			swappingHat.setSlot(currentSlot);
 			setHat(currentSlot, swappingHat);
 		}
+		
+		else {
+			removeHat(currentSlot);
+		}
+		
+//		Hat currentHat = getHat(currentSlot);
+//		currentHat.setSlot(newSlot);
+//		setHat(currentSlot, null);
+//		
+//		if (swapping)
+//		{
+//			Hat swappingHat = getHat(newSlot);
+//			swappingHat.setSlot(currentSlot);
+//			setHat(currentSlot, swappingHat);
+//		}
 		
 		setButton(currentSlot, swappingItem, swappingAction);
 		setButton(newSlot, currentItem, currentAction);
