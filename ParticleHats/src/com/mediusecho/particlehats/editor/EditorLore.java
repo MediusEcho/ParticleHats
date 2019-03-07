@@ -1,6 +1,8 @@
 package com.mediusecho.particlehats.editor;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.bukkit.Color;
@@ -248,20 +250,33 @@ public class EditorLore {
 	 * @param duration
 	 * @param description
 	 */
-	public static void updateDurationDescription (ItemStack item, int duration)
+	public static void updateDurationDescription (ItemStack item, int duration, Message description)
 	{
+		int time = duration / 20;
+		int remainder = time % 3600; // get the rest in seconds
+		int minutes = remainder / 60; // get the amount of minutes from the rest
+		int seconds = remainder % 60; // get the new rest
+		String disMinu = (minutes < 10 ? "0" : "") + minutes; // get minutes and add "0" before if lower than 10
+		String disSec = (seconds < 10 ? "0" : "") + seconds; // get seconds and add "0" before if lower than 10
+		String formattedTime = disMinu + ":" + disSec; //get the whole time
+		
+		String desc = description.getValue();
+		String s = desc.replace("{1}", formattedTime);
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+		
 		//"/n&8» {1} second{2=s}/n/n&3Left Click to Add 1/nRight Click to Subtract 1/n&cShift Click to Adjust by 30"
-		String description = Message.EDITOR_DURATION_MENU_DESCRIPTION.getValue();
-		DecimalFormat df = new DecimalFormat("#.#");
-		String[] suffixInfo = StringUtil.parseValue(description, "2");
+		//DecimalFormat df = new DecimalFormat("#.#");
+		//String[] suffixInfo = StringUtil.parseValue(description, "2");
 		
-		double time = duration / 20D;
-		String suffix = time == 1 ? "" : suffixInfo[1];
+		//SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
 		
-		description = description.replace(suffixInfo[0], suffix)
-				.replace("{1}", df.format(time));
+		//double time = duration / 20D;
+		//String suffix = time == 1 ? "" : suffixInfo[1];
 		
-		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
+//		description = description.replace(suffixInfo[0], suffix)
+//				.replace("{1}", formattedTime);
+		
+//		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
 	
 	/**
@@ -403,18 +418,19 @@ public class EditorLore {
 		case DEMO:
 		{
 			String description = Message.EDITOR_ACTION_MENU_DEMO_DESCRIPTION.getValue();
-			String[] suffixInfo = StringUtil.parseValue(description, "3");
 			
-			DecimalFormat df = new DecimalFormat("#.#");
-			int duration = hat.getDemoDuration();
-			double time = duration / 20D;
-			String suffix = time == 1 ? "" : suffixInfo[1];
+			int time = hat.getDemoDuration() / 20;
+			int remainder = time % 3600; // get the rest in seconds
+			int minutes = remainder / 60; // get the amount of minutes from the rest
+			int seconds = remainder % 60; // get the new rest
+			String disMinu = (minutes < 10 ? "0" : "") + minutes; // get minutes and add "0" before if lower than 10
+			String disSec = (seconds < 10 ? "0" : "") + seconds; // get seconds and add "0" before if lower than 10
+			String formattedTime = disMinu + ":" + disSec; //get the whole time
 			
-			description = description.replace("{1}", action.getStrippedName())
-					.replace(suffixInfo[0], suffix);
-			
-			description = description.replace("{2}", df.format(time));
-			return description;
+			String s = description
+					.replace("{1}", action.getStrippedName())
+					.replace("{2}", formattedTime);
+			return s;
 		}
 		
 		default:
@@ -617,8 +633,6 @@ public class EditorLore {
 		ParticleProperty property = particle.getProperty();
 		String particleName = particle.getStrippedName();
 		
-		Core.debug(property.toString());
-		
 		switch (property)
 		{
 			case COLOR:
@@ -660,6 +674,17 @@ public class EditorLore {
 				break;
 			}
 			
+			case ITEMSTACK_DATA:
+			{
+				String description = Message.EDITOR_PARTICLE_ITEMSTACK_DESCRIPTION.getValue();
+				int items = hat.getItemStackData(particleIndex).getItems().size();
+				String s = description
+						.replace("{1}", particleName)
+						.replace("{2}", Integer.toString(items));
+				ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+				break;
+			}
+			
 			default:
 			{
 				String description = Message.EDITOR_PARTICLE_MISC_DESCRIPTION.getValue();
@@ -667,6 +692,22 @@ public class EditorLore {
 				ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 			}
 		}
+	}
+	
+	public static void updateGravityDescription (ItemStack item, boolean gravity)
+	{
+		//"/n&8Gravity:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"
+		String description = Message.EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION.getValue();
+		String[] enabledInfo = StringUtil.parseValue(description, "1");
+		String[] disabledInfo = StringUtil.parseValue(description, "2");
+		
+		String enabled = gravity ? enabledInfo[1] : "";
+		String disabled = gravity ? "" : disabledInfo[1];
+		
+		String s = description
+				.replace(enabledInfo[0], enabled)
+				.replace(disabledInfo[0], disabled);
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
 	public static void updateHatDescription (ItemStack item, Hat hat)
