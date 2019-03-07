@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
@@ -176,6 +177,14 @@ public enum ParticleEffect {
 		} catch (IllegalArgumentException e) {
 			return "";
 		}
+	}
+	
+	/**
+	 * Get this ParticleEffect's name without color codes
+	 * @return
+	 */
+	public String getStrippedName () {
+		return ChatColor.stripColor(getName());
 	}
 	
 	/**
