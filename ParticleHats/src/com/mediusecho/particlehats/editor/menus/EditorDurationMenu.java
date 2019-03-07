@@ -12,7 +12,6 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.MathUtil;
 
 public class EditorDurationMenu extends EditorMenu {
 
@@ -46,17 +45,17 @@ public class EditorDurationMenu extends EditorMenu {
 		setButton(12, backButton, backAction);
 		
 		ItemStack durationItem = ItemUtil.createItem(Material.MAP, Message.EDITOR_DURATION_MENU_SET_DURATION.getValue());
-		EditorLore.updateDurationDescription(durationItem, targetHat.getDemoDuration());
+		EditorLore.updateDurationDescription(durationItem, targetHat.getDemoDuration(), Message.EDITOR_DURATION_MENU_DESCRIPTION);
 		setButton(14, durationItem, (event, slot) ->
 		{
-			double normalClick    = event.isLeftClick() ? 20 : -20;
-			double shiftClick     = event.isShiftClick() ? 30 : 1;
-			double modifier       = normalClick * shiftClick;
+			int normalClick    = event.isLeftClick() ? 20 : -20;
+			int shiftClick     = event.isShiftClick() ? 30 : 1;
+			int modifier       = normalClick * shiftClick;
 			
-			int duration = (int) MathUtil.clamp(targetHat.getDemoDuration() + modifier, 20, 72000);
+			int duration = targetHat.getDemoDuration() + modifier;
 			targetHat.setDemoDuration(duration);
 			
-			EditorLore.updateDurationDescription(getItem(14), duration);
+			EditorLore.updateDurationDescription(getItem(14), targetHat.getDemoDuration(), Message.EDITOR_DURATION_MENU_DESCRIPTION);
 			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 	}
