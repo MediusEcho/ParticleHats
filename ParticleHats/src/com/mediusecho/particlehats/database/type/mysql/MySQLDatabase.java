@@ -316,42 +316,14 @@ public class MySQLDatabase implements Database {
 					{
 						String dropQuery = "DROP TABLE IF EXISTS "
 								+ "menu_" + menuName + "_meta,"
-								+ "menu_" + menuName + "_items";
+								+ "menu_" + menuName + "_items,"
+								+ "menu_" + menuName + "_particles";
 						
 						try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery)) {
 							dropStatement.executeUpdate();
 						}
-//						String dropQuery = "DROP TABLE IF EXISTS ?";
-//						try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery))
-//						{
-//							dropStatement.setString(1, "menu_" + menuName + "_meta");
-//							dropStatement.addBatch();
-//							
-//							dropStatement.setString(1, "menu_" + menuName + "_items");
-//							dropStatement.addBatch();
-//							
-//							dropStatement.executeBatch();
-//						}
 					}
 				}
-				
-//				String dropQuery = "DROP TABLE IF EXISTS "
-//						+ "menu_" + menuName + "_icons,"
-//						+ "menu_" + menuName + "_desc,"
-//						+ "menu_" + menuName + "_items";
-//				
-//				try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery))
-//				{
-//					if (dropStatement.exe)
-//					{
-//						String deleteQuery = "DELETE FROM menus WHERE name = ?";
-//						try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
-//						{
-//							deleteStatement.setString(1, menuName);
-//							deleteStatement.execute();
-//						}
-//					}
-//				}
 			});
 		});
 	}
