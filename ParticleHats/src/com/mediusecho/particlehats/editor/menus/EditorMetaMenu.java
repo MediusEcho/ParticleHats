@@ -91,7 +91,7 @@ public class EditorMetaMenu extends EditorMenu {
 					
 					Database database = core.getDatabase();
 					String menuName = menuBuilder.getEditingMenu().getName();
-					database.saveMetaData(menuName, targetHat, DataType.DESCRIPTION);
+					database.saveMetaData(menuName, targetHat, DataType.DESCRIPTION, 0);
 					
 					EditorLore.updateDescriptionDescription(getItem(11), targetHat.getDescription());
 				}
@@ -118,7 +118,7 @@ public class EditorMetaMenu extends EditorMenu {
 					
 					Database database = core.getDatabase();
 					String menuName = menuBuilder.getEditingMenu().getName();
-					database.saveMetaData(menuName, targetHat, DataType.PERMISSION_DESCRIPTION);
+					database.saveMetaData(menuName, targetHat, DataType.PERMISSION_DESCRIPTION, 0);
 					
 					EditorLore.updateDescriptionDescription(getItem(19), targetHat.getPermissionDescription());
 				}
