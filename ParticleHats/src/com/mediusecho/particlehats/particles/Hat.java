@@ -718,7 +718,7 @@ public class Hat {
 	 */
 	public void setDemoDuration (int demoDuration)
 	{
-		this.demoDuration = demoDuration;
+		this.demoDuration = MathUtil.clamp(demoDuration, 1, 36000);
 		setProperty("duration", Integer.toString(demoDuration));
 	}
 	
