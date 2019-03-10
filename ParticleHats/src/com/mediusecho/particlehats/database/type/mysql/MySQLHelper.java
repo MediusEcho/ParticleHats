@@ -92,7 +92,7 @@ public class MySQLHelper {
 	
 	public String getShallowHatQuery (String menuName)
 	{
-		String itemQuery = "SELECT "
+		return "SELECT "
 				+ "slot,"
 				+ "id,"
 				+ "title,"
@@ -106,12 +106,11 @@ public class MySQLHelper {
 				+ "right_argument,"
 				+ "duration"
 				+ " FROM menu_" + menuName + "_items";
-		return itemQuery;
 	}
 	
 	public String getItemTableQuery (String menuName)
 	{
-		String query = "CREATE TABLE IF NOT EXISTS  menu_" + menuName + "_items ("
+		return "CREATE TABLE IF NOT EXISTS  menu_" + menuName + "_items ("
 				+ "slot TINYINT PRIMARY KEY,"
 				+ "ver SMALLINT NOT NULL DEFAULT " + menuTableVersion + ","
 				+ "id VARCHAR(64) NOT NULL DEFAULT 'SUNFLOWER',"
@@ -148,12 +147,11 @@ public class MySQLHelper {
 				+ "display_mode TINYINT NOT NULL DEFAULT 0,"
 				+ "particle_scale DOUBLE NOT NULL DEFAULT 0.2"
 				+ ")";
-		return query;
 	}
 	
 	public String getMetaTableQuery (String menuName)
 	{
-		String query = "CREATE TABLE IF NOT EXISTS menu_" + menuName + "_meta ("
+		return "CREATE TABLE IF NOT EXISTS menu_" + menuName + "_meta ("
 				+ "slot TINYINT,"
 				+ "type TINYINT,"
 				+ "line TINYINT,"
