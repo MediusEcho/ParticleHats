@@ -2,20 +2,23 @@ package com.mediusecho.particlehats.particles.properties;
 
 import org.bukkit.Color;
 
-public class ParticleColor {
+public class ColorData {
 
+	private final ParticleData parent;
+	
 	private Color color;
 	private boolean isRandom = false;
 	
-	public ParticleColor (Color color, boolean isRandom)
+	public ColorData (final ParticleData parent, Color color, boolean isRandom)
 	{
+		this.parent = parent;
 		this.color = color;
 		this.isRandom = isRandom;
 	}
 	
-	public ParticleColor (Color color)
+	public ColorData (final ParticleData parent, Color color)
 	{
-		this(color, false);
+		this(parent, color, false);
 	}
 	
 	/**
@@ -38,8 +41,10 @@ public class ParticleColor {
 	 * Set the color of this Particle
 	 * @param color
 	 */
-	public void setColor (Color color) {
+	public void setColor (Color color) 
+	{
 		this.color = color;
+		parent.setProperty("color", Integer.toString(color.asRGB()));
 	}
 	
 	/**
