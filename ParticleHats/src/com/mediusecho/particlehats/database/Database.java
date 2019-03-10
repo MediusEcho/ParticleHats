@@ -1,7 +1,7 @@
 package com.mediusecho.particlehats.database;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.mediusecho.particlehats.particles.Hat;
@@ -71,6 +71,14 @@ public interface Database {
 	public void loadHatData (String menuName, int slot, Hat hat);
 	
 	/**
+	 * Creates a duplicate copy of this hat in a different slot
+	 * @param menuName
+	 * @param currentSlot
+	 * @param newSlot
+	 */
+	public void cloneHatData (String menuName, int currentSlot, int newSlot);
+	
+	/**
 	 * 
 	 * @return
 	 */
@@ -82,7 +90,14 @@ public interface Database {
 	 * @param hat
 	 * @param type
 	 */
-	public void saveMetaData (String menuName, Hat hat, DataType type);
+	public void saveMetaData (String menuName, Hat hat, DataType type, int index);
+	
+	/**
+	 * Save this hats particle data to the menu
+	 * @param menuName
+	 * @param hat
+	 */
+	public void saveParticleData (String menuName, Hat hat, int index);
 	
 	/**
 	 * Deletes this hat from the database
@@ -99,11 +114,20 @@ public interface Database {
 	
 	public enum DataType
 	{
+		NONE (0),
 		DESCRIPTION (1),
 		PERMISSION_DESCRIPTION (2),
 		ICON (3),
 		TAGS (4),
-		PARTICLES (5);
+		ITEMSTACK (5);
+		
+		private static Map<Integer, DataType> dataID = new HashMap<Integer, DataType>();
+		static 
+		{
+			for (DataType type : values()) {
+				dataID.put(type.id, type);
+			}
+		}
 		
 		private final int id;
 		
@@ -114,6 +138,14 @@ public interface Database {
 		
 		public int getID () {
 			return id;
+		}
+		
+		public static DataType fromID (int id) 
+		{
+			if (dataID.containsKey(id)) {
+				return dataID.get(id);
+			}
+			return DataType.NONE;
 		}
 	}
 }

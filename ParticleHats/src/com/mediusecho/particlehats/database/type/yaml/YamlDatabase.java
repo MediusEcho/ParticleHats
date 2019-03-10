@@ -86,7 +86,17 @@ public class YamlDatabase implements Database {
 	}
 
 	@Override
-	public void saveMetaData(String menuName, Hat hat, DataType type) {
+	public void saveMetaData(String menuName, Hat hat, DataType type, int index) {
+		
+	}
+
+	@Override
+	public void saveParticleData(String menuName, Hat hat, int index) {
+		
+	}
+
+	@Override
+	public void cloneHatData(String menuName, int currentSlot, int newSlot) {
 		
 	}
 

@@ -441,6 +441,59 @@ public class MySQLDatabase implements Database {
 			}
 		});
 	}
+	
+	@Override
+	public void cloneHatData (String menuName, int currentSlot, int newSlot)
+	{
+		// Clone items
+		cloneTableRow("menu_" + menuName + "_items", currentSlot, newSlot);
+		
+		// Clone Meta
+		cloneTableRow("menu_" + menuName + "_meta", currentSlot, newSlot);
+		
+		// Clone particles
+		cloneTableRow("menu_" + menuName + "_particles", currentSlot, newSlot);
+	}
+	
+	private void cloneTableRow (String menuName, int currentSlot, int newSlot)
+	{
+		sync(() ->
+		{
+			connect((connection) ->
+			{
+				// Create a temporary table and copy this rows data to it
+				String cloneQuery = "CREATE TEMPORARY TABLE tmp SELECT * FROM " + menuName + " WHERE slot = ?";
+				try (PreparedStatement cloneStatement = connection.prepareStatement(cloneQuery))
+				{
+					cloneStatement.setInt(1, currentSlot);
+					cloneStatement.execute();
+					
+					// Set the slot we want to clone to in this temp table
+					String updateQuery = "UPDATE tmp SET slot = ? WHERE slot = ?";
+					try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery))
+					{
+						updateStatement.setInt(1, newSlot);
+						updateStatement.setInt(2, currentSlot);
+						updateStatement.executeUpdate();
+						
+						// Move this data back into the original table with the new slot set
+						String switchQuery = "INSERT INTO " + menuName + " SELECT * FROM tmp WHERE slot = ?";
+						try (PreparedStatement switchStatement = connection.prepareStatement(switchQuery))
+						{
+							switchStatement.setInt(1, newSlot);
+							switchStatement.executeUpdate();
+							
+							// Delete the temporary table
+							String dropQuery = "DROP TABLE tmp";
+							try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery)) {
+								dropStatement.execute();
+							}
+						}
+					}
+				}
+			});
+		});
+	}
 
 	/**
 	 * 
