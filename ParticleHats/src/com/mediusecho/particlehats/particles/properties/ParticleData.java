@@ -9,6 +9,8 @@ import com.mediusecho.particlehats.particles.ParticleEffect;
 
 public class ParticleData {
 
+	private Map<String, String> modifiedProperties;
+	
 	private ParticleEffect particle;
 	private ParticleColor color;
 	private ItemStack item;
@@ -18,6 +20,8 @@ public class ParticleData {
 	
 	public ParticleData ()
 	{
+		modifiedProperties    = new HashMap<String, String>();
+		
 		particle = ParticleEffect.NONE;
 		color = new ParticleColor(Color.WHITE, true);
 		item = new ItemStack(Material.APPLE);
@@ -30,8 +34,10 @@ public class ParticleData {
 	 * Set the particle for this ParticleData class
 	 * @param particle
 	 */
-	public void setParticle (ParticleEffect particle) {
+	public void setParticle (ParticleEffect particle) 
+	{
 		this.particle = particle;
+		setProperty("particle_id", Integer.toString(particle.getID()));
 	}
 	
 	/**
@@ -62,8 +68,10 @@ public class ParticleData {
 	 * Set the ItemStack for this ParticleData class
 	 * @param item
 	 */
-	public void setItem (ItemStack item) {
+	public void setItem (ItemStack item) 
+	{
 		this.item = item;
+		setProperty("item_data", "'" + item.getType().toString() + "'");
 	}
 	
 	/**
@@ -78,16 +86,20 @@ public class ParticleData {
 	 * Set the BlockData for this ParticleData class
 	 * @param block
 	 */
-	public void setBlock (BlockData block) {
+	public void setBlock (BlockData block) 
+	{
 		this.block = block;
+		setProperty("block_data", "'" + block.getMaterial().toString() + "'");
 	}
 	
 	/**
 	 * Set the BlockData for this ParticleData class
 	 * @param block
 	 */
-	public void setBlock (Material block) {
+	public void setBlock (Material block) 
+	{
 		this.block = block.createBlockData();
+		setProperty("block_data", "'" + block.toString() + "'");
 	}
 	
 	/**
@@ -102,8 +114,10 @@ public class ParticleData {
 	 * Set the scale for this ParticleData class
 	 * @param scale
 	 */
-	public void setScale (double scale) {
+	public void setScale (double scale) 
+	{
 		this.scale = scale;
+		setProperty("scale", Double.toString(scale));
 	}
 	
 	/**
@@ -120,5 +134,39 @@ public class ParticleData {
 	
 	public ItemStackData getItemStackData () {
 		return stackData;
+	}
+	
+	/**
+	 * Clears the recently modified properties list
+	 */
+	public void clearPropertyChanges () {
+		modifiedProperties.clear();
+	}
+	
+	/**
+	 * Checks to see if any properties have been changed
+	 * @return
+	 */
+	public boolean hasPropertyChanges () {
+		return modifiedProperties.size() > 0;
+	}
+	
+	/**
+	 * Get a list of all changes made<br>
+	 * @return
+	 */
+	public Map<String, String> getPropertyChanges () 
+	{
+		final Map<String, String> changes = new HashMap<String, String>(modifiedProperties);
+		return changes;
+	}
+	
+	/**
+	 * Adds a modified property for reference when saving this hat
+	 * @param key
+	 * @param value
+	 */
+	public void setProperty (String key, String value) {
+		modifiedProperties.put(key, value);
 	}
 }
