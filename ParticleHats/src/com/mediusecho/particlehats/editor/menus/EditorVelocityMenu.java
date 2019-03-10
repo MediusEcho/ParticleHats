@@ -35,7 +35,7 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 		double modifier       = normalClick * shiftClick;
 		boolean isMiddleClick = event.isMiddleClick();
 		
-		ItemStackData data = hat.getItemStackData(particleIndex);
+		ItemStackData data = hat.getParticleData(particleIndex).getItemStackData();
 		Vector velocity = data.getVelocity();
 		switch (axis)
 		{
@@ -70,10 +70,12 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 	protected void build() 
 	{
 		Hat targetHat = menuBuilder.getTargetHat();
+		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
+		Vector velocity = itemStackData.getVelocity();
 		
 		// X Offset
 		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_X);
-		EditorLore.updateVectorDescription(xItem, targetHat.getItemStackData(particleIndex).getVelocity(), Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
+		EditorLore.updateVectorDescription(xItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
 		setButton(14, xItem, (event, slot) ->
 		{
 			return updateVelocity(event, targetHat, VectorAxis.X);
@@ -81,7 +83,7 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 		
 		// Y Offset
 		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Y);
-		EditorLore.updateVectorDescription(yItem, targetHat.getItemStackData(particleIndex).getVelocity(), Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
+		EditorLore.updateVectorDescription(yItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
 		setButton(15, yItem, (event, slot) ->
 		{
 			return updateVelocity(event, targetHat, VectorAxis.Y);
@@ -89,7 +91,7 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 		
 		// Z Offset
 		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Z);
-		EditorLore.updateVectorDescription(zItem, targetHat.getItemStackData(particleIndex).getVelocity(), Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
+		EditorLore.updateVectorDescription(zItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
 		setButton(16, zItem, (event, slot) ->
 		{
 			return updateVelocity(event, targetHat, VectorAxis.Z);
