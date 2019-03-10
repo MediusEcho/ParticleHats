@@ -64,6 +64,8 @@ public class MySQLDatabase implements Database {
 	private long lastMenuUpdate = 0L;
 	private long lastImageUpdate = 0L;
 	
+	private boolean connected = false;
+	
 	// Fetch MySQL changes every 30 seconds
 	private final long UPDATE_INTERVAL = 30000L;
 	
@@ -82,26 +84,31 @@ public class MySQLDatabase implements Database {
 		try {
 			dataSource = new HikariDataSource(config);
 			helper.initDatabase(core);
+			connected = true;
 		}
 		
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			Core.log("There was an error connecting to the MySQL database");
-			e.printStackTrace();
+			Core.log(e.getMessage());
+			//e.printStackTrace();
 		}
 	}
 	
 	public boolean init ()
 	{
-		
 		return true;
 	}
 	
 	@Override
-	public void onDisable () {
-		dataSource.close();
+	public void onDisable () 
+	{
+		if (connected) {
+			dataSource.close();
+		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public MenuInventory loadInventory(String menuName)
 	{		
