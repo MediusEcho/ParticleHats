@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.util.MathUtil;
 
 public class IconData {
@@ -44,6 +45,14 @@ public class IconData {
 		if (previousMaterial == null) {
 			previousMaterial = material;
 		}
+	}
+	
+	/**
+	 * Set all materials for this IconData class
+	 * @param materials
+	 */
+	public void setMaterials (List<Material> materials) {
+		this.materials = materials;
 	}
 	
 	/**
@@ -122,6 +131,7 @@ public class IconData {
 			{
 				int attempts = 0;
 				Material nextMaterial = materials.get(random.nextInt(materials.size()));
+				
 				while (nextMaterial == previousMaterial && attempts < 50) 
 				{
 					nextMaterial = materials.get(random.nextInt(materials.size()));
@@ -134,6 +144,7 @@ public class IconData {
 			case DISPLAY_IN_ORDER:
 			{
 				previousMaterial = materials.get(MathUtil.wrap(index++, materials.size(), 0));
+				Core.debug(previousMaterial.toString());
 				return previousMaterial;
 			}		
 		}
