@@ -49,18 +49,10 @@ public class ParticleData {
 	}
 	
 	/**
-	 * Set the particle color for this ParticleData class
-	 * @param color
-	 */
-	public void setColor (ParticleColor color) {
-		this.color = color;
-	}
-	
-	/**
 	 * Get the particle color for this ParticleData class
 	 * @return
 	 */
-	public ParticleColor getColor () {
+	public ColorData getColorData() {
 		return color;
 	}
 	
