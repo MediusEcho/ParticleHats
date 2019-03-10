@@ -19,6 +19,8 @@ import com.mediusecho.particlehats.util.MathUtil;
 
 public class ItemStackData {
 
+	private ParticleData parent;
+	
 	private int duration = 20;
 	private Vector velocity;
 	private List<ItemStack> items;
@@ -29,8 +31,10 @@ public class ItemStackData {
 	
 	private Random random;
 	
-	public ItemStackData () 
+	public ItemStackData (final ParticleData parent) 
 	{
+		this.parent = parent;
+		
 		velocity = new Vector();
 		items = new ArrayList<ItemStack>();
 		random = new Random();
@@ -41,8 +45,10 @@ public class ItemStackData {
 	 * duration is clamped to a range of 0 - 6000 (5 minutes max)
 	 * @param duration
 	 */
-	public void setDuration (int duration) {
+	public void setDuration (int duration) 
+	{
 		this.duration = MathUtil.clamp(duration, 20, 6000);
+		parent.setProperty("duration", Integer.toString(this.duration));
 	}
 	
 	/**
@@ -65,39 +71,54 @@ public class ItemStackData {
 	 * Set the velocity of items when they're spawned into the world
 	 * @param velocity
 	 */
-	public void setVelocity (Vector velocity) {
-		this.velocity = velocity;
+	public void setVelocity (Vector velocity) 
+	{
+		setVelocityX(velocity.getX());
+		setVelocityY(velocity.getY());
+		setVelocityZ(velocity.getZ());
 	}
 	
+	/**
+	 * Set the velocity of items when they're spawned into the world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void setVelocity (double x, double y, double z) 
 	{
-		velocity.setX(x);
-		velocity.setY(y);
-		velocity.setZ(z);
+		setVelocityX(x);
+		setVelocityY(y);
+		setVelocityZ(z);
 	}
 	
 	/**
 	 * Set the velocity x value of items when they're spawned in the world
 	 * @param x
 	 */
-	public void setVelocityX (double x) {
+	public void setVelocityX (double x) 
+	{
 		velocity.setX(x);
+		parent.setProperty("velocity_x", Double.toString(x));
 	}
 	
 	/**
 	 * Set the velocity y value of items when they're spawned in the world
 	 * @param y
 	 */
-	public void setVelocityY (double y) {
+	public void setVelocityY (double y) 
+	{
 		velocity.setY(y);
+		parent.setProperty("velocity_y", Double.toString(y));
 	}
 	
 	/**
 	 * Set the velocity z value of items when they're spawned in the world
 	 * @param z
 	 */
-	public void setVelocityZ (double z) {
+	public void setVelocityZ (double z) 
+	{
 		velocity.setZ(z);
+		parent.setProperty("velocity_z", Double.toString(z));
 	}
 	
 	/**
@@ -168,8 +189,10 @@ public class ItemStackData {
 	 * Set whether items obey gravity when spawned
 	 * @param gravity
 	 */
-	public void setGravity (boolean gravity) {
+	public void setGravity (boolean gravity) 
+	{
 		this.hasGravity = gravity;
+		parent.setProperty("gravity", Boolean.toString(gravity));
 	}
 	
 	/**
