@@ -58,75 +58,8 @@ public class EditorParticleOverviewMenu extends EditorMenu {
 				editorParticleMenu.open();
 			}
 			
-			else if (event.isRightClick())
-			{
-				ParticleEffect particle = targetHat.getParticle(particleIndex);
-				switch (particle.getProperty())
-				{
-					case NO_DATA:
-						break;
-				
-					case COLOR:
-					{
-						EditorColorMenu editorColorMenu = new EditorColorMenu(core, owner, menuBuilder, particleIndex, () ->
-						{
-							modifiedParticles.put(particleIndex, true);
-							EditorLore.updateParticleDescription(getItem(slot), targetHat, particleIndex);
-						});
-						menuBuilder.addMenu(editorColorMenu);
-						editorColorMenu.open();
-						break;
-					}
-					
-					case BLOCK_DATA:
-					{
-						Message menuTitle = Message.EDITOR_ICON_MENU_BLOCK_TITLE;
-						Message blockTitle = Message.EDITOR_ICON_MENU_BLOCK_INFO;
-						Message blockDescription = Message.EDITOR_ICON_MENU_BLOCK_DESCRIPTION;
-						
-						EditorIconMenu editorBlockMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, blockTitle, blockDescription, (item) ->
-						{
-							if (item.getType().isBlock()) 
-							{
-								targetHat.setParticleBlock(particleIndex, item.getType());
-								modifiedParticles.put(particleIndex, true);
-								EditorLore.updateParticleDescription(getItem(slot), targetHat, particleIndex);
-							}
-						});
-						menuBuilder.addMenu(editorBlockMenu);
-						editorBlockMenu.open();
-						break;
-					}
-					
-					case ITEM_DATA:
-					{
-						Message menuTitle = Message.EDITOR_ICON_MENU_ITEM_TITLE;
-						Message itemTitle = Message.EDITOR_ICON_MENU_ITEM_INFO;
-						Message itemDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
-						
-						EditorIconMenu editorItemMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, itemTitle, itemDescription, (item) ->
-						{
-							if (!item.getType().isBlock()) 
-							{
-								targetHat.setParticleItem(particleIndex, item);
-								modifiedParticles.put(particleIndex, true);
-								EditorLore.updateParticleDescription(getItem(slot), targetHat, particleIndex);
-							}
-						});
-						menuBuilder.addMenu(editorItemMenu);
-						editorItemMenu.open();
-						break;
-					}
-					 
-					case ITEMSTACK_DATA:
-					{
-						// TODO: Update item count description
-						EditorItemStackMenu editorItemStackMenu = new EditorItemStackMenu(core, owner, menuBuilder, particleIndex);
-						menuBuilder.addMenu(editorItemStackMenu);
-						editorItemStackMenu.open();
-						break;
-					}
-				}
+			else if (event.isRightClick()) {
+				editorMainMenu.onParticleEdit(getItem(slot), particleIndex);
 			}
 			
 			return EditorClickType.NEUTRAL;

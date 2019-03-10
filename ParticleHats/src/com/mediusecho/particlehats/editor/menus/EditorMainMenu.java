@@ -67,71 +67,8 @@ public class EditorMainMenu extends EditorMenu {
 				editorParticleMenu.open();
 			}
 			
-			else if (event.isRightClick())
-			{
-				ParticleEffect particle = targetHat.getParticle(0);
-				switch (particle.getProperty())
-				{
-					case NO_DATA:
-						break;
-				
-					case COLOR:
-					{
-						EditorColorMenu editorColorMenu = new EditorColorMenu(core, owner, menuBuilder, 0, () ->
-						{
-							EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
-						});
-						menuBuilder.addMenu(editorColorMenu);
-						editorColorMenu.open();
-						break;
-					}
-					
-					case BLOCK_DATA:
-					{
-						Message menuTitle = Message.EDITOR_ICON_MENU_BLOCK_TITLE;
-						Message blockTitle = Message.EDITOR_ICON_MENU_BLOCK_INFO;
-						Message blockDescription = Message.EDITOR_ICON_MENU_BLOCK_DESCRIPTION;
-						
-						EditorIconMenu editorBlockMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, blockTitle, blockDescription, (item) ->
-						{
-							if (item.getType().isBlock()) 
-							{
-								targetHat.setParticleBlock(0, item.getType());
-								EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
-							}
-						});
-						menuBuilder.addMenu(editorBlockMenu);
-						editorBlockMenu.open();
-						break;
-					}
-					
-					case ITEM_DATA:
-					{
-						Message menuTitle = Message.EDITOR_ICON_MENU_ITEM_TITLE;
-						Message itemTitle = Message.EDITOR_ICON_MENU_ITEM_INFO;
-						Message itemDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
-						
-						EditorIconMenu editorItemMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, itemTitle, itemDescription, (item) ->
-						{
-							if (!item.getType().isBlock()) 
-							{
-								targetHat.setParticleItem(0, item);
-								EditorLore.updateParticleDescription(getItem(particleItemSlot), targetHat, 0);
-							}
-						});
-						menuBuilder.addMenu(editorItemMenu);
-						editorItemMenu.open();
-						break;
-					}
-					 
-					case ITEMSTACK_DATA:
-					{
-						EditorItemStackMenu editorItemStackMenu = new EditorItemStackMenu(core, owner, menuBuilder, 0);
-						menuBuilder.addMenu(editorItemStackMenu);
-						editorItemStackMenu.open();
-						break;
-					}
-				}
+			else if (event.isRightClick()) {
+				onParticleEdit(getItem(particleItemSlot), 0);
 			}
 			
 			return EditorClickType.NEUTRAL;
@@ -168,6 +105,68 @@ public class EditorMainMenu extends EditorMenu {
 		{
 			Database database = core.getDatabase();
 			database.saveParticleData(menuBuilder.getEditingMenu().getName(), targetHat, 0);
+			case NO_DATA:
+				break;
+		
+			case COLOR:
+			{
+				EditorColorMenu editorColorMenu = new EditorColorMenu(core, owner, menuBuilder, particleIndex, () ->
+				{
+					EditorLore.updateParticleDescription(item, targetHat, particleIndex);
+				});
+				menuBuilder.addMenu(editorColorMenu);
+				editorColorMenu.open();
+				break;
+			}
+			
+			case BLOCK_DATA:
+			{
+				Message menuTitle = Message.EDITOR_ICON_MENU_BLOCK_TITLE;
+				Message blockTitle = Message.EDITOR_ICON_MENU_BLOCK_INFO;
+				Message blockDescription = Message.EDITOR_ICON_MENU_BLOCK_DESCRIPTION;
+				
+				EditorIconMenu editorBlockMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, blockTitle, blockDescription, (i) ->
+				{
+					if (item.getType().isBlock()) 
+					{
+						targetHat.setParticleBlock(particleIndex, i.getType());
+						EditorLore.updateParticleDescription(item, targetHat, particleIndex);
+					}
+				});
+				menuBuilder.addMenu(editorBlockMenu);
+				editorBlockMenu.open();
+				break;
+			}
+			
+			case ITEM_DATA:
+			{
+				Message menuTitle = Message.EDITOR_ICON_MENU_ITEM_TITLE;
+				Message itemTitle = Message.EDITOR_ICON_MENU_ITEM_INFO;
+				Message itemDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
+				
+				EditorIconMenu editorItemMenu = new EditorIconMenu(core, owner, menuBuilder, menuTitle, itemTitle, itemDescription, (i) ->
+				{
+					if (!item.getType().isBlock()) 
+					{
+						targetHat.setParticleItem(particleIndex, i);
+						EditorLore.updateParticleDescription(item, targetHat, particleIndex);
+					}
+				});
+				menuBuilder.addMenu(editorItemMenu);
+				editorItemMenu.open();
+				break;
+			}
+			 
+			case ITEMSTACK_DATA:
+			{
+				EditorItemStackMenu editorItemStackMenu = new EditorItemStackMenu(core, owner, menuBuilder, particleIndex, () ->
+				{
+					EditorLore.updateParticleDescription(item, targetHat, particleIndex);
+				});
+				menuBuilder.addMenu(editorItemStackMenu);
+				editorItemStackMenu.open();
+				break;
+			}
 		}
 	}
 	
