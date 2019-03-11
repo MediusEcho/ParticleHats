@@ -174,16 +174,6 @@ public class StringUtil {
 		return 0;
 	}
 	
-	public static String getTrimmedMenuTitle (String s)
-	{
-		if (s.length() > 28) {
-			s = s.substring(0, 28) + "...";
-		}
-		s += "&r)";
-			
-		return s;
-	}
-	
 	/**
 	 * Returns the Roman Numeral value of this number
 	 * @param number
