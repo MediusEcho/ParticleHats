@@ -16,7 +16,7 @@ import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.particles.properties.ParticleColor;
+import com.mediusecho.particlehats.particles.properties.ColorData;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
@@ -43,17 +43,16 @@ public class EditorColorMenu extends EditorMenu {
 		{
 			if (colors.containsKey(slot)) 
 			{
-				ParticleColor color = targetHat.getParticleColor(particleIndex);
+				ColorData color = targetHat.getParticleData(particleIndex).getColorData();
 				color.setColor(colors.get(slot));
 				color.setRandom(false);
 				
-				targetHat.setParticleColor(particleIndex, color);
 				menuBuilder.goBack();
 			}
 			return EditorClickType.NEUTRAL;
 		};
 		
-		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_COLOR_MENU_TITLE.getValue());
+		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_COLOUR_MENU_TITLE.getValue());
 		build();
 	}
 	
@@ -71,7 +70,7 @@ public class EditorColorMenu extends EditorMenu {
 	
 	private String getColorDescription (Color color, String title)
 	{
-		String description = Message.EDITOR_COLOR_MENU_PRESET_DESCRIPTION.getValue();
+		String description = Message.EDITOR_COLOUR_MENU_PRESET_DESCRIPTION.getValue();
 		String s = description
 				.replace("{1}", ChatColor.stripColor(title.toLowerCase()))
 				.replace("{2}", Integer.toString(color.getRed()))
@@ -86,7 +85,7 @@ public class EditorColorMenu extends EditorMenu {
 		int shiftClick  = event.isShiftClick() ? 10 : 1;
 		int modifier    = normalClick * shiftClick;
 		
-		ParticleColor pc = hat.getParticleColor(particleIndex);
+		ColorData pc = targetHat.getParticleData(particleIndex).getColorData();
 		Color color = pc.getStoredColor();
 		
 		pc.setRandom(false);
@@ -107,17 +106,18 @@ public class EditorColorMenu extends EditorMenu {
 			break;
 		}
 		
-		EditorLore.updateColorDescription(getItem(16), color, false, Message.EDITOR_COLOR_MENU_R_DESCRIPTION);
-		EditorLore.updateColorDescription(getItem(25), color, false, Message.EDITOR_COLOR_MENU_G_DESCRIPTION);
-		EditorLore.updateColorDescription(getItem(34), color, false, Message.EDITOR_COLOR_MENU_B_DESCRIPTION);
+		EditorLore.updateColorDescription(getItem(16), color, false, Message.EDITOR_COLOUR_MENU_R_DESCRIPTION);
+		EditorLore.updateColorDescription(getItem(25), color, false, Message.EDITOR_COLOUR_MENU_G_DESCRIPTION);
+		EditorLore.updateColorDescription(getItem(34), color, false, Message.EDITOR_COLOUR_MENU_B_DESCRIPTION);
 		
-		hat.setParticleColor(particleIndex, color);
+		hat.getParticleData(particleIndex).getColorData().setColor(color);
+		//hat.setParticleColor(particleIndex, color);
 		return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 	}
 	
 	private void setColor (int slot, Color color, String colorName)
 	{
-		String title = Message.fromString("EDITOR_COLOR_MENU_SET_" + colorName).getValue();
+		String title = Message.fromString("EDITOR_COLOUR_MENU_SET_" + colorName).getValue();
 		Material material = ItemUtil.materialFromString(colorName + "_STAINED_GLASS_PANE", Material.BLACK_STAINED_GLASS_PANE);
 		
 		setColor(slot, color);
@@ -132,38 +132,38 @@ public class EditorColorMenu extends EditorMenu {
 			setAction(getNormalIndex(i, 10, 4), setColorAction);
 		}
 		
-		ParticleColor pc = targetHat.getParticleColor(particleIndex);
+		ColorData pc = targetHat.getParticleData(particleIndex).getColorData();
 		Color color = pc.getColor();
 		
-		ItemStack redItem = ItemUtil.createItem(Material.ROSE_RED, Message.EDITOR_COLOR_MENU_SET_RED_VALUE);
-		EditorLore.updateColorDescription(redItem, color, pc.isRandom(), Message.EDITOR_COLOR_MENU_R_DESCRIPTION);
+		ItemStack redItem = ItemUtil.createItem(Material.ROSE_RED, Message.EDITOR_COLOUR_MENU_SET_RED_VALUE);
+		EditorLore.updateColorDescription(redItem, color, pc.isRandom(), Message.EDITOR_COLOUR_MENU_R_DESCRIPTION);
 		setButton(16, redItem, (event, slot) ->
 		{
 			return updateRGB(event, targetHat, RGB.R);
 		});
 		
-		ItemStack greenItem = ItemUtil.createItem(Material.CACTUS_GREEN, Message.EDITOR_COLOR_MENU_SET_GREEN_VALUE);
-		EditorLore.updateColorDescription(greenItem, color, pc.isRandom(), Message.EDITOR_COLOR_MENU_G_DESCRIPTION);
+		ItemStack greenItem = ItemUtil.createItem(Material.CACTUS_GREEN, Message.EDITOR_COLOUR_MENU_SET_GREEN_VALUE);
+		EditorLore.updateColorDescription(greenItem, color, pc.isRandom(), Message.EDITOR_COLOUR_MENU_G_DESCRIPTION);
 		setButton(25, greenItem, (event, slot) ->
 		{
 			return updateRGB(event, targetHat, RGB.G);
 		});
 		
-		ItemStack blueItem = ItemUtil.createItem(Material.LAPIS_LAZULI, Message.EDITOR_COLOR_MENU_SET_BLUE_VALUE);
-		EditorLore.updateColorDescription(blueItem, color, pc.isRandom(), Message.EDITOR_COLOR_MENU_B_DESCRIPTION);
+		ItemStack blueItem = ItemUtil.createItem(Material.LAPIS_LAZULI, Message.EDITOR_COLOUR_MENU_SET_BLUE_VALUE);
+		EditorLore.updateColorDescription(blueItem, color, pc.isRandom(), Message.EDITOR_COLOUR_MENU_B_DESCRIPTION);
 		setButton(34, blueItem, (event, slot) ->
 		{
 			return updateRGB(event, targetHat, RGB.B);
 		});
 		
-		ItemStack randomItem = ItemUtil.createItem(Material.EXPERIENCE_BOTTLE, Message.EDITOR_COLOR_MENU_SET_RANDOM, Message.EDITOR_COLOR_MENU_RANDOM_DESCRIPTION);
+		ItemStack randomItem = ItemUtil.createItem(Material.EXPERIENCE_BOTTLE, Message.EDITOR_COLOUR_MENU_SET_RANDOM, Message.EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION);
 		setButton(51, randomItem, (event, slot) ->
 		{
-			targetHat.getParticleColor(particleIndex).setRandom(true);
+			targetHat.getParticleData(particleIndex).getColorData().setRandom(true);
 			
-			EditorLore.updateColorDescription(getItem(16), color, true, Message.EDITOR_COLOR_MENU_R_DESCRIPTION);
-			EditorLore.updateColorDescription(getItem(25), color, true, Message.EDITOR_COLOR_MENU_G_DESCRIPTION);
-			EditorLore.updateColorDescription(getItem(34), color, true, Message.EDITOR_COLOR_MENU_B_DESCRIPTION);
+			EditorLore.updateColorDescription(getItem(16), color, true, Message.EDITOR_COLOUR_MENU_R_DESCRIPTION);
+			EditorLore.updateColorDescription(getItem(25), color, true, Message.EDITOR_COLOUR_MENU_G_DESCRIPTION);
+			EditorLore.updateColorDescription(getItem(34), color, true, Message.EDITOR_COLOUR_MENU_B_DESCRIPTION);
 			
 			return EditorClickType.NEUTRAL;
 		});
