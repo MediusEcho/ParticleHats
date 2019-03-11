@@ -5,7 +5,6 @@ import java.util.Deque;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -21,6 +20,7 @@ import com.mediusecho.particlehats.ui.MenuState;
 
 public class MenuBuilder {
 
+	// TODO: Are we using the owner properties?
 	private final Core core;
 	private final Player owner;
 	private final UUID ownerID;
@@ -75,7 +75,7 @@ public class MenuBuilder {
 			MySQLDatabase mysqlDatabase = (MySQLDatabase)core.getDatabase();
 			
 			for (Entry<Integer, Hat> hats : editorMenu.getHats().entrySet())
-			{
+			{				
 				Hat hat = hats.getValue();
 				if (hat.isModified())
 				{
@@ -214,6 +214,25 @@ public class MenuBuilder {
 	 */
 	public EditorBaseMenu getEditingMenu () {
 		return editorMenu;
+	}
+	
+	/**
+	 * Clears the list of open menus and opens the base editing menu
+	 */
+	public void openEditingMenu ()
+	{
+		while (activeMenus.getLast() != editorMenu) {
+			activeMenus.pollLast().onClose(true);
+		}
+		
+		setTargetHat(null);
+		setTargetSlot(-1);
+		
+		activeMenus.getLast().open();
+	}
+	
+	public String getMenuName () {
+		return editorMenu.getName();
 	}
 	
 	public void onHatNameChange () {
