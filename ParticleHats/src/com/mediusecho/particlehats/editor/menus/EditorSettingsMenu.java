@@ -73,6 +73,9 @@ public class EditorSettingsMenu extends EditorMenu {
 		ItemStack deleteItem = ItemUtil.createItem(Material.TNT, Message.EDITOR_SETTINGS_MENU_DELETE);
 		setButton(16, deleteItem, (event, slot) ->
 		{
+			EditorDeleteMenu editorDeleteMenu = new EditorDeleteMenu(core, owner, menuBuilder);
+			menuBuilder.addMenu(editorDeleteMenu);
+			editorDeleteMenu.open();
 			return EditorClickType.NEUTRAL;
 		});
 		
