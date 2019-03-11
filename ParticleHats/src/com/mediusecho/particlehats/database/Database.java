@@ -79,7 +79,15 @@ public interface Database {
 	public void cloneHatData (String menuName, int currentSlot, int newSlot);
 	
 	/**
-	 * 
+	 * Moves this hat and all data to a new menu
+	 * @param fromMenu
+	 * @param toMenu
+	 * @param slot
+	 */
+	public void moveHatData (String fromMenu, String toMenu, int fromSlot, int toSlot);
+	
+	/**
+	 * Gets all stored images on the database
 	 * @return
 	 */
 	public Map<String, BufferedImage> getImages (boolean forceUpdate);
