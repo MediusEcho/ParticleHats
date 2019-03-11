@@ -3,14 +3,13 @@ package com.mediusecho.particlehats.editor.menus;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -18,7 +17,6 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorBaseMenu extends EditorMenu {
 
@@ -42,7 +40,7 @@ public class EditorBaseMenu extends EditorMenu {
 		rows = menuInventory.getSize() / 9;
 		emptyItem = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
 		
-		String title = ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + menuInventory.getTitle()));
+		String title = EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_BASE_MENU_TITLE);//ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + menuInventory.getTitle()));
 		inventory = Bukkit.createInventory(null, menuInventory.getSize(), title);
 		inventory.setContents(menuInventory.getContents());
 		
@@ -120,27 +118,6 @@ public class EditorBaseMenu extends EditorMenu {
 			}
 		}
 	}
-
-	@Override
-	protected void build() 
-	{
-		int size = menuInventory.getSize();
-		for (int i = 0; i < size; i++)
-		{
-			if (!itemExists(i)) {
-				setButton(i, emptyItem, emptyParticleAction);
-			}
-			
-			else {
-				setAction(i, existingParticleAction);
-			}
-			
-			Hat hat = menuInventory.getHat(i);
-			if (hat != null) {
-				setHat(i, hat);
-			}
-		}
-	}
 	
 	/**
 	 * Sets this menus modified flag to true
@@ -204,6 +181,16 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
+	 * Removes the hat and item at this slot
+	 * @param slot
+	 */
+	public void removeButton (int slot)
+	{
+		removeHat(slot);
+		setButton(slot, emptyItem, emptyParticleAction);
+	}
+	
+	/**
 	 * Get this menus inventory
 	 * @return
 	 */
@@ -218,7 +205,7 @@ public class EditorBaseMenu extends EditorMenu {
 	public void setTitle (String title)
 	{
 		menuInventory.setTitle(title);
-		String editingTitle = ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + title));
+		String editingTitle =  EditorLore.getTrimmedMenuTitle(title, Message.EDITOR_BASE_MENU_TITLE);// ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + title));
 		
 		Inventory replacementInventory = Bukkit.createInventory(null, inventory.getSize(), editingTitle);
 		replacementInventory.setContents(inventory.getContents());
@@ -271,10 +258,17 @@ public class EditorBaseMenu extends EditorMenu {
 		return menuInventory.getTitle();
 	}
 	
+	/**
+	 * Set whether live updates are enabeld
+	 */
 	public void toggleLive () {
 		isLive = !isLive;
 	}
 	
+	/**
+	 * Returns whether live updates are enabled
+	 * @return
+	 */
 	public boolean isLive () {
 		return isLive;
 	}
@@ -306,17 +300,6 @@ public class EditorBaseMenu extends EditorMenu {
 			removeHat(currentSlot);
 		}
 		
-//		Hat currentHat = getHat(currentSlot);
-//		currentHat.setSlot(newSlot);
-//		setHat(currentSlot, null);
-//		
-//		if (swapping)
-//		{
-//			Hat swappingHat = getHat(newSlot);
-//			swappingHat.setSlot(currentSlot);
-//			setHat(currentSlot, swappingHat);
-//		}
-		
 		setButton(currentSlot, swappingItem, swappingAction);
 		setButton(newSlot, currentItem, currentAction);
 		setHat(newSlot, currentHat);
@@ -324,6 +307,16 @@ public class EditorBaseMenu extends EditorMenu {
 		menuBuilder.setTargetSlot(newSlot);
 		
 		core.getDatabase().changeSlot(getName(), currentSlot, newSlot, swapping);
+	}
+	
+	public void cloneHat (int currentSlot, int newSlot)
+	{
+		Hat currentHat = getHat(currentSlot);
+		Hat clonedHat = currentHat.visualCopy();
+		
+		setHat(newSlot, clonedHat);
+		setButton(newSlot, new ItemStack(clonedHat.getMaterial()), existingParticleAction);
+		core.getDatabase().cloneHatData(getName(), currentSlot, newSlot);
 	}
 	
 	public void onHatNameChange (Hat hat, int slot) {
@@ -366,5 +359,26 @@ public class EditorBaseMenu extends EditorMenu {
 		EditorSettingsMenu editorSettingsMenu = new EditorSettingsMenu(core, owner, menuBuilder);
 		menuBuilder.addMenu(editorSettingsMenu);
 		editorSettingsMenu.open();
+	}
+	
+	@Override
+	protected void build() 
+	{
+		int size = menuInventory.getSize();
+		for (int i = 0; i < size; i++)
+		{
+			if (!itemExists(i)) {
+				setButton(i, emptyItem, emptyParticleAction);
+			}
+			
+			else {
+				setAction(i, existingParticleAction);
+			}
+			
+			Hat hat = menuInventory.getHat(i);
+			if (hat != null) {
+				setHat(i, hat);
+			}
+		}
 	}
 }
