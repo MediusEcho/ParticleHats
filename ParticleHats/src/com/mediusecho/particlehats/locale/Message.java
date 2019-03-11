@@ -315,14 +315,16 @@ public enum Message {
 	EDITOR_MISC_PREVIOUS_PAGE ("&3Previous Page"),
 	
 	// Particles
-	EDITOR_PARTICLE_MISC_DESCRIPTION         ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle"),
-	EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION    ("/n&8Current:/n&8» &e{1}/n/n&8Color:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
-	EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION ("/n&8Current:/n&8» &e{1}/n/n&8Color:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
-	EDITOR_PARTICLE_MISC_COLOR_DESCRIPTION   ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Color"),
-	EDITOR_PARTICLE_BLOCK_DESCRIPTION        ("/n&8Current:/n&8» &e{1}/n/n&8Block:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
-	EDITOR_PARTICLE_ITEM_DESCRIPTION         ("/n&8Current:/n&8» &e{1}/n/n&8Item:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
+	EDITOR_PARTICLE_MISC_DESCRIPTION          ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle"),
+	EDITOR_PARTICLE_RGB_COLOUR_DESCRIPTION    ("/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
+	EDITOR_PARTICLE_RANDOM_COLOUR_DESCRIPTION ("/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
+	EDITOR_PARTICLE_MISC_COLOUR_DESCRIPTION   ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
+	EDITOR_PARTICLE_BLOCK_DESCRIPTION         ("/n&8Current:/n&8» &e{1}/n/n&8Block:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
+	EDITOR_PARTICLE_ITEM_DESCRIPTION          ("/n&8Current:/n&8» &e{1}/n/n&8Item:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
+	EDITOR_PARTICLE_ITEMSTACK_DESCRIPTION     ("/n&8Current:/n&8» &e{1}/n/n&8Items:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"),
 	
 	// Base Menu
+	EDITOR_BASE_MENU_TITLE         ("Editing ({1=...})"),
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
 	EDITOR_SLOT_DESCRIPTION        ("&3Left Click to Edit/n&3Right Click for Settings"),
 	EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2=Custom}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}"),
@@ -337,7 +339,14 @@ public enum Message {
 	EDITOR_SETTINGS_MENU_TOGGLE_LIVE_MENU  ("&bToggle Live Updates"),
 	EDITOR_SETTINGS_MENU_SYNC_ICONS        ("&bSync Icons"),
 	
-	EDITOR_SETTINGS_MENU_TITLE_DESCRIPTION ("&8Current Title: {1}"),
+	EDITOR_SETTINGS_MENU_TITLE_DESCRIPTION     ("&8Current Title: {1}"),
+	EDITOR_SETTINGS_MENU_ANIMATION_DESCRIPTION ("/n&8Live Updates:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&8Hats will cycle through their/n&8icons and display them/n/n&3Click to Toggle"),
+	EDITOR_SETTINGS_SYNC_DESCRIPTION           ("&8Resets each hat's animation index to 0/n&8so each hat is synced"), 
+	
+	// Delete Menu
+	EDITOR_DELETE_MENU_TITLE ("Delete this Menu?"),
+	EDITOR_DELETE_MENU_YES   ("&2Yes"),
+	EDITOR_DELETE_MENU_NO    ("&cI've changed my mind"),
 	
 	// Resize Menu
 	EDITOR_RESIZE_MENU_TITLE               ("Resize this menu"),
@@ -363,6 +372,8 @@ public enum Message {
 	EDITOR_MAIN_MENU_SET_PARTICLE         ("&bSelect a new Particle"),
 	EDITOR_MAIN_MENU_SET_ICON             ("&bSet Item"),
 	EDITOR_MAIN_MENU_SET_SLOT             ("&bSet Slot"),
+	EDITOR_MAIN_MENU_CLONE                ("&bCreate a Copy"),
+	EDITOR_MAIN_MENU_MOVE                 ("&bMove"),
 	EDITOR_MAIN_MENU_EDIT_PARTICLES       ("&bEdit Particles"),
 	EDITOR_MAIN_MENU_NO_PARTICLES         ("&bNo Particles"),
 	EDITOR_MAIN_MENU_CUSTOM_TYPE_ERROR    ("&cUnable to find image"),
@@ -377,6 +388,8 @@ public enum Message {
 	EDITOR_MAIN_MENU_ICON_DESCRIPTION                     ("&8Change the item that will we displayed/n&8inside this menu"),
 	EDITOR_MAIN_MENU_SOUND_DESCRIPTION                    ("/n&8Sound: &7{1=&cNot Set}/n&8Volume: &7{2}/n&8Pitch: &7{3}/n/n&3Left Click to Change{4=/n&cShift Right Click to Clear}"),
 	EDITOR_MAIN_MENU_SLOT_DESCRIPTION                     ("&8Change where this hat will be/n&8inside this menu"),
+	EDITOR_MAIN_MENU_CLONE_DESCRIPTION                    ("&8Create a copy of this hat/n&8and place it in a new slot"),
+	EDITOR_MAIN_MENU_MOVE_DESCRIPTION                     ("&8Move this hat to a different menu"),
 	EDITOR_MAIN_MENU_ACTION_DESCRIPTION                   ("/n&8Left Click Action:/n{1}/n/n&8Right Click Action:/n{2}/n/n&3Click to Change Actions"),
 	EDITOR_MAIN_MENU_META_DESCRIPTION                     ("&8Edit various meta properties/n/n&3Left Click to Open/n&3Right Click for Description Shortcut"),
 	EDITOR_MAIN_MENU_TYPE_DESCRIPTION                     ("/n&8Current:/n&8» &e{1=/n&8» }{2}/n/n&3Left Click to Change Type/n{3=&cShift Click to Change Animation}"),
@@ -394,6 +407,13 @@ public enum Message {
 	EDITOR_TYPE_MENU_INCLUDED_FILTER         ("&bIncluded Types"),
 	EDITOR_TYPE_MENU_CUSTOM_FILTER           ("&bCustom Types"),
 	EDITOR_TYPE_MENU_NO_CUSTOM_TYPES         ("&cNo Custom Types Found"),
+	
+	// Move Menu
+	EDITOR_MOVE_MENU_TITLE                ("Move to ({1=...})"),
+	EDITOR_MOVE_MENU_MOVE                 ("&bMove Here"),
+	EDITOR_MOVE_MENU_OCCUPIED             ("&cOccupied"),
+	EDITOR_MOVE_MENU_MOVE_DESCRIPTION     ("&3Left Click to Move/n&cRight Click to Cancel"),
+	EDITOR_MOVE_MENU_OCCUPIED_DESCRIPTION ("&cRight Click to Cancel"),
 	
 	// Icon Menu
 	EDITOR_ICON_OVERVIEW_MENU_TITLE               ("Add or Remove Items"),
@@ -434,14 +454,18 @@ public enum Message {
 	EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION ("/n&8• X: &7{1}/n&8• Y: &7{2}/n&e» Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
 
 	// Particle Selection Menu
-	EDITOR_PARTICLE_MENU_TITLE          ("Supported Particles {1}/{2}"),
-	EDITOR_PARTICLE_COLOR_FILTER_TITLE  ("Filter: Color"),
-	EDITOR_PARTICLE_DATA_FILTER_TITLE   ("Filter: Data"),
-	EDITOR_PARTICLE_RECENT_FILTER_TITLE ("Recent Particles"),
-	EDITOR_PARTICLE_COLOR_FILTER        ("&3Color Filter"),
-	EDITOR_PARTICLE_DATA_FILTER         ("&3Data Filter"),
-	EDITOR_PARTICLE_NORMAL_FILTER       ("&3Show All Particles"),
-	EDITOR_PARTICLE_RECENT_FILTER       ("&3Recently Used"),
+	EDITOR_PARTICLE_MENU_TITLE               ("Supported Particles {1}/{2}"),
+	EDITOR_PARTICLE_MENU_COLOUR_FILTER_TITLE ("Filter: Colour"),
+	EDITOR_PARTICLE_MENU_DATA_FILTER_TITLE   ("Filter: Data"),
+	EDITOR_PARTICLE_MENU_RECENT_FILTER_TITLE ("Recent Particles"),
+	EDITOR_PARTICLE_MENU_COLOUR_FILTER       ("&3Colour Filter"),
+	EDITOR_PARTICLE_MENU_DATA_FILTER         ("&3Data Filter"),
+	EDITOR_PARTICLE_MENU_NORMAL_FILTER       ("&3Show All Particles"),
+	EDITOR_PARTICLE_MENU_RECENT_FILTER       ("&3Recently Used"),
+	
+	// Particle Overview Menu
+	EDITOR_PARTICLE_OVERVIEW_MENU_TITLE ("Edit Particles"),
+	EDITOR_PARTICLE_OVERVIEW_PARTICLE_NAME ("&bParticle #{1}"),
 	
 	// Sound Menu
 	EDITOR_SOUND_MENU_MISC_TITLE         ("Misc Sounds {1}/{2}"),
@@ -466,7 +490,7 @@ public enum Message {
 	EDITOR_ACTION_MENU_MISC_DESCRIPTION            ("&8» &e{1}"),
 	EDITOR_ACTION_MENU_MENU_DESCRIPTION            ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
 	EDITOR_ACTION_MENU_COMMAND_DESCRIPTION         ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
-	EDITOR_ACTION_MENU_DEMO_DESCRIPTION            ("&8» &e{1}/n&8» &7{2} second{3=s}"),
+	EDITOR_ACTION_MENU_DEMO_DESCRIPTION            ("&8» &e{1}/n&8» &7{2}"),
 	EDITOR_ACTION_MENU_ACTION_DESCRIPTION          ("{1}{2=/n/n&3Selected}{3=/n/n&3Click to Select}"),
 	
 	// Slot Menu
@@ -479,7 +503,7 @@ public enum Message {
 	// Duration Menu
 	EDITOR_DURATION_MENU_TITLE        ("Set Duration"),
 	EDITOR_DURATION_MENU_SET_DURATION ("&3Set Duration"),
-	EDITOR_DURATION_MENU_DESCRIPTION  ("/n&8» &e{1} &8second{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 30"),
+	EDITOR_DURATION_MENU_DESCRIPTION  ("/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 30"),
 	
 	// Meta Menu
 	EDITOR_META_MENU_TITLE                      ("Meta Properties"),
@@ -510,6 +534,23 @@ public enum Message {
 	EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION    ("/n&8» &r{1=&cEmpty}/n/n&3Left Click to Edit/n&cShift Right Click to Delete"),
 	EDITOR_DESCRIPTION_MENU_PREVIEW_DESCRIPTION ("{1=&cEmpty}{2=/n&cShift Right Click to Clear}"),
 	
+	// ItemStack menu
+	EDITOR_ITEMSTACK_MENU_TITLE          ("Add or Remove Items"),
+	EDITOR_ITEMSTACK_MENU_ADD_ITEM       ("&bAdd an Item"),
+	EDITOR_ITEMSTACK_MENU_SET_DURATION   ("&bSet Duration"),
+	EDITOR_ITEMSTACK_MENU_TOGGLE_GRAVITY ("&bToggle Gravity"),
+	EDITOR_ITEMSTACK_MENU_SET_VELOCITY   ("&bSet Velocity"),
+	
+	EDITOR_ITEMSTACK_MENU_DURATION_DESCRIPTION ("/n&8Duration:/n&8» &e{1}/n/n&8Set how long items stay/n&8spawned in the world/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"),
+	EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION  ("/n&8Gravity:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"),
+	EDITOR_ITEMSTACK_MENU_VELOCITY_DESCRIPTION ("/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"),
+	
+	// Velocity menu
+	EDITOR_VELOCITY_MENU_TITLE          ("Set Velocity"),
+	EDITOR_VELOCITY_MENU_SET_VELOCITY_X ("&bSet X Velocity"),
+	EDITOR_VELOCITY_MENU_SET_VELOCITY_Y ("&bSet Y Velocity"),
+	EDITOR_VELOCITY_MENU_SET_VELOCITY_Z ("&bSet Z Velocity"),
+	
 	// Menu Selection
 	EDITOR_MENU_SELECTION_TITLE            ("Select a Menu {1}/{2}"),
 	EDITOR_MENU_SELECTION_CREATE           ("&bCreate a Menu"),
@@ -518,36 +559,36 @@ public enum Message {
 	
 	EDITOR_MENU_SELECTION_MENU_DESCRIPTION ("&8Title: {1}"),
 	
-	// Color Menu
-	EDITOR_COLOR_MENU_TITLE           ("Select or Crete a Color"),
-	EDITOR_COLOR_MENU_SET_WHITE       ("&bWhite"),
-	EDITOR_COLOR_MENU_SET_RED         ("&bRed"),
-	EDITOR_COLOR_MENU_SET_LIME        ("&bLime"),
-	EDITOR_COLOR_MENU_SET_LIGHT_BLUE  ("&bLight Blue"),
-	EDITOR_COLOR_MENU_SET_PINK        ("&bPink"),
-	EDITOR_COLOR_MENU_SET_GRAY        ("&bGrey"),
-	EDITOR_COLOR_MENU_SET_ORANGE      ("&bOrange"),
-	EDITOR_COLOR_MENU_SET_GREEN       ("&bGreen"),
-	EDITOR_COLOR_MENU_SET_BLUE        ("&bBlue"),
-	EDITOR_COLOR_MENU_SET_MAGENTA     ("&bMagenta"),
-	EDITOR_COLOR_MENU_SET_BLACK       ("&bBlack"),
-	EDITOR_COLOR_MENU_SET_YELLOW      ("&bYellow"),
-	EDITOR_COLOR_MENU_SET_BROWN       ("&bBrown"),
-	EDITOR_COLOR_MENU_SET_PURPLE      ("&bPurple"),
-	EDITOR_COLOR_MENU_SET_CYAN        ("&bCyan"),
-	EDITOR_COLOR_MENU_SET_RED_VALUE   ("&bSet Red Value"),
-	EDITOR_COLOR_MENU_SET_GREEN_VALUE ("&bSet Green Value"),
-	EDITOR_COLOR_MENU_SET_BLUE_VALUE  ("&bSet Blue Value"),
-	EDITOR_COLOR_MENU_SET_RANDOM      ("&bRandom Colors"),
-	EDITOR_COLOR_MENU_SET_SIZE        ("&bSet Size"),
+	// Colour Menu
+	EDITOR_COLOUR_MENU_TITLE           ("Select or Create a Colour"),
+	EDITOR_COLOUR_MENU_SET_WHITE       ("&bWhite"),
+	EDITOR_COLOUR_MENU_SET_RED         ("&bRed"),
+	EDITOR_COLOUR_MENU_SET_LIME        ("&bLime"),
+	EDITOR_COLOUR_MENU_SET_LIGHT_BLUE  ("&bLight Blue"),
+	EDITOR_COLOUR_MENU_SET_PINK        ("&bPink"),
+	EDITOR_COLOUR_MENU_SET_GRAY        ("&bGrey"),
+	EDITOR_COLOUR_MENU_SET_ORANGE      ("&bOrange"),
+	EDITOR_COLOUR_MENU_SET_GREEN       ("&bGreen"),
+	EDITOR_COLOUR_MENU_SET_BLUE        ("&bBlue"),
+	EDITOR_COLOUR_MENU_SET_MAGENTA     ("&bMagenta"),
+	EDITOR_COLOUR_MENU_SET_BLACK       ("&bBlack"),
+	EDITOR_COLOUR_MENU_SET_YELLOW      ("&bYellow"),
+	EDITOR_COLOUR_MENU_SET_BROWN       ("&bBrown"),
+	EDITOR_COLOUR_MENU_SET_PURPLE      ("&bPurple"),
+	EDITOR_COLOUR_MENU_SET_CYAN        ("&bCyan"),
+	EDITOR_COLOUR_MENU_SET_RED_VALUE   ("&bSet Red Value"),
+	EDITOR_COLOUR_MENU_SET_GREEN_VALUE ("&bSet Green Value"),
+	EDITOR_COLOUR_MENU_SET_BLUE_VALUE  ("&bSet Blue Value"),
+	EDITOR_COLOUR_MENU_SET_RANDOM      ("&bRandom Colours"),
+	EDITOR_COLOUR_MENU_SET_SIZE        ("&bSet Size"),
 	
-	EDITOR_COLOR_MENU_PRESET_DESCRIPTION ("&8Set this particles/n&8color to {1}/n/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}"),
-	EDITOR_COLOR_MENU_R_DESCRIPTION ("/n&e» R: {1}/n&8• G: &7{2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOR_MENU_G_DESCRIPTION ("/n&8• R: &7{1}/n&e» G: {2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOR_MENU_B_DESCRIPTION ("/n&8• R: &7{1}/n&8• G: &7{2}/n&e» B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOR_MENU_RANDOM_SUFFIX ("Random"),
+	EDITOR_COLOUR_MENU_PRESET_DESCRIPTION ("&8Set this particles/n&8colour to {1}/n/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}"),
+	EDITOR_COLOUR_MENU_R_DESCRIPTION ("/n&e» R: {1}/n&8• G: &7{2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_G_DESCRIPTION ("/n&8• R: &7{1}/n&e» G: {2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_B_DESCRIPTION ("/n&8• R: &7{1}/n&8• G: &7{2}/n&e» B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_RANDOM_SUFFIX ("Random"),
 
-	EDITOR_COLOR_MENU_RANDOM_DESCRIPTION ("&8Give this particle random colors"),
+	EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION ("&8Give this particle random colours"),
 
 	
 	/**
@@ -571,7 +612,7 @@ public enum Message {
 	}
 	
 	/**
-	 * Get this messages color code translated value<br>
+	 * Get this messages colour code translated value<br>
 	 * By default each message will have &f applied to the beginning
 	 * @return
 	 */
@@ -580,7 +621,7 @@ public enum Message {
 	}
 	
 	/**
-	 * Get this messages value without translated color codes
+	 * Get this messages value without translated colour codes
 	 * @return
 	 */
 	public String getRawValue () {
