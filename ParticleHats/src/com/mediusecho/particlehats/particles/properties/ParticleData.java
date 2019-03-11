@@ -1,5 +1,8 @@
 package com.mediusecho.particlehats.particles.properties;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -12,7 +15,7 @@ public class ParticleData {
 	private Map<String, String> modifiedProperties;
 	
 	private ParticleEffect particle;
-	private ParticleColor color;
+	private ColorData color;
 	private ItemStack item;
 	private BlockData block;
 	private double scale;
@@ -23,11 +26,11 @@ public class ParticleData {
 		modifiedProperties    = new HashMap<String, String>();
 		
 		particle = ParticleEffect.NONE;
-		color = new ParticleColor(Color.WHITE, true);
+		color = new ColorData(this, Color.WHITE, true);
 		item = new ItemStack(Material.APPLE);
 		block = Material.STONE.createBlockData();
 		scale = 1;
-		stackData = new ItemStackData();
+		stackData = new ItemStackData(this);
 	}
 	
 	/**
@@ -120,10 +123,10 @@ public class ParticleData {
 		return scale;
 	}
 	
-	public void setItemStackData (ItemStackData data) {
-		this.stackData = data;
-	}
-	
+	/**
+	 * Get the ItemStackData for this ParticleData class
+	 * @return
+	 */
 	public ItemStackData getItemStackData () {
 		return stackData;
 	}
