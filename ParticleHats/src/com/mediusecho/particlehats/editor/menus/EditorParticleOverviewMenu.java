@@ -1,8 +1,6 @@
 package com.mediusecho.particlehats.editor.menus;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -23,14 +21,18 @@ import com.mediusecho.particlehats.util.ItemUtil;
 
 public class EditorParticleOverviewMenu extends EditorMenu {
 
+	private final Database database;
+	
 	private final Hat targetHat;
 	private final Map<Integer, ParticleEffect> particles;
 	private final EditorAction editAction;
 	private final Map<Integer, Boolean> modifiedParticles;
 	
-	public EditorParticleOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorParticleOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
 	{
 		super(core, owner, menuBuilder);
+		
+		database = core.getDatabase();
 		
 		targetHat = menuBuilder.getTargetHat();
 		particles = new HashMap<Integer, ParticleEffect>();
@@ -45,10 +47,12 @@ public class EditorParticleOverviewMenu extends EditorMenu {
 					Hat hat = menuBuilder.getTargetHat();
 					hat.setParticle(particleIndex, particle);
 					
+					// Add this particle to our recents list
+					core.getParticleManager().addParticleToRecents(ownerID, particle);
+					
 					ItemStack item = getItem(slot);
 					item.setType(particle.getMaterial());
 					
-					ItemUtil.setItemName(item, particle.getName());
 					EditorLore.updateParticleDescription(item, targetHat, particleIndex);	
 					modifiedParticles.put(particleIndex, true);
 					
@@ -72,13 +76,10 @@ public class EditorParticleOverviewMenu extends EditorMenu {
 	@Override
 	public void onClose (boolean forced)
 	{
-		Database database = core.getDatabase();
-		String menuName = menuBuilder.getEditingMenu().getName();
-		
 		for (Entry<Integer, Boolean> particles : modifiedParticles.entrySet())
 		{
 			if (particles.getValue()) {
-				database.saveParticleData(menuName, targetHat, particles.getKey());
+				database.saveParticleData(menuBuilder.getMenuName(), targetHat, particles.getKey());
 			}
 		}
 	}
