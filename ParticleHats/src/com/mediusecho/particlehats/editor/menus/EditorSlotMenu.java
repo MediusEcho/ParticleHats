@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,12 +17,15 @@ import com.mediusecho.particlehats.util.ItemUtil;
 
 public class EditorSlotMenu extends EditorMenu {
 	
+	private final boolean cloning;
+	
 	private final EditorBaseMenu editorBaseMenu;
 	private final int size;
 	
-	public EditorSlotMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorSlotMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean cloning) 
 	{
 		super(core, owner, menuBuilder);
+		this.cloning = cloning;
 		
 		editorBaseMenu = menuBuilder.getEditingMenu();
 		size = editorBaseMenu.getInventory().getSize();
@@ -44,16 +48,29 @@ public class EditorSlotMenu extends EditorMenu {
 		
 		final EditorAction selectAction = (event, slot) ->
 		{
-			editorBaseMenu.changeSlots(menuBuilder.getTargetSlot(), slot, false);
+			if (cloning) 
+			{
+				editorBaseMenu.cloneHat(targetSlot, slot);
+				menuBuilder.goBack();
+				return EditorClickType.NEUTRAL;
+			}
+			
+			editorBaseMenu.changeSlots(targetSlot, slot, false);
 			menuBuilder.goBack();
 			return EditorClickType.NEUTRAL;
 		};
 		
 		final EditorAction swapAction = (event, slot) ->
 		{
-			editorBaseMenu.changeSlots(menuBuilder.getTargetSlot(), slot, true);
+			editorBaseMenu.changeSlots(targetSlot, slot, true);
 			menuBuilder.goBack();
 			return EditorClickType.NEUTRAL;
+		};
+		
+		final EditorAction secretAction = (event, slot) ->
+		{
+			owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 1f);
+			return EditorClickType.NONE;
 		};
 		
 		for (int i = 0; i < size; i++)
@@ -79,8 +96,17 @@ public class EditorSlotMenu extends EditorMenu {
 			
 			else if (editorBaseMenu.getHat(i) != null)
 			{
-				displayName = Message.EDITOR_SLOT_MENU_SWAP.getValue();
-				setAction(i, swapAction);
+				if (!cloning)
+				{
+					displayName = Message.EDITOR_SLOT_MENU_SWAP.getValue();
+					setAction(i, swapAction);
+				}
+				
+				else 
+				{
+					displayName = Message.EDITOR_SLOT_MENU_OCCUPIED.getValue();
+					setAction(i, secretAction);
+				}
 			}
 			
 			else {

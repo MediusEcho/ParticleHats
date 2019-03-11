@@ -464,6 +464,15 @@ public class EditorMainMenu extends EditorMenu {
 			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
+		// Clone
+		ItemStack cloneItem = ItemUtil.createItem(Material.PRISMARINE_SHARD, Message.EDITOR_MAIN_MENU_CLONE, Message.EDITOR_MAIN_MENU_CLONE_DESCRIPTION);
+		setButton(30, cloneItem, (event, slot) ->
+		{
+			EditorSlotMenu editorSlotMenu = new EditorSlotMenu(core, owner, menuBuilder, true);
+			menuBuilder.addMenu(editorSlotMenu);
+			editorSlotMenu.open();
+			return EditorClickType.NEUTRAL;
+		});
 		// Count
 		ItemStack countItem = ItemUtil.createItem(Material.WHEAT_SEEDS, Message.EDITOR_MAIN_MENU_SET_COUNT);
 		EditorLore.updateIntegerDescription(countItem, targetHat.getCount(), Message.EDITOR_MAIN_MENU_COUNT_DESCRIPTION);
@@ -508,7 +517,6 @@ public class EditorMainMenu extends EditorMenu {
 		});
 		
 		// TODO: Move to new menu
-		// TODO: Clone option
 		// TODO: Node Editor
 	}
 }
