@@ -18,9 +18,10 @@ import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.ParticleEffect.ParticleProperty;
 import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
+import com.mediusecho.particlehats.particles.properties.ItemStackData;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
-import com.mediusecho.particlehats.particles.properties.ParticleColor;
+import com.mediusecho.particlehats.particles.properties.ColorData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
@@ -198,7 +199,7 @@ public class EditorLore {
 	 */
 	public static void updateColorDescription (ItemStack item, Color color, boolean random, Message description)
 	{
-		String rs = Message.EDITOR_COLOR_MENU_RANDOM_SUFFIX.getValue();
+		String rs = Message.EDITOR_COLOUR_MENU_RANDOM_SUFFIX.getValue();
 		String r = random ? rs : Integer.toString(color.getRed());
 		String g = random ? rs : Integer.toString(color.getGreen());
 		String b = random ? rs : Integer.toString(color.getBlue());
@@ -637,10 +638,10 @@ public class EditorLore {
 		{
 			case COLOR:
 			{
-				ParticleColor color = hat.getParticleColor(particleIndex);
+				ColorData color = hat.getParticleData(particleIndex).getColorData();
 				if (color.isRandom())
 				{
-					String description = Message.EDITOR_PARTICLE_RANDOM_COLOR_DESCRIPTION.getValue();
+					String description = Message.EDITOR_PARTICLE_RANDOM_COLOUR_DESCRIPTION.getValue();
 					String s = description
 							.replace("{1}", particleName);
 					ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
@@ -648,7 +649,7 @@ public class EditorLore {
 				
 				else
 				{
-					String description = Message.EDITOR_PARTICLE_RGB_COLOR_DESCRIPTION.getValue();
+					String description = Message.EDITOR_PARTICLE_RGB_COLOUR_DESCRIPTION.getValue();
 					Color c = color.getColor();
 					String s = description
 							.replace("{1}", particleName)
@@ -677,7 +678,9 @@ public class EditorLore {
 			case ITEMSTACK_DATA:
 			{
 				String description = Message.EDITOR_PARTICLE_ITEMSTACK_DESCRIPTION.getValue();
-				int items = hat.getItemStackData(particleIndex).getItems().size();
+				ItemStackData itemStackData = hat.getParticleData(particleIndex).getItemStackData();
+				int items = itemStackData.getItems().size();
+				
 				String s = description
 						.replace("{1}", particleName)
 						.replace("{2}", Integer.toString(items));
@@ -694,19 +697,39 @@ public class EditorLore {
 		}
 	}
 	
-	public static void updateGravityDescription (ItemStack item, boolean gravity)
+//	public static void updateGravityDescription (ItemStack item, boolean gravity)
+//	{
+//		//"/n&8Gravity:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"
+//		String description = Message.EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION.getValue();
+//		String[] enabledInfo = StringUtil.parseValue(description, "1");
+//		String[] disabledInfo = StringUtil.parseValue(description, "2");
+//		
+//		String enabled = gravity ? enabledInfo[1] : "";
+//		String disabled = gravity ? "" : disabledInfo[1];
+//		
+//		String s = description
+//				.replace(enabledInfo[0], enabled)
+//				.replace(disabledInfo[0], disabled);
+//		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+//	}
+	
+	/**
+	 * Applies a description to this ItemStack using boolean data
+	 * @param item
+	 * @param enabled
+	 * @param message
+	 */
+	public static void updateBooleanDescription (ItemStack item, boolean enabled, Message message)
 	{
-		//"/n&8Gravity:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"
-		String description = Message.EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION.getValue();
+		String description = message.getValue();
 		String[] enabledInfo = StringUtil.parseValue(description, "1");
 		String[] disabledInfo = StringUtil.parseValue(description, "2");
 		
-		String enabled = gravity ? enabledInfo[1] : "";
-		String disabled = gravity ? "" : disabledInfo[1];
+		String e = enabled ? enabledInfo[1] : "";
+		String d = enabled ? "" : disabledInfo[1];
 		
 		String s = description
-				.replace(enabledInfo[0], enabled)
-				.replace(disabledInfo[0], disabled);
+				.replace(enabledInfo[0], e).replace(disabledInfo[0], d);
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
@@ -716,5 +739,27 @@ public class EditorLore {
 		String description = Message.EDITOR_HAT_GENERIC_DESCRIPTION.getValue();
 		String s = 
 				description.replace("{1}", String.valueOf(hat.getSlot()));
+	}
+	
+	public static String getTrimmedMenuTitle (String title, Message message)
+	{
+		final int charLimit = 28;
+		String menuTitle = message.getValue();
+		String[] extraInfo = StringUtil.parseValue(menuTitle, "1");
+		
+		int messageLength = menuTitle.length() - extraInfo[0].length();
+		int totalLength = messageLength + title.length();
+		
+		if (totalLength > charLimit) 
+		{
+			int difference = totalLength - charLimit;
+			title = title.substring(0, title.length() - difference) + extraInfo[1];
+		}
+		
+		//String t = title.length() > 28 ? title.substring(0, 28) + extraInfo[1] : title;
+		
+		//Core.log(t);
+		
+		return menuTitle.replace(extraInfo[0], title);
 	}
 }
