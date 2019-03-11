@@ -16,13 +16,13 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ItemStackData;
 import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorItemStackMenu extends EditorListMenu {
 
 	private final Hat targetHat;
 	private final int particleIndex;
+	private final EditorGenericCallback callback;
 	
 	private boolean dataModified = false;
 	private boolean itemModified = false;
@@ -31,11 +31,12 @@ public class EditorItemStackMenu extends EditorListMenu {
 	private final Message iconName = Message.EDITOR_ICON_MENU_ITEM_INFO;
 	private final Message iconDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
 	
-	public EditorItemStackMenu(Core core, Player owner, MenuBuilder menuBuilder, final int particleIndex) 
+	public EditorItemStackMenu(Core core, Player owner, MenuBuilder menuBuilder, final int particleIndex, EditorGenericCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		targetHat = menuBuilder.getTargetHat();
 		this.particleIndex = particleIndex;
+		this.callback = callback;
 		
 		editAction = (event, slot) ->
 		{
@@ -50,7 +51,9 @@ public class EditorItemStackMenu extends EditorListMenu {
 					i.setType(material);
 					ItemUtil.setItemName(i, displayName);
 					
-					targetHat.getItemStackData(particleIndex).updateItem(getClampedIndex(slot, 10, 2), item);
+					ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
+					itemStackData.updateItem(getClampedIndex(slot, 10, 2), item);
+					
 					itemModified = true;
 				});
 				menuBuilder.addMenu(editorIconMenu);
@@ -72,7 +75,9 @@ public class EditorItemStackMenu extends EditorListMenu {
 	private void onVelocityChange ()
 	{
 		dataModified = true;
-		EditorLore.updateVectorDescription(getItem(48), targetHat.getItemStackData(particleIndex).getVelocity(), Message.EDITOR_ITEMSTACK_MENU_VELOCITY_DESCRIPTION);
+		
+		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
+		EditorLore.updateVectorDescription(getItem(48), itemStackData.getVelocity(), Message.EDITOR_ITEMSTACK_MENU_VELOCITY_DESCRIPTION);
 	}
 	
 	@Override
@@ -84,21 +89,25 @@ public class EditorItemStackMenu extends EditorListMenu {
 			core.getDatabase().saveParticleData(name, targetHat, particleIndex);
 		}
 		
-		if (itemModified) {
+		if (itemModified) 
+		{
 			core.getDatabase().saveMetaData(name, targetHat, DataType.ITEMSTACK, particleIndex);
+			callback.onExecute();
 		}
 	}
 	
 	public void onAdd (int slot, ItemStack item)
 	{
-		int size = targetHat.getItemStackData(particleIndex).getItems().size();
+		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
+		
+		int size = itemStackData.getItems().size();
 		if (size <= 27)
 		{
 			Material material = item.getType();
 			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
 			ItemStack i = ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue()));
 			
-			targetHat.getItemStackData(particleIndex).addItem(item);
+			itemStackData.addItem(item);
 			setItem(getNormalIndex(size, 10, 2), i);
 			
 			itemModified = true;
@@ -110,7 +119,8 @@ public class EditorItemStackMenu extends EditorListMenu {
 	{
 		super.onDelete(slot);
 		
-		targetHat.getItemStackData(particleIndex).removeItem(getClampedIndex(slot, 10, 2));
+		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
+		itemStackData.removeItem(getClampedIndex(slot, 10, 2));
 		itemModified = true;
 	}
 
@@ -120,8 +130,10 @@ public class EditorItemStackMenu extends EditorListMenu {
 		super.build();
 		setButton(46, backButton, backAction);
 		
+		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
+		
 		ItemStack velocityItem = ItemUtil.createItem(Material.ARROW, Message.EDITOR_ITEMSTACK_MENU_SET_VELOCITY);
-		EditorLore.updateVectorDescription(velocityItem, targetHat.getItemStackData(particleIndex).getVelocity(), Message.EDITOR_ITEMSTACK_MENU_VELOCITY_DESCRIPTION);
+		EditorLore.updateVectorDescription(velocityItem, itemStackData.getVelocity(), Message.EDITOR_ITEMSTACK_MENU_VELOCITY_DESCRIPTION);
 		setButton(48, velocityItem, (event, slot) ->
 		{
 			if (event.isLeftClick())
@@ -136,33 +148,34 @@ public class EditorItemStackMenu extends EditorListMenu {
 			
 			else if (event.isShiftRightClick())
 			{
-				targetHat.getItemStackData(particleIndex).setVelocity(0, 0, 0);
+				ItemStackData data = targetHat.getParticleData(particleIndex).getItemStackData();
+				data.setVelocity(0, 0, 0);
 				onVelocityChange();
 			}
 			return EditorClickType.NEUTRAL;
 		});
 		
 		ItemStack gravityItem = ItemUtil.createItem(Material.LEATHER_BOOTS, Message.EDITOR_ITEMSTACK_MENU_TOGGLE_GRAVITY);
-		EditorLore.updateGravityDescription(gravityItem, targetHat.getItemStackData(particleIndex).hasGravity());
+		EditorLore.updateBooleanDescription(gravityItem, itemStackData.hasGravity(), Message.EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION);
 		setButton(49, gravityItem, (event, slot) ->
 		{
-			ItemStackData data = targetHat.getItemStackData(particleIndex);
+			ItemStackData data = targetHat.getParticleData(particleIndex).getItemStackData();
 			data.setGravity(!data.hasGravity());
 			dataModified = true;
 			
-			EditorLore.updateGravityDescription(getItem(49), data.hasGravity());
+			EditorLore.updateBooleanDescription(getItem(49), data.hasGravity(), Message.EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION);
 			return EditorClickType.NEUTRAL;
 		});
 		
 		ItemStack durationItem = ItemUtil.createItem(Material.FIREWORK_STAR, Message.EDITOR_ITEMSTACK_MENU_SET_DURATION);
-		EditorLore.updateDurationDescription(durationItem, targetHat.getItemStackData(particleIndex).getDuration(), Message.EDITOR_ITEMSTACK_MENU_DURATION_DESCRIPTION);
+		EditorLore.updateDurationDescription(durationItem, itemStackData.getDuration(), Message.EDITOR_ITEMSTACK_MENU_DURATION_DESCRIPTION);
 		setButton(50, durationItem, (event, slot) ->
 		{
 			int normalClick    = event.isLeftClick() ? 20 : -20;
 			int shiftClick     = event.isShiftClick() ? 30 : 1;
 			int modifier       = normalClick * shiftClick;
 			
-			ItemStackData data = targetHat.getItemStackData(particleIndex);
+			ItemStackData data = targetHat.getParticleData(particleIndex).getItemStackData();
 			int duration = data.getDuration() + modifier;
 			data.setDuration(duration);
 			dataModified = true;
@@ -183,7 +196,7 @@ public class EditorItemStackMenu extends EditorListMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		List<ItemStack> items = targetHat.getItemStackData(particleIndex).getItems();
+		List<ItemStack> items = itemStackData.getItems();
 		for (int i = 0; i < items.size(); i++)
 		{
 			ItemStack item = items.get(i);
