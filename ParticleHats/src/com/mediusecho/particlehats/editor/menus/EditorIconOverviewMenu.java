@@ -108,7 +108,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 			Database database = core.getDatabase();
 			String menuName = menuBuilder.getEditingMenu().getName();
 			
-			database.saveMetaData(menuName, targetHat, DataType.ICON);
+			database.saveMetaData(menuName, targetHat, DataType.ICON, 0);
 		}
 	}
 
@@ -186,7 +186,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		List<Material> materials = targetHat.getIconData().getMaterials();
 		for (int i = 1; i < materials.size(); i++) 
 		{
-			Material material = materials.get(i);
+			Material material = materials.get(i);			
 			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.capitalizeFirstLetter(material.toString().toLowerCase());
 			
 			int index = getNormalIndex(i, 10, 2);
