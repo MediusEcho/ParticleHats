@@ -18,19 +18,32 @@ import com.mediusecho.particlehats.util.ItemUtil;
 public class EditorActionOverviewMenu extends EditorMenu {
 
 	private final EditorGenericCallback callback;
-	//private final EditorMainMenu editorMainMenu;
 	private final Hat targetHat;
 	
-//	public EditorActionOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
+	private boolean editingLeftCommand = false;
+	private boolean editingRightCommand = false;
+	
 	public EditorActionOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		this.callback = callback;
-		//this.editorMainMenu = editorMainMenu;
 		this.targetHat = menuBuilder.getBaseHat();
 		
 		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_ACTION_OVERVIEW_MENU_TITlE.getValue());
 		build();
+	}
+	
+	@Override
+	public void open ()
+	{
+		if (editingLeftCommand || editingRightCommand) 
+		{
+			onActionChange(editingLeftCommand);
+			editingLeftCommand = false;
+			editingRightCommand = false;
+		}
+		
+		super.open();
 	}
 
 	@Override
@@ -90,14 +103,14 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		case OPEN_MENU_PERMISSION:
 		case OPEN_MENU:
 		{
-			EditorMenuSelectionMenu editorMenuSelectionMenu = new EditorMenuSelectionMenu(core, owner, menuBuilder, (string) ->
+			EditorMenuSelectionMenu editorMenuSelectionMenu = new EditorMenuSelectionMenu(core, owner, menuBuilder, false, (string) ->
 			{
-				Core.log(string);
 				if (leftClick) {
 					targetHat.setLeftClickArgument(string);
 				} else {
 					targetHat.setRightClickArgument(string);
 				}
+				menuBuilder.goBack();
 				onActionChange(leftClick);
 			});
 			menuBuilder.addMenu(editorMenuSelectionMenu);
@@ -107,6 +120,12 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		
 		case COMMAND:
 		{
+			if (leftClick) {
+				editingLeftCommand = true;
+			} else {
+				editingRightCommand = true;
+			}
+			
 			targetHat.setEditingAction(leftClick ? 1 : 2);
 			menuBuilder.setOwnerState(MetaState.HAT_COMMAND);
 			owner.closeInventory();
