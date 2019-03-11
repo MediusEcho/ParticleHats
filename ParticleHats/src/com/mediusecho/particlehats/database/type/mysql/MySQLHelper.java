@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.particles.Hat;
 
 public class MySQLHelper {
 
@@ -143,7 +146,7 @@ public class MySQLHelper {
 				+ "right_action TINYINT NOT NULL DEFAULT 12,"
 				+ "left_argument VARCHAR(128),"
 				+ "right_argument VARCHAR(128),"
-				+ "duration MEDIUMINT NOT NULL DEFAULT 20,"
+				+ "duration MEDIUMINT NOT NULL DEFAULT 200,"
 				+ "display_mode TINYINT NOT NULL DEFAULT 0,"
 				+ "particle_scale DOUBLE NOT NULL DEFAULT 0.2"
 				+ ")";
@@ -155,11 +158,65 @@ public class MySQLHelper {
 				+ "slot TINYINT,"
 				+ "type TINYINT,"
 				+ "line TINYINT,"
+				+ "line_ex TINYINT,"
 				+ "value VARCHAR(64),"
-				+ "PRIMARY KEY(slot, type, line),"
+				+ "PRIMARY KEY(slot, type, line, line_ex),"
 				+ "FOREIGN KEY(slot) REFERENCES menu_" + menuName + "_items(slot) ON DELETE CASCADE ON UPDATE CASCADE"
 				+ ")";
-		return query;
+	}
+	
+	public String getParticleTableQuery (String menuName)
+	{
+		return "CREATE TABLE IF NOT EXISTS menu_" + menuName + "_particles ("
+				+ "slot TINYINT,"
+				+ "particle_index TINYINT,"
+				+ "particle_id TINYINT NOT NULL DEFAULT 0,"
+				+ "color INT,"
+				+ "random BOOLEAN NOT NULL DEFAULT TRUE,"
+				+ "scale DECIMAL(3,2) NOT NULL DEFAULT 1.0,"
+				+ "item_data VARCHAR(64),"
+				+ "block_data VARCHAR(64),"
+				+ "duration SMALLINT NOT NULL DEFAULT 20,"
+				+ "gravity BOOLEAN NOT NULL DEFAULT TRUE,"
+				+ "velocity_x DOUBLE NOT NULL DEFAULT 0,"
+				+ "velocity_y DOUBLE NOT NULL DEFAULT 0,"
+				+ "velocity_z DOUBLE NOT NULL DEFAULT 0,"
+				+ "PRIMARY KEY(slot, particle_index),"
+				+ "FOREIGN KEY(slot) REFERENCES menu_" + menuName + "_items(slot) ON DELETE CASCADE ON UPDATE CASCADE"
+				+ ")";
+	}
+	
+	/**
+	 * Creates a valid insert sql statement based on the hats modified properties
+	 * @param menuName
+	 * @param hat
+	 * @param particleIndex
+	 * @return
+	 */
+	public String getParticleInsertQuery (String menuName, Hat hat, int particleIndex)
+	{
+		StringBuilder propertyBuilder = new StringBuilder();
+		StringBuilder valueBuilder = new StringBuilder();
+		StringBuilder updateBuilder = new StringBuilder();
+		
+		propertyBuilder.append("slot").append(",").append("particle_index");
+		valueBuilder.append(Integer.toString(hat.getSlot())).append(",").append(Integer.toString(particleIndex));
+		
+		String insertQuery = "INSERT INTO menu_" + menuName + "_particles ({1}) VALUES ({2}) ON DUPLICATE KEY UPDATE {3}";
+		
+		Map<String, String> editedProperties = hat.getParticleData(particleIndex).getPropertyChanges();
+		for (Entry<String, String> value : editedProperties.entrySet())
+		{
+			propertyBuilder.append(",").append(value.getKey());
+			valueBuilder.append(",").append(value.getValue());
+			updateBuilder.append(",").append(value.getKey()).append("=").append(value.getValue());
+		}
+		
+		String properties = propertyBuilder.toString();
+		String values = valueBuilder.toString();
+		String updates = updateBuilder.deleteCharAt(0).toString();
+		
+		return insertQuery.replace("{1}", properties).replace("{2}", values).replace("{3}", updates);
 	}
 	
 	/**
