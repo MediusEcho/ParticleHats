@@ -6,26 +6,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.effects.CustomEffect;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
-import com.mediusecho.particlehats.particles.properties.ParticleColor;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
+import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public class Hat {
@@ -53,8 +52,6 @@ public class Hat {
 	private CustomEffect customEffect;
 	
 	private boolean isVanished      = false;
-	//private boolean isAnimated      = false;
-	//private boolean hasLockedName   = false;
 	private boolean isPermanent     = true;
 	private boolean isLoaded        = false;
 	
@@ -69,6 +66,8 @@ public class Hat {
 	
 	private List<String> normalDescription;
 	private List<String> permissionDescription;
+	
+	private List<ParticleTag> tags;
 	
 	private Map<Integer, ParticleData> particleData;
 	
@@ -93,6 +92,7 @@ public class Hat {
 		iconData              = new IconData();
 		normalDescription     = new ArrayList<String>();
 		permissionDescription = new ArrayList<String>();
+		tags                  = new ArrayList<ParticleTag>();
 		particleData          = new HashMap<Integer, ParticleData>();
 	}
 	
@@ -771,6 +771,30 @@ public class Hat {
 	}
 	
 	/**
+	 * Set this hats tags
+	 * @param tags
+	 */
+	public void setTags (List<ParticleTag> tags) {
+		this.tags = tags;
+	}
+	
+	/**
+	 * Adds a ParticleTag to this hat
+	 * @param tag
+	 */
+	public void addTag (ParticleTag tag) {
+		tags.add(tag);
+	}
+	
+	/**
+	 * Get all ParticleTags that belong to this hat
+	 * @return
+	 */
+	public List<ParticleTag> getTags () {
+		return tags;
+	}
+	
+	/**
 	 * Get the ParticleData found at this index
 	 * @param index
 	 * @return
@@ -780,8 +804,6 @@ public class Hat {
 		if (particleData.containsKey(index)) {
 			return particleData.get(index);
 		}
-		
-		Core.debug("creating new particle data for index: " + index);
 		
 		ParticleData data = new ParticleData();
 		particleData.put(index, data);
@@ -829,32 +851,6 @@ public class Hat {
 	}
 	
 	/**
-	 * Set the color of the Particle at index
-	 * @param index
-	 * @param particleColor
-	 */
-	public void setParticleColor (int index, ParticleColor color) {
-	}
-	
-	/**
-	 * Set the color of the Particle at index
-	 * @param index
-	 * @param color
-	 */
-	public void setParticleColor (int index, Color color) {
-		getParticleData(index).setColor(new ParticleColor(color));
-	}
-	
-	/**
-	 * Get any ParticleColor that exists at this index
-	 * @param index
-	 * @return
-	 */
-	public ParticleColor getParticleColor (int index) {
-		return getParticleData(index).getColor();
-	}
-	
-	/**
 	 * Set this hats particle item data
 	 * @param index
 	 * @param item
@@ -898,15 +894,6 @@ public class Hat {
 	public BlockData getParticleBlock (int index) {
 		return getParticleData(index).getBlock();
 	}
-	
-//	/**
-//	 * Check to see if color data exists at this index
-//	 * @param index
-//	 * @return
-//	 */
-//	public boolean hasColorData (int index) {
-//		return particleColorData.containsKey(index);
-//	}
 	
 	/**
 	 * Set the sound this hat will play when clicked
@@ -1141,7 +1128,8 @@ public class Hat {
 		{
 			String varName = entry.getKey();
 			String value = entry.getValue();
-			queryBuilder.append(varName + " = " + value + ",");
+			//queryBuilder.append(varName + " = " + value + ",");
+			queryBuilder.append(varName).append("=").append(value).append(",");
 		}
 		
 		queryBuilder.deleteCharAt(queryBuilder.length() - 1);
@@ -1150,7 +1138,7 @@ public class Hat {
 	}
 	
 	/**
-	 * Returns an SQL statement to insert this hat
+	 * Returns an SQL statement to insert this hat into the database
 	 * @return
 	 */
 	public String getSQLInsertQuery ()
@@ -1185,6 +1173,24 @@ public class Hat {
 		hat.setOffset(offset);
 		hat.setAngle(angle);
 		
+		hat.clearPropertyChanges();
+		return hat;
+	}
+	
+	/**
+	 * Returns a copy of this hat with only data necessary for a gui
+	 * @return
+	 */
+	public Hat visualCopy ()
+	{
+		Hat hat = new Hat();
+		
+		hat.setMaterial(material);
+		hat.setIconUpdateFrequency(iconData.getUpdateFrequency());
+		hat.setDisplayMode(iconData.getDisplayMode());
+		hat.getIconData().setMaterials(new ArrayList<Material>(getIconData().getMaterials()));
+		
+		hat.clearPropertyChanges();
 		return hat;
 	}
 	
