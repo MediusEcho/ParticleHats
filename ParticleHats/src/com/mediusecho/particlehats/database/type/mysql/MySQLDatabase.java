@@ -69,7 +69,7 @@ public class MySQLDatabase implements Database {
 	// Fetch MySQL changes every 30 seconds
 	private final long UPDATE_INTERVAL = 30000L;
 	
-	public MySQLDatabase (Core core)
+	public MySQLDatabase (Core core, DatabaseCallback callback)
 	{
 		menuCache = new HashMap<String, String>();
 		imageCache = new HashMap<String, BufferedImage>();
@@ -89,9 +89,8 @@ public class MySQLDatabase implements Database {
 		
 		catch (SQLException e)
 		{
-			Core.log("There was an error connecting to the MySQL database");
 			Core.log(e.getMessage());
-			//e.printStackTrace();
+			callback.onTimeout();
 		}
 	}
 	

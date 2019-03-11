@@ -23,15 +23,19 @@ public enum DatabaseType {
 	 * Returns the Database object of this type
 	 * @return
 	 */
-	public Database getDatabase (Core core)
+	public Database getDatabase (Core core, DatabaseCallback callback)
 	{
 		switch (this)
 		{	
 		case MYSQL:
-			return new MySQLDatabase(core);
+			return new MySQLDatabase(core, callback);
 		default:
 			return new YamlDatabase();
 		}
+	}
+	
+	public Database getDatabase () {
+		return new YamlDatabase();
 	}
 	
 	/**
@@ -48,5 +52,10 @@ public enum DatabaseType {
 			}
 		}
 		return YAML;
+	}
+	
+	@FunctionalInterface
+	public interface DatabaseCallback {
+		public void onTimeout();
 	}
 }

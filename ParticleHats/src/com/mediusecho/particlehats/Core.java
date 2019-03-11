@@ -12,6 +12,7 @@ import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.DatabaseType;
 import com.mediusecho.particlehats.managers.CommandManager;
 import com.mediusecho.particlehats.managers.EventManager;
+import com.mediusecho.particlehats.managers.ParticleManager;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.stats.Metrics;
@@ -30,6 +31,7 @@ public class Core extends JavaPlugin {
 	// Managers
 	private EventManager eventManager;
 	private CommandManager commandManager;
+	private ParticleManager particleManager;
 	
 	// Player State
 	private Map<UUID, PlayerState> playerState;
@@ -64,7 +66,15 @@ public class Core extends JavaPlugin {
 		{		
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
-			database = databaseType.getDatabase(this);
+			database = databaseType.getDatabase(this, () ->
+			{
+				// Default to YAML if our mysql database can't connect
+				log("There was an error connecting to the MySQL database");
+				log("Switching to yaml");
+				
+				databaseType = DatabaseType.YAML;
+				database = DatabaseType.YAML.getDatabase();
+			});
 			
 			// Initialize our player state map
 			playerState = new HashMap<UUID, PlayerState>();
@@ -72,6 +82,7 @@ public class Core extends JavaPlugin {
 			// Create our managers
 			eventManager   = new EventManager(this);
 			commandManager = new CommandManager(this, "h");
+			particleManager = new ParticleManager(this);
 			
 			// Enable Metrics
 			Metrics metrics = new Metrics(this);
@@ -113,6 +124,14 @@ public class Core extends JavaPlugin {
 	 */
 	public DatabaseType getDatabaseType () {
 		return databaseType;
+	}
+	
+	/**
+	 * Get the ParticleManager class
+	 * @return
+	 */
+	public ParticleManager getParticleManager () {
+		return particleManager;
 	}
 	
 	/**
