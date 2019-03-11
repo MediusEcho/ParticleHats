@@ -473,6 +473,22 @@ public class EditorMainMenu extends EditorMenu {
 			editorSlotMenu.open();
 			return EditorClickType.NEUTRAL;
 		});
+		
+		// Move
+		ItemStack moveItem = ItemUtil.createItem(Material.MAP, Message.EDITOR_MAIN_MENU_MOVE, Message.EDITOR_MAIN_MENU_MOVE_DESCRIPTION);
+		setButton(32, moveItem, (event, slot) ->
+		{
+			EditorMenuSelectionMenu editorMenuSelectionMenu = new EditorMenuSelectionMenu(core, owner, menuBuilder, false, (menu) ->
+			{
+				EditorTransferMenu editorTransferMenu = new EditorTransferMenu(core, owner, menuBuilder, menu);
+				menuBuilder.addMenu(editorTransferMenu);
+				editorTransferMenu.open();
+			});
+			menuBuilder.addMenu(editorMenuSelectionMenu);
+			editorMenuSelectionMenu.open();
+			return EditorClickType.NEUTRAL;
+		});
+		
 		// Count
 		ItemStack countItem = ItemUtil.createItem(Material.WHEAT_SEEDS, Message.EDITOR_MAIN_MENU_SET_COUNT);
 		EditorLore.updateIntegerDescription(countItem, targetHat.getCount(), Message.EDITOR_MAIN_MENU_COUNT_DESCRIPTION);
@@ -516,7 +532,6 @@ public class EditorMainMenu extends EditorMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		// TODO: Move to new menu
 		// TODO: Node Editor
 	}
 }

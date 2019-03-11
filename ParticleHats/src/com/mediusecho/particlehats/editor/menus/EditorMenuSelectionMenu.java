@@ -22,17 +22,19 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 	private final String title = Message.EDITOR_MENU_SELECTION_TITLE.getValue();
 	
 	private final Map<Integer, Inventory> menus;
-	
 	private final EditorAction selectAction;
+	private final boolean transfering;
 	
 	private Map<String, String> loadedMenus;
 	private Map<Integer, String> storedMenus;
 	private int pages;
 	private int currentPage = 0;
 	
-	public EditorMenuSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorStringCallback callback) 
+	
+	public EditorMenuSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean transfering, EditorStringCallback callback) 
 	{
 		super(core, owner, menuBuilder);
+		this.transfering = transfering;
 		
 		menus = new HashMap<Integer, Inventory>();
 		loadedMenus = core.getDatabase().getMenus(false);
@@ -45,7 +47,6 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 			if (storedMenus.containsKey(menuSlot))
 			{				
 				callback.onSelect(storedMenus.get(menuSlot));
-				menuBuilder.goBack();
 				return EditorClickType.NEUTRAL;
 			}
 			return EditorClickType.NONE;
@@ -85,6 +86,11 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 			open();
 			return EditorClickType.NEUTRAL;
 		});
+		
+		if (!transfering)
+		{
+			// TODO: Add option to create menu	
+		}
 		
 		// Create our menus
 		for (int i = 0; i < pages; i++)
