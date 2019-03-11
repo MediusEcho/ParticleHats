@@ -122,7 +122,7 @@ public class MySQLDatabase implements Database {
 				while (menuResult.next())
 				{
 					final String menuTitle = ChatColor.translateAlternateColorCodes('&', menuResult.getString("title"));
-					final int  menuSize = menuResult.getInt("size");
+					final int menuSize = menuResult.getInt("size");
 					final MenuInventory inventory = new MenuInventory(menuName, menuTitle, menuSize);
 					
 					// Load this menus items
@@ -133,8 +133,8 @@ public class MySQLDatabase implements Database {
 						
 						while (itemSet.next())
 						{
-							int itemSlot     = itemSet.getInt("slot");
-							String itemID    = itemSet.getString("id");
+							int itemSlot = itemSet.getInt("slot");
+							String itemID = itemSet.getString("id");
 							String itemTitle = ChatColor.translateAlternateColorCodes('&', itemSet.getString("title"));
 							
 							ItemStack item = ItemUtil.createItem(Material.valueOf(itemID), 1);
