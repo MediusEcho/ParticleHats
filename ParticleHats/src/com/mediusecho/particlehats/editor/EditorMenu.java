@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Material;
@@ -26,6 +27,7 @@ public abstract class EditorMenu {
 
 	protected final Core core;
 	protected final Player owner;
+	protected final UUID ownerID;
 	protected final MenuBuilder menuBuilder;
 	
 	protected final static EditorAction emptyAction = (event, slot) -> { Core.debug("empty action"); return EditorClickType.NONE; };
@@ -48,6 +50,7 @@ public abstract class EditorMenu {
 		
 		this.core = core;
 		this.owner = owner;
+		this.ownerID = owner.getUniqueId();
 		this.menuBuilder = menuBuilder;	
 		
 		actions = new HashMap<Integer, EditorAction>();
