@@ -94,10 +94,10 @@ public class MySQLDatabase implements Database {
 		}
 	}
 	
-	public boolean init ()
-	{
-		return true;
-	}
+//	public boolean init ()
+//	{
+//		return true;
+//	}
 	
 	@Override
 	public void onDisable () 
