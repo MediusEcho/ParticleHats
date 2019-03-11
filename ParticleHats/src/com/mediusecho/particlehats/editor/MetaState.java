@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 
-import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.StringUtil;
@@ -84,7 +83,8 @@ public enum MetaState {
 			default: break;
 			case MENU_TITLE:
 			{
-				menuBuilder.getEditingMenu().setTitle(value);
+				String title = value.length() <= 40 ? value : value.substring(0, 40);
+				menuBuilder.getEditingMenu().setTitle(title);
 				reopenEditor(menuBuilder);
 			}
 			break;
