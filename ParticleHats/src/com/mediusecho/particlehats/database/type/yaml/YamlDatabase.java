@@ -100,4 +100,9 @@ public class YamlDatabase implements Database {
 		
 	}
 
+	@Override
+	public void moveHatData(String fromMenu, String toMenu, int fromSlot, int toSlot) {
+		
+	}
+
 }
