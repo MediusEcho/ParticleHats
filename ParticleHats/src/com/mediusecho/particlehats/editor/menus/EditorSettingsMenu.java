@@ -1,15 +1,19 @@
 package com.mediusecho.particlehats.editor.menus;
 
+import java.util.Map.Entry;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -79,20 +83,29 @@ public class EditorSettingsMenu extends EditorMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		// TODO: Toggle Live Updates
 		// Toggle Live Updates
 		ItemStack liveItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SETTINGS_MENU_TOGGLE_LIVE_MENU);
+		EditorLore.updateBooleanDescription(liveItem, menuBuilder.getEditingMenu().isLive(), Message.EDITOR_SETTINGS_MENU_ANIMATION_DESCRIPTION);
 		setButton(30, liveItem, (event, slot) ->
 		{
-			menuBuilder.getEditingMenu().toggleLive();
+			EditorBaseMenu baseMenu = menuBuilder.getEditingMenu();
+			
+			baseMenu.toggleLive();
+			EditorLore.updateBooleanDescription(getItem(30), baseMenu.isLive(), Message.EDITOR_SETTINGS_MENU_ANIMATION_DESCRIPTION);
+			
 			return EditorClickType.NEUTRAL;
 		});
 		
-		// TODO: Sync icon animation
 		// Sync Icons
-		ItemStack syncItem = ItemUtil.createItem(Material.CONDUIT, Message.EDITOR_SETTINGS_MENU_SYNC_ICONS);
+		ItemStack syncItem = ItemUtil.createItem(Material.CONDUIT, Message.EDITOR_SETTINGS_MENU_SYNC_ICONS, Message.EDITOR_SETTINGS_SYNC_DESCRIPTION);
 		setButton(32, syncItem, (event, slot) ->
 		{
+			for (Entry<Integer, Hat> hats : menuBuilder.getEditingMenu().getHats().entrySet())
+			{
+				Hat hat = hats.getValue();
+				hat.getIconData().reset();
+			}
+			menuBuilder.goBack();
 			return EditorClickType.NEUTRAL;
 		});
 	}
