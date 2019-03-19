@@ -12,10 +12,13 @@ import org.bukkit.command.TabCompleter;
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.MainCommand;
 import com.mediusecho.particlehats.commands.Sender;
+import com.mediusecho.particlehats.commands.subcommands.ClearCommand;
 import com.mediusecho.particlehats.commands.subcommands.CreateCommand;
+import com.mediusecho.particlehats.commands.subcommands.DebugCommand;
 import com.mediusecho.particlehats.commands.subcommands.DebugDeleteMenu;
 import com.mediusecho.particlehats.commands.subcommands.EditCommand;
 import com.mediusecho.particlehats.commands.subcommands.OpenCommand;
+import com.mediusecho.particlehats.commands.subcommands.ReloadCommand;
 
 public class CommandManager implements CommandExecutor, TabCompleter {
 
@@ -30,10 +33,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		this.command = command;
 		
 		mainCommand = new MainCommand();
+		mainCommand.register(new ReloadCommand());
 		mainCommand.register(new OpenCommand(core));
 		mainCommand.register(new EditCommand(core));
 		mainCommand.register(new CreateCommand());
 		mainCommand.register(new DebugDeleteMenu());
+		mainCommand.register(new DebugCommand());
+		mainCommand.register(new ClearCommand());
 		
 		// Register our command executor
 		core.getCommand(command).setExecutor(this);
