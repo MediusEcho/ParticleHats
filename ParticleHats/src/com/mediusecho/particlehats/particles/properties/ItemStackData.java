@@ -175,6 +175,10 @@ public class ItemStackData {
 		return defaultItem;
 	}
 	
+	public void setItems (List<ItemStack> items) {
+		this.items = items;
+	}
+	
 	/**
 	 * Get all items
 	 * @return
@@ -250,5 +254,18 @@ public class ItemStackData {
 		catch (IllegalAccessException e) {
 			Core.debug("IllegalAccessException");
 		}
+	}
+	
+	public ItemStackData clone (ParticleData parent)
+	{
+		ItemStackData data = new ItemStackData(parent);
+		
+		data.duration = duration;
+		data.velocity = velocity.clone();
+		data.hasGravity = hasGravity;
+		data.hasDirectionalVelocity = hasDirectionalVelocity;
+		data.items = new ArrayList<ItemStack>(items);
+		
+		return data;
 	}
 }
