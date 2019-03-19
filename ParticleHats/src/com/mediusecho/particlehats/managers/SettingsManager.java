@@ -48,8 +48,8 @@ public enum SettingsManager {
 	/**
 	 * Afk / Combat cooldown and flags
 	 */
-	AFK_COOLDOWN          ("afk.cooldown",          Type.INT,     1),
-	COMBAT_COOLDOWN       ("combat.cooldown",       Type.INT,     1),
+	AFK_COOLDOWN          ("afk.cooldown",          Type.INT,     1000),
+	COMBAT_COOLDOWN       ("combat.cooldown",       Type.INT,     1000),
 	COMBAT_CHECK_PLAYERS  ("combat.check-players",  Type.BOOLEAN, true),
 	COMBAT_CHECK_MONSTERS ("combat.check-monsters", Type.BOOLEAN, true),
 	COMBAT_CHECK_ANIMALSS ("combat.check-animals",  Type.BOOLEAN, false),
@@ -160,6 +160,11 @@ public enum SettingsManager {
 	 */
 	public Sound getSound () {
 		return dataType.equals(Type.SOUND) ? Sound.valueOf(asString()) : Sound.UI_BUTTON_CLICK;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<String> getList () {
+		return dataType.equals(Type.STRING_LIST) ? (ArrayList<String>)getData() : new ArrayList<String>();
 	}
 	
 	/**
