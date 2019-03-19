@@ -164,4 +164,18 @@ public class ParticleData {
 	public void setProperty (String key, String value) {
 		modifiedProperties.put(key, value);
 	}
+	
+	public ParticleData clone ()
+	{
+		ParticleData data = new ParticleData();
+		
+		data.particle = particle;
+		data.item = item;
+		data.block = block;
+		data.scale = scale;
+		data.color = color.clone(this);
+		data.stackData = stackData.clone(this);
+		
+		return data;
+	}
 }
