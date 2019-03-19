@@ -24,9 +24,6 @@ public class EditorDescriptionMenu extends EditorListMenu {
 	private final boolean editingDescription;
 	private final Hat targetHat;
 	
-	private boolean isEmpty = false;
-	private ItemStack emptyItem;
-	
 	private final String lineTitle = Message.EDITOR_DESCIPRION_LINE_TITLE.getValue();
 	private final String lineDescription = Message.EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION.getValue();
 	private final String[] descriptionInfo = StringUtil.parseValue(lineDescription, "1");
@@ -39,8 +36,6 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		super(core, owner, menuBuilder);
 		this.editingDescription = editingDescription;
 		this.targetHat = menuBuilder.getBaseHat();
-		
-		emptyItem = ItemUtil.createItem(Material.BARRIER, Message.EDITOR_DESCRIPTION_MENU_EMPTY);
 		
 		addItem = ItemUtil.createItem(Material.TURTLE_HELMET, Message.EDITOR_DESCRIPTION_MENU_ADD_LINE);
 		editAction = (event, slot) ->
@@ -167,14 +162,6 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		if (isEmpty) {
 			insertEmptyItem();
 		}
-	}
-	
-	private void insertEmptyItem () {
-		setButton(22, emptyItem, emptyAction);
-	}
-	
-	private void removeEmptyItem () {
-		setButton(22, null, editAction);
 	}
 	
 	@Override
