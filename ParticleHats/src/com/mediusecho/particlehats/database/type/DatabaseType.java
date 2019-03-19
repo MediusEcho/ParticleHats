@@ -56,6 +56,6 @@ public enum DatabaseType {
 	
 	@FunctionalInterface
 	public interface DatabaseCallback {
-		public void onTimeout();
+		public void onTimeout(Exception e);
 	}
 }
