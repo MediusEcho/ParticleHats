@@ -52,6 +52,17 @@ public class Core extends JavaPlugin {
 		instance = this;	
 		logger = getServer().getLogger();
 		
+		// Make sure we're running on a supported version
+		if (getServerVersion() < 13)
+		{
+			log("-----------------------------------------------------------------------");
+			log("This version of ParticleHats is not compatible with your server version");
+			log("Download version 3.7.5 if your server is on 1.7.10 - 1.12.2");
+			log("-----------------------------------------------------------------------");
+			
+			getServer().getPluginManager().disablePlugin(this);
+		}
+		
 		// Check to see if we're running on Spigot
 		try {
 			Class.forName("net.md_5.bungee.api.chat.BaseComponent");
