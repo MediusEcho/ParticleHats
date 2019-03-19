@@ -30,6 +30,7 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 	private int pages;
 	private int currentPage = 0;
 	
+	// TODO: Remove any menu that is being edited from the list when we're moving
 	
 	public EditorMenuSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean transfering, EditorStringCallback callback) 
 	{
@@ -39,7 +40,7 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 		menus = new HashMap<Integer, Inventory>();
 		loadedMenus = core.getDatabase().getMenus(false);
 		storedMenus = new HashMap<Integer, String>();
-		pages = (int) Math.ceil((double) (loadedMenus.size() - 1) / 28D);
+		pages = (int) Math.max(Math.ceil((double) (loadedMenus.size() - 1) / 28D), 1);
 		
 		selectAction = (event, slot) ->
 		{
@@ -119,25 +120,28 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 		int page = 0;
 		String currentMenu = menuBuilder.getEditingMenu().getName();
 		
-		for (Entry<String, String> menu : loadedMenus.entrySet())
+		if (loadedMenus.size() > 0)
 		{
-			if (menu.getKey().equals(currentMenu)) {			
-				continue;
-			}
-			
-			String name = Message.EDITOR_MENU_SELECTION_MENU_PREFIX.getValue() + menu.getKey();
-			String title = menu.getValue();
-			
-			ItemStack item = ItemUtil.createItem(Material.BOOK, name);
-			ItemUtil.setItemDescription(item, Message.EDITOR_MENU_SELECTION_MENU_DESCRIPTION.getValue().replace("{1}", title));
-			
-			menus.get(page).setItem(getNormalIndex(index++, 10, 2), item);
-			storedMenus.put(globalIndex++, menu.getKey());
-			
-			if (index % 28 == 0)
+			for (Entry<String, String> menu : loadedMenus.entrySet())
 			{
-				index = 0;
-				page++;
+				if (menu.getKey().equals(currentMenu)) {			
+					continue;
+				}
+				
+				String name = Message.EDITOR_MENU_SELECTION_MENU_PREFIX.getValue() + menu.getKey();
+				String title = menu.getValue();
+				
+				ItemStack item = ItemUtil.createItem(Material.BOOK, name);
+				ItemUtil.setItemDescription(item, Message.EDITOR_MENU_SELECTION_MENU_DESCRIPTION.getValue().replace("{1}", title));
+				
+				menus.get(page).setItem(getNormalIndex(index++, 10, 2), item);
+				storedMenus.put(globalIndex++, menu.getKey());
+				
+				if (index % 28 == 0)
+				{
+					index = 0;
+					page++;
+				}
 			}
 		}
 	}
