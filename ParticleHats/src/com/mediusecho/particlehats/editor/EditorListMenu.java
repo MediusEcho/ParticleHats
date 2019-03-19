@@ -1,9 +1,12 @@
 package com.mediusecho.particlehats.editor;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.util.ItemUtil;
 
 /**
  * Represents a menu that lets a user add or delete elements of a list
@@ -15,19 +18,22 @@ public abstract class EditorListMenu extends EditorMenu {
 	protected EditorAction addAction;
 	protected EditorAction editAction;
 	
+	protected boolean isEmpty = true;
+	
 	protected ItemStack addItem;
+	protected final ItemStack emptyItem = ItemUtil.createItem(Material.BARRIER, Message.EDITOR_MISC_EMPTY_MENU);
 	
 	public EditorListMenu(Core core, Player owner, MenuBuilder menuBuilder) 
 	{
 		super(core, owner, menuBuilder);
 	}
 	
-	@Override
-	protected void build () 
-	{
-		for (int i = 0; i <= 27; i++) {
-			setAction(getNormalIndex(i, 10, 2), editAction);
-		}	
+	protected void insertEmptyItem () {
+		setButton(22, emptyItem, emptyAction);
+	}
+	
+	protected void removeEmptyItem () {
+		setButton(22, null, editAction);
 	}
 	
 	/**
@@ -54,5 +60,13 @@ public abstract class EditorListMenu extends EditorMenu {
 			setItem(normalIndex, null);
 			setItem(shiftedIndex, item);
 		}
+	}
+	
+	@Override
+	protected void build () 
+	{
+		for (int i = 0; i <= 27; i++) {
+			setAction(getNormalIndex(i, 10, 2), editAction);
+		}	
 	}
 }
