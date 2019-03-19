@@ -23,6 +23,9 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorColorMenu extends EditorMenu {
 
+	// TODO: Add scale option
+	// TODO: color not saving
+	
 	private Map<Integer, Color> colors;
 	
 	private final int particleIndex;
@@ -111,7 +114,6 @@ public class EditorColorMenu extends EditorMenu {
 		EditorLore.updateColorDescription(getItem(34), color, false, Message.EDITOR_COLOUR_MENU_B_DESCRIPTION);
 		
 		hat.getParticleData(particleIndex).getColorData().setColor(color);
-		//hat.setParticleColor(particleIndex, color);
 		return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 	}
 	
