@@ -38,6 +38,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 	private final int totalPages;
 	private int currentPage = 0;
 	
+	// TODO: Add selected description
 	public EditorParticleSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorParticleCallback callback) 
 	{
 		super(core, owner, menuBuilder);
