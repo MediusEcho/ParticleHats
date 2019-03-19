@@ -20,21 +20,20 @@ public class MainCommand extends Command {
 		// Find and execute our sub command
 		else 
 		{
-			Command subCommand = subCommands.get(args.get(0));
-			if (subCommand != null) 
+			String cmd = args.get(0);
+			if (subCommands.containsKey(cmd))
 			{
 				args.remove(0);
-				subCommand.execute(core, sender, label, args);
+				subCommands.get(cmd).execute(core, sender, label, args);
 			}
 			
 			else
 			{
-				//sender.sendMessage(MessageManager.COMMAND_UNKNOWN);
+				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN);
 				return false;
 			}
 		}
 		
-		// TODO Auto-generated method stub
 		return false;
 	}
 
