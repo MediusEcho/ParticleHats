@@ -218,6 +218,14 @@ public enum ParticleEffect {
 	}
 	
 	/**
+	 * Check to see if this ParticleEffect can display particles
+	 * @return
+	 */
+	public boolean canDisplay () {
+		return this != NONE && this != ITEMSTACK;
+	}
+	
+	/**
 	 * Get the Particle that is associated with this ParticleEffect
 	 * @param value
 	 * @return
