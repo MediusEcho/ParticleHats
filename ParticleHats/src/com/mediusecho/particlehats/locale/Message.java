@@ -10,15 +10,31 @@ public enum Message {
 	 * Commands
 	 */
 	
+	// Misc
+	COMMAND_ERROR_UNKNOWN        ("&cUnknown command, try &7/h help &cfor a list of commands"),
+	COMMAND_ERROR_NO_PERMISSION  ("&cYou don't have permission to use this command"),
+	COMMAND_ERROR_PLAYER_ONLY    ("&cYou must be a player to use this command, try &7/h help"),
+	COMMAND_ERROR_ARGUMENTS      ("&cWrong number of arguments/n&c{1}"),
+	COMMAND_ERROR_MENU_EXISTS    ("&7'&c{1}&7' already exists"),
+	COMMAND_ERROR_UNKNOWN_PLAYER ("&7Unable to find '&c{1}&7'"),
+	COMMAND_ERROR_OFFLINE_PLAYER ("&7'&c{1}&7' is offline"),
+	
 	// Main Command
 	COMMAND_MAIN_DESCRIPTION ("Main Command"),
 	COMMAND_MAIN_USAGE       ("/h"),
 	
+	// Reload
+	COMMAND_RELOAD_DESCRIPTION ("Reloads the plugin"),
+	COMMAND_RELOAD_USAGE       ("/h reload"),
+	COMMAND_RELOAD_SUCCESS     ("&2ParticleHats reloaded"),
+	
 	// Clear Command
 	COMMAND_CLEAR_DESCRIPTION        ("Removes all of the players active particless"),
 	COMMAND_CLEAR_USAGE              ("/h clear"),
+	COMMAND_CLEAR_SUCCESS            ("&2All particles cleared"),
 	COMMAND_CLEAR_PLAYER_DESCRIPTION ("Removes all particles for the target player"),
 	COMMAND_CLEAR_PLAYER_USAGE       ("/h clear <player>"),
+	COMMAND_CLEAR_PLAYER_SUCCESS     ("&2All particles cleared for {1}"),
 	
 	// Create Command
 	COMMAND_CREATE_DESCRIPTION ("Creates a new menu with the given name"),
@@ -35,10 +51,6 @@ public enum Message {
 	// Open Command
 	COMMAND_OPEN_DESCRIPTION ("Opens a menu"),
 	COMMAND_OPEN_USAGE       ("/h open <menu name>"),
-	
-	COMMAND_ERROR_PLAYER_ONLY ("&cYou must be a player to use this command, try &7/h help"),
-	COMMAND_ERROR_ARGUMENTS   ("&cWrong number of arguments/n&c{1}"),
-	COMMAND_ERROR_MENU_EXISTS ("&7'&c{1}&7' already exists"),
 	
 	/**
 	 * Particles
@@ -165,34 +177,35 @@ public enum Message {
 	 * Action
 	 */
 	ACTION_EQUIP_NAME                       ("&bEquip"),
-	ACTION_EQUIP_DESCRIPTION                ("&7Equips this particle"),
+	ACTION_EQUIP_DESCRIPTION                ("&8Equips this particle"),
 	ACTION_TOGGLE_NAME                      ("&bToggle"),
-	ACTION_TOGGLE_DESCRIPTION               ("&7Toggles a players active/n&7particles on/off"),
+	ACTION_TOGGLE_DESCRIPTION               ("&8Toggles a players active/n&8particles on/off"),
 	ACTION_CLOSE_NAME                       ("&bClose"),
-	ACTION_CLOSE_DESCRIPTION                ("&7Closes this menu"),
+	ACTION_CLOSE_DESCRIPTION                ("&8Closes this menu"),
 	ACTION_DUMMY_NAME                       ("&bDummy"),
-	ACTION_DUMMY_DESCRIPTION                ("&7Does nothing. Can be used/n&7to show information"),
+	ACTION_DUMMY_DESCRIPTION                ("&8Does nothing. Can be used/n&8to show information"),
 	ACTION_OVERRIDE_NAME                    ("&bOverride"),
-	ACTION_OVERRIDE_DESCRIPTION             ("&7Equips this hat ignoring/n&7permissions"),
+	ACTION_OVERRIDE_DESCRIPTION             ("&8Equips this hat ignoring/n&8permissions"),
 	ACTION_CLEAR_NAME                       ("&bClear"),
-	ACTION_CLEAR_DESCRIPTION                ("&7Removes all active particles"),
+	ACTION_CLEAR_DESCRIPTION                ("&8Removes all active particles"),
 	ACTION_COMMAND_NAME                     ("&bCommand"),
-	ACTION_COMMAND_DESCRIPTION              ("&7Executes a command"),
+	ACTION_COMMAND_DESCRIPTION              ("&8Executes a command"),
 	ACTION_OPEN_MENU_NAME                   ("&bOpen Menu"),
-	ACTION_OPEN_MENU_DESCRIPTION            ("&7Opens a menu"),
+	ACTION_OPEN_MENU_DESCRIPTION            ("&8Opens a menu"),
 	ACTION_OPEN_MENU_PERMISSION_NAME        ("&bOpen Menu with Permission"),
-	ACTION_OPEN_MENU_PERMISSION_DESCRIPTION ("&7Opens a menu only if/n&7the player has permission"),
+	ACTION_OPEN_MENU_PERMISSION_DESCRIPTION ("&8Opens a menu only if/n&8the player has permission"),
 	ACTION_PURCHASE_CONFIRM_NAME            ("&bAccept Purchase"),
-	ACTION_PURCHASE_CONFIRM__DESCRIPTION    ("&7Accepts a purchase/n/n&cShould only be used in a purchase menu"),
+	ACTION_PURCHASE_CONFIRM__DESCRIPTION    ("&8Accepts a purchase/n/n&cShould only be used in a purchase menu"),
 	ACTION_PURCHASE_DENY_NAME               ("&bCancel Purchase"),
-	ACTION_PURCHASE_DENY_DESCRIPTION        ("&7Cancels a purchase/n/n&cShould only be used in a purchase menu"),
+	ACTION_PURCHASE_DENY_DESCRIPTION        ("&8Cancels a purchase/n/n&cShould only be used in a purchase menu"),
 	ACTION_PURCHASE_ITEM_NAME               ("&bPurchase Item"),
-	ACTION_PURCHASE_ITEM_DESCRIPTION        ("&7Replaces this item with whichever hat/n&7the player is trying to purchase/n/n&cShould only be used in a purchase menu"),
+	ACTION_PURCHASE_ITEM_DESCRIPTION        ("&8Replaces this item with whichever hat/n&8the player is trying to purchase/n/n&cShould only be used in a purchase menu"),
 	ACTION_MIMIC_NAME                       ("&bMimic Left Click"),
-	ACTION_MIMIC_DESCRIPTION                ("&7Copies the left click action"),
+	ACTION_MIMIC_DESCRIPTION                ("&8Copies the left click action"),
 	ACTION_DEMO_NAME                        ("&bDemo"),
-	ACTION_DEMO_DESCRIPTION                 ("&7Let players equip this particle/n&7for a set amount of time"),
-	
+	ACTION_DEMO_DESCRIPTION                 ("&8Let players equip this particle/n&8for a set amount of time"),
+	ACTION_ACTIVE_PARTICLES_NAME            ("&bActive Particles"),
+	ACTION_ACTIVE_PARTICLES_DESCRIPTION     ("&8Opens a special menu where the/n&8player can manage their/n&8active particles"),
 	
 	/**
 	 * Modes
@@ -240,7 +253,7 @@ public enum Message {
 	TYPE_INVERSE_VORTEX_NAME        ("&bInverse Vortex"),
 	TYPE_INVERSE_VORTEX_DESCRIPTION (""),
 	TYPE_HOOP_NAME                  ("&bHoop"),
-	TYPE_HOOP_DESCRIPTION           ("&82 Particles that spin around the player/n&8in a circle"),
+	TYPE_HOOP_DESCRIPTION           ("&82 Particles that spin around/n&8the player in a circle"),
 	TYPE_SUSANOO_NAME               ("&bSusanoo"),
 	TYPE_SUSANOO_DESCRIPTION        (""),
 	TYPE_ANGEL_WINGS_NAME           ("&bAngel Wings"),
@@ -249,8 +262,8 @@ public enum Message {
 	TYPE_CREEPER_HAT_DESCRIPTION    ("&8A Creepers lovely face"),
 	TYPE_CLEAN_TRAIL_NAME           ("&bSingle Particle"),
 	TYPE_CLEAN_TRAIL_DESCRIPTION    ("&8A lonely particle, can be used/n&8to create complex designs"),
-	TYPE_TITLE_NAME                 ("&bTitle"),
-	TYPE_TITLE_DESCRIPTION          (""),
+	TYPE_TORNADO_NAME               ("&bTornado"),
+	TYPE_TORNADO_DESCRIPTION        (""),
 	TYPE_CUSTOM_NAME                ("&bCustom"),
 	TYPE_CUSTOM_DESCRIPTION         (""),
 	
@@ -313,6 +326,7 @@ public enum Message {
 	EDITOR_MISC_NEW_PARTICLE  ("&bNew Particle"),
 	EDITOR_MISC_NEXT_PAGE     ("&3Next Page"),
 	EDITOR_MISC_PREVIOUS_PAGE ("&3Previous Page"),
+	EDITOR_MISC_EMPTY_MENU    ("&cEmpty"),
 	
 	// Particles
 	EDITOR_PARTICLE_MISC_DESCRIPTION          ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle"),
@@ -372,9 +386,11 @@ public enum Message {
 	EDITOR_MAIN_MENU_SET_PARTICLE         ("&bSelect a new Particle"),
 	EDITOR_MAIN_MENU_SET_ICON             ("&bSet Item"),
 	EDITOR_MAIN_MENU_SET_SLOT             ("&bSet Slot"),
+	EDITOR_MAIN_MENU_SET_SCALE            ("&bSet Scale"),
 	EDITOR_MAIN_MENU_CLONE                ("&bCreate a Copy"),
 	EDITOR_MAIN_MENU_MOVE                 ("&bMove"),
 	EDITOR_MAIN_MENU_EDIT_PARTICLES       ("&bEdit Particles"),
+	EDITOR_MAIN_MENU_EDIT_NODES           ("&bEdit Nodes"),
 	EDITOR_MAIN_MENU_NO_PARTICLES         ("&bNo Particles"),
 	EDITOR_MAIN_MENU_CUSTOM_TYPE_ERROR    ("&cUnable to find image"),
 	
@@ -388,6 +404,7 @@ public enum Message {
 	EDITOR_MAIN_MENU_ICON_DESCRIPTION                     ("&8Change the item that will we displayed/n&8inside this menu"),
 	EDITOR_MAIN_MENU_SOUND_DESCRIPTION                    ("/n&8Sound: &7{1=&cNot Set}/n&8Volume: &7{2}/n&8Pitch: &7{3}/n/n&3Left Click to Change{4=/n&cShift Right Click to Clear}"),
 	EDITOR_MAIN_MENU_SLOT_DESCRIPTION                     ("&8Change where this hat will be/n&8inside this menu"),
+	EDITOR_MAIN_MENU_SCALE_DESCRIPTION                    ("/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
 	EDITOR_MAIN_MENU_CLONE_DESCRIPTION                    ("&8Create a copy of this hat/n&8and place it in a new slot"),
 	EDITOR_MAIN_MENU_MOVE_DESCRIPTION                     ("&8Move this hat to a different menu"),
 	EDITOR_MAIN_MENU_ACTION_DESCRIPTION                   ("/n&8Left Click Action:/n{1}/n/n&8Right Click Action:/n{2}/n/n&3Click to Change Actions"),
@@ -396,6 +413,7 @@ public enum Message {
 	EDITOR_MAIN_MENU_ANIMATION_DESCRIPTION                ("/n/n&8Animation:/n&8» &e{1}/n{2}"),
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_SINGLE   ("&8» &e{1}"),
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_MULTIPLE ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
+	EDITOR_MAIN_MENU_NODE_DESCRIPTION                     ("&8Add a new hat,/n&8or edit an existing one"),
 	
 	EDITOR_MAIN_MENU_NO_PARTICLES_DESCRIPTION             ("&8Select a Type that supports particles"),
 	
@@ -408,12 +426,23 @@ public enum Message {
 	EDITOR_TYPE_MENU_CUSTOM_FILTER           ("&bCustom Types"),
 	EDITOR_TYPE_MENU_NO_CUSTOM_TYPES         ("&cNo Custom Types Found"),
 	
+	// Potion Menu
+	EDITOR_POTION_MENU_TITLE        ("Select a Potion {1}/{2}"),
+	EDITOR_POTION_MENU_POTION_TITLE ("&b{1}"),
+	EDITOR_POTION_MENU_SET_STRENGTH ("&bSet Strength"),
+	
 	// Move Menu
 	EDITOR_MOVE_MENU_TITLE                ("Move to ({1=...})"),
 	EDITOR_MOVE_MENU_MOVE                 ("&bMove Here"),
 	EDITOR_MOVE_MENU_OCCUPIED             ("&cOccupied"),
 	EDITOR_MOVE_MENU_MOVE_DESCRIPTION     ("&3Left Click to Move/n&cRight Click to Cancel"),
 	EDITOR_MOVE_MENU_OCCUPIED_DESCRIPTION ("&cRight Click to Cancel"),
+	
+	// Node Overview Menu
+	EDITOR_NODE_OVERVIEW_MENU_TITLE            ("Edit or Add a Node"),
+	EDITOR_NODE_OVERVIEW_NODE_TITLE            ("&bNode #{1}"),
+	EDITOR_NODE_OVERVIEW_MENU_NODE_DESCRIPTION ("&3Left Click to Edit/n&cShift Right Click to Delete"),
+	EDITOR_NODE_OVERVIEW_MENU_ADD_NODE         ("&bCreate a new Node"),
 	
 	// Icon Menu
 	EDITOR_ICON_OVERVIEW_MENU_TITLE               ("Add or Remove Items"),
