@@ -59,8 +59,10 @@ public class ColorData {
 	 * Set whether this Color is random
 	 * @param isRandom
 	 */
-	public void setRandom (boolean isRandom) {
+	public void setRandom (boolean isRandom) 
+	{
 		this.isRandom = isRandom;
+		parent.setProperty("random", Boolean.toString(isRandom));
 	}
 	
 	/**
@@ -73,5 +75,14 @@ public class ColorData {
 		int g = (int) Math.round(Math.random() * 255);
 		int b = (int) Math.round(Math.random() * 255);
 		return Color.fromRGB(r, g, b);
+	}
+	
+	/**
+	 * Get a cloned copy of this object
+	 * @param parent
+	 * @return
+	 */
+	public ColorData clone (ParticleData parent) {
+		return new ColorData(parent, color, isRandom);
 	}
 }
