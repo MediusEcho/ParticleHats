@@ -9,13 +9,25 @@ import org.bukkit.ChatColor;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.particles.Effect;
+import com.mediusecho.particlehats.particles.effects.AngelWingsEffect;
 import com.mediusecho.particlehats.particles.effects.ArchEffect;
+import com.mediusecho.particlehats.particles.effects.AtomEffect;
 import com.mediusecho.particlehats.particles.effects.CapeEffect;
 import com.mediusecho.particlehats.particles.effects.CleanTrailEffect;
-import com.mediusecho.particlehats.particles.effects.CustomEffect;
+import com.mediusecho.particlehats.particles.effects.CreeperEffect;
+import com.mediusecho.particlehats.particles.effects.CrystalEffect;
+import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.effects.HaloEffect;
+import com.mediusecho.particlehats.particles.effects.HelixEffect;
+import com.mediusecho.particlehats.particles.effects.HoopEffect;
+import com.mediusecho.particlehats.particles.effects.InverseVortexEffect;
 import com.mediusecho.particlehats.particles.effects.PlaceholderEffect;
+import com.mediusecho.particlehats.particles.effects.SphereEffect;
+import com.mediusecho.particlehats.particles.effects.SusanooEffect;
+import com.mediusecho.particlehats.particles.effects.TornadoEffect;
 import com.mediusecho.particlehats.particles.effects.TrailEffect;
+import com.mediusecho.particlehats.particles.effects.VortexEffect;
+import com.mediusecho.particlehats.particles.effects.WingsEffect;
 
 public enum ParticleType {
 
@@ -23,21 +35,21 @@ public enum ParticleType {
 	HALO           (1,  new HaloEffect()),
 	TRAIL          (2,  new TrailEffect()),
 	CAPE           (3,  new CapeEffect()),
-	WINGS          (4,  new PlaceholderEffect()),
-	VORTEX         (5,  new PlaceholderEffect()),
+	WINGS          (4,  new WingsEffect()),
+	VORTEX         (5,  new VortexEffect()),
 	ARCH           (6,  new ArchEffect()),
-	ATOM           (7,  new PlaceholderEffect()),
-	SPHERE         (8,  new PlaceholderEffect()),
-	CRYSTAL        (9,  new PlaceholderEffect()),
-	HELIX          (10, new PlaceholderEffect()),
-	INVERSE_VORTEX (11, new PlaceholderEffect()),
-	HOOP           (12, new PlaceholderEffect()),
-	SUSANOO        (13, new PlaceholderEffect()),
-	ANGEL_WINGS    (14, new PlaceholderEffect()),
-	CREEPER_HAT    (15, new PlaceholderEffect()),
+	ATOM           (7,  new AtomEffect()),
+	SPHERE         (8,  new SphereEffect()),
+	CRYSTAL        (9,  new CrystalEffect()),
+	HELIX          (10, new HelixEffect()),
+	INVERSE_VORTEX (11, new InverseVortexEffect()),
+	HOOP           (12, new HoopEffect()),
+	SUSANOO        (13, new SusanooEffect()),
+	ANGEL_WINGS    (14, new AngelWingsEffect()),
+	CREEPER_HAT    (15, new CreeperEffect()),
 	CLEAN_TRAIL    (16, new CleanTrailEffect()),
-	TITLE          (17, new PlaceholderEffect()),
-	CUSTOM         (18, new CustomEffect());
+	TORNADO        (17, new TornadoEffect()),
+	CUSTOM         (18, new PixelEffect());
 	
 	private final int id;
 	private final Effect effect;
