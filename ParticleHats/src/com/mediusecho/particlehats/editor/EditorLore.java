@@ -16,7 +16,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.ParticleEffect.ParticleProperty;
-import com.mediusecho.particlehats.particles.effects.CustomEffect;
+import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ItemStackData;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -67,7 +67,7 @@ public class EditorLore {
 		
 		if (type.isCustom())
 		{
-			CustomEffect customEffect = hat.getCustomEffect();
+			PixelEffect customEffect = hat.getCustomEffect();
 			if (customEffect != null) {
 				custom = typeInfo[1] + Message.EDITOR_TYPE_MENU_TYPE_PREFIX.getValue() + StringUtil.capitalizeFirstLetter(customEffect.getImageName().toLowerCase());
 			}
@@ -294,7 +294,7 @@ public class EditorLore {
 	}
 	
 	/**
-	 * Applies a description to this ItemStack using an int
+	 * Applies a description to this ItemStack using a double
 	 * @param item
 	 * @param speed
 	 * @param description
