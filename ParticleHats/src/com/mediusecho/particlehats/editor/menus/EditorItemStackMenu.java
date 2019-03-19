@@ -112,6 +112,12 @@ public class EditorItemStackMenu extends EditorListMenu {
 			
 			itemModified = true;
 		}
+		
+		if (isEmpty)
+		{
+			isEmpty = false;
+			removeEmptyItem();
+		}
 	}
 	
 	@Override
@@ -122,6 +128,11 @@ public class EditorItemStackMenu extends EditorListMenu {
 		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
 		itemStackData.removeItem(getClampedIndex(slot, 10, 2));
 		itemModified = true;
+		
+		isEmpty = itemStackData.getItems().size() == 0;
+		if (isEmpty) {
+			insertEmptyItem();
+		}
 	}
 
 	@Override
@@ -204,6 +215,11 @@ public class EditorItemStackMenu extends EditorListMenu {
 			
 			ItemUtil.setNameAndDescription(item, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue()));
 			setItem(getNormalIndex(i, 10, 2), item);
+		}
+		
+		isEmpty = items.size() == 0;
+		if (isEmpty) {
+			insertEmptyItem();
 		}
 	}
 }
