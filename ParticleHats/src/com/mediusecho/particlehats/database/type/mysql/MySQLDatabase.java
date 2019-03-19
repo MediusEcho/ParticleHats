@@ -89,12 +89,12 @@ public class MySQLDatabase implements Database {
 			dataSource = new HikariDataSource(config);
 			helper.initDatabase(core);
 			connected = true;
+			
+			Core.log("Using database: MySQL");
 		}
 		
-		catch (SQLException e)
-		{
-			Core.log(e.getMessage());
-			callback.onTimeout();
+		catch (Exception e) {
+			callback.onTimeout(e);
 		}
 	}
 	
