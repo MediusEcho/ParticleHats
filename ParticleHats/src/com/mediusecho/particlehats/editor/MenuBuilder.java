@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -84,6 +85,14 @@ public class MenuBuilder {
 					
 					mysqlDatabase.saveIncremental(getEditingMenu().getName(), hats.getKey(), hat.getSQLUpdateQuery());
 					hat.clearPropertyChanges();
+				}
+				
+				//List<Hat> nodes = hat.getNodes();
+				for (Hat node : hat.getNodes())
+				{
+					if (node.isModified() || !node.isLoaded()) {
+						mysqlDatabase.saveNodeIncremental(getEditingMenu().getName(), hat, node, node.getIndex());
+					}
 				}
 			}
 		}
