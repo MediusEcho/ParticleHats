@@ -325,8 +325,9 @@ public class MySQLDatabase implements Database {
 					{
 						String dropQuery = "DROP TABLE IF EXISTS "
 								+ "menu_" + menuName + "_meta,"
-								+ "menu_" + menuName + "_items,"
-								+ "menu_" + menuName + "_particles";
+								+ "menu_" + menuName + "_particles,"
+								+ "menu_" + menuName + "_nodes,"
+								+ "menu_" + menuName + "_items";
 						
 						try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery)) {
 							dropStatement.executeUpdate();
