@@ -150,6 +150,7 @@ public class MySQLDatabase implements Database {
 							hat.setIconUpdateFrequency(itemSet.getInt("icon_update_frequency"));
 							hat.setDisplayMode(IconDisplayMode.fromId(itemSet.getInt("display_mode")));
 							
+							hat.setPermission(itemSet.getString("permission"));	
 							String permissionDenied = itemSet.getString("permission_denied");
 							if (permissionDenied != null) {
 								hat.setPermissionDeniedMessage(permissionDenied);
@@ -375,8 +376,6 @@ public class MySQLDatabase implements Database {
 				{
 					hat.setSlot(set.getInt("slot"));
 					hat.setName(set.getString("title"));
-					hat.setPermission(set.getString("permission"));	
-					// Permission Denied
 					hat.setType(ParticleType.fromID(set.getInt("type")));
 					hat.setLocation(ParticleLocation.fromId(set.getInt("location")));
 					hat.setMode(ParticleMode.fromId(set.getInt("mode")));
