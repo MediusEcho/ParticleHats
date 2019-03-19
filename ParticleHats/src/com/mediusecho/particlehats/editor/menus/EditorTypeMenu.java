@@ -21,7 +21,7 @@ import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.particles.effects.CustomEffect;
+import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.ui.MenuState;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -97,7 +97,7 @@ public class EditorTypeMenu extends EditorMenu {
 					BufferedImage image = customTypes.get(name);
 					
 					targetHat.setType(ParticleType.CUSTOM);
-					targetHat.setCustomType(new CustomEffect(image, name, 0.2D));
+					targetHat.setCustomType(new PixelEffect(image, name, 0.2D));
 					
 					menuBuilder.goBack();
 				}
@@ -213,7 +213,7 @@ public class EditorTypeMenu extends EditorMenu {
 			String currentEffectName = "";
 			if (targetHat.getType().isCustom())
 			{
-				CustomEffect customEffect = targetHat.getCustomEffect();
+				PixelEffect customEffect = targetHat.getCustomEffect();
 				if (customEffect != null) {
 					currentEffectName = customEffect.getImageName();
 				}
