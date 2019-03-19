@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 
 public class ParticleData {
@@ -49,6 +50,14 @@ public class ParticleData {
 	 */
 	public ParticleEffect getParticle () {
 		return particle;
+	}
+	
+	/**
+	 * Set this ParticleData ColorData value
+	 * @param color
+	 */
+	public void setColorData (ColorData color) {
+		this.color = color;
 	}
 	
 	/**
@@ -129,6 +138,10 @@ public class ParticleData {
 	 */
 	public ItemStackData getItemStackData () {
 		return stackData;
+	}
+	
+	public void setItemStackData (ItemStackData stackData) {
+		this.stackData = stackData;
 	}
 	
 	/**
