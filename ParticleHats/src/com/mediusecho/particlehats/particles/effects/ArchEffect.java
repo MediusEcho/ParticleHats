@@ -10,7 +10,6 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
 
 public class ArchEffect extends Effect {
 
@@ -88,7 +87,7 @@ public class ArchEffect extends Effect {
 		List<List<Vector>> frames = createEmptyFrames();
 		frames.addAll(Arrays.asList(l1, l2, l3, l4, l5));
 		
-		ParticleType.ARCH.setFrames(frames);
+		setFrames(frames);
 	}
 
 }

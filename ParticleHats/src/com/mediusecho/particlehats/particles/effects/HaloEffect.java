@@ -10,7 +10,6 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
 
 public class HaloEffect extends Effect {
 
@@ -80,6 +79,6 @@ public class HaloEffect extends Effect {
 		List<List<Vector>> frames = createEmptyFrames();
 		frames.add(points);
 		
-		ParticleType.HALO.setFrames(frames);
+		setFrames(frames);
 	}
 }

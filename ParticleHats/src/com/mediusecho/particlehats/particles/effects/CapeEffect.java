@@ -10,7 +10,6 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
 
 public class CapeEffect extends Effect {
 
@@ -77,7 +76,7 @@ public class CapeEffect extends Effect {
 		List<List<Vector>> frames = createEmptyFrames();
 		frames.add(points);
 		
-		ParticleType.CAPE.setFrames(frames);
+		setFrames(frames);
 	}
 
 }
