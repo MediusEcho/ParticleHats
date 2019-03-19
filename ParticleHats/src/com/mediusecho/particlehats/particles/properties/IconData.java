@@ -6,7 +6,6 @@ import java.util.Random;
 
 import org.bukkit.Material;
 
-import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.util.MathUtil;
 
 public class IconData {
@@ -144,7 +143,6 @@ public class IconData {
 			case DISPLAY_IN_ORDER:
 			{
 				previousMaterial = materials.get(MathUtil.wrap(index++, materials.size(), 0));
-				Core.debug(previousMaterial.toString());
 				return previousMaterial;
 			}		
 		}
