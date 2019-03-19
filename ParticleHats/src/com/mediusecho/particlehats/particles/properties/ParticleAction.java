@@ -22,7 +22,8 @@ public enum ParticleAction {
 	PURCHASE_DENY        (10, false),
 	PURCHASE_ITEM        (11, false),
 	MIMIC                (12, false),
-	DEMO                 (13, true);
+	DEMO                 (13, true),
+	ACTIVE_PARTICLES     (14, false);
 	
 	private final int id;
 	private final boolean hasData;
