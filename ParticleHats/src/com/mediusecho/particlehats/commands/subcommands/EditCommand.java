@@ -18,6 +18,8 @@ public class EditCommand extends Command {
 
 	private final Database database;
 	
+	// TODO: Add Permission
+	
 	public EditCommand (final Core core)
 	{
 		database = core.getDatabase();
