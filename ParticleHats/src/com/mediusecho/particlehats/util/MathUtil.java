@@ -3,6 +3,9 @@ package com.mediusecho.particlehats.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
 public class MathUtil {
 
 	/**
@@ -52,5 +55,60 @@ public class MathUtil {
 		}
 		BigDecimal bd = new BigDecimal(value);
 		return bd.setScale(places, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	/**
+	 * Returns a vector rotated to the locations pitch/yaw
+	 * @param v
+	 * @param location
+	 * @return
+	 */
+	public static Vector rotateVector (Vector v , Location location)
+	{
+		double yaw = location.getYaw() / 180.0 * Math.PI;
+		double pitch = location.getPitch() / 180.0 * Math.PI;
+		
+		v = rotateXAxis(v, pitch);
+		v = rotateYAxis(v, -yaw);
+		return v;
+	}
+	
+	/**
+	 * Rotates a vector on its x axis
+	 * @param v
+	 * @param a
+	 * @return
+	 */
+	public static Vector rotateXAxis (Vector v, double a) 
+	{
+		double y = Math.cos(a) * v.getY() - Math.sin(a) * v.getZ();
+		double z = Math.sin(a) * v.getY() + Math.cos(a) * v.getZ();
+		return v.setY(y).setZ(z);
+	}
+	
+	/**
+	 * Rotates a vector on its y axis
+	 * @param v
+	 * @param b
+	 * @return
+	 */
+	public static Vector rotateYAxis (Vector v, double b) 
+	{
+		double x = Math.cos(b) * v.getX() + Math.sin(b) * v.getZ();
+		double z = -Math.sin(b) * v.getX() + Math.cos(b) * v.getZ();
+		return v.setX(x).setZ(z);
+	}
+	
+	/**
+	 * Rotates a vector on its z axis
+	 * @param v
+	 * @param c
+	 * @return
+	 */
+	public static Vector rotateZAxis (Vector v, double c) 
+	{
+		double x = Math.cos(c) * v.getX() - Math.sin(c) * v.getY();
+		double y = Math.sin(c) * v.getX() + Math.cos(c) * v.getY();
+		return v.setX(x).setY(y);
 	}
 }
