@@ -77,11 +77,14 @@ public class Core extends JavaPlugin {
 		{		
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
-			database = databaseType.getDatabase(this, () ->
+			database = databaseType.getDatabase(this, (e) ->
 			{
 				// Default to YAML if our mysql database can't connect
+				log("---------------------------------------------------");
 				log("There was an error connecting to the MySQL database");
+				log("Error: " + e.getClass().getSimpleName());
 				log("Switching to yaml");
+				log("---------------------------------------------------");
 				
 				databaseType = DatabaseType.YAML;
 				database = DatabaseType.YAML.getDatabase();
