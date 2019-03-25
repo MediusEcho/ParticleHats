@@ -17,13 +17,13 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ColorData;
+import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorColorMenu extends EditorMenu {
 
-	// TODO: Add scale option
 	// TODO: color not saving
 	
 	private Map<Integer, Color> colors;
@@ -156,6 +156,23 @@ public class EditorColorMenu extends EditorMenu {
 		setButton(34, blueItem, (event, slot) ->
 		{
 			return updateRGB(event, targetHat, RGB.B);
+		});
+		
+		ItemStack sizeItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_COLOUR_MENU_SET_SIZE);
+		EditorLore.updateDoubleDescription(sizeItem, targetHat.getParticleData(particleIndex).getScale(), Message.EDITOR_COLOUR_MENU_SIZE_DESCRIPTION);
+		setButton(50, sizeItem, (event, slot) ->
+		{
+			double normal = event.isLeftClick() ? 0.1 : -0.1;
+			double shift = event.isShiftClick() ? 10 : 1;
+			double modifier = normal * shift;
+			
+			ParticleData data = targetHat.getParticleData(particleIndex);
+			double size = data.getScale() + modifier;
+			
+			data.setScale(size);
+			EditorLore.updateDoubleDescription(getItem(50), data.getScale(), Message.EDITOR_COLOUR_MENU_SIZE_DESCRIPTION);
+			
+			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
 		ItemStack randomItem = ItemUtil.createItem(Material.EXPERIENCE_BOTTLE, Message.EDITOR_COLOUR_MENU_SET_RANDOM, Message.EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION);
