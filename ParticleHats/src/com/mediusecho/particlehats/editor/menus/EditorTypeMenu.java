@@ -97,7 +97,7 @@ public class EditorTypeMenu extends EditorMenu {
 					BufferedImage image = customTypes.get(name);
 					
 					targetHat.setType(ParticleType.CUSTOM);
-					targetHat.setCustomType(new PixelEffect(image, name, 0.2D));
+					targetHat.setCustomType(new PixelEffect(image, name));
 					
 					menuBuilder.goBack();
 				}
