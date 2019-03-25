@@ -8,8 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.particles.ParticleEffect;
+import com.mediusecho.particlehats.util.MathUtil;
 
 public class ParticleData {
 
@@ -120,8 +120,8 @@ public class ParticleData {
 	 */
 	public void setScale (double scale) 
 	{
-		this.scale = scale;
-		setProperty("scale", Double.toString(scale));
+		this.scale = MathUtil.clamp(MathUtil.round(scale, 2), 0.1, 10.0);
+		setProperty("scale", Double.toString(this.scale));
 	}
 	
 	/**
