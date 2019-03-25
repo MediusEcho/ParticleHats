@@ -1,5 +1,12 @@
 package com.mediusecho.particlehats.locale;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bukkit.configuration.file.FileConfiguration;
+
+import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public enum Message {
@@ -629,6 +636,14 @@ public enum Message {
 	private final String defaultValue;
 	private final boolean showInFile;
 	
+	private static Map<String, String> messages;
+	
+	static 
+	{
+		messages = new HashMap<String, String>();
+		loadMessages();
+	}
+	
 	private Message (String defaultValue)
 	{
 		this(true, defaultValue);
@@ -645,7 +660,11 @@ public enum Message {
 	 * By default each message will have &f applied to the beginning
 	 * @return
 	 */
-	public String getValue () {
+	public String getValue () 
+	{
+		if (messages.containsKey(getKey())) {
+			return StringUtil.colorize(messages.get(getKey()));
+		}
 		return StringUtil.colorize(defaultValue);
 	}
 	
@@ -653,8 +672,20 @@ public enum Message {
 	 * Get this messages value without translated colour codes
 	 * @return
 	 */
-	public String getRawValue () {
+	public String getRawValue () 
+	{
+		if (messages.containsKey(getKey())) {
+			return messages.get(getKey());
+		}
 		return defaultValue;
+	}
+	
+	/**
+	 * Get the enum value as a key for the locale configuration file
+	 * @return
+	 */
+	public String getKey () {
+		return this.toString().toLowerCase();
 	}
 	
 	/**
@@ -669,6 +700,32 @@ public enum Message {
 			return Message.valueOf(messageName);
 		} catch (IllegalArgumentException e) {
 			return Message.UNKNOWN;
+		}
+	}
+	
+	/**
+	 * Reloads all messages found in messages.yml
+	 */
+	public static void onReload ()
+	{
+		messages.clear();
+		loadMessages();
+	}
+	
+	/**
+	 * Loads all messages found in messages.yml
+	 */
+	private static void loadMessages ()
+	{
+		CustomConfig locale = Core.instance.getLocaleConfig();
+		FileConfiguration config = locale.getConfig();
+		
+		for (Message message : values())
+		{
+			String value = config.getString(message.getKey());
+			if (value != null) {
+				messages.put(message.getKey(), value);
+			}
 		}
 	}
 }
