@@ -97,6 +97,12 @@ public abstract class Command {
 	public abstract CommandPermission getPermission ();
 	
 	/**
+	 * Returns true if this command will appear in the help menu
+	 * @return
+	 */
+	public abstract boolean showInHelp ();
+	
+	/**
 	 * Registers a sub-command under this command
 	 * @param command
 	 */
@@ -123,9 +129,12 @@ public abstract class Command {
 		for (Entry<String, Command> entry : subCommands.entrySet())
 		{
 			Command cmd = entry.getValue();
+			
+			if (cmd.showInHelp()) {
 			commands.put(cmd.getName(), cmd);
+			}
+			
 			cmd.getSubCommands(commands);
 		}
 	}
-	
 }

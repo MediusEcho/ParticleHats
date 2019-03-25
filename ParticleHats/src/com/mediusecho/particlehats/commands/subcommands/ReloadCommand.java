@@ -43,5 +43,10 @@ public class ReloadCommand extends Command {
 	public CommandPermission getPermission() {
 		return CommandPermission.RELOAD;
 	}
+	
+	@Override
+	public boolean showInHelp() {
+		return true;
+	}
 
 }

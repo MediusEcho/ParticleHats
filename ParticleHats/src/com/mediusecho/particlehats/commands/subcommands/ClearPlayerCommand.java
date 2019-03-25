@@ -60,4 +60,9 @@ public class ClearPlayerCommand extends Command {
 		return CommandPermission.CLEAR_PLAYER;
 	}
 
+	@Override
+	public boolean showInHelp() {
+		return true;
+	}
+	
 }

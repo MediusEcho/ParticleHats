@@ -20,6 +20,7 @@ public class ClearCommand extends Command {
 	public ClearCommand ()
 	{
 		clearPlayerCommand = new ClearPlayerCommand();
+		register(clearPlayerCommand);
 	}
 	
 	@Override
@@ -85,6 +86,11 @@ public class ClearCommand extends Command {
 	@Override
 	public CommandPermission getPermission() {
 		return CommandPermission.CLEAR;
+	}
+	
+	@Override
+	public boolean showInHelp() {
+		return true;
 	}
 
 }

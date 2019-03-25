@@ -43,5 +43,10 @@ public class DebugCommand extends Command {
 	public CommandPermission getPermission() {
 		return CommandPermission.ALL;
 	}
+	
+	@Override
+	public boolean showInHelp() {
+		return false;
+	}
 
 }

@@ -59,9 +59,15 @@ public class CreateCommand extends Command {
 		return Message.COMMAND_CREATE_DESCRIPTION;
 	}
 
+	// TOOD: Change permission
 	@Override
 	public CommandPermission getPermission() {
-		return CommandPermission.ALL;
+		return CommandPermission.CREATE;
+	}
+	
+	@Override
+	public boolean showInHelp() {
+		return true;
 	}
 
 }
