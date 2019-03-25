@@ -12,7 +12,6 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.MathUtil;
 
 public class EditorAngleMenu extends EditorOffsetMenu {
 	
@@ -35,15 +34,15 @@ public class EditorAngleMenu extends EditorOffsetMenu {
 		switch (axis)
 		{
 		case X:
-			double xa = !isMiddleClick ? MathUtil.round(MathUtil.clamp(angle.getX() + modifier, 0, 360), 2) : 0;
+			double xa = !isMiddleClick ? angle.getX() + modifier : 0;
 			hat.setAngleX(xa);
 			break;
 		case Y:
-			double ya = !isMiddleClick ? MathUtil.round(MathUtil.clamp(angle.getY() + modifier, 0, 360), 2) : 0;
+			double ya = !isMiddleClick ? angle.getY() + modifier : 0;
 			hat.setAngleY(ya);
 			break;
 		case Z:
-			double za = !isMiddleClick ? MathUtil.round(MathUtil.clamp(angle.getZ() + modifier, 0, 360), 2) : 0;
+			double za = !isMiddleClick ? angle.getZ() + modifier : 0;
 			hat.setAngleZ(za);
 			break;
 		}
