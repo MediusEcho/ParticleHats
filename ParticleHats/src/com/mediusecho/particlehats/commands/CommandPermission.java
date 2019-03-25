@@ -21,4 +21,13 @@ public enum CommandPermission {
 	{
 		this.value = ROOT + value;
 	}
+	
+	/**
+	 * Applies an extra permission value to the end of this permission
+	 * @param permission
+	 * @return
+	 */
+	public String append (String permission) {
+		return value + "." + permission;
+	}
 }
