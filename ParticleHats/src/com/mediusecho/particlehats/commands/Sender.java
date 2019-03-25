@@ -3,12 +3,11 @@ package com.mediusecho.particlehats.commands;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.locale.Message;
-
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * Represents both a CommandSender and Player
@@ -81,7 +80,7 @@ public class Sender {
 	 * @return
 	 */
 	public boolean hasPermission (CommandPermission permission) {
-		return isConsoleSender ? true : playerSender.hasPermission(permission.value);
+		return isConsoleSender ? true : (playerSender.hasPermission(permission.value) || playerSender.hasPermission(CommandPermission.ALL.value));
 	}
 	
 	/**
