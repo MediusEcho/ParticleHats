@@ -59,6 +59,14 @@ public class Sender {
 	}
 	
 	/**
+	 * Returns the CommandSender executing this command
+	 * @return
+	 */
+	public CommandSender getCommandSender () {
+		return commandSender;
+	}
+	
+	/**
 	 * Returns true if this Sender has permission
 	 * @param permission
 	 * @return
