@@ -13,6 +13,9 @@ public enum Message {
 	
 	UNKNOWN ("&cUnknown Message"),
 	
+	HAT_EQUIPPED ("{1} &7equipped"),
+	HAT_EQUIPPED_VANISHED ("{1} &7equipped while vanished"),
+	
 	/**
 	 * Commands
 	 */
@@ -21,7 +24,7 @@ public enum Message {
 	COMMAND_ERROR_UNKNOWN        ("&cUnknown command, try &7/h help &cfor a list of commands"),
 	COMMAND_ERROR_NO_PERMISSION  ("&cYou don't have permission to use this command"),
 	COMMAND_ERROR_PLAYER_ONLY    ("&cYou must be a player to use this command, try &7/h help"),
-	COMMAND_ERROR_ARGUMENTS      ("&cWrong number of arguments/n&c{1}"),
+	COMMAND_ERROR_ARGUMENTS      ("&cWrong number of arguments"),
 	COMMAND_ERROR_MENU_EXISTS    ("&7'&c{1}&7' already exists"),
 	COMMAND_ERROR_UNKNOWN_PLAYER ("&7Unable to find '&c{1}&7'"),
 	COMMAND_ERROR_OFFLINE_PLAYER ("&7'&c{1}&7' is offline"),
@@ -29,6 +32,10 @@ public enum Message {
 	// Main Command
 	COMMAND_MAIN_DESCRIPTION ("Main Command"),
 	COMMAND_MAIN_USAGE       ("/h"),
+	
+	// Help
+	COMMAND_HELP_DESCRIPTION ("Displays all commands and their usage"),
+	COMMAND_HELP_USAGE       ("/h help"),
 	
 	// Reload
 	COMMAND_RELOAD_DESCRIPTION ("Reloads the plugin"),
@@ -58,6 +65,14 @@ public enum Message {
 	// Open Command
 	COMMAND_OPEN_DESCRIPTION ("Opens a menu"),
 	COMMAND_OPEN_USAGE       ("/h open <menu name>"),
+	
+	// Set
+	// TODO: Add description
+	COMMAND_SET_DESCRIPTION (""),
+	COMMAND_SET_USAGE       ("/h set <player> <label> <tellPlayer true|false>"),
+	COMMAND_SET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
+	COMMAND_SET_ALREADY_SET ("&c{1} is already wearing this hat"),
+	COMMAND_SET_SUCCESS     ("&2You were given the {1} &2hat"),
 	
 	/**
 	 * Particles
@@ -348,8 +363,8 @@ public enum Message {
 	EDITOR_BASE_MENU_TITLE         ("Editing ({1=...})"),
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
 	EDITOR_SLOT_DESCRIPTION        ("&3Left Click to Edit/n&3Right Click for Settings"),
-	EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2=Custom}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}"),
-	EDITOR_HAT_COMMAND_DESCRIPTION (""),
+	EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}/n&7Particles: &f{7=None}/n&7Nodes: &f{8}"),
+	EDITOR_HAT_COMMAND_DESCRIPTION ("&7Slot: &f{1}/n&7Command: &f/{2}"),
 	
 	// Settings Menu
 	EDITOR_SETTINGS_MENU_TITLE             ("Menu Settings"),
@@ -407,11 +422,11 @@ public enum Message {
 	EDITOR_MAIN_MENU_VECTOR_DESCRIPTION                   ("/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"),
 	EDITOR_MAIN_MENU_LOCATION_DESCRIPTION                 ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	EDITOR_MAIN_MENU_MODE_DESCRIPTION                     ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n{4}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
-	EDITOR_MAIN_MENU_UPDATE_FREQUENCY_DESCRIPTION         ("/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
+	EDITOR_MAIN_MENU_UPDATE_FREQUENCY_DESCRIPTION         ("/n&8Updates Every:/n&8» &e{1} &8tick{2=s}/n/n&8Set how often this particle/n&8is updated, 1 = fastest/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cMiddle Click to Reset"),//("/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
 	EDITOR_MAIN_MENU_ICON_DESCRIPTION                     ("&8Change the item that will we displayed/n&8inside this menu"),
 	EDITOR_MAIN_MENU_SOUND_DESCRIPTION                    ("/n&8Sound: &7{1=&cNot Set}/n&8Volume: &7{2}/n&8Pitch: &7{3}/n/n&3Left Click to Change{4=/n&cShift Right Click to Clear}"),
 	EDITOR_MAIN_MENU_SLOT_DESCRIPTION                     ("&8Change where this hat will be/n&8inside this menu"),
-	EDITOR_MAIN_MENU_SCALE_DESCRIPTION                    ("/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_MAIN_MENU_SCALE_DESCRIPTION                    ("/n&8Scale:/n&8» &e{1}/n/n&8Adjusts the spacing of each/n&8particle in the current type/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
 	EDITOR_MAIN_MENU_CLONE_DESCRIPTION                    ("&8Create a copy of this hat/n&8and place it in a new slot"),
 	EDITOR_MAIN_MENU_MOVE_DESCRIPTION                     ("&8Move this hat to a different menu"),
 	EDITOR_MAIN_MENU_ACTION_DESCRIPTION                   ("/n&8Left Click Action:/n{1}/n/n&8Right Click Action:/n{2}/n/n&3Click to Change Actions"),
@@ -498,6 +513,8 @@ public enum Message {
 	EDITOR_PARTICLE_MENU_DATA_FILTER         ("&3Data Filter"),
 	EDITOR_PARTICLE_MENU_NORMAL_FILTER       ("&3Show All Particles"),
 	EDITOR_PARTICLE_MENU_RECENT_FILTER       ("&3Recently Used"),
+	
+	EDITOR_PARTICLE_MENU_PARTICLE_DESCRIPTION ("&8{1}/n/n{2=&3Click to Select}{3=&3Selected}"),
 	
 	// Particle Overview Menu
 	EDITOR_PARTICLE_OVERVIEW_MENU_TITLE ("Edit Particles"),
@@ -619,12 +636,12 @@ public enum Message {
 	EDITOR_COLOUR_MENU_SET_SIZE        ("&bSet Size"),
 	
 	EDITOR_COLOUR_MENU_PRESET_DESCRIPTION ("&8Set this particles/n&8colour to {1}/n/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}"),
-	EDITOR_COLOUR_MENU_R_DESCRIPTION ("/n&e» R: {1}/n&8• G: &7{2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOUR_MENU_G_DESCRIPTION ("/n&8• R: &7{1}/n&e» G: {2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOUR_MENU_B_DESCRIPTION ("/n&8• R: &7{1}/n&8• G: &7{2}/n&e» B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOUR_MENU_RANDOM_SUFFIX ("Random"),
-
+	EDITOR_COLOUR_MENU_R_DESCRIPTION      ("/n&e» R: {1}/n&8• G: &7{2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_G_DESCRIPTION      ("/n&8• R: &7{1}/n&e» G: {2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_B_DESCRIPTION      ("/n&8• R: &7{1}/n&8• G: &7{2}/n&e» B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_RANDOM_SUFFIX      ("Random"),
 	EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION ("&8Give this particle random colours"),
+	EDITOR_COLOUR_MENU_SIZE_DESCRIPTION   ("/n&8Set the size of these particles/n/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
 
 	
 	/**
