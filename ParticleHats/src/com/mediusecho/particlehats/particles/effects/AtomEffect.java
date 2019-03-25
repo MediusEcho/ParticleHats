@@ -36,8 +36,7 @@ public class AtomEffect extends Effect {
 
 	@Override
 	public ParticleLocation getDefaultLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		return ParticleLocation.FEET;
 	}
 
 	@Override
