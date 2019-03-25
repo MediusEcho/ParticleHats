@@ -60,6 +60,7 @@ public class EditorMetaMenu extends EditorMenu {
 			if (event.isLeftClick())
 			{
 				menuBuilder.setOwnerState(MetaState.HAT_NAME);
+				core.prompt(owner, MetaState.HAT_NAME);
 				owner.closeInventory();
 			}
 			
@@ -131,6 +132,7 @@ public class EditorMetaMenu extends EditorMenu {
 		setButton(15, permissionItem, (event, slot) ->
 		{
 			menuBuilder.setOwnerState(MetaState.HAT_PERMISSION);
+			core.prompt(owner, MetaState.HAT_PERMISSION);
 			owner.closeInventory();
 			return EditorClickType.NEUTRAL;
 		});
@@ -142,6 +144,7 @@ public class EditorMetaMenu extends EditorMenu {
 			if (event.isLeftClick())
 			{
 				menuBuilder.setOwnerState(MetaState.HAT_LABEL);
+				core.prompt(owner, MetaState.HAT_LABEL);
 				owner.closeInventory();
 			}
 			
@@ -160,6 +163,7 @@ public class EditorMetaMenu extends EditorMenu {
 			if (event.isLeftClick())
 			{
 				menuBuilder.setOwnerState(MetaState.HAT_EQUIP_MESSAGE);
+				core.prompt(owner, MetaState.HAT_EQUIP_MESSAGE);
 				owner.closeInventory();
 			}
 			
@@ -178,6 +182,7 @@ public class EditorMetaMenu extends EditorMenu {
 			if (event.isLeftClick())
 			{
 				menuBuilder.setOwnerState(MetaState.HAT_PERMISSION_MESSAGE);
+				core.prompt(owner, MetaState.HAT_PERMISSION_MESSAGE);
 				owner.closeInventory();
 			}
 			

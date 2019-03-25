@@ -44,7 +44,11 @@ public class EditorDescriptionMenu extends EditorListMenu {
 			{
 				editingLine = getClampedIndex(slot, 10, 2);
 				menuBuilder.getOwnerState().setMetaDescriptionLine(editingLine);
-				menuBuilder.setOwnerState(editingDescription ? MetaState.HAT_DESCRIPTION : MetaState.HAT_PERMISSION_DESCRIPTION);
+				
+				MetaState metaState = editingDescription ? MetaState.HAT_DESCRIPTION : MetaState.HAT_PERMISSION_DESCRIPTION;
+				
+				menuBuilder.setOwnerState(metaState);
+				core.prompt(owner, metaState);
 				owner.closeInventory();
 				
 				isModified = true;

@@ -52,6 +52,7 @@ public class EditorSettingsMenu extends EditorMenu {
 		setButton(10, titleItem, (event, slot) ->
 		{
 			menuBuilder.setOwnerState(MetaState.MENU_TITLE);
+			core.prompt(owner, MetaState.MENU_TITLE);
 			owner.closeInventory();
 			return EditorClickType.NEUTRAL;
 		});
