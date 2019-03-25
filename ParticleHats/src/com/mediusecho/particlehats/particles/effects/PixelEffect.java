@@ -24,6 +24,7 @@ import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
+import com.mediusecho.particlehats.util.StringUtil;
 
 public class PixelEffect extends Effect {
 
@@ -32,15 +33,13 @@ public class PixelEffect extends Effect {
 			
 	private final BufferedImage image;
 	private final String name;
-	private double scale;
 	
 	private final List<PixelData> pixels;
 	
-	public PixelEffect (BufferedImage image, final String name, final double scale)
+	public PixelEffect (BufferedImage image, final String name)
 	{
 		this.image = image;
 		this.name = name;
-		this.scale = scale;
 		
 		pixels = new ArrayList<PixelData>();
 		build();
@@ -48,16 +47,16 @@ public class PixelEffect extends Effect {
 	
 	public PixelEffect ()
 	{
-		this(null, "", 0);
+		this(null, "");
 	}
 	
-	public void rebuild (double scale)
-	{
-		this.scale = scale;
-		pixels.clear();
-		
-		build();
-	}
+//	public void rebuild (double scale)
+//	{
+//		this.scale = scale;
+//		pixels.clear();
+//		
+//		build();
+//	}
 	
 	/**
 	 * Get this custom effects image name
@@ -65,6 +64,10 @@ public class PixelEffect extends Effect {
 	 */
 	public String getImageName () {
 		return name;
+	}
+	
+	public String getImageDisplayName () {
+		return StringUtil.capitalizeFirstLetter(name.toLowerCase());
 	}
 	
 	@Override
@@ -122,6 +125,7 @@ public class PixelEffect extends Effect {
 			
 			double xoffset = ((double) width / 2) - 0.5D;
 			double yoffset = (double) height / 2D;
+			double scale = 0.2;
 			
 			for (int y = 0; y < height; y++)
 			{

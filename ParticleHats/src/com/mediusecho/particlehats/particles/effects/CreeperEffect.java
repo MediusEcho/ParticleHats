@@ -12,7 +12,7 @@ public class CreeperEffect extends PixelEffect {
 	
 	public CreeperEffect ()
 	{
-		super(ResourceUtil.getImage("creeper_face.png"), "creeper_face", 0.2D);
+		super(ResourceUtil.getImage("creeper_face.png"), "creeper_face");
 	}
 	
 	@Override

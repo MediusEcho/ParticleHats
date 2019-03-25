@@ -12,7 +12,7 @@ public class AngelWingsEffect extends PixelEffect {
 	
 	public AngelWingsEffect ()
 	{
-		super(ResourceUtil.getImage("angel_wings.png"), "angel_wings", 0.2D);
+		super(ResourceUtil.getImage("angel_wings.png"), "angel_wings");
 	}
 	
 	@Override

@@ -12,7 +12,7 @@ public class WingsEffect extends PixelEffect {
 	
 	public WingsEffect ()
 	{
-		super(ResourceUtil.getImage("wings.png"), "wings", 0.2D);
+		super(ResourceUtil.getImage("wings.png"), "wings");
 	}
 	
 	@Override
