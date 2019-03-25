@@ -49,12 +49,24 @@ public class PromptTask extends BukkitRunnable {
 						continue;
 					}
 					
-					String description = metaState.getDescription() + StringUtil.colorize("  &f(" + time + ")");
-					BaseComponent[] bc = TextComponent.fromLegacyText(description);
-					player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
+					String description = metaState.getDescription() + StringUtil.colorize(" &f(" + time + ")");
+					prompt(player, description);
+					
+//					BaseComponent[] bc = TextComponent.fromLegacyText(description);
+//					player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
 				}
 			}
 		}
 	}
 
+	/**
+	 * Sends the player a message using their Action Bar
+	 * @param player
+	 * @param message
+	 */
+	public void prompt (Player player, String message)
+	{
+		BaseComponent[] bc = TextComponent.fromLegacyText(message);
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
+	}
 }
