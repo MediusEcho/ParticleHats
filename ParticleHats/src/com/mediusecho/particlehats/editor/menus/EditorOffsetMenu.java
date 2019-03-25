@@ -13,7 +13,6 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.MathUtil;
 
 public class EditorOffsetMenu extends EditorMenu {
 
@@ -48,15 +47,15 @@ public class EditorOffsetMenu extends EditorMenu {
 		switch (axis)
 		{
 		case X:
-			double xo = !isMiddleClick ? MathUtil.round(MathUtil.clamp(offset.getX() + modifier, -20, 20), 2) : 0;
+			double xo = !isMiddleClick ? offset.getX() + modifier : 0;
 			hat.setOffsetX(xo);
 			break;
 		case Y:
-			double yo = !isMiddleClick ? MathUtil.round(MathUtil.clamp(offset.getY() + modifier, -20, 20), 2) : 0;
+			double yo = !isMiddleClick ? offset.getY() + modifier : 0;
 			hat.setOffsetY(yo);
 			break;
 		case Z:
-			double zo = !isMiddleClick ? MathUtil.round(MathUtil.clamp(offset.getZ() + modifier, -20, 20), 2) : 0;
+			double zo = !isMiddleClick ? offset.getZ() + modifier : 0;
 			hat.setOffsetZ(zo);
 			break;
 		}

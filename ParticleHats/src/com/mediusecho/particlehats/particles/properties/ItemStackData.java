@@ -71,11 +71,8 @@ public class ItemStackData {
 	 * Set the velocity of items when they're spawned into the world
 	 * @param velocity
 	 */
-	public void setVelocity (Vector velocity) 
-	{
-		setVelocityX(velocity.getX());
-		setVelocityY(velocity.getY());
-		setVelocityZ(velocity.getZ());
+	public void setVelocity (Vector velocity) {
+		setVelocity(velocity.getX(), velocity.getY(), velocity.getZ());
 	}
 	
 	/**
@@ -86,39 +83,37 @@ public class ItemStackData {
 	 */
 	public void setVelocity (double x, double y, double z) 
 	{
-		setVelocityX(x);
-		setVelocityY(y);
-		setVelocityZ(z);
+		velocity.setX(MathUtil.clamp(x, -20, 20));
+		velocity.setY(MathUtil.clamp(y, -20, 20));
+		velocity.setZ(MathUtil.clamp(z, -20, 20));
+		
+		parent.setProperty("velocity_x", Double.toString(velocity.getX()));
+		parent.setProperty("velocity_y", Double.toString(velocity.getY()));
+		parent.setProperty("velocity_z", Double.toString(velocity.getZ()));
 	}
 	
 	/**
 	 * Set the velocity x value of items when they're spawned in the world
 	 * @param x
 	 */
-	public void setVelocityX (double x) 
-	{
-		velocity.setX(x);
-		parent.setProperty("velocity_x", Double.toString(x));
+	public void setVelocityX (double x) {
+		setVelocity(x, velocity.getY(), velocity.getZ());
 	}
 	
 	/**
 	 * Set the velocity y value of items when they're spawned in the world
 	 * @param y
 	 */
-	public void setVelocityY (double y) 
-	{
-		velocity.setY(y);
-		parent.setProperty("velocity_y", Double.toString(y));
+	public void setVelocityY (double y) {
+		setVelocity(velocity.getX(), y, velocity.getZ());
 	}
 	
 	/**
 	 * Set the velocity z value of items when they're spawned in the world
 	 * @param z
 	 */
-	public void setVelocityZ (double z) 
-	{
-		velocity.setZ(z);
-		parent.setProperty("velocity_z", Double.toString(z));
+	public void setVelocityZ (double z) {
+		setVelocity(velocity.getX(), velocity.getY(), z);
 	}
 	
 	/**

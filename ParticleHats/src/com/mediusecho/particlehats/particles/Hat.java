@@ -1017,10 +1017,10 @@ public class Hat {
 	 * @param z
 	 */
 	public void setOffset (double x, double y, double z) 
-	{
-		offset.setX(x);
-		offset.setY(y);
-		offset.setZ(z);
+	{			
+		offset.setX(MathUtil.clamp(x, -20, 20));
+		offset.setY(MathUtil.clamp(y, -20, 20));
+		offset.setZ(MathUtil.clamp(z, -20, 20));
 		
 		setProperty("offset_x", Double.toString(offset.getX()));
 		setProperty("offset_y", Double.toString(offset.getY()));
@@ -1098,9 +1098,9 @@ public class Hat {
 	 */
 	public void setAngle (double x, double y, double z) 
 	{
-		angle.setX(x);
-		angle.setY(y);
-		angle.setZ(z);
+		angle.setX(MathUtil.wrap(x, 360, 0));
+		angle.setY(MathUtil.wrap(y, 360, 0));
+		angle.setZ(MathUtil.wrap(z, 360, 0));
 		
 		setProperty("angle_x", Double.toString(angle.getX()));
 		setProperty("angle_y", Double.toString(angle.getY()));
