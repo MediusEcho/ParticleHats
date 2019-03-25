@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.inventory.meta.tags.ItemTagType;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -38,7 +39,6 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 	private final int totalPages;
 	private int currentPage = 0;
 	
-	// TODO: Add selected description
 	public EditorParticleSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorParticleCallback callback) 
 	{
 		super(core, owner, menuBuilder);
@@ -205,9 +205,14 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 			ItemStack item = ItemUtil.createItem(material, name);
 			item.getItemMeta().getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, pe.getID());
 			
-			if (pe.equals(currentEffect)) {
+			boolean selected = false;
+			if (pe.equals(currentEffect)) 
+			{
 				ItemUtil.highlightItem(item);
+				selected = true;
 			}
+			
+			EditorLore.updateParticleItemDescription(item, pe, selected);
 			
 			if (pe.hasColorData()) {
 				colorFilterMenu.setItem(colorIndex++, item);
