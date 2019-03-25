@@ -11,7 +11,8 @@ public enum CommandPermission {
 	EDIT         ("edit"),
 	CREATE       ("create"),
 	CLEAR        ("clear"),
-	CLEAR_PLAYER ("clear.player");
+	CLEAR_PLAYER ("clear.player"),
+	SET          ("set");
 	
 	public static final String ROOT = "particlehats.command.";
 	public final String value;
