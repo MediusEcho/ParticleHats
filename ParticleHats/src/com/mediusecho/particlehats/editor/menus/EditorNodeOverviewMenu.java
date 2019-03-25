@@ -69,6 +69,7 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 			Hat node = new Hat();
 			
 			node.setIndex(index);
+			node.setSlot(targetHat.getSlot());
 			nodes.add(node);
 			
 			String title = nodeTitle.replace("{1}", Integer.toString(size + 1));
@@ -114,7 +115,7 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 	{
 		super.build();
 		
-		setButton(49, backButton, (event, slot) ->
+		setButton(46, backButton, (event, slot) ->
 		{
 			menuBuilder.setTargetNodeHat(null);
 			menuBuilder.goBack();
