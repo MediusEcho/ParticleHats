@@ -3,6 +3,7 @@ main: com.mediusecho.particlehats.Core
 version: 4.0
 api-version: 1.13
 author: MediusEcho
+softdepend: [Vault, SuperVanish, PremiumVanish, VanishNoPacket, PlayerPoints]
 commands:
   h:
     description: Main command for ParticleHats
