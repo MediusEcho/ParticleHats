@@ -85,4 +85,19 @@ public class ColorData {
 	public ColorData clone (ParticleData parent) {
 		return new ColorData(parent, color, isRandom);
 	}
+	
+	@Override
+	public boolean equals (Object o)
+	{
+		if (this == o) return true;
+		if (o == null) return false;
+		if (!(o instanceof ColorData)) return false;
+		
+		ColorData data = (ColorData)o;
+		
+		if (!data.color.equals(color)) return false;
+		if (data.isRandom != isRandom) return false;
+		
+		return true;
+ 	}
 }
