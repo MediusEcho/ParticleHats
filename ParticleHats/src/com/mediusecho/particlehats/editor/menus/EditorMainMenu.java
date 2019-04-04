@@ -532,6 +532,20 @@ public class EditorMainMenu extends EditorMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		// TODO: Node Editor
+		// Potion
+		ItemStack potionItem = ItemUtil.createItem(Material.POTION, Message.EDITOR_MAIN_MENU_SET_POTION);
+		EditorLore.updatePotionDescription(potionItem, targetHat.getPotion());
+		setButton(42, potionItem, (event, slot) ->
+		{
+			EditorPotionMenu editorPotionMenu = new EditorPotionMenu(core, owner, menuBuilder, () ->
+			{
+				EditorLore.updatePotionDescription(getItem(42), targetHat.getPotion());
+			}); 
+			menuBuilder.addMenu(editorPotionMenu);
+			editorPotionMenu.open();
+			return EditorClickType.NEUTRAL;
+		});
+		
+		// TODO: Potion Menu
 	}
 }
