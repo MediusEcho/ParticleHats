@@ -25,6 +25,12 @@ public class IconData {
 		setMainMaterial(Material.SUNFLOWER);
 	}
 	
+	public IconData (List<Material> materials)
+	{
+		this.materials = materials;
+		setMainMaterial(materials.get(0));
+	}
+	
 	/**
 	 * Set this IconData's IconDisplayMode
 	 * @param displayMode
