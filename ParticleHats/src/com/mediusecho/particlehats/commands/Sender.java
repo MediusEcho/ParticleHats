@@ -79,8 +79,21 @@ public class Sender {
 	 * @param permission
 	 * @return
 	 */
-	public boolean hasPermission (CommandPermission permission) {
-		return isConsoleSender ? true : (playerSender.hasPermission(permission.value) || playerSender.hasPermission(CommandPermission.ALL.value));
+	public boolean hasPermission (CommandPermission permission) 
+	{
+		if (isConsoleSender) {
+			return true;
+		}
+		
+		if (playerSender.hasPermission(permission.getPermission())) {
+			return true;
+		}
+		
+		if (playerSender.hasPermission(CommandPermission.ALL.getPermission())) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
