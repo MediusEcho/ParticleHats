@@ -24,10 +24,10 @@ public class CreateCommand extends Command {
 			
 			if (database.menuExists(menuName))
 			{
-				sender.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS);
+				sender.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS.getValue().replace("{1}", menuName));
 				return false;
 			}
-			database.createEmptyMenu(menuName);
+			database.createMenu(menuName);
 			
 			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 			MenuBuilder menuBuilder = playerState.getMenuBuilder();
