@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.Hat;
@@ -24,6 +23,7 @@ import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
+import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public class PixelEffect extends Effect {
@@ -49,14 +49,6 @@ public class PixelEffect extends Effect {
 	{
 		this(null, "");
 	}
-	
-//	public void rebuild (double scale)
-//	{
-//		this.scale = scale;
-//		pixels.clear();
-//		
-//		build();
-//	}
 	
 	/**
 	 * Get this custom effects image name
@@ -118,6 +110,7 @@ public class PixelEffect extends Effect {
 	@Override
 	public void build() 
 	{
+		// TODO: Center pixel position relative to center
 		if (image != null)
 		{
 			int width = image.getWidth();
@@ -171,10 +164,6 @@ public class PixelEffect extends Effect {
 			double angleXRad = Math.toRadians(angle.getX());
 			double angleYRad = Math.toRadians(angle.getY());
 			double angleZRad = Math.toRadians(angle.getZ());
-			
-			if (((Player)entity).isSneaking()) {
-				Core.debug("image is null? " + image == null);
-			}
 			
 			for (PixelData pixelData : pixels)
 			{
@@ -249,6 +238,21 @@ public class PixelEffect extends Effect {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean equals (Object o)
+	{
+		if (this == o) return true;
+		if (o == null) return false;
+		if (!(o instanceof PixelEffect)) return false;
+		
+		PixelEffect effect = (PixelEffect)o;
+		
+		if (!ResourceUtil.compareImages(effect.image, image)) return false;
+		if (!effect.name.equals(name)) return false;
+		
+		return true;
 	}
 
 	public class PixelData {
