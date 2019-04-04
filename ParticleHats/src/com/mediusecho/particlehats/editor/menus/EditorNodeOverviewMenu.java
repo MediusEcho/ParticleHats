@@ -15,8 +15,6 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-// TODO: Add Delete option
-
 public class EditorNodeOverviewMenu extends EditorListMenu {
 
 	private final Hat targetHat;
@@ -91,7 +89,9 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 		super.onDelete(slot);
 		
 		int index = getClampedIndex(slot, 10, 2);
-		targetHat.getNodes().remove(index);
+		Hat node = targetHat.getNodes().remove(index);
+		
+		core.getDatabase().deleteNode(menuBuilder.getMenuName(), node.getSlot(), node.getIndex());
 		
 		for (int i = index; i <= 27; i++)
 		{
