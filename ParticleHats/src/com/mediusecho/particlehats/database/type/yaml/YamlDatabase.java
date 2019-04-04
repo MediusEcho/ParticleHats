@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.entity.Player;
+
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.MenuInventory;
@@ -18,7 +20,7 @@ public class YamlDatabase implements Database {
 	}
 	
 	@Override
-	public MenuInventory loadInventory (String menuName) 
+	public MenuInventory loadInventory (String menuName, Player player) 
 	{
 		return null;
 	}
@@ -30,7 +32,7 @@ public class YamlDatabase implements Database {
 	}
 
 	@Override
-	public void createEmptyMenu(String menuName) {
+	public void createMenu(String menuName) {
 		
 	}
 
@@ -43,9 +45,14 @@ public class YamlDatabase implements Database {
 	public void deleteHat(String menuName, int slot) {
 		
 	}
+	
+	@Override
+	public void deleteNode(String menuName, int slot, int nodeIndex) {
+		
+	}
 
 	@Override
-	public void loadHatData(String menuName, int slot, Hat hat) {
+	public void loadHat(String menuName, int slot, Hat hat) {
 		
 	}
 
@@ -60,10 +67,10 @@ public class YamlDatabase implements Database {
 		return null;
 	}
 
-	@Override
-	public void changeSlot(String menuName, int previousSlot, int newSlot, boolean swapping) {
-		
-	}
+//	@Override
+//	public void changeSlot(String menuName, int previousSlot, int newSlot, boolean swapping) {
+//		
+//	}
 
 	@Override
 	public void deleteMenu(String menuName) {
@@ -96,13 +103,18 @@ public class YamlDatabase implements Database {
 	}
 
 	@Override
-	public void cloneHatData(String menuName, int currentSlot, int newSlot) {
+	public void cloneHat(String menuName, int currentSlot, int newSlot) {
 		
 	}
 
 	@Override
-	public void moveHatData(String fromMenu, String toMenu, int fromSlot, int toSlot) {
+	public void moveHat(String fromMenu, String toMenu, int fromSlot, int toSlot, boolean swapping) {
 		
+	}
+
+	@Override
+	public Hat getHatFromLabel(String label) {
+		return null;
 	}
 
 }

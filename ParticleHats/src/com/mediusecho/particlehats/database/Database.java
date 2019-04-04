@@ -4,6 +4,10 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import org.bukkit.entity.Player;
+
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.MenuInventory;
 
@@ -19,13 +23,14 @@ public interface Database {
 	 * @param menuName
 	 * @return
 	 */
-	public MenuInventory loadInventory (String menuName);
+	@Nullable
+	public MenuInventory loadInventory (String menuName, Player player);
 	
 	/**
 	 * Creates and inserts an empty menu into our database
 	 * @param menuName
 	 */
-	public void createEmptyMenu (String menuName);
+	public void createMenu (String menuName);
 	
 	/**
 	 * Deletes a menu and all it's data
@@ -56,6 +61,13 @@ public interface Database {
 	public boolean labelExists (String menuName, String label);
 	
 	/**
+	 * Loads a hat with the given label
+	 * @param label
+	 * @return
+	 */
+	public Hat getHatFromLabel (String label);
+	
+	/**
 	 * Inserts a new hat entry into the database
 	 * @param menuName
 	 * @param slot
@@ -68,7 +80,7 @@ public interface Database {
 	 * @param slot
 	 * @param hat
 	 */
-	public void loadHatData (String menuName, int slot, Hat hat);
+	public void loadHat (String menuName, int slot, Hat hat);
 	
 	/**
 	 * Creates a duplicate copy of this hat in a different slot
@@ -76,29 +88,37 @@ public interface Database {
 	 * @param currentSlot
 	 * @param newSlot
 	 */
-	public void cloneHatData (String menuName, int currentSlot, int newSlot);
+	public void cloneHat (String menuName, int currentSlot, int newSlot);
 	
 	/**
 	 * Moves this hat and all data to a new menu
-	 * @param fromMenu
-	 * @param toMenu
+	 * @param fromMenu Current menu the hat is inside of
+	 * @param toMenu Menu we're moving this hat to, leave as <b>NULL</b> if moving slots in the same menu
+	 * @param fromSlot Current slot the hat is in
+	 * @param toSlot New slot the hat will be moved to
+	 * @param swapping Swap this hat with the hat existing at the toSlot slot
+	 */
+	public void moveHat (String fromMenu, String toMenu, int fromSlot, int toSlot, boolean swapping);
+	
+	/**
+	 * Deletes a hat from this menu
+	 * @param menuName
 	 * @param slot
 	 */
-	public void moveHatData (String fromMenu, String toMenu, int fromSlot, int toSlot);
+	public void deleteHat (String menuName, int slot);
+	
+	/**
+	 * Deletes a node from this menu
+	 * @param menuName
+	 * @param slot
+	 */
+	public void deleteNode (String menuName, int slot, int nodeIndex);
 	
 	/**
 	 * Gets all stored images on the database
 	 * @return
 	 */
 	public Map<String, BufferedImage> getImages (boolean forceUpdate);
-	
-	/**
-	 * Save this hats meta data to the menu
-	 * @param menuName
-	 * @param hat
-	 * @param type
-	 */
-	public void saveMetaData (String menuName, Hat hat, DataType type, int index);
 	
 	/**
 	 * Save this hats particle data to the menu
@@ -108,13 +128,14 @@ public interface Database {
 	public void saveParticleData (String menuName, Hat hat, int index);
 	
 	/**
-	 * Deletes this hat from the database
+	 * Save this hats meta data to the menu
 	 * @param menuName
-	 * @param slot
+	 * @param hat
+	 * @param type
 	 */
-	public void deleteHat (String menuName, int slot);
+	public void saveMetaData (String menuName, Hat hat, DataType type, int index);
 	
-	public void changeSlot (String menuName, int previousSlot, int newSlot, boolean swapping);
+	//public void changeSlot (String menuName, int previousSlot, int newSlot, boolean swapping);
 	
 	public void saveMenuTitle (String menuName, String title);
 	

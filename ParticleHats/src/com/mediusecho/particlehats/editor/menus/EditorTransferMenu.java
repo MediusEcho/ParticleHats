@@ -26,7 +26,7 @@ public class EditorTransferMenu extends EditorMenu {
 		super(core, owner, menuBuilder);
 		this.menuName = menuName;
 		
-		menuInventory = core.getDatabase().loadInventory(menuName);
+		menuInventory = core.getDatabase().loadInventory(menuName, owner);
 		inventory = Bukkit.createInventory(null, menuInventory.getSize(), EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_MOVE_MENU_TITLE));
 		
 		build();
@@ -45,7 +45,7 @@ public class EditorTransferMenu extends EditorMenu {
 			
 			int currentSlot = menuBuilder.getBaseHat().getSlot();
 			
-			core.getDatabase().moveHatData(menuBuilder.getMenuName(), menuName, currentSlot,slot);
+			core.getDatabase().moveHat(menuBuilder.getMenuName(), menuName, currentSlot, slot, false);
 			menuBuilder.getEditingMenu().removeButton(currentSlot);
 			menuBuilder.openEditingMenu();
 			

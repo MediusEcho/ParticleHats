@@ -15,6 +15,7 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
 
@@ -71,7 +72,7 @@ public class EditorBaseMenu extends EditorMenu {
 				if (clickedHat != null)
 				{
 					if (!clickedHat.isLoaded()) {
-						core.getDatabase().loadHatData(getName(), slot, clickedHat);
+						core.getDatabase().loadHat(getName(), slot, clickedHat);
 					}
 					
 					menuBuilder.setTargetHat(clickedHat);
@@ -306,17 +307,17 @@ public class EditorBaseMenu extends EditorMenu {
 		
 		menuBuilder.setTargetSlot(newSlot);
 		
-		core.getDatabase().changeSlot(getName(), currentSlot, newSlot, swapping);
+		core.getDatabase().moveHat(getName(), null, currentSlot, newSlot, swapping);
 	}
 	
 	public void cloneHat (int currentSlot, int newSlot)
 	{
 		Hat currentHat = getHat(currentSlot);
-		Hat clonedHat = currentHat.visualCopy();
+		Hat clonedHat = currentHat.visualClone();
 		
 		setHat(newSlot, clonedHat);
 		setButton(newSlot, new ItemStack(clonedHat.getMaterial()), existingParticleAction);
-		core.getDatabase().cloneHatData(getName(), currentSlot, newSlot);
+		core.getDatabase().cloneHat(getName(), currentSlot, newSlot);
 	}
 	
 	public void onHatNameChange (Hat hat, int slot) {
@@ -376,8 +377,13 @@ public class EditorBaseMenu extends EditorMenu {
 			}
 			
 			Hat hat = menuInventory.getHat(i);
-			if (hat != null) {
+			if (hat != null) 
+			{
 				setHat(i, hat);
+				
+				if (hat.getLeftClickAction() == ParticleAction.EQUIP || hat.getRightClickAction() == ParticleAction.EQUIP) {
+					EditorLore.updateHatGenericDescription(getItem(i), hat);
+				}
 			}
 		}
 	}
