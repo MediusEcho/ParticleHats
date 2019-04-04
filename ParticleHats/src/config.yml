@@ -25,10 +25,6 @@ disabled-worlds: []
 # Checks to see if a player has permission to use particles for the world they're in.
 check-world-permission: false
 #
-# Custom message that is added to the description of every hat a player has equipped.
-# Lets them know that they have already equipped this hat
-hat-equipped-tooltip: []
-#
 # Closes the players menu any time they equip a hat
 close-menu-on-equip: true
 #
@@ -58,6 +54,9 @@ flags:
   #
   # Enable Vault and use any economy plugin you want to unlock hats
   vault: false
+  #
+  # Enable PlayerPoints economy
+  playerpoints: false
   #
   # Allow players to unlock hats using their experience points
   experience: false
