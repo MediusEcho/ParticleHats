@@ -23,8 +23,6 @@ import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorColorMenu extends EditorMenu {
-
-	// TODO: color not saving
 	
 	private Map<Integer, Color> colors;
 	

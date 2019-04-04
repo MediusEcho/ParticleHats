@@ -82,6 +82,13 @@ public class EditorParticleOverviewMenu extends EditorMenu {
 				database.saveParticleData(menuBuilder.getMenuName(), targetHat, particles.getKey());
 			}
 		}
+		
+		for (int i = 0; i < targetHat.getType().getParticlesSupported(); i++)
+		{
+			if (targetHat.getParticleData(i).hasPropertyChanges()) {
+				database.saveParticleData(menuBuilder.getMenuName(), targetHat, i);
+			}
+		}
 	}
 
 	@Override
