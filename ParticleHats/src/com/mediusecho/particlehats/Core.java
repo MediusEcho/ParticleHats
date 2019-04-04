@@ -6,22 +6,38 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.DatabaseType;
+import com.mediusecho.particlehats.editor.MetaState;
+import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.CommandManager;
 import com.mediusecho.particlehats.managers.EventManager;
+import com.mediusecho.particlehats.managers.HookManager;
+import com.mediusecho.particlehats.managers.MenuManager;
 import com.mediusecho.particlehats.managers.ParticleManager;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
+import com.mediusecho.particlehats.tasks.ParticleTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
 
 @SuppressWarnings("unused")
 public class Core extends JavaPlugin {
 
+	// TODO: Purchasing saving / loading
+	
+	// TODO: [Opt] Add menu cache feature, only load menus that have changes
+	
+	// TODO: [?] Separate menu for block-fixed particles?
+	// Store fixed particles in a menu that is separate from player menus
+	// Players can sort by nearest and teleport to the particle
+	
 	public static Core instance;
 	private static Logger logger;
 	
@@ -29,9 +45,14 @@ public class Core extends JavaPlugin {
 	private DatabaseType databaseType;
 	
 	// Managers
+	private MenuManager menuManager;
 	private EventManager eventManager;
 	private CommandManager commandManager;
 	private ParticleManager particleManager;
+	private HookManager hookManager;
+	
+	// Configuration files
+	CustomConfig locale;
 	
 	// Player State
 	private Map<UUID, PlayerState> playerState;
@@ -42,6 +63,7 @@ public class Core extends JavaPlugin {
 	// Tasks
 	private MenuTask menuTask;
 	private PromptTask promptTask;
+	private ParticleTask particleTask;
 	
 	// Debugging
 	private static final boolean debugging = true;
@@ -74,6 +96,7 @@ public class Core extends JavaPlugin {
 		saveDefaultConfig();
 		
 		log("Initializing");
+		log("");
 		{		
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
@@ -85,6 +108,7 @@ public class Core extends JavaPlugin {
 				log("Error: " + e.getClass().getSimpleName());
 				log("Switching to yaml");
 				log("---------------------------------------------------");
+				log("");
 				
 				databaseType = DatabaseType.YAML;
 				database = DatabaseType.YAML.getDatabase();
@@ -93,16 +117,19 @@ public class Core extends JavaPlugin {
 			// Initialize our player state map
 			playerState = new HashMap<UUID, PlayerState>();
 			
+			// Create our configuration files
+			locale = new CustomConfig(this, "", "messages.yml", true);
+			
 			// Create our managers
-			eventManager   = new EventManager(this);
+			menuManager = new MenuManager(this);
+			eventManager = new EventManager(this);
 			commandManager = new CommandManager(this, "h");
 			particleManager = new ParticleManager(this);
+			hookManager = new HookManager(this);
 			
 			// Enable Metrics
 			Metrics metrics = new Metrics(this);
 			metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> databaseType.toString().toLowerCase()));
-			
-			// Create our tasks
 			
 			// Handles menu updates
 			menuTask = new MenuTask(this);
@@ -111,7 +138,12 @@ public class Core extends JavaPlugin {
 			// Handles meta editing prompts
 			promptTask = new PromptTask(this);
 			promptTask.runTaskTimer(this, 0, 40);
+			
+			// Handles displaying particles
+			particleTask = new ParticleTask(this);
+			particleTask.runTaskTimer(this, 0, 1);
 		}
+		log("");
 		log("" + this.getDescription().getVersion() + " loaded");
 	}
 	
@@ -122,6 +154,19 @@ public class Core extends JavaPlugin {
 		
 		menuTask.cancel();
 		promptTask.cancel();
+		particleTask.cancel();
+	}
+	
+	public void onReload ()
+	{
+		locale.reload();
+		reloadConfig();
+		
+		SettingsManager.onReload();
+		Message.onReload();
+		
+		particleTask.onReload();
+		hookManager.onReload();
 	}
 	
 	/**
@@ -141,11 +186,27 @@ public class Core extends JavaPlugin {
 	}
 	
 	/**
+	 * Get the MenuManager class
+	 * @return
+	 */
+	public MenuManager getMenuManager () {
+		return menuManager;
+	}
+	
+	/**
 	 * Get the ParticleManager class
 	 * @return
 	 */
 	public ParticleManager getParticleManager () {
 		return particleManager;
+	}
+	
+	/**
+	 * Get the HookManager class
+	 * @return
+	 */
+	public HookManager getHookManager () {
+		return hookManager;
 	}
 	
 	/**
@@ -159,7 +220,7 @@ public class Core extends JavaPlugin {
 			return playerState.get(id);
 		}
 		
-		PlayerState state = new PlayerState();
+		PlayerState state = new PlayerState(Bukkit.getPlayer(id));
 		playerState.put(id, state);
 		
 		return state;
@@ -171,6 +232,41 @@ public class Core extends JavaPlugin {
 	 */
 	public Boolean canUseBungee () {
 		return supportsBaseComponent;
+	}
+	
+	/**
+	 * Gets the current server version
+	 * @return
+	 */
+	public int getServerVersion() 
+	{
+		String version = Bukkit.getServer().getClass().getPackage().getName().substring(23);
+		return Integer.parseInt(version.split("_")[1]);
+	}
+	
+	/**
+	 * Get this plugins CommandManager
+	 * @return
+	 */
+	public CommandManager getCommandManager () {
+		return commandManager;
+	}
+	
+	/**
+	 * Gets the CustomConfig responsible for our plugins locale
+	 * @return
+	 */
+	public CustomConfig getLocaleConfig () {
+		return locale;
+	}
+	
+	/**
+	 * Sends the player a message using their Action Bar
+	 * @param player
+	 * @param message
+	 */
+	public void prompt (Player player, MetaState message) {
+		promptTask.prompt(player, message.getDescription());
 	}
 	
 	/**
