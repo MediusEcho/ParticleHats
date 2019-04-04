@@ -262,9 +262,9 @@ public abstract class EditorMenu {
 			Sound sound = SettingsManager.EDITOR_SOUND_ID.getSound();
 			if (sound != null)
 			{
-				float volume = SettingsManager.EDITOR_SOUND_VOLUME.getFloat();
-				float pitch = SettingsManager.EDITOR_SOUND_PITCH.getFloat();
-				float modifier = clickType.getModifier();
+				float volume = (float) SettingsManager.EDITOR_SOUND_VOLUME.getDouble();
+				float pitch = (float) SettingsManager.EDITOR_SOUND_PITCH.getDouble();
+				float modifier = (float) clickType.getModifier();
 				float p = (float) MathUtil.clamp(pitch + modifier, 0, 2);
 				
 				owner.playSound(owner.getLocation(), sound, volume, p);
@@ -436,7 +436,7 @@ public abstract class EditorMenu {
 	 * @author MediusEcho
 	 *
 	 */
-	protected enum EditorClickType {
+	public enum EditorClickType {
 		
 		/**
 		 * The player is not clicking inside a menu
@@ -458,13 +458,13 @@ public abstract class EditorMenu {
 		 */
 		NEGATIVE;
 		
-		public float getModifier ()
+		public double getModifier ()
 		{
 			if (this == NONE || this == NEUTRAL) {
 				return 0;
 			}
 			
-			float mod = SettingsManager.EDITOR_SOUND_MODIFIER.getFloat();
+			double mod = SettingsManager.EDITOR_SOUND_MODIFIER.getDouble();
 			return mod * (this == POSITIVE ? 1f : -1f);
 		}
 	}
