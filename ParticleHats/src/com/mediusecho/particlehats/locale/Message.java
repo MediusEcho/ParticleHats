@@ -11,10 +11,22 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public enum Message {
 	
-	UNKNOWN ("&cUnknown Message"),
+	// TODO: override messages.yml with any changes
 	
-	HAT_EQUIPPED ("{1} &7equipped"),
-	HAT_EQUIPPED_VANISHED ("{1} &7equipped while vanished"),
+	UNKNOWN            ("&cUnknown Message"),
+	INSUFFICIENT_FUNDS ("&cYou don't have enough {1} to purchase this hat"),
+	
+	HAT_EQUIPPED_DESCRIPTION ("&3Equipped"),
+	HAT_EQUIPPED             ("{1} &7equipped"),
+	HAT_EQUIPPED_VANISHED    ("{1} &7equipped while vanished"),
+	HAT_NO_PERMISSION        ("&cYou don't have permission for this hat"),
+	
+	/**
+	 * World
+	 */
+	
+	WORLD_DISABLED ("&cParticles are disabled in this world"),
+	WORLD_NO_PERMISSION ("&cYou don't have permission for this world"),
 	
 	/**
 	 * Commands
@@ -26,6 +38,7 @@ public enum Message {
 	COMMAND_ERROR_PLAYER_ONLY    ("&cYou must be a player to use this command, try &7/h help"),
 	COMMAND_ERROR_ARGUMENTS      ("&cWrong number of arguments"),
 	COMMAND_ERROR_MENU_EXISTS    ("&7'&c{1}&7' already exists"),
+	COMMAND_ERROR_UNKNOWN_MENU   ("&cUnable to find '&7{1}&c'"),
 	COMMAND_ERROR_UNKNOWN_PLAYER ("&7Unable to find '&c{1}&7'"),
 	COMMAND_ERROR_OFFLINE_PLAYER ("&7'&c{1}&7' is offline"),
 	
@@ -66,9 +79,12 @@ public enum Message {
 	COMMAND_OPEN_DESCRIPTION ("Opens a menu"),
 	COMMAND_OPEN_USAGE       ("/h open <menu name>"),
 	
+	// Particles Command
+	COMMAND_PARTICLE_DESCRIPTION ("Lets players manage their equipped particles"),
+	COMMAND_PARTICLE_USAGE       ("/h particles"),
+	
 	// Set
-	// TODO: Add description
-	COMMAND_SET_DESCRIPTION (""),
+	COMMAND_SET_DESCRIPTION ("Creates a new hat from the given label and equips it to the player"),
 	COMMAND_SET_USAGE       ("/h set <player> <label> <tellPlayer true|false>"),
 	COMMAND_SET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
 	COMMAND_SET_ALREADY_SET ("&c{1} is already wearing this hat"),
@@ -341,9 +357,14 @@ public enum Message {
 	 * Menu Editor Properties
 	 */
 	
+	// Active Particles
+	EDITOR_ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
+	EDITOR_ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8» &e{1=&2Active}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
+	
 	// General
 	EDITOR_MISC_MAIN_MENU     ("&6Main Menu"),
 	EDITOR_MISC_GO_BACK       ("&6Back"),
+	EDITOR_MISC_CLOSE         ("&6Close"),
 	EDITOR_MISC_EQUIP         ("&bTry it on"),
 	EDITOR_MISC_NEW_PARTICLE  ("&bNew Particle"),
 	EDITOR_MISC_NEXT_PAGE     ("&3Next Page"),
@@ -436,7 +457,7 @@ public enum Message {
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_SINGLE   ("&8» &e{1}"),
 	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_MULTIPLE ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	EDITOR_MAIN_MENU_NODE_DESCRIPTION                     ("&8Add a new hat,/n&8or edit an existing one"),
-	
+	EDITOR_MAIN_MENU_POTION_DESCRIPTION                   ("/n&8Current:/n&8» &e{1=&cNot Set} {2}/n/n&3Click to Change"),
 	EDITOR_MAIN_MENU_NO_PARTICLES_DESCRIPTION             ("&8Select a Type that supports particles"),
 	
 	// Type Menu
@@ -449,9 +470,11 @@ public enum Message {
 	EDITOR_TYPE_MENU_NO_CUSTOM_TYPES         ("&cNo Custom Types Found"),
 	
 	// Potion Menu
-	EDITOR_POTION_MENU_TITLE        ("Select a Potion {1}/{2}"),
-	EDITOR_POTION_MENU_POTION_TITLE ("&b{1}"),
-	EDITOR_POTION_MENU_SET_STRENGTH ("&bSet Strength"),
+	EDITOR_POTION_MENU_TITLE                ("Select a Potion {1}/{2}"),
+	EDITOR_POTION_MENU_POTION_TITLE         ("&b{1}"),
+	EDITOR_POTION_MENU_POTION_DESCRIPTION   ("{1=&3Click to Select}{2=&3Selected}"),
+	EDITOR_POTION_MENU_SET_STRENGTH         ("&bSet Strength"),
+	EDITOR_POTION_MENU_STRENGTH_DESCRIPTION ("/n&8Strength: &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
 	
 	// Move Menu
 	EDITOR_MOVE_MENU_TITLE                ("Move to ({1=...})"),
@@ -586,6 +609,19 @@ public enum Message {
 	
 	EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION    ("/n&8» &r{1=&cEmpty}/n/n&3Left Click to Edit/n&cShift Right Click to Delete"),
 	EDITOR_DESCRIPTION_MENU_PREVIEW_DESCRIPTION ("{1=&cEmpty}{2=/n&cShift Right Click to Clear}"),
+	
+	// Tag Overview Menu
+	EDITOR_TAG_OVERVIEW_MENU_TITLE           ("Edit Tags"),
+	EDITOR_TAG_OVERVIEW_MENU_ADD_TAG         ("&bAdd a Tag"),
+	EDITOR_TAG_OVERVIEW_MENU_TAG_TITLE       ("&b{1}"),
+	
+	EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION ("&cShift Right Click to Delete"),
+	EDITOR_TAG_OVERVIEW_MENU_INFO_TITLE      ("&bWhat are Tags?"),
+	EDITOR_TAG_OVERVIEW_MENU_INFO            ("&8Tags are experimental features/n&8that may, or may not stay/n&8depending on their popularity"),//("&8Tags are experimental features/n&8that don't quite have/n&8a place of their own yet."),
+	
+	// Tag Menu
+	EDITOR_TAG_MENU_TITLE     ("Select a Tag"),
+	EDITOR_TAG_MENU_TAG_TITLE ("&b{1}"),
 	
 	// ItemStack menu
 	EDITOR_ITEMSTACK_MENU_TITLE          ("Add or Remove Items"),
