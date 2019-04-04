@@ -15,7 +15,6 @@ import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorMetaMenu extends EditorMenu {
 
@@ -195,8 +194,14 @@ public class EditorMetaMenu extends EditorMenu {
 		});
 		
 		// Tags
-		ItemStack tagItem = ItemUtil.createItem(Material.TRIPWIRE_HOOK, StringUtil.colorize("&c&lWIP"));
-		setItem(31, tagItem);
+		ItemStack tagItem = ItemUtil.createItem(Material.BOWL, Message.EDITOR_META_MENU_SET_TAG);
+		setButton(31, tagItem, (event, slot) ->
+		{
+			EditorTagOverviewMenu editorTagOverviewMenu = new EditorTagOverviewMenu(core, owner, menuBuilder);
+			menuBuilder.addMenu(editorTagOverviewMenu);
+			editorTagOverviewMenu.open();
+			return EditorClickType.NEUTRAL;
+		});
 	}
 
 }
