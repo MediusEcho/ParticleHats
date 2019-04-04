@@ -191,4 +191,24 @@ public class ParticleData {
 		
 		return data;
 	}
+	
+	@Override
+	public boolean equals (Object o)
+	{
+		if (this == o) return true;
+		if (o == null) return false;
+		if (!(o instanceof ParticleData)) return false;
+		
+		ParticleData data = (ParticleData)o;
+		
+		if (!data.particle.equals(particle)) return false;
+		if (!data.item.equals(item)) return false;
+		if (!data.block.equals(block)) return false;
+		if (data.scale != scale) return false;
+		
+		if (!data.color.equals(color)) return false;
+		if (!data.stackData.equals(stackData)) return false;
+		
+		return true;
+	}
 }
