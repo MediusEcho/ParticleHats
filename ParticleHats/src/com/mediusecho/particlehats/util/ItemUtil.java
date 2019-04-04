@@ -119,7 +119,7 @@ public class ItemUtil {
 	 * @return
 	 */
 	public static ItemStack createItem (Material material, Message title) {
-		return ItemUtil.createItem(material, 1, title.getValue());
+		return createItem(material, 1, title.getValue());
 	}
 	
 	/**
@@ -130,7 +130,18 @@ public class ItemUtil {
 	 * @return
 	 */
 	public static ItemStack createItem (Material material, Message title, Message description) {
-		return ItemUtil.createItem(material, title.getValue(), StringUtil.parseDescription(description.getValue()));
+		return createItem(material, title.getValue(), StringUtil.parseDescription(description.getValue()));
+	}
+	
+	/**
+	 * 
+	 * @param material
+	 * @param title
+	 * @param description
+	 * @return
+	 */
+	public static ItemStack createItem (Material material, String title, Message description) {
+		return createItem(material, title, StringUtil.parseDescription(description.getValue()));
 	}
 	
 	/**
@@ -183,6 +194,10 @@ public class ItemUtil {
 		item.setItemMeta(itemMeta);
 	}
 	
+	public static void setNameAndDescription (ItemStack item, String name, String... description) {
+		setNameAndDescription(item, name, Arrays.asList(description));
+	}
+	
 	/**
 	 * Gives this item a shiny glimmer
 	 * @param item
@@ -192,6 +207,14 @@ public class ItemUtil {
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.addItemFlags(ItemFlag.values());
 		itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 0, true);
+		
+		item.setItemMeta(itemMeta);
+	}
+	
+	public static void stripHighlight (ItemStack item)
+	{
+		ItemMeta itemMeta = item.getItemMeta();
+		itemMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
 		
 		item.setItemMeta(itemMeta);
 	}
