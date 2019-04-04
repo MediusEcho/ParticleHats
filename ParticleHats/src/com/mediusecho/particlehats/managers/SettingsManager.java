@@ -75,9 +75,9 @@ public enum SettingsManager {
 	EDITOR_META_TIME_LIMIT ("editor.meta-time-limit", Type.INT,     30),
 	EDITOR_SOUND_ENABLED   ("editor.sound.enabled",   Type.BOOLEAN, true),
 	EDITOR_SOUND_ID        ("editor.sound.id",        Type.SOUND,   Sound.BLOCK_METAL_PLACE),
-	EDITOR_SOUND_VOLUME    ("editor.sound.volume",    Type.FLOAT,   1.0),
-	EDITOR_SOUND_PITCH     ("editor.sound.pitch",     Type.FLOAT,   1.0),
-	EDITOR_SOUND_MODIFIER  ("editor.sound.modifier",  Type.FLOAT,   0.25);
+	EDITOR_SOUND_VOLUME    ("editor.sound.volume",    Type.DOUBLE,   1.0),
+	EDITOR_SOUND_PITCH     ("editor.sound.pitch",     Type.DOUBLE,   1.0),
+	EDITOR_SOUND_MODIFIER  ("editor.sound.modifier",  Type.DOUBLE,   0.25);
 	
 	
 	private final String key;
@@ -135,8 +135,8 @@ public enum SettingsManager {
 	 * Returns the Float value of this enum, or -1.0
 	 * @return
 	 */
-	public float getFloat () {
-		return dataType.equals(Type.FLOAT) ? Float.valueOf(asString()): -1.0f;
+	public double getDouble () {
+		return dataType.equals(Type.DOUBLE) ? (double)getData() : -1.0f;
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public enum SettingsManager {
 	private enum Type
 	{
 		INT,
-		FLOAT,
+		DOUBLE,
 		STRING,
 		BOOLEAN,
 		MATERIAL,
