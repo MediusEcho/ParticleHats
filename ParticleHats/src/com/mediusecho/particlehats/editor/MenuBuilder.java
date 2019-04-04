@@ -2,9 +2,7 @@ package com.mediusecho.particlehats.editor;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.List;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -21,10 +19,7 @@ import com.mediusecho.particlehats.ui.MenuState;
 
 public class MenuBuilder {
 
-	// TODO: Are we using the owner properties?
 	private final Core core;
-	private final Player owner;
-	private final UUID ownerID;
 	private PlayerState ownerState;
 	
 	private Deque<EditorMenu> activeMenus;
@@ -38,8 +33,6 @@ public class MenuBuilder {
 	public MenuBuilder (final Core core,  final Player owner, final PlayerState ownerState, MenuInventory inventory)
 	{
 		this.core = core;
-		this.owner = owner;
-		this.ownerID = owner.getUniqueId();
 		this.ownerState = ownerState;
 		
 		activeMenus = new ArrayDeque<EditorMenu>();
@@ -83,7 +76,7 @@ public class MenuBuilder {
 					String sqlQuery = hat.getSQLUpdateQuery();
 					Core.debug("saving hat with query: " + sqlQuery);
 					
-					mysqlDatabase.saveIncremental(getEditingMenu().getName(), hats.getKey(), hat.getSQLUpdateQuery());
+					mysqlDatabase.saveIncremental(getEditingMenu().getName(), hats.getKey(), sqlQuery);
 					hat.clearPropertyChanges();
 				}
 				
