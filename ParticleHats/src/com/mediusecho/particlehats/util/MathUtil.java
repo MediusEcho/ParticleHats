@@ -16,7 +16,7 @@ public class MathUtil {
 	 * @return
 	 */
 	public static double clamp (double value, double min, double max) {
-		return Math.min(Math.max(value, min), max);
+		return round(Math.min(Math.max(value, min), max), 2);
 	}
 	
 	/**
@@ -40,6 +40,34 @@ public class MathUtil {
 	 */
 	public static int wrap (int value, int length, int offset) {
 		return (((value - offset) % length) + length) % length;
+	}
+	
+	/**
+	 * Wraps a value between the offset and length repeating<br>
+	 * eg: (offset = 4, length = 10): value(3) = 9, value(4) = 0, (value(5) = 1
+	 * @param value Value to wrap
+	 * @param length How many increments before the value is wrapped
+	 * @param offset Where to start wrapping
+	 * @return
+	 */
+	public static double wrap (double value, double length, double offset) 
+	{
+		double v = round((((value - offset) % length) + length) % length, 2);
+		return v < length ? v : offset;
+	}
+	
+	/**
+	 * Returns the Integer value of this String, or 0 if an Integer cannot be found
+	 * @param s
+	 * @return
+	 */
+	public static int valueOf (String s)
+	{
+		try {
+			return Integer.valueOf(s);
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 	
 	/**
