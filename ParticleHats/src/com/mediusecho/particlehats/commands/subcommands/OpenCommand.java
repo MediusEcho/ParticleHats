@@ -31,6 +31,8 @@ public class OpenCommand extends Command {
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
 	{
+		// TODO: Check against the console
+		
 		// No argument
 		if (args.size() == 0)
 		{
@@ -40,22 +42,21 @@ public class OpenCommand extends Command {
 		
 		if (args.size() == 1)
 		{
-			// Just grab the name without any extensions and manually add the extension
+			// Grab the name without any extensions
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
 			
 			Database database = core.getDatabase();
-			MenuInventory inventory = database.loadInventory(menuName);
+			MenuInventory inventory = database.loadInventory(menuName, sender.getPlayer());
 			
-			if (inventory != null)
+			if (inventory == null)
 			{
-				Menu menu = new StaticMenu(core, sender.getPlayer(), inventory);
-				menu.open();
+				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.getValue().replace("{1}", menuName));
+				return false;
 			}
 			
-			else
-			{
-				sender.sendMessage("Unable to find '" + menuName + "'");
-			}
+			Menu menu = new StaticMenu(core, sender.getPlayer(), inventory);
+			core.getMenuManager().openMenu(menu, true);
+			return true;
 		}
 		return false;
 	}
