@@ -40,10 +40,11 @@ public enum SettingsManager {
 	/**
 	 * Flags
 	 */
-	FLAG_VAULT      ("flags.vault",      Type.BOOLEAN, false),
-	FLAG_EXPERIENCE ("flags.experience", Type.BOOLEAN, false),
-	FLAG_PERMISSION ("flags.permission", Type.BOOLEAN, false),
-	FLAG_VANISH     ("flags.vanish",     Type.BOOLEAN, false),
+	FLAG_VAULT        ("flags.vault",        Type.BOOLEAN, false),
+	FLAG_PLAYERPOINTS ("flags.playerpoints", Type.BOOLEAN, false),
+	FLAG_EXPERIENCE   ("flags.experience",   Type.BOOLEAN, false),
+	FLAG_PERMISSION   ("flags.permission",   Type.BOOLEAN, false),
+	FLAG_VANISH       ("flags.vanish",       Type.BOOLEAN, false),
 	
 	/**
 	 * Afk / Combat cooldown and flags
