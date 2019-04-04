@@ -203,8 +203,10 @@ public abstract class Effect {
 		World world = location.getWorld();
 		
 		ParticleEffect particleEffect = hat.getParticle(index);
-		if (particleEffect == ParticleEffect.NONE) {
+		if (particleEffect == ParticleEffect.NONE) 
+		{
 			particleEffect = hat.getParticle(0); 
+			index = 0;
 		}
 		
 		if (particleEffect != ParticleEffect.NONE)
