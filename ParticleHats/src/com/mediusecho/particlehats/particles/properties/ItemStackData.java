@@ -263,4 +263,22 @@ public class ItemStackData {
 		
 		return data;
 	}
+	
+	@Override
+	public boolean equals (Object o)
+	{
+		if (this == o) return true;
+		if (o == null) return false;
+		if (!(o instanceof ItemStackData)) return false;
+		
+		ItemStackData data = (ItemStackData)o;
+		
+		if (data.duration != duration) return false;
+		if (!data.velocity.equals(velocity)) return false;
+		if (!data.items.equals(items)) return false;
+		if (data.hasGravity != hasGravity) return false;
+		if (data.hasDirectionalVelocity != hasDirectionalVelocity) return false;
+		
+		return true;
+	}
 }
