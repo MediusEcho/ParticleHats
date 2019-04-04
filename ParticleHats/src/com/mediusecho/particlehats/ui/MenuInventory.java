@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.ui;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -131,5 +132,23 @@ public class MenuInventory {
 	 */
 	public void open (Player player) {
 		player.openInventory(inventory);
+	}
+	
+	/**
+	 * Creates a copy of this MenuInventory object
+	 */
+	public MenuInventory clone ()
+	{
+		MenuInventory inventory = new MenuInventory(name, title, getSize() / 9);
+		for (Entry<Integer, Hat> entry : getHats().entrySet())
+		{
+			int slot = entry.getKey();
+			Hat hat = entry.getValue();
+			
+			inventory.setHat(slot, hat);
+			inventory.setItem(slot, getItem(slot).clone());
+		}
+		
+		return inventory;
 	}
 }
