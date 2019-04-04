@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -14,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.particles.effects.PixelEffect;
+import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.player.PlayerState.AFKState;
@@ -74,7 +77,7 @@ public class ParticleTask extends BukkitRunnable {
 					Hat hat = activeHats.get(i);
 					
 					// Skip hats that are vanished
-					if (hat.isVanished()) {
+					if (hat.isVanished() || hat.isHidden()) {
 						continue;
 					}
 					
@@ -142,14 +145,14 @@ public class ParticleTask extends BukkitRunnable {
 		{
 			case ACTIVE:
 			{
-				displayHat(player, hat);
+				displayHat(player, hat, checkNode);
 				break;
 			}
 			
 			case WHEN_MOVING:
 			{
 				if (afkState == AFKState.ACTIVE) {
-					displayHat(player, hat);
+					displayHat(player, hat, checkNode);
 				}
 				break;
 			}
@@ -157,7 +160,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_AFK:
 			{
 				if (afkState == AFKState.AFK) {
-					displayHat(player, hat);
+					displayHat(player, hat, checkNode);
 				}
 				break;
 			}
@@ -165,7 +168,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_PEACEFUL:
 			{
 				if (pvpState == PVPState.PEACEFUL) {
-					displayHat(player, hat);
+					displayHat(player, hat, checkNode);
 				}
 				break;
 			}
@@ -173,7 +176,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_GLIDING:
 			{
 				if (player.isGliding()) {
-					displayHat(player, hat);
+					displayHat(player, hat, checkNode);
 				}
 				break;
 			}
@@ -181,7 +184,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_SPRINTING:
 			{
 				if (player.isSprinting()) {
-					displayHat(player, hat);
+					displayHat(player, hat, checkNode);
 				}
 				break;
 			}
@@ -189,7 +192,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_SWIMMING:
 			{
 				if (player.isSwimming()) {
-					displayHat(player, hat);
+					displayHat(player, hat, checkNode);
 				}
 				break;
 			}
@@ -204,29 +207,75 @@ public class ParticleTask extends BukkitRunnable {
 		}
 	}
 
-	private void displayHat (Player player, Hat hat)
+	private void displayHat (Player player, Hat hat, boolean rootHat)
 	{
 		ParticleType type = hat.getType();
 		if (type != ParticleType.NONE)
 		{
-			if (!type.equals(ParticleType.CUSTOM)) {
-				type.getEffect().display(ticks, player, hat);
-			}
-			
-			else
+			// Continue if we're displaying a node, or if we can't use a tag
+			if (!rootHat || handleTags(player, hat, ticks))
 			{
-				PixelEffect customEffect = hat.getCustomEffect();
-				if (customEffect != null) {
-					customEffect.display(ticks, player, hat);
+				hat.displayType(ticks, player);
+				
+				PotionEffect potion = hat.getPotion();
+				if (potion != null) {
+					player.addPotionEffect(potion, true);
 				}
-			}
-			
-			PotionEffect potion = hat.getPotion();
-			if (potion != null) {
-				player.addPotionEffect(potion, true);
 			}
 		}
 	}
 	
-	// TODO: Easter Eggs? (tags)
+	private boolean handleTags (Player player, Hat hat, int ticks)
+	{
+		List<ParticleTag> tags = hat.getTags();
+		
+		if (tags.contains(ParticleTag.ARROWS))
+		{
+			for (Entity e : player.getNearbyEntities(50, 50, 50))
+			{
+				if (e instanceof Arrow)
+				{
+					Arrow arrow = (Arrow)e;
+					if (!arrow.isInBlock())
+					{
+						if (arrow.getShooter() instanceof Player) {
+							hat.displayType(ticks, arrow);
+						}
+					}
+				}
+			}
+			return false;
+		}
+		
+		if (tags.contains(ParticleTag.ARMOUR_STAND))
+		{
+			displayToNearestEntity(player, hat, ticks, ArmorStand.class);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private void displayToNearestEntity (Player player, Hat hat, int ticks, Class<?> entity)
+	{
+		Entity nearest = null;
+		double maxDistance = 1000;
+		
+		for (Entity e : player.getNearbyEntities(50, 10, 50))
+		{
+			if (entity.isInstance(e))
+			{
+				double distance = e.getLocation().distanceSquared(player.getLocation());
+				if (distance < maxDistance)
+				{
+					maxDistance = distance;
+					nearest = e;
+				}
+			}
+		}
+		
+		if (nearest != null) {
+			hat.displayType(ticks, nearest);
+		}
+	}
 }
