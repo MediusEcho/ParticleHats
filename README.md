@@ -1,1 +1,1 @@
-![ParticleHats](http://i.imgur.com/4kxcOsc.png?1)
+![ParticleHats](https://i.imgur.com/0DVAyL4.png)
