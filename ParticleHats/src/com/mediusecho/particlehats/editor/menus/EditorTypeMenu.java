@@ -171,9 +171,16 @@ public class EditorTypeMenu extends EditorMenu {
 				continue;
 			}
 			
+			if (type.isDebug()) 
+			{
+				if (!Core.debugging) {
+					continue;
+				}
+			}
+			
 			boolean selected = currentType.equals(type);
 			
-			String title = typePrefix + type.getDisplayName();
+			String title = typePrefix.replace("{1}", type.getDisplayName());
 			ItemStack item = ItemUtil.createItem(Material.FIREWORK_STAR, StringUtil.colorize(title));
 			EditorLore.updateTypeItemDescription(item, type, selected);
 			
@@ -227,7 +234,7 @@ public class EditorTypeMenu extends EditorMenu {
 				String name = types.getKey();
 				boolean isSelected = name.equals(currentEffectName);
 				
-				String title = typePrefix + StringUtil.capitalizeFirstLetter(name.toLowerCase());
+				String title = typePrefix.replace("{1}", StringUtil.capitalizeFirstLetter(name.toLowerCase()));
 				ItemStack item = ItemUtil.createItem(Material.FIRE_CHARGE, StringUtil.colorize(title));
 					
 				String select = isSelected ? "" : selectInfo[1];
