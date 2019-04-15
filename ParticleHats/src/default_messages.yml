@@ -1,5 +1,66 @@
+#############################################################################
+#                                                                           #
+#                    Default plugin message descriptions                    #
+#                                                                           #
+# Notes:                                                                    #
+# - {#}'s are used in messages that use extra data                          #
+# - {#=#} is used to provide optional data for messages                     #
+# - /n Will create a new line in the description                            #
+#                                                                           #
+# Notice:                                                                   #
+# This file is overridden when the server starts, create a custom .yml file #
+# if you want to customize messages. Make sure to set default_messages: in  #
+# config.yml to the file you created.                                       #
+#                                                                           #
+#############################################################################
 #
+# Called if there was an issue retrieving a message
+unknown: "&cUnknown Message"
 #
+##########################
+#          Hats          #
+##########################
 #
-# :: Will create a new line
+# Adds this description to any hats the player has equipped.
+# Only visible in menus
+hat_equipped_description: "&3Equipped"
 #
+# Sent when players equip a hat, if the hat has a custom equip message, then that one will be sent
+# {1}: The hat's display name
+hat_equipped: "{1} &7equipped"
+#
+# Sent when a player tries to equip a hat while vanished.
+# {1}: The hat's display name
+hat_equipped_vanished: "{1} &7equipped while vanished"
+#
+##########################
+#        Commands        #
+##########################
+#
+# Trying to execute an unknown command
+command_error_unknown: "&cUnknown command, try &7/h help &cfor a list of commands"
+#
+# Trying to execute a command they don't have permission for
+command_error_no_permission: "&cYou don't have permission to use this command"
+#
+# Trying to execute a player command from the server console
+command_error_player_only: "&cYou must be a player to use this command, try &7/h help"
+#
+# Missing arguments in a command
+command_error_arguments: "&cWrong number of arguments"
+#
+# Trying to create a menu that already exists
+# {1}: The name of the menu
+command_error_menu_exists: "&7'&c{1}&7' already exists"
+#
+# Trying to access a menu that doesn't exist
+# {1}: The name of the menu
+command_error_unknown_menu: "&cUnable to find '&7{1}&c'"
+#
+# Trying to reference a player that doesn't exist
+# {1}: The name of the player
+command_error_unknown_player: "&7Unable to find '&c{1}&7'"
+#
+# Trying to reference a player that isn't online
+# {1}: The name of the player
+command_error_offline_player: "&7'&c{1}&7' is offline"

@@ -95,6 +95,16 @@ public class Core extends JavaPlugin {
 		// Save default config
 		saveDefaultConfig();
 		
+		// Override our default_message.yml config
+		InputStream localStream = getResource("default_messages.yml");
+		if (localStream != null) 
+		{
+			File defaultLocale = new File(this.getDataFolder() + File.separator + "default_messages.yml");
+			try {
+				ResourceUtil.copyFile(localStream, defaultLocale);
+			} catch (IOException e) {}
+		}
+		
 		log("Initializing");
 		log("");
 		{		
@@ -118,7 +128,7 @@ public class Core extends JavaPlugin {
 			playerState = new HashMap<UUID, PlayerState>();
 			
 			// Create our configuration files
-			locale = new CustomConfig(this, "", "messages.yml", true);
+			locale = new CustomConfig(this, "", SettingsManager.DEFAULT_MESSAGES.getString(), true);
 			
 			// Create our managers
 			menuManager = new MenuManager(this);
