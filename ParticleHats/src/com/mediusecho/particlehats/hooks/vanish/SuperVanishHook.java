@@ -34,8 +34,6 @@ public class SuperVanishHook implements Listener, VanishHook {
 		PlayerHideEvent.getHandlerList().unregister(this);
 		PlayerShowEvent.getHandlerList().unregister(this);
 	}
-	
-	// TODO: [Opt] toggle visible hats and ignore hats that were hidden manually
 
 	@EventHandler
 	public void onPlayerHide (PlayerHideEvent event)
