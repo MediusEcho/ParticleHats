@@ -16,6 +16,8 @@ import com.mediusecho.particlehats.particles.effects.CapeEffect;
 import com.mediusecho.particlehats.particles.effects.CleanTrailEffect;
 import com.mediusecho.particlehats.particles.effects.CreeperEffect;
 import com.mediusecho.particlehats.particles.effects.CrystalEffect;
+import com.mediusecho.particlehats.particles.effects.Debug5x5Effect;
+import com.mediusecho.particlehats.particles.effects.Debug6x6Effect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.effects.HaloEffect;
 import com.mediusecho.particlehats.particles.effects.HelixEffect;
@@ -49,10 +51,14 @@ public enum ParticleType {
 	CREEPER_HAT    (15, new CreeperEffect()),
 	CLEAN_TRAIL    (16, new CleanTrailEffect()),
 	TORNADO        (17, new TornadoEffect()),
-	CUSTOM         (18, new PixelEffect());
+	CUSTOM         (18, new PixelEffect()),
+	DEBUG_5X5      (-1, new Debug5x5Effect(), true),
+	DEBUG_6X6      (-2, new Debug6x6Effect(), true);
 	
 	private final int id;
 	private final Effect effect;
+	
+	private final boolean debug;
 	
 	private static final Map<String, ParticleType> typeName = new HashMap<String, ParticleType>();
 	private static final Map<Integer, ParticleType> typeID = new HashMap<Integer, ParticleType>();
@@ -71,10 +77,16 @@ public enum ParticleType {
 		}
 	}
 	
-	private ParticleType (final int id, final Effect effect)
+	private ParticleType (final int id, final Effect effect, final boolean debug)
 	{
 		this.id = id;
 		this.effect = effect;
+		this.debug = debug;
+	}
+	
+	private ParticleType (final int id, final Effect effect)
+	{
+		this(id, effect, false);
 	}
 	
 	/**
@@ -147,6 +159,14 @@ public enum ParticleType {
 	 */
 	public int getID () {
 		return id;
+	}
+	
+	/**
+	 * Returns true if this Type if meant for debugging
+	 * @return
+	 */
+	public boolean isDebug () {
+		return debug;
 	}
 	
 	/**
