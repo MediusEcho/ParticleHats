@@ -192,4 +192,16 @@ public class IconData {
 	public void reset () {
 		index = 0;
 	}
+	
+	public IconData clone ()
+	{
+		IconData iconData = new IconData();
+		
+		iconData.displayMode = displayMode;
+		iconData.materials = new ArrayList<Material>(materials);
+		iconData.index = index;
+		iconData.updateFrequency = updateFrequency;
+		
+		return iconData;
+	}
 }
