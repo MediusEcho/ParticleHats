@@ -7,8 +7,10 @@ import org.bukkit.plugin.PluginManager;
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.hooks.CurrencyHook;
 import com.mediusecho.particlehats.hooks.VanishHook;
+import com.mediusecho.particlehats.hooks.economy.PlayerPointsHook;
 import com.mediusecho.particlehats.hooks.economy.VaultHook;
 import com.mediusecho.particlehats.hooks.vanish.SuperVanishHook;
+import com.mediusecho.particlehats.hooks.vanish.VanishNoPacketHook;
 
 public class HookManager {
 
@@ -65,12 +67,19 @@ public class HookManager {
 		{
 			if (pluginManager.isPluginEnabled("PlayerPoints"))
 			{
-				// TODO: PlayerPointsHook
+				currencyHook = new PlayerPointsHook();
 				Core.log("hooking into PlayerPoints");
 			}
 		}
 		
-		else {
+		else 
+		{
+//			if (SettingsManager.FLAG_VAULT.getBoolean() || SettingsManager.FLAG_PLAYERPOINTS.getBoolean())
+//			{
+//				Core.debug("Unable to find a supported economy plugin, disabling economy support");
+//				SettingsManager.FLAG_VANISH.addOverride(false);
+//				SettingsManager.FLAG_PLAYERPOINTS.addOverride(false);
+//			}
 			currencyHook = null;
 		}
 		
@@ -94,13 +103,15 @@ public class HookManager {
 			// VanishNoPacket
 			else if (pluginManager.isPluginEnabled("VanishNoPacket"))
 			{
-				// TODO: VanishNoPacketHook
+				// TODO: Check VanishNoPacket support
+				vanishHook = new VanishNoPacketHook(core);
 				Core.log("hooking into VanishNoPacket");
 			}
 			
 			else
 			{
 				Core.log("Unable to find a supported vanish plugin, disabling vanish support");
+				SettingsManager.FLAG_VANISH.addOverride(false);
 			}
 		}
 		
