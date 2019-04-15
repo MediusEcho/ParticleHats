@@ -19,12 +19,12 @@ public enum Message {
 	HAT_EQUIPPED_DESCRIPTION ("&3Equipped"),
 	HAT_EQUIPPED             ("{1} &7equipped"),
 	HAT_EQUIPPED_VANISHED    ("{1} &7equipped while vanished"),
+	HAT_EQUIPPED_OVERFLOW    ("&cYou can only equip 28 hats at a time"),
 	HAT_NO_PERMISSION        ("&cYou don't have permission for this hat"),
 	
 	/**
 	 * World
 	 */
-	
 	WORLD_DISABLED ("&cParticles are disabled in this world"),
 	WORLD_NO_PERMISSION ("&cYou don't have permission for this world"),
 	
@@ -208,7 +208,7 @@ public enum Message {
 	 * Location
 	 */
 	LOCATION_HEAD_NAME  ("Head"),
-	LOCATION_WAIST_NAME ("Waist"),
+	LOCATION_CHEST_NAME ("Chest"),
 	LOCATION_FEET_NAME  ("Feet"),
 	
 	/**
@@ -354,12 +354,15 @@ public enum Message {
 	DISPLAY_MODE_DISPLAY_RANDOMLY_NAME ("Pick icons randomly"),
 	
 	/**
+	 * Active Particles Menu
+	 */
+	ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
+	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8» &e{1=&2Active}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
+	
+	
+	/**
 	 * Menu Editor Properties
 	 */
-	
-	// Active Particles
-	EDITOR_ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
-	EDITOR_ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8» &e{1=&2Active}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
 	
 	// General
 	EDITOR_MISC_MAIN_MENU     ("&6Main Menu"),
@@ -385,7 +388,8 @@ public enum Message {
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
 	EDITOR_SLOT_DESCRIPTION        ("&3Left Click to Edit/n&3Right Click for Settings"),
 	EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}/n&7Particles: &f{7=None}/n&7Nodes: &f{8}"),
-	EDITOR_HAT_COMMAND_DESCRIPTION ("&7Slot: &f{1}/n&7Command: &f/{2}"),
+	EDITOR_HAT_COMMAND_DESCRIPTION ("&7Slot: &f{1}/n&7Left Click: &f{2}/n&7Right Click: &f{3}"),
+	EDITOR_HAT_MENU_DESCRIPTION (""),
 	
 	// Settings Menu
 	EDITOR_SETTINGS_MENU_TITLE             ("Menu Settings"),
@@ -462,7 +466,7 @@ public enum Message {
 	
 	// Type Menu
 	EDITOR_TYPE_MENU_TITLE                   ("Select a Type {1}/{2}"),
-	EDITOR_TYPE_MENU_TYPE_PREFIX             ("&e"),
+	EDITOR_TYPE_MENU_TYPE_PREFIX             ("&e{1}"),
 	EDITOR_TYPE_MENU_TYPE_DESCRIPTION        ("{1=/n/n}&8Supports &3{2} &8Particle{3=s}/n/n{4=&3Click to Select}{5=&3Selected}"),
 	EDITOR_TYPE_MENU_CUSTOM_TYPE_DESCRIPTION ("{1=&3Click to Select}{2=&3Selected}"),
 	EDITOR_TYPE_MENU_INCLUDED_FILTER         ("&bIncluded Types"),
@@ -731,6 +735,16 @@ public enum Message {
 			return messages.get(getKey());
 		}
 		return defaultValue;
+	}
+	
+	/**
+	 * Get this messages colour code translated value
+	 * @param regex
+	 * @param value
+	 * @return
+	 */
+	public String replace (String regex, String value) {
+		return getValue().replace(regex, value);
 	}
 	
 	/**
