@@ -35,11 +35,11 @@ public class Hat {
 	private String displayName             = StringUtil.colorize(name);
 	private String permission              = "all";
 	private String permissionDeniedMessage = "";
-	private String nodePath                = "";
 	private String equipMessage            = "";
 	private String leftClickArgument       = "";
 	private String rightClickArgument      = "";
 	private String label                   = "";
+	private String menu                    = "";
 	
 	private ParticleLocation location       = ParticleLocation.HEAD;
 	private ParticleAction leftAction       = ParticleAction.EQUIP;
@@ -334,6 +334,22 @@ public class Hat {
 	{
 		this.label = "";
 		setProperty("label", "NULL");
+	}
+	
+	/**
+	 * Set which menu this hat belongs to
+	 * @param menu
+	 */
+	public void setMenu (String menu) {
+		this.menu = menu;
+	}
+	
+	/**
+	 * Get which menu this hat belongs to
+	 * @return
+	 */
+	public String getMenu () {
+		return menu;
 	}
 	
 	/**
