@@ -227,6 +227,10 @@ public class ItemUtil {
 	 */
 	public static Material materialFromString (String materialName, Material fallbackMaterial)
 	{
+		if (materialName == null) {
+			return fallbackMaterial;
+		}
+		
 		try {
 			return Material.valueOf(materialName);
 		} catch (IllegalArgumentException e) {
