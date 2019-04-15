@@ -63,7 +63,6 @@ public enum MetaState {
 		sb.deleteCharAt(0);
 		
 		String value = sb.toString();
-		String parsedString = StringUtil.colorize(value);
 		String rawString = ChatColor.stripColor(value);
 		
 		Hat targetHat = menuBuilder.getBaseHat();
