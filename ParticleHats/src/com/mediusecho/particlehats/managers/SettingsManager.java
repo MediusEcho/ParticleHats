@@ -9,6 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.util.ItemUtil;
 
 public enum SettingsManager {
 
@@ -86,21 +87,8 @@ public enum SettingsManager {
 	private static Map<String, Object> data = new HashMap<String, Object>();
 	private static final Core plugin = Core.instance;
 	
-	static
-	{
-		FileConfiguration config = plugin.getConfig();
-		if (config != null)
-		{
-			for (SettingsManager entry : values())
-			{
-				Object value = config.get(entry.key);
-				if (value != null) {
-					data.put(entry.key, value);
-				} else {
-					data.put(entry.key, entry.defaultData);
-				}
-			}
-		}
+	static {
+		loadData();
 	}
 	
 	private SettingsManager (final String key, final Type dataType, Object defaultData)
@@ -120,6 +108,53 @@ public enum SettingsManager {
 			return data.get(key);
 		}
 		return defaultData;
+	}
+	
+	/**
+	 * Override the current value
+	 * @param o
+	 */
+	@SuppressWarnings("incomplete-switch")
+	public void addOverride (Object o)
+	{
+		switch (dataType)
+		{
+			case INT:
+				if (o instanceof Integer) {
+					data.put(key, (int)o);
+				}
+				break;
+				
+			case DOUBLE:
+				if (o instanceof Double) {
+					data.put(key, (double)o);
+				}
+				break;
+				
+			case STRING:
+				if (o instanceof String) {
+					data.put(key, (String)o);
+				}
+				break;
+				
+			case BOOLEAN:
+				if (o instanceof Boolean) {
+					data.put(key, (boolean)o);
+				}
+				break;
+				
+			case MATERIAL:
+				if (o instanceof Material) {
+					data.put(key, (Material)o);
+				}
+				break;
+				
+			case SOUND:
+				if (o instanceof Sound) {
+					data.put(key, (Sound)o);
+				}
+				break;
+		}
 	}
 	
 	/**
@@ -159,7 +194,7 @@ public enum SettingsManager {
 	 * @return
 	 */
 	public Sound getSound () {
-		return dataType.equals(Type.SOUND) ? Sound.valueOf(asString()) : Sound.UI_BUTTON_CLICK;
+		return dataType.equals(Type.SOUND) ? (Sound)getData() : Sound.UI_BUTTON_CLICK;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -168,11 +203,78 @@ public enum SettingsManager {
 	}
 	
 	/**
+	 * Returns the Material value of this enum
+	 * @return
+	 */
+	public Material getMaterial () {
+		return dataType.equals(Type.MATERIAL) ? (Material)getData() : (Material)defaultData;
+	}
+	
+	/**
 	 * Forces this enum's data to be returned as a String
 	 * @return
 	 */
 	public String asString () {
 		return String.valueOf(getData());
+	}
+	
+	private static void loadData ()
+	{
+		FileConfiguration config = plugin.getConfig();
+		if (config != null)
+		{
+			for (SettingsManager entry : values())
+			{
+				Object value;
+				
+				switch (entry.dataType)
+				{
+					case INT:
+						value = config.getInt(entry.key);
+						break;
+						
+					case DOUBLE:
+						value = config.getDouble(entry.key);
+						break;
+						
+					case STRING:
+						value = config.getString(entry.key);
+						break;
+						
+					case BOOLEAN:
+						value = config.getBoolean(entry.key);
+						break;
+						
+					case MATERIAL:
+						value = ItemUtil.materialFromString(config.getString(entry.key), (Material) entry.defaultData);
+						break;
+						
+					case STRING_LIST:
+						value = config.getStringList(entry.key);
+						break;
+						
+					case SOUND:
+						value = Sound.valueOf(config.getString(entry.key));
+						break;
+					
+					default:
+						value = config.get(entry.key);
+				}
+				
+				//Object value = config.get(entry.key);
+				if (value != null) {
+					data.put(entry.key, value);
+				} else {
+					data.put(entry.key, entry.defaultData);
+				}
+			}
+		}
+	}
+	
+	public static void onReload ()
+	{
+		data.clear();
+		loadData();
 	}
 	
 	private enum Type
