@@ -72,8 +72,10 @@ public class MySQLDatabase implements Database {
 	// Fetch MySQL changes every 30 seconds
 	private final long UPDATE_INTERVAL = 30000L;
 	
-	public MySQLDatabase (Core core, DatabaseCallback callback)
+	public MySQLDatabase (Core core, DatabaseConnectionCallback callback)
 	{
+		this.core = core;
+		
 		menuCache = new HashMap<String, String>();
 		imageCache = new HashMap<String, BufferedImage>();
 		

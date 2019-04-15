@@ -23,7 +23,7 @@ public enum DatabaseType {
 	 * Returns the Database object of this type
 	 * @return
 	 */
-	public Database getDatabase (Core core, DatabaseCallback callback)
+	public Database getDatabase (Core core, DatabaseConnectionCallback callback)
 	{
 		switch (this)
 		{	
@@ -55,7 +55,7 @@ public enum DatabaseType {
 	}
 	
 	@FunctionalInterface
-	public interface DatabaseCallback {
+	public interface DatabaseConnectionCallback {
 		public void onTimeout(Exception e);
 	}
 }
