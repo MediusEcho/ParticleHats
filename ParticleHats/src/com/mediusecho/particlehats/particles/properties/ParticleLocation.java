@@ -16,10 +16,11 @@ public enum ParticleLocation
 {
 	HEAD  (0, "head"),
 	FEET  (1, "feet"),
-	WAIST (2, "waist");
+	CHEST (2, "chest", "waist");
 	
 	private final int id;
 	private final String name;
+	private final String legacyName;
 	
 	private static final Map<Integer, ParticleLocation> locationID = new HashMap<Integer, ParticleLocation>();
 	private static final Map<String, ParticleLocation> locationName = new HashMap<String, ParticleLocation>();
@@ -33,10 +34,16 @@ public enum ParticleLocation
 		}
 	}
 	
-	private ParticleLocation (int id, String name)
+	private ParticleLocation (int id, String name, String legacyName)
 	{
 		this.id = id;
 		this.name = name;
+		this.legacyName = legacyName;
+	}
+	
+	private ParticleLocation (int id, String name)
+	{
+		this(id, name, "");
 	}
 	
 	/**
@@ -45,6 +52,14 @@ public enum ParticleLocation
 	 */
 	public String getName () {
 		return name;
+	}
+	
+	/**
+	 * Get this locations legacy name
+	 * @return
+	 */
+	public String getLegacyName () {
+		return legacyName.equals("") ? name : legacyName;
 	}
 	
 	/**
