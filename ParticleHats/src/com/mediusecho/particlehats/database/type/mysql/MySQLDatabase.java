@@ -113,7 +113,7 @@ public class MySQLDatabase implements Database {
 	{		
 		try (Connection connection = dataSource.getConnection())
 		{
-			String menuQuery = "SELECT * FROM menus WHERE name = ?";
+			String menuQuery = "SELECT * FROM " + Table.MENUS.getFormat() + " WHERE name = ?";
 			try (PreparedStatement menuStatement = connection.prepareStatement(menuQuery))
 			{
 				menuStatement.setString(1, menuName);
@@ -145,7 +145,7 @@ public class MySQLDatabase implements Database {
 			connect((connection) ->
 			{
 				// Menu Entry
-				String createMenuStatement= "INSERT INTO menus VALUES(?, ?, ?)";
+				String createMenuStatement= "INSERT INTO " + Table.MENUS.getFormat() + " VALUES(?, ?, ?)";
 				try (PreparedStatement statement = connection.prepareStatement(createMenuStatement))
 				{
 					statement.setString(1, menuName); // Name
@@ -193,17 +193,23 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{
-				String deleteQuery = "DELETE FROM menus WHERE name = ?";
+				String deleteQuery = "DELETE FROM " + Table.MENUS.getFormat() + " WHERE name = ?";
 				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
 				{
 					deleteStatement.setString(1, menuName);
 					if (deleteStatement.executeUpdate() >= 1)
 					{
 						String dropQuery = "DROP TABLE IF EXISTS "
-								+ "menu_" + menuName + "_meta,"
-								+ "menu_" + menuName + "_particles,"
-								+ "menu_" + menuName + "_nodes,"
-								+ "menu_" + menuName + "_items"; // Make sure the items table is deleted last since all menus reference this one
+								+ Table.META.format(menuName) + ","
+								+ Table.PARTICLES.format(menuName) + ","
+								+ Table.NODES.format(menuName) + ","
+								+ Table.ITEMS.format(menuName); // Make sure the items table is deleted last since all menus reference this one
+						
+//						String dropQuery = "DROP TABLE IF EXISTS "
+//								+ "menu_" + menuName + "_meta,"
+//								+ "menu_" + menuName + "_particles,"
+//								+ "menu_" + menuName + "_nodes,"
+//								+ "menu_" + menuName + "_items"; // Make sure the items table is deleted last since all menus reference this one
 						
 						try (PreparedStatement dropStatement = connection.prepareStatement(dropQuery)) {
 							dropStatement.executeUpdate();
@@ -230,7 +236,7 @@ public class MySQLDatabase implements Database {
 			menuCache.clear();
 			connect((connection) -> 
 			{
-				try (PreparedStatement statement = connection.prepareStatement("SELECT name, title FROM menus"))
+				try (PreparedStatement statement = connection.prepareStatement("SELECT name, title FROM " + Table.MENUS.getFormat()))
 				{
 					ResultSet set = statement.executeQuery();
 					while (set.next()) {
@@ -247,7 +253,8 @@ public class MySQLDatabase implements Database {
 	{
 		try (Connection connection = dataSource.getConnection())
 		{
-			String labelQuery = "SELECT COUNT(*) AS labels FROM menu_" + menuName + "_items WHERE label = ?";
+			String labelQuery = "SELECT COUNT(*) AS labels FROM " + Table.ITEMS.format(menuName) + " WHERE label = ?";
+			//String labelQuery = "SELECT COUNT(*) AS labels FROM menu_" + menuName + "_items WHERE label = ?";
 			try (PreparedStatement statement = connection.prepareStatement(labelQuery))
 			{
 				statement.setString(1, label);
@@ -269,7 +276,7 @@ public class MySQLDatabase implements Database {
 	{
 		StringBuilder builder = new StringBuilder();
 		for (Entry<String, String> menu : getMenus(true).entrySet()) {
-			builder.append("SELECT slot, '").append(menu.getKey()).append("' AS TableName FROM menu_").append(menu.getKey()).append("_items WHERE label = '").append(label).append("' %");
+			builder.append("SELECT slot, '").append(menu.getKey()).append("' AS TableName FROM ").append(Table.ITEMS.format(menu.getKey())).append(" WHERE label = '").append(label).append("' %");
 		}
 		builder.deleteCharAt(builder.lastIndexOf("%"));
 		builder.append("LIMIT 1");
@@ -307,7 +314,8 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{
-				String createQuery = "INSERT INTO menu_" + menuName + "_items (slot) VALUES(?)";
+				String createQuery = "INSERT INTO " + Table.ITEMS.format(menuName) + "(slot) VALUES(?)";
+//				String createQuery = "INSERT INTO menu_" + menuName + "_items (slot) VALUES(?)";
 				try (PreparedStatement createStatement = connection.prepareStatement(createQuery))
 				{
 					createStatement.setInt(1, slot);
@@ -322,8 +330,8 @@ public class MySQLDatabase implements Database {
 	{		
 		connect((connection) ->
 		{
-			String hatQuery = "SELECT * FROM menu_" + menuName + "_items WHERE slot = ?";
 			try (PreparedStatement hatStatement = connection.prepareStatement(hatQuery))
+			String hatQuery = "SELECT * FROM " + Table.ITEMS.format(menuName) + " WHERE slot = ?";
 			{
 				hatStatement.setInt(1, slot);
 				ResultSet set = hatStatement.executeQuery();
@@ -449,7 +457,7 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{				
-				String deleteQuery = "DELETE FROM menu_" + menuName + "_items WHERE slot = ?";
+				String deleteQuery = "DELETE FROM " + Table.ITEMS.format(menuName) + " WHERE slot = ?";
 				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
 				{
 					deleteStatement.setInt(1, slot);
@@ -466,7 +474,7 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{
-				String deleteQuery = "DELETE FROM menu_" + menuName + "_nodes WHERE slot = ? AND node_index = ?";
+				String deleteQuery = "DELETE FROM " + Table.NODES.format(menuName) + " WHERE slot = ? AND node_index = ?";
 				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
 				{
 					deleteStatement.setInt(1, slot);
@@ -486,7 +494,7 @@ public class MySQLDatabase implements Database {
 			imageCache.clear();
 			connect((connection) -> 
 			{
-				String imageQuery = "SELECT * FROM images";
+				String imageQuery = "SELECT * FROM " + Table.IMAGES.getFormat();
 				try (PreparedStatement imageStatement = connection.prepareStatement(imageQuery))
 				{
 					ResultSet set = imageStatement.executeQuery();
@@ -532,8 +540,8 @@ public class MySQLDatabase implements Database {
 		async(() ->
 		{
 			connect((connection) ->
-			{
-				String deleteQuery = "DELETE FROM menu_" + menuName + "_meta WHERE slot = ? AND type = ? AND line_ex = ? AND node_index = ?";
+			{				
+				String deleteQuery = "DELETE FROM " + Table.META.format(menuName) + " WHERE slot = ? AND type = ? AND line_ex = ? AND node_index = ?";
 				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
 				{
 					deleteStatement.setInt(1, hat.getSlot());
@@ -543,7 +551,7 @@ public class MySQLDatabase implements Database {
 					deleteStatement.execute();
 				}
 				
-				String insertQuery = "INSERT INTO menu_" + menuName + "_meta VALUES(?,?,?,?,?,?)";
+				String insertQuery = "INSERT INTO " + Table.META.format(menuName) + " VALUES(?,?,?,?,?,?)";
 				try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery))
 				{
 					int slot = hat.getSlot();
@@ -650,7 +658,7 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{
-				String titleQuery = "UPDATE menus SET title = ? WHERE name = ?";
+				String titleQuery = "UPDATE " + Table.MENUS.getFormat() + " SET title = ? WHERE name = ?";
 				try (PreparedStatement titleStatement = connection.prepareStatement(titleQuery))
 				{
 					titleStatement.setString(1, title);
@@ -668,7 +676,7 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{
-				String sizeQuery = "UPDATE menus SET size = ? WHERE name = ?";
+				String sizeQuery = "UPDATE " + Table.MENUS.getFormat() + " SET size = ? WHERE name = ?";
 				try (PreparedStatement sizeStatement = connection.prepareStatement(sizeQuery))
 				{
 					sizeStatement.setInt(1, rows);
@@ -676,7 +684,7 @@ public class MySQLDatabase implements Database {
 					sizeStatement.executeUpdate();
 				}
 				
-				String deleteQuery = "DELETE FROM menu_" + menuName + "_items WHERE slot >= ?";
+				String deleteQuery = "DELETE FROM " + Table.ITEMS.format(menuName) + " WHERE slot >= ?";
 				try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery))
 				{
 					deleteStatement.setInt(1, rows * 9);
