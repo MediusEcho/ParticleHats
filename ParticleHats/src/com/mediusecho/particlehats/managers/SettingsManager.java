@@ -16,12 +16,11 @@ public enum SettingsManager {
 	 * General Properties
 	 */
 	DEFAULT_MENU               ("default-menu",               Type.STRING,      "particles.yml"),
-	DEFAULT_MESSAGES           ("default-messages",           Type.STRING,      "messages.yml"),
+	DEFAULT_MESSAGES           ("default-messages",           Type.STRING,      "default_messages.yml"),
 	LOAD_INCLUDED_MENUS        ("load-included-menus",        Type.BOOLEAN,     true),
 	LOAD_INCLUDED_CUSTOM_TYPES ("load-included-custom-types", Type.BOOLEAN,     true),
 	DISABLED_WORLDS            ("disabled-worlds",            Type.STRING_LIST, new ArrayList<String>()),
 	CHECK_WORLD_PERMISSION     ("check-world-permission",     Type.BOOLEAN,     true),
-	HAT_EQUIPPED_TOOLTIP       ("hat-equipped-tooltip",       Type.STRING_LIST, new ArrayList<String>()),
 	CLOSE_MENU_ON_EQUIP        ("close-menu-on-equip",        Type.BOOLEAN,     true),
 	CURRENCY                   ("currency",                   Type.STRING,      "$"),
 	LIVE_MENUS                 ("live-menus",                 Type.BOOLEAN,     true),
