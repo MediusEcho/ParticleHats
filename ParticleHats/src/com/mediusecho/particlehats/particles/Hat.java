@@ -93,7 +93,19 @@ public class Hat {
 		normalDescription     = new ArrayList<String>();
 		permissionDescription = new ArrayList<String>();
 		tags                  = new ArrayList<ParticleTag>();
+		nodes                 = new ArrayList<Hat>();
 		particleData          = new HashMap<Integer, ParticleData>();
+		animationIndex        = new HashMap<Integer, Integer>();
+	}
+	
+	public boolean onTick ()
+	{
+		if (demoDuration > 0)
+		{
+			demoDuration--;
+			return false;
+		}
+		return true;
 	}
 	
 	/**
