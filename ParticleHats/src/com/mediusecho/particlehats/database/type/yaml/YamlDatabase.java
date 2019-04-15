@@ -3,6 +3,7 @@ package com.mediusecho.particlehats.database.type.yaml;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -67,11 +68,6 @@ public class YamlDatabase implements Database {
 		return null;
 	}
 
-//	@Override
-//	public void changeSlot(String menuName, int previousSlot, int newSlot, boolean swapping) {
-//		
-//	}
-
 	@Override
 	public void deleteMenu(String menuName) {
 		
@@ -115,6 +111,26 @@ public class YamlDatabase implements Database {
 	@Override
 	public Hat getHatFromLabel(String label) {
 		return null;
+	}
+
+	@Override
+	public void savePlayerEquippedHats(UUID id, List<Hat> hats) {
+		
+	}
+
+	@Override
+	public void loadPlayerEquippedHats(UUID id, DatabaseCallback callback) {
+		
+	}
+
+	@Override
+	public void savePlayerPurchase(UUID id, Hat hat) {
+		
+	}
+
+	@Override
+	public void loadPlayerPurchasedHats(UUID id, DatabaseCallback callback) {
+		
 	}
 
 }

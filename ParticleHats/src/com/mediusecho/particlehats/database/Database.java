@@ -2,12 +2,15 @@ package com.mediusecho.particlehats.database;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
 
+import com.mediusecho.particlehats.database.Database.DatabaseCallback;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.MenuInventory;
 
@@ -135,11 +138,32 @@ public interface Database {
 	 */
 	public void saveMetaData (String menuName, Hat hat, DataType type, int index);
 	
-	//public void changeSlot (String menuName, int previousSlot, int newSlot, boolean swapping);
-	
+	/**
+	 * Saves a menus title
+	 * @param menuName
+	 * @param title
+	 */
 	public void saveMenuTitle (String menuName, String title);
 	
+	/**
+	 * Saves a menus size
+	 * @param menuName
+	 * @param rows
+	 */
 	public void saveMenuSize (String menuName, int rows);
+	
+	public void savePlayerEquippedHats (UUID id, List<Hat> hats);
+	
+	public void loadPlayerEquippedHats (UUID id, DatabaseCallback callback);
+	
+	public void savePlayerPurchase (UUID id, Hat hat);
+	
+	public void loadPlayerPurchasedHats (UUID id, DatabaseCallback callback);
+	
+	@FunctionalInterface
+	public interface DatabaseCallback {
+		public void execute(Object o);
+	}
 	
 	public enum DataType
 	{
@@ -177,4 +201,5 @@ public interface Database {
 			return DataType.NONE;
 		}
 	}
+	
 }
