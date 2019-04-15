@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -12,15 +13,20 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.HatReference;
+import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
 import com.mediusecho.particlehats.ui.MenuState;
 
 public class PlayerState {
 	
 	private final Player owner;
+	private final UUID ownerID;
 	
 	private MenuBuilder menuBuilder;
 	private MenuState menuState         = MenuState.CLOSED;
 	private MenuState previousMenuState = MenuState.CLOSED;
+
+	private ActiveParticlesMenu activeParticlesMenu;
 	
 	private MetaState metaState = MetaState.NONE;
 	private int metaStateTime = 15;
@@ -35,16 +41,31 @@ public class PlayerState {
 	private Location afkLocation;
 	
 	private List<Hat> activeHats;
+	private List<HatReference> purchasedHats;
 	
 	public PlayerState (final Player owner)
 	{
 		this.owner = owner;
+		this.ownerID = owner.getUniqueId();
 		
 		activeHats = new ArrayList<Hat>();
+		purchasedHats = new ArrayList<HatReference>();
 	}
 	
+	/**
+	 * Get the owner of this PlayerState class
+	 * @return
+	 */
 	public Player getOwner () {
 		return owner;
+	}
+	
+	/**
+	 * Get the owners UUID
+	 * @return
+	 */
+	public UUID getOwnerID () {
+		return ownerID;
 	}
 
 	/**
@@ -87,6 +108,22 @@ public class PlayerState {
 	 */
 	public MenuState getPreviousMenuState () {
 		return previousMenuState;
+	}
+	
+	/**
+	 * Set this players active particles menu
+	 * @param activeParticlesMenu
+	 */
+	public void setActiveParticlesMenu (ActiveParticlesMenu activeParticlesMenu) {
+		this.activeParticlesMenu = activeParticlesMenu;
+	}
+	
+	/**
+	 * Get this players active particles menu
+	 * @return
+	 */
+	public ActiveParticlesMenu getActiveParticlesMenu () {
+		return activeParticlesMenu;
 	}
 	
 	/**
@@ -237,6 +274,14 @@ public class PlayerState {
 	}
 	
 	/**
+	 * Checks to see if the player can equip a hat
+	 * @return
+	 */
+	public boolean canEquip () {
+		return activeHats.size() < 28;
+	}
+	
+	/**
 	 * Removes all active hats
 	 */
 	public void clearActiveHats () {
@@ -251,8 +296,52 @@ public class PlayerState {
 		activeHats.remove(index);
 	}
 	
+	/**
+	 * Removes this hat from the players active hats list
+	 * @param hat
+	 */
 	public void removeHat (Hat hat) {
 		activeHats.remove(hat);
+	}
+	
+	/**
+	 * Adds a new purchased hat to the list
+	 * @param hat
+	 */
+	public void addPurchasedHat (Hat hat) {
+		purchasedHats.add(new HatReference(hat.getMenu(), hat.getSlot()));
+	}
+	
+	/**
+	 * Adds a new purchased hat to the list
+	 * @param hat
+	 */
+	public void addPurchasedHat (HatReference hat) {
+		purchasedHats.add(hat);
+	}
+	
+	/**
+	 * Gets a list of all purchased hats
+	 * @return
+	 */
+	public List<HatReference> getPurchasedHats () {
+		return purchasedHats;
+	}
+	
+	/**
+	 * Removes all purchased hats
+	 */
+	public void clearPurchases () {
+		purchasedHats.clear();
+	}
+	
+	/**
+	 * Checks to see if the player has purchased this hat
+	 * @param hat
+	 * @return
+	 */
+	public boolean hasPurchased (Hat hat) {
+		return purchasedHats.contains(hat);
 	}
 	
 	public enum AFKState
