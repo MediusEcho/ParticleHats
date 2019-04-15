@@ -6,8 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.hooks.VanishHook;
+import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
+import com.mediusecho.particlehats.player.PlayerState;
 
 public class ParticleManager 
 {
@@ -59,5 +66,37 @@ public class ParticleManager
 			return recentParticles.get(id);
 		}
 		return emptyRecents;
+	}
+	
+	public void equipHat (UUID id, Hat hat)
+	{
+		Player player = Bukkit.getPlayer(id);
+		PlayerState playerState = core.getPlayerState(id);
+		
+		if (playerState.canEquip())
+		{
+			boolean isVanished = false;
+			
+			if (SettingsManager.FLAG_VANISH.getBoolean())
+			{
+				VanishHook vanishHook = core.getHookManager().getVanishHook();
+				if (vanishHook != null) {
+					isVanished = vanishHook.isVanished(player);
+				}
+			}
+			
+			hat.setVanished(isVanished);
+			playerState.addHat(hat);
+			
+			if (!hat.isVanished())
+			{
+				String message = hat.getEquipMessage();
+				if (!message.equals("")) {
+					player.sendMessage(message);
+				} else {
+					player.sendMessage(Message.HAT_EQUIPPED.getValue().replace("{1}", hat.getDisplayName()));
+				}
+			}
+		}
 	}
 }
