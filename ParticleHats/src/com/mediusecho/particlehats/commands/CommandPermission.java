@@ -12,6 +12,7 @@ public enum CommandPermission {
 	CREATE       ("create"),
 	CLEAR        ("clear"),
 	CLEAR_PLAYER ("clear.player"),
+	PARTICLES    ("particles"),
 	SET          ("set");
 	
 	public static final String ROOT = "particlehats.command.";
@@ -29,5 +30,9 @@ public enum CommandPermission {
 	 */
 	public String append (String permission) {
 		return value + "." + permission;
+	}
+	
+	public String getPermission () {
+		return value;
 	}
 }
