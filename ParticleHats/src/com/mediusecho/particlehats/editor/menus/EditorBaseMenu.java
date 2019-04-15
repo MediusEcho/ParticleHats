@@ -313,10 +313,15 @@ public class EditorBaseMenu extends EditorMenu {
 	public void cloneHat (int currentSlot, int newSlot)
 	{
 		Hat currentHat = getHat(currentSlot);
-		Hat clonedHat = currentHat.visualClone();
+		Hat clonedHat = currentHat.clone();
+		
+		clonedHat.setSlot(newSlot);
 		
 		setHat(newSlot, clonedHat);
 		setButton(newSlot, new ItemStack(clonedHat.getMaterial()), existingParticleAction);
+		
+		onHatNameChange(clonedHat, newSlot);
+		
 		core.getDatabase().cloneHat(getName(), currentSlot, newSlot);
 	}
 	
