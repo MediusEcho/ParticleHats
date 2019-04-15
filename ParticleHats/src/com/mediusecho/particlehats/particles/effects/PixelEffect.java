@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.Hat;
@@ -110,15 +111,14 @@ public class PixelEffect extends Effect {
 	@Override
 	public void build() 
 	{
-		// TODO: Center pixel position relative to center
 		if (image != null)
 		{
 			int width = image.getWidth();
 			int height = image.getHeight();
 			
-			double xoffset = ((double) width / 2) - 0.5D;
-			double yoffset = (double) height / 2D;
 			double scale = 0.2;
+			double centerX = ((double) width / 2D) - 0.5;
+			double centerY = ((double) height / 2D) - 0.5;
 			
 			for (int y = 0; y < height; y++)
 			{
@@ -132,8 +132,8 @@ public class PixelEffect extends Effect {
 			        
 			        if (color.asRGB() != IGNORED_COLOR)
 			        {
-				        double xx = ((x - xoffset) * scale) * -1;
-				        double yy = (((y - yoffset) * scale) - 1D) * -1;
+			        	double xx = ((x - centerX) * -1) * scale;
+			        	double yy = ((y - centerY) * -1) * scale;
 				        
 				        pixels.add(new PixelData(new Vector(xx, yy, 0), color));
 			        }
@@ -150,6 +150,14 @@ public class PixelEffect extends Effect {
 			Location location = entity.getLocation();
 			if (hat.getTrackingMethod() == ParticleTracking.TRACK_HEAD_MOVEMENT && entity instanceof Player) {
 				location = ((Player)entity).getEyeLocation();
+			}
+			
+			if (entity instanceof Player)
+			{			
+				if (((Player)entity).isSneaking())
+				{
+					Core.debug(location);
+				}
 			}
 			
 			double yaw = Math.toRadians(location.getYaw());
@@ -253,6 +261,11 @@ public class PixelEffect extends Effect {
 		if (!effect.name.equals(name)) return false;
 		
 		return true;
+	}
+	
+	public PixelEffect clone ()
+	{
+		return new PixelEffect(image, name);
 	}
 
 	public class PixelData {
