@@ -59,13 +59,13 @@ public enum SettingsManager {
 	 * Menu Properties
 	 */
 	MENU_LOCK_HATS_WITHOUT_PERMISSION ("menu.lock-hats-without-permission", Type.BOOLEAN,  false),
-	MENU_LOCKED_ITEM_ID               ("menu.locked-item.id",               Type.MATERIAL, Material.LAPIS_LAZULI),
-	MENU_LOCKED_ITEM_TITLE            ("menu.locked-item.title",            Type.STRING,   "&8Lockled"),
+	MENU_LOCKED_ITEM                  ("menu.locked-item.id",               Type.MATERIAL, Material.LAPIS_LAZULI),
+	MENU_LOCKED_ITEM_TITLE            ("menu.locked-item.title",            Type.STRING,   "&cLocked"),
 	
 	MENU_SOUND_ENABLED ("menu.sound.enabled", Type.BOOLEAN, true),
 	MENU_SOUND_ID      ("menu.sound.id",      Type.SOUND,   Sound.UI_BUTTON_CLICK),
-	MENU_SOUND_VOLUME  ("menu.sound.volume",  Type.FLOAT,   1.0),
-	MENU_SOUND_PITCH   ("menu.sound.pitch",   Type.FLOAT,   1.0),
+	MENU_SOUND_VOLUME  ("menu.sound.volume",  Type.DOUBLE,   1.0),
+	MENU_SOUND_PITCH   ("menu.sound.pitch",   Type.DOUBLE,   1.0),
 	
 	/**
 	 * Editor Properties
