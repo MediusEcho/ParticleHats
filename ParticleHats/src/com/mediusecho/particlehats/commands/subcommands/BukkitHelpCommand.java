@@ -11,10 +11,10 @@ import org.bukkit.command.CommandSender;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.Command;
-import com.mediusecho.particlehats.commands.CommandPermission;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.CommandManager;
+import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -38,7 +38,7 @@ public class BukkitHelpCommand extends Command {
 			Command cmd = cmds.getValue();
 			if (cmd != null) 
 			{
-				String entry = builder.append("&3").append(cmd.getUsage().getRawValue()).append(" &7").append(cmd.getDescription().getRawValue()).toString();
+				String entry = builder.append("&7> &3").append(cmd.getUsage().getRawValue()).append(" &7").append(cmd.getDescription().getRawValue()).toString();
 				commands.put(commandIndex++, StringUtil.colorize(entry));
 				
 				builder.setLength(0);
@@ -54,17 +54,10 @@ public class BukkitHelpCommand extends Command {
 	 */
 	protected void readPage (Sender sender, int page)
 	{
-		sender.sendMessage(">- &6ParticleHats v" + core.getDescription().getVersion());
-		
-		int range = page * 9;
-		for (int i = range; i < (range + 9); i++)
-		{
-			if (commands.containsKey(i)) {
-				sender.sendMessage(commands.get(i));
-			}
+		sender.sendMessage("&f> &6ParticleHats v" + core.getDescription().getVersion());
+		for (Entry<Integer, String> entry : commands.entrySet()) {
+			sender.sendMessage(entry.getValue());
 		}
-		
-		sender.sendMessage(">- &6" + (page + 1) + "&7/&6" + pages);
 	}
 	
 	/**
@@ -73,7 +66,7 @@ public class BukkitHelpCommand extends Command {
 	 */
 	protected void readPage (CommandSender sender)
 	{
-		sender.sendMessage(StringUtil.colorize(">- &6ParticleHats v" + core.getDescription().getVersion()));
+		sender.sendMessage(StringUtil.colorize("&f> &6ParticleHats v" + core.getDescription().getVersion()));
 		for (Entry<Integer, String> cmd : commands.entrySet()) {
 			sender.sendMessage(cmd.getValue());
 		}
