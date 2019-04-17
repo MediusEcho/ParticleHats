@@ -63,5 +63,10 @@ public class ParticlesCommand extends Command {
 	public boolean showInHelp() {
 		return true;
 	}
+	
+	@Override
+	public boolean isPlayerOnly() {
+		return true;
+	}
 
 }

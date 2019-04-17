@@ -142,5 +142,10 @@ public class SetCommand extends Command {
 	public boolean showInHelp() {
 		return true;
 	}
+	
+	@Override
+	public boolean isPlayerOnly() {
+		return false;
+	}
 
 }

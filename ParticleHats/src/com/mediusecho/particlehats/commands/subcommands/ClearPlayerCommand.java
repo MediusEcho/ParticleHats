@@ -65,4 +65,9 @@ public class ClearPlayerCommand extends Command {
 		return true;
 	}
 	
+	@Override
+	public boolean isPlayerOnly() {
+		return false;
+	}
+	
 }

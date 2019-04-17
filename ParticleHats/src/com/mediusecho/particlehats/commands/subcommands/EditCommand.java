@@ -126,4 +126,9 @@ public class EditCommand extends Command {
 	public boolean showInHelp() {
 		return true;
 	}
+	
+	@Override
+	public boolean isPlayerOnly() {
+		return true;
+	}
 }

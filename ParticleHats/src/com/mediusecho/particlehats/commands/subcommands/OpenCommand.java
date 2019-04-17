@@ -86,4 +86,9 @@ public class OpenCommand extends Command {
 		return true;
 	}
 
+	@Override
+	public boolean isPlayerOnly() {
+		return true;
+	}
+
 }

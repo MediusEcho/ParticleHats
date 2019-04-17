@@ -70,4 +70,9 @@ public class CreateCommand extends Command {
 		return true;
 	}
 
+	@Override
+	public boolean isPlayerOnly() {
+		return false;
+	}
+	
 }

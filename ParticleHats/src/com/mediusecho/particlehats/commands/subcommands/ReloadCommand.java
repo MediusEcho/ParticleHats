@@ -48,5 +48,10 @@ public class ReloadCommand extends Command {
 	public boolean showInHelp() {
 		return true;
 	}
+	
+	@Override
+	public boolean isPlayerOnly() {
+		return false;
+	}
 
 }

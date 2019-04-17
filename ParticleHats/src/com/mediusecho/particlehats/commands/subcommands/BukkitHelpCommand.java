@@ -135,5 +135,10 @@ public class BukkitHelpCommand extends Command {
 	public boolean showInHelp() {
 		return false;
 	}
+	
+	@Override
+	public boolean isPlayerOnly() {
+		return false;
+	}
 
 }

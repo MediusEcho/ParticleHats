@@ -103,6 +103,12 @@ public abstract class Command {
 	public abstract boolean showInHelp ();
 	
 	/**
+	 * Checks to see if consoles can run this command
+	 * @return
+	 */
+	public abstract boolean isPlayerOnly();
+	
+	/**
 	 * Registers a sub-command under this command
 	 * @param command
 	 */

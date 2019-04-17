@@ -49,5 +49,10 @@ public class DebugDeleteMenu extends Command {
 	public boolean showInHelp() {
 		return false;
 	}
+	
+	@Override
+	public boolean isPlayerOnly() {
+		return true;
+	}
 
 }
