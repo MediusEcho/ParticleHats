@@ -77,6 +77,20 @@ public class StringUtil {
 		return s.substring(i, j).trim();
 	}
 	
+	/**
+	 * Returns the integer value of the given string, or a default value if the given string is not an integer
+	 * @param s
+	 * @param defaultValue
+	 * @return
+	 */
+	public static int toInt (String s, int defaultValue)
+	{
+		try {
+			return Integer.valueOf(s);
+		} catch (NumberFormatException e) {}
+		return defaultValue;
+	}
+	
 	public static String stripColor (String s) {
 		return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', s));
 	}
