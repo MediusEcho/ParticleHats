@@ -52,7 +52,7 @@ public class ChatListener implements Listener {
 					else
 					{
 						List<String> arguments = Arrays.asList(event.getMessage().split(" "));
-						metaState.onMetaSet(menuBuilder, arguments);
+						metaState.onMetaSet(menuBuilder, event.getPlayer(), arguments);
 					}
 					
 					event.setCancelled(true);

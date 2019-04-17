@@ -5,7 +5,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
+import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.StringUtil;
@@ -23,7 +26,9 @@ public enum MetaState {
 	HAT_EQUIP_MESSAGE,
 	HAT_TAG,
 	MENU_TITLE,
-	NEW_MENU_NAME;
+	NEW_MENU;
+	
+	private final Core core = Core.instance;
 	
 	/**
 	 * Get the name of this ParticleMode
@@ -53,7 +58,7 @@ public enum MetaState {
 		}
 	}
 	
-	public void onMetaSet (MenuBuilder menuBuilder, List<String> args)
+	public void onMetaSet (MenuBuilder menuBuilder, Player player, List<String> args)
 	{
 		// Stick all arguments together into one string
 		StringBuilder sb = new StringBuilder();
@@ -84,6 +89,23 @@ public enum MetaState {
 			{
 				String title = value.length() <= 40 ? value : value.substring(0, 40);
 				menuBuilder.getEditingMenu().setTitle(title);
+				reopenEditor(menuBuilder);
+			}
+			break;
+			
+			case NEW_MENU:
+			{
+				String menuName = (rawString.contains(".") ? rawString.split("\\.")[0] : rawString).replaceAll(" ", "_");
+				Database database = core.getDatabase();
+				
+				
+				if (database.menuExists(menuName)) 
+				{
+					player.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS.getValue().replace("{1}", menuName));
+					return;
+				}
+				
+				database.createMenu(menuName);
 				reopenEditor(menuBuilder);
 			}
 			break;
