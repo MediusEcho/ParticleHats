@@ -2,9 +2,10 @@ package com.mediusecho.particlehats.managers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -12,25 +13,29 @@ import org.bukkit.command.TabCompleter;
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.MainCommand;
 import com.mediusecho.particlehats.commands.Sender;
+import com.mediusecho.particlehats.commands.Command;
+import com.mediusecho.particlehats.commands.subcommands.BukkitHelpCommand;
 import com.mediusecho.particlehats.commands.subcommands.ClearCommand;
 import com.mediusecho.particlehats.commands.subcommands.CreateCommand;
 import com.mediusecho.particlehats.commands.subcommands.DebugCommand;
 import com.mediusecho.particlehats.commands.subcommands.DebugDeleteMenu;
 import com.mediusecho.particlehats.commands.subcommands.EditCommand;
+import com.mediusecho.particlehats.commands.subcommands.GroupsCommand;
 import com.mediusecho.particlehats.commands.subcommands.OpenCommand;
+import com.mediusecho.particlehats.commands.subcommands.ParticlesCommand;
 import com.mediusecho.particlehats.commands.subcommands.ReloadCommand;
+import com.mediusecho.particlehats.commands.subcommands.SetCommand;
+import com.mediusecho.particlehats.commands.subcommands.SpigotHelpCommand;
 
 public class CommandManager implements CommandExecutor, TabCompleter {
 
 	private final Core core;
-	private final String command;
 	
 	private final MainCommand mainCommand;
 	
 	public CommandManager (final Core core, final String command)
 	{
 		this.core = core;
-		this.command = command;
 		
 		mainCommand = new MainCommand();
 		mainCommand.register(new ReloadCommand());
@@ -40,13 +45,22 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand.register(new DebugDeleteMenu());
 		mainCommand.register(new DebugCommand());
 		mainCommand.register(new ClearCommand());
+		mainCommand.register(new SetCommand());
+		mainCommand.register(new ParticlesCommand());
+		mainCommand.register(new GroupsCommand());
+		
+		if (core.canUseBungee()) {
+			mainCommand.register(new SpigotHelpCommand(core, this));
+		} else {
+			mainCommand.register(new BukkitHelpCommand(core, this));
+		}
 		
 		// Register our command executor
 		core.getCommand(command).setExecutor(this);
 	}
 	
-	
-	public List<String> onTabComplete(CommandSender commandSender, Command cmd, String label, String[] args) 
+	@Override
+	public List<String> onTabComplete(CommandSender commandSender, org.bukkit.command.Command cmd, String label, String[] args) 
 	{
 		Sender sender = new Sender(commandSender);
 		
@@ -56,10 +70,23 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		return sortCommandSuggestions(arguments, currentCommand);
 	}
 
-	public boolean onCommand(CommandSender commandSender, Command cmd, String label, String[] args) 
+	@Override
+	public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command cmd, String label, String[] args) 
 	{
 		Sender sender = new Sender(commandSender);
 		return mainCommand.execute(core, sender, label, new ArrayList<String>(Arrays.asList(args)));
+	}
+	
+	/**
+	 * Get all registered commands
+	 * @return
+	 */
+	public Map<String, Command> getCommands ()
+	{
+		LinkedHashMap<String, Command> commands = new LinkedHashMap<String, Command>();
+		mainCommand.getSubCommands(commands);
+		
+		return commands;
 	}
 	
 	/**
@@ -74,7 +101,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return commands;
 		}
 		
-		List<String>  matchingCommands = new ArrayList<String>();
+		List<String> matchingCommands = new ArrayList<String>();
 		commandLoop:
 		for (String s : commands)
 		{
