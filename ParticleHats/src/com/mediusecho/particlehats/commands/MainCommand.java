@@ -24,7 +24,21 @@ public class MainCommand extends Command {
 			if (subCommands.containsKey(cmd))
 			{
 				args.remove(0);
-				subCommands.get(cmd).execute(core, sender, label, args);
+				Command subCommand = subCommands.get(cmd);
+				
+				if (!sender.hasPermission(subCommand.getPermission()))
+				{
+					sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
+					return false;
+				}
+				
+				if (!sender.isPlayer() && subCommand.isPlayerOnly())
+				{
+					sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
+					return false;
+				}
+				
+				subCommand.execute(core, sender, label, args);
 			}
 			
 			else
@@ -53,7 +67,17 @@ public class MainCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.ALL;
+	public Permission getPermission() {
+		return Permission.COMMAND_MAIN;
+	}
+	
+	@Override
+	public boolean showInHelp() {
+		return true;
+	}
+	
+	@Override
+	public boolean isPlayerOnly() {
+		return false;
 	}
 }

@@ -7,11 +7,11 @@ import java.util.Set;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.Command;
-import com.mediusecho.particlehats.commands.CommandPermission;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
 
@@ -50,17 +50,11 @@ public class EditCommand extends Command {
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
 	{
-		if (!sender.isPlayer()) 
-		{
-			sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
-			return false;
-		}
-		
-		if (!sender.hasPermission(getPermission()))
-		{
-			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-			return false;
-		}
+//		if (!sender.isPlayer()) 
+//		{
+//			sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
+//			return false;
+//		}
 		
 		if (args.size() < 1) 
 		{
@@ -70,16 +64,20 @@ public class EditCommand extends Command {
 		}
 		
 		String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
-		if (!sender.hasPermission(getPermission().append(menuName)) && !sender.hasPermission(getPermission().append("all")))
+		if (!sender.hasPermission(getPermission().append(menuName)) && !sender.hasPermission(Permission.COMMAND_EDIT_ALLL))
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
 			return false;
 		}
 		
+		if (menuName.equalsIgnoreCase("purchase"))
+		{
+			// TODO: edit purchase menu
+		}
 		
 		if (!core.getDatabase().menuExists(menuName))
 		{
-			sender.sendMessage("&cThis menu does not exist");
+			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
 			return false;
 		}
 		

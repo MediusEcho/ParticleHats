@@ -9,24 +9,18 @@ import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.Command;
-import com.mediusecho.particlehats.commands.CommandPermission;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 
 public class SetCommand extends Command {
 
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
-	{
-		if (!sender.hasPermission(getPermission()))
-		{
-			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-			return false;
-		}
-		
+	{		
 		if (args.size() < 2 || args.size() > 4)
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_ARGUMENTS);
@@ -47,14 +41,19 @@ public class SetCommand extends Command {
 			return false;
 		}
 		
+		boolean premanent = true;
+		if (args.size() >= 3) {
+			premanent = Boolean.valueOf(args.get(2));
+		}
+		
 		boolean tellPlayer = true;
-		if (args.size() == 3) {
-			tellPlayer = Boolean.valueOf(args.get(2));
+		if (args.size() >= 4) {
+			tellPlayer = Boolean.valueOf(args.get(3));
 		}
 		
 		boolean logError = true;
-		if (args.size() == 4) {
-			logError = Boolean.valueOf(args.get(3));
+		if (args.size() >= 5) {
+			logError = Boolean.valueOf(args.get(4));
 		}
 		
 		String hatLabel = args.get(1);
@@ -81,6 +80,7 @@ public class SetCommand extends Command {
 			return false;
 		}
 		
+		hat.setPermanent(premanent);
 		core.getParticleManager().equipHat(player.getUniqueId(), hat);
 		
 		if (tellPlayer) {
@@ -106,11 +106,12 @@ public class SetCommand extends Command {
 			
 			case 2:
 			{
-				return Arrays.asList("label");
+				return core.getDatabase().getLabels(false);
 			}
 			
 			case 3:
 			case 4:
+			case 5:
 			{
 				return Arrays.asList("true", "false");
 			}

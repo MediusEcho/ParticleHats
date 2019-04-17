@@ -7,21 +7,15 @@ import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.Command;
-import com.mediusecho.particlehats.commands.CommandPermission;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.permission.Permission;
 
 public class ClearPlayerCommand extends Command {
 
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
-	{
-		if (!sender.hasPermission(getPermission()))
-		{
-			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-			return false;
-		}
-		
+	{		
 		Player player = Bukkit.getPlayer(args.get(0));
 		if (player == null)
 		{

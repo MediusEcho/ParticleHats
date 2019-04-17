@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.Command;
-import com.mediusecho.particlehats.commands.CommandPermission;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.permission.Permission;
 
 public class ClearCommand extends Command {
 
@@ -31,13 +31,8 @@ public class ClearCommand extends Command {
 		{
 			if (!sender.isPlayer())
 			{
-				sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
-				return false;
-			}
-			
-			if (!sender.hasPermission(getPermission()))
-			{
-				sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
+				sender.sendMessage(Message.COMMAND_ERROR_ARGUMENTS);
+				sender.sendMessage(Message.COMMAND_CLEAR_PLAYER_USAGE);
 				return false;
 			}
 			
@@ -46,7 +41,13 @@ public class ClearCommand extends Command {
 			return true;
 		}
 		
-		else {
+		else 
+		{
+			if (!sender.hasPermission(clearPlayerCommand.getPermission()))
+			{
+				sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
+				return false;
+			}
 			return clearPlayerCommand.execute(core, sender, label, args);
 		}
 	}

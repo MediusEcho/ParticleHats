@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.Command;
-import com.mediusecho.particlehats.commands.CommandPermission;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
 
@@ -22,12 +22,19 @@ public class CreateCommand extends Command {
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
 			Database database = core.getDatabase();
 			
-			if (database.menuExists(menuName))
+			// "purchase" is a reserved menu name, used for the plugins purchase menu
+			if (database.menuExists(menuName) || menuName.equalsIgnoreCase("purchase"))
 			{
 				sender.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS.getValue().replace("{1}", menuName));
 				return false;
 			}
 			database.createMenu(menuName);
+			
+			if (!sender.isPlayer())
+			{
+				sender.sendMessage(Message.COMMAND_CREATE_SUCCESS.replace("{1}", menuName));
+				return true;
+			}
 			
 			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 			MenuBuilder menuBuilder = playerState.getMenuBuilder();
