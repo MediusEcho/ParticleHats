@@ -236,6 +236,10 @@ public class Core extends JavaPlugin {
 		return state;
 	}
 	
+	public void removePlayerState (UUID id) {
+		playerState.remove(id);
+	}
+	
 	/**
 	 * Check to see if we can use the bungee BaseComponent class
 	 * @return
