@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.permission.Permission;
 
 /**
  * Represents both a CommandSender and Player
@@ -89,7 +90,20 @@ public class Sender {
 			return true;
 		}
 		
-		if (playerSender.hasPermission(CommandPermission.ALL.getPermission())) {
+		return false;
+	}
+	
+	public boolean hasPermission (Permission permission)
+	{
+		if (isConsoleSender) {
+			return true;
+		}
+		
+		if (playerSender.hasPermission(permission.getPermission())) {
+			return true;
+		}
+		
+		if (playerSender.hasPermission(Permission.COMMAND_ALL.getPermission())) {
 			return true;
 		}
 		
