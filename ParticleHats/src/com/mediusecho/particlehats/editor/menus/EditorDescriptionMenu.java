@@ -31,6 +31,8 @@ public class EditorDescriptionMenu extends EditorListMenu {
 	private int editingLine = -1;
 	private boolean isModified = false;
 	
+	// TODO: [Opt] Allow regex in description?
+	
 	public EditorDescriptionMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean editingDescription) 
 	{
 		super(core, owner, menuBuilder);
@@ -42,6 +44,12 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		{
 			if (event.isLeftClick())
 			{
+				if (event.isShiftClick())
+				{
+					onInsert(slot);
+					return EditorClickType.NEUTRAL;
+				}
+				
 				editingLine = getClampedIndex(slot, 10, 2);
 				menuBuilder.getOwnerState().setMetaDescriptionLine(editingLine);
 				
@@ -165,6 +173,36 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		isEmpty = getDescription().size() == 0;
 		if (isEmpty) {
 			insertEmptyItem();
+		}
+	}
+	
+	private void onInsert (int slot)
+	{
+		List<String> description = getDescription();
+		int size = description.size();
+		
+		if (size <= 27)
+		{
+			int index = getClampedIndex(slot, 10, 2) + 1;
+			description.add(index, "");
+			
+			for (int i = size - 1; i >= index; i--)
+			{
+				int fromSlot = getNormalIndex(i, 10, 2);
+				int toSlot = getNormalIndex(i + 1, 10, 2);
+				
+				ItemStack item = getItem(fromSlot);
+				ItemUtil.setItemName(item, lineTitle.replace("{1}", Integer.toString(i + 2)));
+				
+				setItem(fromSlot, null);
+				setItem(toSlot, item);
+			}
+			
+			ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(index + 1)));
+			EditorLore.updatePreviewDecription(getItem(49), getDescription());
+			
+			setLineDescription(item, "");
+			setItem(getNormalIndex(index, 10, 2), item);
 		}
 	}
 	
