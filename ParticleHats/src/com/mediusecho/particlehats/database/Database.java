@@ -56,6 +56,26 @@ public interface Database {
 	public Map<String, String> getMenus (boolean forceUpdate);
 	
 	/**
+	 * Gets all stored images on the database
+	 * @return
+	 */
+	public Map<String, BufferedImage> getImages (boolean forceUpdate);
+	
+	/**
+	 * Gets a list of unique labels, duplicate labels are discarded
+	 * @param forceUpdate
+	 * @return
+	 */
+	public List<String> getLabels (boolean forceUpdate);
+	
+	/**
+	 * Gets a list of groups
+	 * @param forceUpdate
+	 * @return
+	 */
+	public Map<String, String> getGroups (boolean forceUpdate);
+	
+	/**
 	 * Checks to see if this label has already been used in the database
 	 * @param menuName
 	 * @param label

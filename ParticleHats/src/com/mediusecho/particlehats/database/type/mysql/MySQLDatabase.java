@@ -249,12 +249,96 @@ public class MySQLDatabase implements Database {
 	}
 	
 	@Override
+	public Map<String, BufferedImage> getImages (boolean forceUpdate)
+	{
+		if (forceUpdate || (System.currentTimeMillis() - lastImageUpdate) > UPDATE_INTERVAL)
+		{
+			lastImageUpdate = System.currentTimeMillis();
+			imageCache.clear();
+			connect((connection) -> 
+			{
+				String imageQuery = "SELECT * FROM " + Table.IMAGES.getFormat();
+				try (PreparedStatement imageStatement = connection.prepareStatement(imageQuery))
+				{
+					ResultSet set = imageStatement.executeQuery();
+					while (set.next())
+					{
+						String name = set.getString("name");
+						InputStream stream = set.getBinaryStream("image");
+						
+						try 
+						{
+							BufferedImage image = ImageIO.read(stream);
+							imageCache.put(name, image);
+							
+						} catch (Exception e) {}
+					}
+				}
+			});
+		}
+		return new HashMap<String, BufferedImage>(imageCache);
+	}
+	
+	@Override
+	public List<String> getLabels (boolean forceUpdate)
+	{
+		if (forceUpdate || (System.currentTimeMillis() - lastLabelUpdate) > UPDATE_INTERVAL)
+		{
+			labelCache.clear();
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append("SELECT label FROM (");
+			
+			for (Entry<String, String> menu : getMenus(true).entrySet()) {
+				builder.append("SELECT label FROM ").append(Table.ITEMS.format(menu.getKey())).append(" WHERE label IS NOT NULL %");
+			}
+			builder.deleteCharAt(builder.lastIndexOf("%")).append(") AS count");
+						
+			connect((connection) ->
+			{
+				String query = builder.toString().replaceAll("%", "UNION ");
+				//Core.debug(query);
+				try (PreparedStatement statement = connection.prepareStatement(query))
+				{
+					ResultSet set = statement.executeQuery();
+					while (set.next()) {
+						labelCache.add(set.getString("label"));
+					}
+				}
+			});
+		}
+		
+		return labelCache;
+	}
+	
+	@Override
+	public Map<String, String> getGroups (boolean forceUpdate)
+	{
+		if (forceUpdate || (System.currentTimeMillis() - lastGroupUpdate) > UPDATE_INTERVAL)
+		{
+			groupCache.clear();
+			
+			connect((connection) ->
+			{
+				String groupQuery = "SELECT * FROM " + Table.GROUPS.getFormat() + " ORDER BY weight ASC";
+				try (PreparedStatement statement = connection.prepareStatement(groupQuery))
+				{
+					ResultSet set = statement.executeQuery();
+					while (set.next()) {
+						groupCache.put(set.getString("name"), set.getString("menu"));
+					}
+				}
+			});
+		}
+		return groupCache;
+	}
+	
+	@Override
 	public boolean labelExists(String menuName, String label) 
 	{
 		try (Connection connection = dataSource.getConnection())
 		{
 			String labelQuery = "SELECT COUNT(*) AS labels FROM " + Table.ITEMS.format(menuName) + " WHERE label = ?";
-			//String labelQuery = "SELECT COUNT(*) AS labels FROM menu_" + menuName + "_items WHERE label = ?";
 			try (PreparedStatement statement = connection.prepareStatement(labelQuery))
 			{
 				statement.setString(1, label);
@@ -483,37 +567,6 @@ public class MySQLDatabase implements Database {
 				}
 			});
 		});
-	}
-	
-	@Override
-	public Map<String, BufferedImage> getImages (boolean forceUpdate)
-	{
-		if (forceUpdate || (System.currentTimeMillis() - lastImageUpdate) > UPDATE_INTERVAL)
-		{
-			lastImageUpdate = System.currentTimeMillis();
-			imageCache.clear();
-			connect((connection) -> 
-			{
-				String imageQuery = "SELECT * FROM " + Table.IMAGES.getFormat();
-				try (PreparedStatement imageStatement = connection.prepareStatement(imageQuery))
-				{
-					ResultSet set = imageStatement.executeQuery();
-					while (set.next())
-					{
-						String name = set.getString("name");
-						InputStream stream = set.getBinaryStream("image");
-						
-						try 
-						{
-							BufferedImage image = ImageIO.read(stream);
-							imageCache.put(name, image);
-							
-						} catch (Exception e) {}
-					}
-				}
-			});
-		}
-		return new HashMap<String, BufferedImage>(imageCache);
 	}
 	
 	@Override

@@ -31,6 +31,26 @@ public class YamlDatabase implements Database {
 	{
 		return null;
 	}
+	
+	
+	@Override
+	public Map<String, BufferedImage> getImages (boolean forceUpdate)
+	{
+		return null;
+	}
+	
+	@Override
+	public List<String> getLabels (boolean forceUpdate)
+	{
+		return null;
+	}
+	
+
+	@Override
+	public Map<String, String> getGroups(boolean forceUpdate) 
+	{
+		return null;
+	}
 
 	@Override
 	public void createMenu(String menuName) {
