@@ -1,9 +1,17 @@
 package com.mediusecho.particlehats.commands;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.ui.Menu;
+import com.mediusecho.particlehats.ui.MenuInventory;
+import com.mediusecho.particlehats.ui.StaticMenu;
 
 public class MainCommand extends Command {
 
@@ -13,8 +21,39 @@ public class MainCommand extends Command {
 		// Execute this command
 		if (args.size() == 0)
 		{
-			Core.log("Hello World");
-			Core.log("Looking up menus");	
+			if (!sender.isPlayer())
+			{
+				sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
+				return false;
+			}
+			
+			Map<String, String> groups = core.getDatabase().getGroups(true);
+			String defaultMenu = "";
+			
+			for (Entry<String, String> entry : groups.entrySet())
+			{
+				if (sender.hasPermission(Permission.GROUP.append(entry.getKey()))) {
+					defaultMenu = entry.getValue();
+				}
+			}
+			
+			if (defaultMenu.equals("")) {
+				defaultMenu = SettingsManager.DEFAULT_MENU.getString();
+			}
+			
+			String menuName = defaultMenu.contains(".") ? defaultMenu.split("\\.")[0] : defaultMenu;
+			Database database = core.getDatabase();
+			MenuInventory inventory = database.loadInventory(menuName, sender.getPlayer());
+			
+			if (inventory == null)
+			{
+				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.getValue().replace("{1}", menuName));
+				return false;
+			}
+			
+			Menu menu = new StaticMenu(core, sender.getPlayer(), inventory);
+			core.getMenuManager().openMenu(menu, true);
+			return true;
 		}
 		
 		// Find and execute our sub command
