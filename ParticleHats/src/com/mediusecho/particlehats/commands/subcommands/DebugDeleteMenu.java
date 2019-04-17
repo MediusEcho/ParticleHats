@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.commands.Command;
-import com.mediusecho.particlehats.commands.CommandPermission;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.permission.Permission;
 
 public class DebugDeleteMenu extends Command {
 
@@ -41,8 +41,8 @@ public class DebugDeleteMenu extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.ALL;
+	public Permission getPermission() {
+		return Permission.COMMAND_ALL;
 	}
 	
 	@Override

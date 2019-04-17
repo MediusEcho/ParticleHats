@@ -77,8 +77,8 @@ public class OpenCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.ALL;
+	public Permission getPermission() {
+		return Permission.COMMAND_OPEN;
 	}
 	
 	@Override

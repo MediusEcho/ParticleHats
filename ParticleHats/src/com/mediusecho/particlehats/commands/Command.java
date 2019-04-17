@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.permission.Permission;
 
 public abstract class Command {
 	
@@ -94,7 +95,7 @@ public abstract class Command {
 	 * Returns this commands permission
 	 * @return
 	 */
-	public abstract CommandPermission getPermission ();
+	public abstract Permission getPermission ();
 	
 	/**
 	 * Returns true if this command will appear in the help menu

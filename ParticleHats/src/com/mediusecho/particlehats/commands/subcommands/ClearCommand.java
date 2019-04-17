@@ -84,8 +84,8 @@ public class ClearCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.CLEAR;
+	public Permission getPermission() {
+		return Permission.COMMAND_CLEAR;
 	}
 	
 	@Override

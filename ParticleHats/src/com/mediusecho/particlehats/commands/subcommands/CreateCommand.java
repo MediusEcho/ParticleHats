@@ -61,8 +61,8 @@ public class CreateCommand extends Command {
 
 	// TOOD: Change permission
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.CREATE;
+	public Permission getPermission() {
+		return Permission.COMMAND_CREATE;
 	}
 	
 	@Override

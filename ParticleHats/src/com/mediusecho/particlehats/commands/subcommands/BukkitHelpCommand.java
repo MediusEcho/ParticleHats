@@ -127,8 +127,8 @@ public class BukkitHelpCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.HELP;
+	public Permission getPermission() {
+		return Permission.COMMAND_HELP;
 	}
 
 	@Override

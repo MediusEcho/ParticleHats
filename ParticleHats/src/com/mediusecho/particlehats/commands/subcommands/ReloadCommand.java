@@ -40,8 +40,8 @@ public class ReloadCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.RELOAD;
+	public Permission getPermission() {
+		return Permission.COMMAND_RELOAD;
 	}
 	
 	@Override

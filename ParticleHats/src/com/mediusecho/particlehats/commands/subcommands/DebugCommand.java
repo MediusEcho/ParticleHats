@@ -40,8 +40,8 @@ public class DebugCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.ALL;
+	public Permission getPermission() {
+		return Permission.COMMAND_ALL;
 	}
 	
 	@Override

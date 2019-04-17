@@ -56,8 +56,8 @@ public class ClearPlayerCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.CLEAR_PLAYER;
+	public Permission getPermission() {
+		return Permission.COMMAND_CLEAR_PLAYER;
 	}
 
 	@Override

@@ -134,8 +134,8 @@ public class SetCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.SET;
+	public Permission getPermission() {
+		return Permission.COMMAND_SET;
 	}
 	
 	@Override

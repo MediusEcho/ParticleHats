@@ -55,8 +55,8 @@ public class ParticlesCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.PARTICLES;
+	public Permission getPermission() {
+		return Permission.COMMAND_PARTICLES;
 	}
 
 	@Override

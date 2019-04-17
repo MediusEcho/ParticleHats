@@ -118,8 +118,8 @@ public class EditCommand extends Command {
 	}
 
 	@Override
-	public CommandPermission getPermission() {
-		return CommandPermission.EDIT;
+	public Permission getPermission() {
+		return Permission.COMMAND_EDIT;
 	}
 	
 	@Override
