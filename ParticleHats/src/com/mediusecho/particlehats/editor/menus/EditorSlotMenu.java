@@ -51,7 +51,7 @@ public class EditorSlotMenu extends EditorMenu {
 			if (cloning) 
 			{
 				editorBaseMenu.cloneHat(targetSlot, slot);
-				menuBuilder.goBack();
+				menuBuilder.openEditingMenu();
 				return EditorClickType.NEUTRAL;
 			}
 			
