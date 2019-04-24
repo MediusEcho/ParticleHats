@@ -31,6 +31,37 @@ public class ResourceUtil {
 	}
 	
 	/**
+	 * Compares two BufferedImages
+	 * @param a
+	 * @param b
+	 * @return True if both images are the same
+	 */
+	public static boolean compareImages (BufferedImage a, BufferedImage b)
+	{
+		if (a == null || b == null) return false;
+		if (a == b) return true;
+		
+		if (a.getWidth() != b.getWidth() || a.getHeight() != b.getHeight()) {
+			return false;
+		}
+		
+		int width = a.getWidth();
+		int height = a.getHeight();
+		
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				if (a.getRGB(x, y) != b.getRGB(x, y)) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Copies the file provided
 	 * @param File to copy
 	 * @param File to copy to
