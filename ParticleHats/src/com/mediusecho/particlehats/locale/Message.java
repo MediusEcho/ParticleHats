@@ -11,7 +11,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public enum Message {
 	
-	// TODO: override messages.yml with any changes
+	// TODO: Finish adding messages to default_messages.yml
 	
 	UNKNOWN            ("&cUnknown Message"),
 	INSUFFICIENT_FUNDS ("&cYou don't have enough {1} to purchase this hat"),
@@ -19,7 +19,7 @@ public enum Message {
 	HAT_EQUIPPED_DESCRIPTION ("&3Equipped"),
 	HAT_EQUIPPED             ("{1} &7equipped"),
 	HAT_EQUIPPED_VANISHED    ("{1} &7equipped while vanished"),
-	HAT_EQUIPPED_OVERFLOW    ("&cYou can only equip 28 hats at a time"),
+	HAT_EQUIPPED_OVERFLOW    ("&cYou can only equip {1} hats at a time"),
 	HAT_NO_PERMISSION        ("&cYou don't have permission for this hat"),
 	
 	/**
@@ -37,10 +37,14 @@ public enum Message {
 	COMMAND_ERROR_NO_PERMISSION  ("&cYou don't have permission to use this command"),
 	COMMAND_ERROR_PLAYER_ONLY    ("&cYou must be a player to use this command, try &7/h help"),
 	COMMAND_ERROR_ARGUMENTS      ("&cWrong number of arguments"),
-	COMMAND_ERROR_MENU_EXISTS    ("&7'&c{1}&7' already exists"),
-	COMMAND_ERROR_UNKNOWN_MENU   ("&cUnable to find '&7{1}&c'"),
+	COMMAND_ERROR_MENU_EXISTS    ("&7Menu '&c{1}&7' already exists"),
+	COMMAND_ERROR_UNKNOWN_MENU   ("&cUnable to find menu '&7{1}&c'"),
 	COMMAND_ERROR_UNKNOWN_PLAYER ("&7Unable to find '&c{1}&7'"),
 	COMMAND_ERROR_OFFLINE_PLAYER ("&7'&c{1}&7' is offline"),
+	COMMAND_ERROR_GROUP_EXISTS   ("&7Group '&c{1}&7' already exists"),
+	COMMAND_ERROR_UNKNOWN_GROUP  ("&cUnable to find group '&7{1}&c'"),
+	COMMAND_ERROR_TYPE_EXISTS    ("&7Type '&c{1}&7' already exists in the database"),
+	COMMAND_ERROR_UNKNOWN_TYPE   ("&cUnable to find type &7'{1}&c'"),
 	
 	// Main Command
 	COMMAND_MAIN_DESCRIPTION ("Main Command"),
@@ -53,122 +57,163 @@ public enum Message {
 	// Reload
 	COMMAND_RELOAD_DESCRIPTION ("Reloads the plugin"),
 	COMMAND_RELOAD_USAGE       ("/h reload"),
-	COMMAND_RELOAD_SUCCESS     ("&2ParticleHats reloaded"),
+	COMMAND_RELOAD_SUCCESS     ("&aParticleHats reloaded"),
 	
 	// Clear Command
-	COMMAND_CLEAR_DESCRIPTION        ("Removes all of the players active particless"),
+	COMMAND_CLEAR_DESCRIPTION        ("Removes all of the players active particles"),
 	COMMAND_CLEAR_USAGE              ("/h clear"),
-	COMMAND_CLEAR_SUCCESS            ("&2All particles cleared"),
+	COMMAND_CLEAR_SUCCESS            ("&aAll particles cleared"),
 	COMMAND_CLEAR_PLAYER_DESCRIPTION ("Removes all particles for the target player"),
 	COMMAND_CLEAR_PLAYER_USAGE       ("/h clear <player>"),
-	COMMAND_CLEAR_PLAYER_SUCCESS     ("&2All particles cleared for {1}"),
+	COMMAND_CLEAR_PLAYER_SUCCESS     ("&aAll particles cleared for &3{1}"),
 	
 	// Create Command
 	COMMAND_CREATE_DESCRIPTION ("Creates a new menu with the given name"),
 	COMMAND_CREATE_USAGE       ("/h create <menu name>"),
+	COMMAND_CREATE_SUCCESS     ("&aCreated menu {1}"),
 	
 	// Edit Command
 	COMMAND_EDIT_DESCRIPTION ("Opens a menu in the editor"),
 	COMMAND_EDIT_USAGE       ("/h edit <menu name>"),
 	
 	// Meta Command
-	COMMAND_META_DESCRIPTION ("Lets the player change meta properties while editing a menu"),
-	COMMAND_META_USAGE       ("/h meta <value>"),
+	COMMAND_META_DESCRIPTION ("Lets the player edit meta properties while editing a menu"),
+	COMMAND_META_USAGE       ("/h meta {1}"),
 	
 	// Open Command
-	COMMAND_OPEN_DESCRIPTION ("Opens a menu"),
+	COMMAND_OPEN_DESCRIPTION ("Opens the selected menu"),
 	COMMAND_OPEN_USAGE       ("/h open <menu name>"),
 	
 	// Particles Command
 	COMMAND_PARTICLE_DESCRIPTION ("Lets players manage their equipped particles"),
 	COMMAND_PARTICLE_USAGE       ("/h particles"),
 	
-	// Set
+	// Set Command
 	COMMAND_SET_DESCRIPTION ("Creates a new hat from the given label and equips it to the player"),
 	COMMAND_SET_USAGE       ("/h set <player> <label> <tellPlayer true|false>"),
 	COMMAND_SET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
 	COMMAND_SET_ALREADY_SET ("&c{1} is already wearing this hat"),
-	COMMAND_SET_SUCCESS     ("&2You were given the {1} &2hat"),
+	COMMAND_SET_SUCCESS     ("&aYou were given the {1} &2hat"),
+	
+	// Add Group Command
+	COMMAND_ADD_GROUP_DESCRIPTION ("Add a new group, use weight to determine a groups priority"),
+	COMMAND_ADD_GROUP_USAGE       ("/h group add <name> <menu> <weight>"),
+	COMMAND_ADD_GROUP_SUCCESS     ("&aAdded group &3'{1}'"),
+	
+	// Delete Group Command
+	COMMAND_REMOVE_GROUP_DESCRIPTION ("Removes a group"),
+	COMMAND_REMOVE_GROUP_USAGE       ("/h group remove <group>"),
+	COMMAND_REMOVE_GROUP_SUCCESS     ("&aGroup '&3{1}&a' removed"),
+	
+	// Edit Group Command
+	COMMAND_EDIT_GROUP_DESCRIPTION ("Edit an existing group"),
+	COMMAND_EDIT_GROUP_USAGE       ("/h group edit <group> <menu> <weight>"),
+	COMMAND_EDIT_GROUP_SUCCESS     ("&aUpdated group '&3{1}&a'"),
+	
+	// Add Type Command
+	COMMAND_ADD_TYPE_DESCRIPTION ("Adds a custom type to the MySQL database"),
+	COMMAND_ADD_TYPE_USAGE       ("/h type add <type>"),
+	COMMAND_ADD_TYPE_SUCCESS     ("&aAdded '&3{1}&a' to the database"),
+	COMMAND_ADD_TYPE_ERROR       ("&cThis command only works with a MySQL database"),
+	
+	// Remove Type Command
+	COMMAND_REMOVE_TYPE_DESCRIPTION ("Removes a custom type from the MySQL database"),
+	COMMAND_REMOVE_TYPE_USAGE       ("/h type remove <type>"),
+	COMMAND_REMOVE_TYPE_SUCCESS     ("&aRemoved '&3{1}&a' from the database"),
+	COMMAND_REMOVE_TYPE_PROMPT      ("&a'&3{1}&a' is being used currently, use /h type remove {1} again to remove"),
+	
+	// Import Command
+	COMMAND_IMPORT_DESCRIPTION ("Adds an existing .yml menu into the MySQL database"),
+	COMMAND_IMPORT_USAGE       ("/h import <menu>"),
+	COMMAND_IMPORT_SUCCESS     ("&aAdded '&3{1}&a' to the MySQL database"),
+	
+	/**
+	 * Purchase Menu
+	 */
+	PURCHASE_MENU_TITLE   ("Confirm Purchase"),
+	PURCHASE_MENU_CONFIRM ("&3Accept Purchase"),
+	PURCHASE_MENU_CANCEL  ("&cCancel Purchase"),
 	
 	/**
 	 * Particles
 	 */
+	// TODO: Finish particle descriptions
 	PARTICLE_NONE_NAME                     ("&bNone"),
 	PARTICLE_NONE_DESCRIPTION              ("Does Nothing"),
 	PARTICLE_BARRIER_NAME                  ("&bBarrier"),
 	PARTICLE_BARRIER_DESCRIPTION           ("Displayed by Barrier blocks"),
 	PARTICLE_BLOCK_CRACK_NAME              ("&bBlock Crack"),
-	PARTICLE_BLOCK_CRACK_DESCRIPTION       (""),
+	PARTICLE_BLOCK_CRACK_DESCRIPTION       ("Displayed when breaking blocks"),
 	PARTICLE_BLOCK_DUST_NAME               ("&bBlock Dust"),
-	PARTICLE_BLOCK_DUST_DESCRIPTION        (""),
+	PARTICLE_BLOCK_DUST_DESCRIPTION        ("Displayed when running on top of blocks"),
 	PARTICLE_BUBBLE_COLUMN_UP_NAME         ("&bBubble Column Up"),
-	PARTICLE_BUBBLE_COLUMN_UP_DESCRIPTION  (""),
+	PARTICLE_BUBBLE_COLUMN_UP_DESCRIPTION  ("Bubbles floating upwards in a column"),
 	PARTICLE_BUBBLE_POP_NAME               ("&bBubble Pop"),
-	PARTICLE_BUBBLE_POP_DESCRIPTION        (""),
+	PARTICLE_BUBBLE_POP_DESCRIPTION        ("Bubbles popping"),
 	PARTICLE_CLOUD_NAME                    ("&bCloud"),
-	PARTICLE_CLOUD_DESCRIPTION             (""),
+	PARTICLE_CLOUD_DESCRIPTION             ("Displayed after killing an entity"),
 	PARTICLE_CRIT_NAME                     ("&bCritical Hit"),
-	PARTICLE_CRIT_DESCRIPTION              (""),
+	PARTICLE_CRIT_DESCRIPTION              ("Displayed when dealing critical damage"),
 	PARTICLE_CRIT_MAGIC_NAME               ("&bMagic Critical Hit"),
-	PARTICLE_CRIT_MAGIC_DESCRIPTION        (""),
+	PARTICLE_CRIT_MAGIC_DESCRIPTION        ("Displayed when dealing critical damage/nwith an enchanted weapon"),
 	PARTICLE_CURRENT_DOWN_NAME             ("&bCurrent Down"),
-	PARTICLE_CURRENT_DOWN_DESCRIPTION      (""),
+	PARTICLE_CURRENT_DOWN_DESCRIPTION      ("Bubbles being pulled down"),
 	PARTICLE_DAMAGE_INDICATOR_NAME         ("&bDamage Indicator"),
-	PARTICLE_DAMAGE_INDICATOR_DESCRIPTION  (""),
+	PARTICLE_DAMAGE_INDICATOR_DESCRIPTION  ("Displayed by entities when attacked"),
 	PARTICLE_DRAGON_BREATH_NAME            ("&bDragons Breath"),
 	PARTICLE_DRAGON_BREATH_DESCRIPTION     (""),
 	PARTICLE_DRIP_LAVA_NAME                ("&bDripping Lava"),
-	PARTICLE_DRIP_LAVA_DESCRIPTION         (""),
+	PARTICLE_DRIP_LAVA_DESCRIPTION         ("Lava dripping through a block"),
 	PARTICLE_DRIP_WATER_NAME               ("&bDripping Water"),
-	PARTICLE_DRIP_WATER_DESCRIPTION        (""),
+	PARTICLE_DRIP_WATER_DESCRIPTION        ("Water dripping through a block"),
 	PARTICLE_DOLPHIN_NAME                  ("&bDolphins Grace"),
-	PARTICLE_DOLPHIN_DESCRIPTION           (""),
+	PARTICLE_DOLPHIN_DESCRIPTION           ("Displayed behind Dolphins as they swim"),
 	PARTICLE_ENCHANTMENT_TABLE_NAME        ("&bEnchantment Runes"),
-	PARTICLE_ENCHANTMENT_TABLE_DESCRIPTION (""),
+	PARTICLE_ENCHANTMENT_TABLE_DESCRIPTION ("Enchantment runes"),
 	PARTICLE_END_ROD_NAME                  ("&bEnder Rod"),
-	PARTICLE_END_ROD_DESCRIPTION           (""),
+	PARTICLE_END_ROD_DESCRIPTION           ("Displayed by End Rods & Shulker bullets"),
 	PARTICLE_EXPLOSION_HUGE_NAME           ("&bHuge Explosion"),
-	PARTICLE_EXPLOSION_HUGE_DESCRIPTION    (""),
+	PARTICLE_EXPLOSION_HUGE_DESCRIPTION    ("Displayed when the Ender Dragon is killed"),
 	PARTICLE_EXPLOSION_LARGE_NAME          ("&bLarge Explosion"),
-	PARTICLE_EXPLOSION_LARGE_DESCRIPTION   (""),
+	PARTICLE_EXPLOSION_LARGE_DESCRIPTION   ("Large explosions"),
 	PARTICLE_EXPLOSION_NORMAL_NAME         ("&bNormal Explosion"),
-	PARTICLE_EXPLOSION_NORMAL_DESCRIPTION  (""),
+	PARTICLE_EXPLOSION_NORMAL_DESCRIPTION  ("Small explosions, usually from spawners, killing mobs,/nand silverfish infesting blocks"),
 	PARTICLE_FALLING_DUST_NAME             ("&bFalling Dust"),
-	PARTICLE_FALLING_DUST_DESCRIPTION      (""),
+	PARTICLE_FALLING_DUST_DESCRIPTION      ("Displayed by floating sand / gravel blocks"),
 	PARTICLE_FIREWORKS_SPARK_NAME          ("&bFirework Sparks"),
-	PARTICLE_FIREWORKS_SPARK_DESCRIPTION   (""),
+	PARTICLE_FIREWORKS_SPARK_DESCRIPTION   ("A fireworks rocket trail"),
 	PARTICLE_FLAME_NAME                    ("&bFlame"),
-	PARTICLE_FLAME_DESCRIPTION             (""),
+	PARTICLE_FLAME_DESCRIPTION             ("Displayed by torches, furnaces, magma cubes, & spawners"),
 	PARTICLE_HEART_NAME                    ("&bHearts"),
-	PARTICLE_HEART_DESCRIPTION             (""),
+	PARTICLE_HEART_DESCRIPTION             ("Displayed by breeding & taming animals"),
 	PARTICLE_ITEM_CRACK_NAME               ("&bItem Crack"),
-	PARTICLE_ITEM_CRACK_DESCRIPTION        (""),
+	PARTICLE_ITEM_CRACK_DESCRIPTION        ("Displayed by eating, or throwing various items"),
 	PARTICLE_LAVA_NAME                     ("&bLava"),
-	PARTICLE_LAVA_DESCRIPTION              (""),
+	PARTICLE_LAVA_DESCRIPTION              ("Fire that shoots out of lava"),
 	PARTICLE_MOB_APPEARANCE_NAME           ("&bMob Appearance"),
-	PARTICLE_MOB_APPEARANCE_DESCRIPTION    (""),
+	PARTICLE_MOB_APPEARANCE_DESCRIPTION    ("Displayed by Elder Guardians"),
 	PARTICLE_NAUTILUS_NAME                 ("&bNautilus"),
-	PARTICLE_NAUTILUS_DESCRIPTION          (""),
+	PARTICLE_NAUTILUS_DESCRIPTION          ("Displayed by activated Conduits"),
 	PARTICLE_NOTE_NAME                     ("&bNoteblock Notes"),
-	PARTICLE_NOTE_DESCRIPTION              (""),
+	PARTICLE_NOTE_DESCRIPTION              ("Displays by note blocks"),
 	PARTICLE_PORTAL_NAME                   ("&bPortal"),
-	PARTICLE_PORTAL_DESCRIPTION            (""),
+	PARTICLE_PORTAL_DESCRIPTION            ("Displayed by nether portals, Endermen, Endermites,/n& ender pearls"),
 	PARTICLE_REDSTONE_NAME                 ("&bRedstone Dust"),
 	PARTICLE_REDSTONE_DESCRIPTION          (""),
 	PARTICLE_SLIME_NAME                    ("&bSlime"),
-	PARTICLE_SLIME_DESCRIPTION             (""),
+	PARTICLE_SLIME_DESCRIPTION             ("Displayed when a slime jumps"),
 	PARTICLE_SMOKE_LARGE_NAME              ("&bLarge Smoke"),
-	PARTICLE_SMOKE_LARGE_DESCRIPTION       (""),
+	PARTICLE_SMOKE_LARGE_DESCRIPTION       ("Displayed by fire, blazes, & water flowing into lava"),
 	PARTICLE_SMOKE_NORMAL_NAME             ("&bNormal Smoke"),
-	PARTICLE_SMOKE_NORMAL_DESCRIPTION      (""),
+	PARTICLE_SMOKE_NORMAL_DESCRIPTION      ("Displayed by torches, & various other blocks"),
 	PARTICLE_SNOW_SHOVEL_NAME              ("&bSnow Shovel"),
-	PARTICLE_SNOW_SHOVEL_DESCRIPTION       (""),
+	PARTICLE_SNOW_SHOVEL_DESCRIPTION       ("Displayed by snowballs"),
 	PARTICLE_SNOWBALL_NAME                 ("&bSnowballs"),
-	PARTICLE_SNOWBALL_DESCRIPTION          (""),
+	PARTICLE_SNOWBALL_DESCRIPTION          ("Displayed by snowballs"),
 	PARTICLE_SPELL_NAME                    ("&bSpells"),
-	PARTICLE_SPELL_DESCRIPTION             (""),
+	PARTICLE_SPELL_DESCRIPTION             ("Displayed by splash potions, lingering potions & bottle o' enchanting"),
 	PARTICLE_SPELL_INSTANT_NAME            ("&bInstant Spells"),
-	PARTICLE_SPELL_INSTANT_DESCRIPTION     (""),
+	PARTICLE_SPELL_INSTANT_DESCRIPTION     ("Displayed by instant splash & lingering potions"),
 	PARTICLE_SPELL_MOB_NAME                ("&bMob Spells"),
 	PARTICLE_SPELL_MOB_DESCRIPTION         (""),
 	PARTICLE_SPELL_MOB_AMBIENT_NAME        ("&bAmbient Mod Spells"),
@@ -266,6 +311,7 @@ public enum Message {
 	/**
 	 * Types
 	 */
+	// TODO: Finish type descriptions
 	TYPE_NONE_NAME                  ("&cNone"),
 	TYPE_NONE_DESCRIPTION           (""),
 	TYPE_HALO_NAME                  ("&bHalo"),
@@ -275,7 +321,7 @@ public enum Message {
 	TYPE_CAPE_NAME                  ("&bCape"),
 	TYPE_CAPE_DESCRIPTION           (""),
 	TYPE_WINGS_NAME                 ("&bWings"),
-	TYPE_WINGS_DESCRIPTION          (""),
+	TYPE_WINGS_DESCRIPTION          ("&8Default Wings"),
 	TYPE_VORTEX_NAME                ("&bVortex"),
 	TYPE_VORTEX_DESCRIPTION         ("&8A Swirling cone that gets/n&8larger at the bottom"),
 	TYPE_ARCH_NAME                  ("&bArch"),
@@ -309,28 +355,40 @@ public enum Message {
 	/**
 	 * Meta State
 	 */
+	META_ERROR                                  ("&cYou are not editing a menu"),
 	META_HAT_NAME_COMMAND_USAGE                 ("&6Use &f/h meta <name> &6to rename"),
 	META_HAT_NAME_DESCRIPTION                   ("Type the &eName &finto chat, or '&ccancel&f' to return"),
+	META_HAT_NAME_SUGGESTION                    ("<hat name>"),
 	META_HAT_LABEL_USAGE                        ("&6Use &f/h meta <label> &6to rename"),
 	META_HAT_LABEL_DESCRIPTION                  ("Type the &eLabel &finto chat, or '&6cancel&f' to return"),
+	META_HAT_LABEL_SUGGESTION                   ("<label>"),
 	META_HAT_COMMAND_USAGE                      ("&6Use &f/h meta <command> &6to rename"),
 	META_HAT_COMMAND_DESCRIPTION                ("Type the &eCommand &7(without '/') &finto chat, or '&6cancel&f' to return"),
+	META_HAT_COMMAND_SUGGESTION                 ("<command>"),
 	META_HAT_DESCRIPTION_USAGE                  ("&6Use &f/h meta <description> &6to rename"),
 	META_HAT_DESCRIPTION_DESCRIPTION            ("Type the &eDescription &finto chat, or '&6cancel&f' to return"),
+	META_HAT_DESCRIPTION_SUGGESTION             ("<description>"),
 	META_HAT_PEMISSION_USAGE                    ("&6Use &f/h meta <permission> &6to rename"),
 	META_HAT_PEMISSION_DESCRIPTION              ("Type the &ePermission &finto chat, or '&6cancel&f' to return"),
+	META_HAT_PERMISSION_SUGGESTION              ("<permission>"),
 	META_HAT_PERMISSION_DESCRIPTION_USAGE       ("&6Use &f/h meta <description> &6to rename"),
 	META_HAT_PERMISSION_DESCRIPTION_DESCRIPTION ("Type the &eDescription &finto chat, or '&6cancel&f' to return"),
+	META_HAT_PERMISSION_DESCRIPTION_SUGGESTION  ("<description>"),
 	META_HAT_PERMISSION_MESSAGE_USAGE           ("&6Use &f/h meta <permission message> &6to rename"),
 	META_HAT_PERMISSION_MESSAGE_DESCRIPTION     ("Type the &eMessage &finto chat, or '&6cancel&f' to return"),
+	META_HAT_PERMISSION_MESSAGE_SUGGESTION      ("<permission message>"),
 	META_HAT_EQUIP_MESSAGE_USAGE                ("&6Use &f/h meta <equip message> &6to rename"),
 	META_HAT_EQUIP_MESSAGE_DESCRIPTION          ("Type the &eMessage &finto chat, or '&6cancel&f' to return"),
+	META_HAT_EQUIP_MESSAGE_SUGGESTION           ("<equip message>"),
 	META_HAT_TAG_USAGE                          ("&6Use &f/h meta <tag> &6to set"),
 	META_HAT_TAG_DESCRIPTION                    ("Type the &eTag &finto chat, or '&6cancel&f' to return"),
+	META_HAT_TAG_SUGGESTION                     ("<tag>"),
 	META_MENU_TITLE_USAGE                       ("&6Use &f/h meta <title> &6to rename"),
 	META_MENU_TITLE_DESCRIPTION                 ("Type the &eTitle &finto chat, or '&6cancel&f' to return"),
-	META_NEW_MENU_NAME_USAGE                    ("&6Use &f/h meta <menu name> &6to create a new menu"),
-	META_NEW_MENU_NAME_DESCRIPTION              ("Type the &eName &finto chat, or '&6cancel&f' to return"),
+	META_MENU_TITLE_SUGGESTION                  ("<menu title>"),
+	META_NEW_MENU_USAGE                         ("&6Use &f/h meta <menu name> &6to create a new menu"),
+	META_NEW_MENU_DESCRIPTION                   ("Type the &eName &finto chat, or '&6cancel&f' to return"),
+	META_NEW_MENU_SUGGESTION                    ("<menu name>"),
 	
 	/**
 	 * Tracking
@@ -541,7 +599,7 @@ public enum Message {
 	EDITOR_PARTICLE_MENU_NORMAL_FILTER       ("&3Show All Particles"),
 	EDITOR_PARTICLE_MENU_RECENT_FILTER       ("&3Recently Used"),
 	
-	EDITOR_PARTICLE_MENU_PARTICLE_DESCRIPTION ("&8{1}/n/n{2=&3Click to Select}{3=&3Selected}"),
+	EDITOR_PARTICLE_MENU_PARTICLE_DESCRIPTION ("&8{1=/n/n}{2=&3Click to Select}{3=&3Selected}"),
 	
 	// Particle Overview Menu
 	EDITOR_PARTICLE_OVERVIEW_MENU_TITLE ("Edit Particles"),
@@ -611,7 +669,7 @@ public enum Message {
 	EDITOR_DESCRIPTION_MENU_PREVIEW  ("&bPreview"),
 	EDITOR_DESCRIPTION_MENU_EMPTY    ("&cNo Description Set"),
 	
-	EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION    ("/n&8» &r{1=&cEmpty}/n/n&3Left Click to Edit/n&cShift Right Click to Delete"),
+	EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION    ("/n&8» &r{1=&cEmpty}/n/n&3Left Click to Edit/n&3Shift Left Click to Insert Line/n&cShift Right Click to Delete"),
 	EDITOR_DESCRIPTION_MENU_PREVIEW_DESCRIPTION ("{1=&cEmpty}{2=/n&cShift Right Click to Clear}"),
 	
 	// Tag Overview Menu
