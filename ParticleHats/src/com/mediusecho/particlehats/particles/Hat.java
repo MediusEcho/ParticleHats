@@ -852,6 +852,69 @@ public class Hat {
 	}
 	
 	/**
+	 * Adds a node to this hats node list
+	 * @param node
+	 */
+	public void addNode (Hat node) {
+		nodes.add(node);
+	}
+	
+	/**
+	 * Removes the node at index
+	 * @param index
+	 */
+	public void removeNode (int index) 
+	{
+		if (index < nodes.size()) {
+			nodes.remove(index);
+		}
+	}
+	
+	/**
+	 * Gets a node that exists at this index
+	 * @param index
+	 * @return
+	 */
+	public Hat getNode (int index) 
+	{
+		if (index < nodes.size()) {
+			return nodes.get(index);
+		}
+		return null;
+	}
+	
+	/**
+	 * Compares each nodes index value to the given index value and returns the matching node<br>
+	 * Returns null if no match is found
+	 * @param index
+	 * @return
+	 */
+	public Hat getNodeAtIndex (int index)
+	{
+		for (Hat node : nodes)
+		{
+			if (node.getIndex() == index) {
+				return node;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get a list of all nodes in this hat
+	 * @return
+	 */
+	public List<Hat> getNodes () {
+		return nodes;
+	}
+	
+	/**
+	 * Get how many nodes this hat has
+	 * @return
+	 */
+	public int getNodeCount () {
+		return isLoaded ? nodes.size() : nodeCountPreview;
+	}
 	 * Get the ParticleData found at this index
 	 * @param index
 	 * @return
