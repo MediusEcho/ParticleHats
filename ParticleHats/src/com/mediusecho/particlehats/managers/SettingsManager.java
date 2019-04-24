@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 
 public enum SettingsManager {
 
@@ -26,6 +27,7 @@ public enum SettingsManager {
 	CURRENCY                   ("currency",                   Type.STRING,      "$"),
 	LIVE_MENUS                 ("live-menus",                 Type.BOOLEAN,     true),
 	LIVE_MENU_UPDATE_FREQUENCY ("live-menu-update-frequency", Type.INT,         5),
+	MAXIMUM_HAT_LIMIT          ("max-hats",                   Type.INT_CLAMPED, 7, 28),
 	
 	/**
 	 * Database properties
@@ -90,6 +92,7 @@ public enum SettingsManager {
 	private final String key;
 	private final Type dataType;
 	private final Object defaultData;
+	private final int range;
 	
 	private static Map<String, Object> data = new HashMap<String, Object>();
 	private static final Core plugin = Core.instance;
@@ -98,11 +101,17 @@ public enum SettingsManager {
 		loadData();
 	}
 	
-	private SettingsManager (final String key, final Type dataType, Object defaultData)
+	private SettingsManager (final String key, final Type dataType, Object defaultData, int range)
 	{
 		this.key = key;
 		this.dataType = dataType;
 		this.defaultData = defaultData;
+		this.range = range;
+	}
+	
+	private SettingsManager (final String key, final Type dataType, Object defaultData)
+	{
+		this(key, dataType, defaultData, -1);
 	}
 	
 	/**
@@ -168,8 +177,17 @@ public enum SettingsManager {
 	 * Returns the Integer value of this enum, or -1
 	 * @return
 	 */
-	public int getInt () {
-		return dataType.equals(Type.INT) ? (int)getData() : -1;
+	public int getInt () 
+	{
+		if (dataType.equals(Type.INT)) {
+			return (int)getData();
+		}
+		
+		if (dataType.equals(Type.INT_CLAMPED)) {
+			return MathUtil.clamp((int)getData(), 0, range);
+		}
+		
+		return -1;
 	}
 
 	/**
@@ -287,6 +305,7 @@ public enum SettingsManager {
 	private enum Type
 	{
 		INT,
+		INT_CLAMPED,
 		DOUBLE,
 		STRING,
 		BOOLEAN,
