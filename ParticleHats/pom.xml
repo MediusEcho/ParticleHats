@@ -48,16 +48,16 @@
     </repository>
     
     <!-- PlayerPoints repo -->
-	<repository>
-	  <id>dakani</id>
-	  <name>Dakani Nexus Repo</name>
-	  <url>http://repo.dakanilabs.com/content/repositories/public</url>
-	</repository>
+    <repository>
+      <id>dakani</id>
+      <name>Dakani Nexus Repo</name>
+      <url>http://repo.dakanilabs.com/content/repositories/public</url>
+    </repository>
 	
 	<!-- Vault repo -->
-	<repository>
-	    <id>vault-repo</id>
-	    <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+    <repository>
+      <id>vault-repo</id>
+      <url>http://nexus.hc.to/content/repositories/pub_releases</url>
     </repository>
 	
   </repositories>
