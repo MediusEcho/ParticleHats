@@ -59,14 +59,21 @@ public enum SettingsManager {
 	/**
 	 * Menu Properties
 	 */
-	MENU_LOCK_HATS_WITHOUT_PERMISSION ("menu.lock-hats-without-permission", Type.BOOLEAN,  false),
-	MENU_LOCKED_ITEM                  ("menu.locked-item.id",               Type.MATERIAL, Material.LAPIS_LAZULI),
-	MENU_LOCKED_ITEM_TITLE            ("menu.locked-item.title",            Type.STRING,   "&cLocked"),
+	MENU_LOCK_HATS_WITHOUT_PERMISSION  ("menu.lock-hats-without-permission", Type.BOOLEAN,  false),
+	MENU_SHOW_DESCRIPTION_WHEN_LOCKKED ("menu.show-description-when-locked", Type.BOOLEAN,  false),
+	MENU_LOCKED_ITEM                   ("menu.locked-item.id",               Type.MATERIAL, Material.LAPIS_LAZULI),
+	MENU_LOCKED_ITEM_TITLE             ("menu.locked-item.title",            Type.STRING,   "&cLocked"),
+	
+	MENU_OPEN_WITH_ITEM          ("menu.open-menu-with-item.enabled", Type.BOOLEAN, false),
+	MENU_OPEN_DEFAULT_MENU       ("menu.open-menu-with-item.default-menu", Type.STRING, "particles"),
+	MENU_OPEN_WITH_GROUP         ("menu.open-menu-with-item.use-player-group", Type.BOOLEAN, true),
+	MENU_OPEN_WITH_ITEM_MATERIAL ("menu.open-menu-with-item.id", Type.MATERIAL, Material.NETHER_STAR),
+	MENU_OPEN_WITH_ITEM_DAMAGE   ("menu.open-menu-with-item.damage-value", Type.INT, 0),
 	
 	MENU_SOUND_ENABLED ("menu.sound.enabled", Type.BOOLEAN, true),
 	MENU_SOUND_ID      ("menu.sound.id",      Type.SOUND,   Sound.UI_BUTTON_CLICK),
-	MENU_SOUND_VOLUME  ("menu.sound.volume",  Type.DOUBLE,   1.0),
-	MENU_SOUND_PITCH   ("menu.sound.pitch",   Type.DOUBLE,   1.0),
+	MENU_SOUND_VOLUME  ("menu.sound.volume",  Type.DOUBLE,  1.0),
+	MENU_SOUND_PITCH   ("menu.sound.pitch",   Type.DOUBLE,  1.0),
 	
 	/**
 	 * Editor Properties
@@ -75,9 +82,9 @@ public enum SettingsManager {
 	EDITOR_META_TIME_LIMIT ("editor.meta-time-limit", Type.INT,     30),
 	EDITOR_SOUND_ENABLED   ("editor.sound.enabled",   Type.BOOLEAN, true),
 	EDITOR_SOUND_ID        ("editor.sound.id",        Type.SOUND,   Sound.BLOCK_METAL_PLACE),
-	EDITOR_SOUND_VOLUME    ("editor.sound.volume",    Type.DOUBLE,   1.0),
-	EDITOR_SOUND_PITCH     ("editor.sound.pitch",     Type.DOUBLE,   1.0),
-	EDITOR_SOUND_MODIFIER  ("editor.sound.modifier",  Type.DOUBLE,   0.25);
+	EDITOR_SOUND_VOLUME    ("editor.sound.volume",    Type.DOUBLE,  1.0),
+	EDITOR_SOUND_PITCH     ("editor.sound.pitch",     Type.DOUBLE,  1.0),
+	EDITOR_SOUND_MODIFIER  ("editor.sound.modifier",  Type.DOUBLE,  0.25);
 	
 	
 	private final String key;
