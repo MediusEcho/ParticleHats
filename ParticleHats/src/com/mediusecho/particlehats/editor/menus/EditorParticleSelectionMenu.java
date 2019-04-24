@@ -16,7 +16,7 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.util.ItemUtil;
 
 public class EditorParticleSelectionMenu extends EditorMenu {
@@ -91,7 +91,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 	{
 		if (menus.containsKey(currentPage))
 		{
-			menuBuilder.setOwnerState(MenuState.SWITCHING);
+			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
 			owner.openInventory(menus.get(currentPage));
 		}
 	}
@@ -153,7 +153,8 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		setAction(45, (clickEvent, slot) ->
 		{
 			menuType = MenuType.PARTICLES;
-			menuBuilder.setOwnerState(MenuState.SWITCHING);
+			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
+			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(menus.get(currentPage));
 			return EditorClickType.NEUTRAL;
 		});
@@ -162,7 +163,8 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		setAction(46, (clickEvent, slot) ->
 		{
 			menuType = MenuType.COLOR;
-			menuBuilder.setOwnerState(MenuState.SWITCHING);
+			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
+			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(colorFilterMenu);
 			return EditorClickType.NEUTRAL;
 		});
@@ -171,7 +173,8 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		setAction(47, (clickEvent, slot) ->
 		{
 			menuType = MenuType.DATA;
-			menuBuilder.setOwnerState(MenuState.SWITCHING);
+			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
+			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(dataFilterMenu);
 			return EditorClickType.NEUTRAL;
 		});
@@ -180,7 +183,8 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		setAction(53, (clickEvent, slot) ->
 		{
 			menuType = MenuType.RECENTS;
-			menuBuilder.setOwnerState(MenuState.SWITCHING);
+			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
+			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(recentFilterMenu);
 			return EditorClickType.NEUTRAL;
 		});
@@ -219,6 +223,10 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		
 		for (ParticleEffect pe : ParticleEffect.values())
 		{
+			if (!pe.isSupported()) {
+				continue;
+			}
+			
 			Material material = pe.getMaterial();
 			String name = pe.getName();
 			ItemStack item = ItemUtil.createItem(material, name);
