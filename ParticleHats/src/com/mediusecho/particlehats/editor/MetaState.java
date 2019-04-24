@@ -31,7 +31,7 @@ public enum MetaState {
 	private final Core core = Core.instance;
 	
 	/**
-	 * Get the name of this ParticleMode
+	 * Get the name of this MetaState
 	 * @return The name of this mode as defined in the current messages.yml file
 	 */
 	public String getUsage () 
@@ -45,12 +45,26 @@ public enum MetaState {
 	}
 	
 	/**
-	 * Get the description of this ParticleMode
+	 * Get the description of this MetaState
 	 * @return The description of this mode as defined in the current messages.yml file
 	 */
 	public String getDescription ()
 	{
 		final String key = "META_" + toString() + "_DESCRIPTION";
+		try {
+			return Message.valueOf(key).getValue();
+		} catch (IllegalArgumentException e) {
+			return "";
+		}
+	}
+	
+	/**
+	 * Get the suggested value for this MetaState
+	 * @return
+	 */
+	public String getSuggestion ()
+	{
+		final String key = "META_" + toString() + "_SUGGESTION";
 		try {
 			return Message.valueOf(key).getValue();
 		} catch (IllegalArgumentException e) {
