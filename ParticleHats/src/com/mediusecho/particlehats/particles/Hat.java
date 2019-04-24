@@ -813,8 +813,12 @@ public class Hat {
 	 * Set the slot this hat belongs in
 	 * @param slot
 	 */
-	public void setSlot (int slot) {
+	public void setSlot (int slot) 
+	{
 		this.slot = slot;
+		for (Hat node : nodes) {
+			node.setSlot(slot);
+		}
 	}
 	
 	/**
