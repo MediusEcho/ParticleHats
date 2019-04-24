@@ -150,8 +150,11 @@ public class Hat {
 	 */
 	public void setPermission (String permission) 
 	{
-		this.permission = permission;	
-		setProperty("permission", "'" + permission + "'");
+		if (permission != null)
+		{
+			this.permission = permission;	
+			setProperty("permission", "'" + permission + "'");
+		}
 	}
 	
 	/**
@@ -176,8 +179,11 @@ public class Hat {
 	 */
 	public void setPermissionDeniedMessage (String permissionDeniedMessage) 
 	{
-		this.permissionDeniedMessage = permissionDeniedMessage;
-		setProperty("permission_denied", "'" + permissionDeniedMessage + "'");
+		if (permissionDeniedMessage != null)
+		{
+			this.permissionDeniedMessage = permissionDeniedMessage;
+			setProperty("permission_denied", "'" + permissionDeniedMessage + "'");
+		}
 	}
 	
 	/**
@@ -206,29 +212,16 @@ public class Hat {
 	}
 	
 	/**
-	 * Set this hats node path. Mainly used for yaml database storage
-	 * @param nodePath
-	 */
-	public void setNodePath (String nodePath) {
-		this.nodePath = nodePath;
-	}
-	
-	/**
-	 * Get this hats node path. Used in yaml database storage
-	 * @return
-	 */
-	public String getNodePath () {
-		return nodePath;
-	}
-	
-	/**
 	 * Set the message players will see when they use this hat
 	 * @param equipMessage
 	 */
 	public void setEquipMessage (String equipMessage) 
 	{
-		this.equipMessage = equipMessage;
-		setProperty("equip_message", "'" + equipMessage + "'");
+		if (equipMessage != null)
+		{
+			this.equipMessage = equipMessage;
+			setProperty("equip_message", "'" + equipMessage + "'");
+		}
 	}
 	
 	/**
@@ -262,8 +255,11 @@ public class Hat {
 	 */
 	public void setLeftClickArgument (String leftClickArgument)
 	{
-		this.leftClickArgument = leftClickArgument;
-		setProperty("left_argument", "'" + leftClickArgument + "'");
+		if (leftClickArgument != null)
+		{
+			this.leftClickArgument = leftClickArgument;
+			setProperty("left_argument", "'" + leftClickArgument + "'");
+		}
 	}
 	
 	/**
@@ -280,8 +276,11 @@ public class Hat {
 	 */
 	public void setRightClickArgument (String rightClickArgument)
 	{
-		this.rightClickArgument = rightClickArgument;
-		setProperty("right_argument", "'" + rightClickArgument + "'");
+		if (rightClickArgument != null)
+		{
+			this.rightClickArgument = rightClickArgument;
+			setProperty("right_argument", "'" + rightClickArgument + "'");
+		}
 	}
 	
 	/**
@@ -317,8 +316,11 @@ public class Hat {
 	 */
 	public void setLabel (String label)
 	{
-		this.label = label;
-		setProperty("label", "'" + label + "'");
+		if (label != null)
+		{
+			this.label = label;
+			setProperty("label", "'" + label + "'");
+		}
 	}
 	
 	/**
@@ -358,8 +360,11 @@ public class Hat {
 	 */
 	public void setLocation (ParticleLocation location) 
 	{
-		this.location = location;
-		setProperty("location", Integer.toString(location.getID()));
+		if (location != null)
+		{
+			this.location = location;
+			setProperty("location", Integer.toString(location.getID()));
+		}
 	}
 	
 	/**
@@ -376,8 +381,11 @@ public class Hat {
 	 */
 	public void setLeftClickAction (ParticleAction action)
 	{
-		this.leftAction = action;
-		setProperty("left_action", Integer.toString(action.getID()));
+		if (leftAction != null)
+		{
+			this.leftAction = action;
+			setProperty("left_action", Integer.toString(action.getID()));
+		}
 	}
 	
 	/**
@@ -394,8 +402,11 @@ public class Hat {
 	 */
 	public void setRightClickAction (ParticleAction action)
 	{
-		this.rightAction = action;
-		setProperty("right_action", Integer.toString(action.getID()));
+		if (rightAction != null)
+		{
+			this.rightAction = action;
+			setProperty("right_action", Integer.toString(action.getID()));
+		}
 	}
 	
 	/**
@@ -412,8 +423,11 @@ public class Hat {
 	 */
 	public void setMode (ParticleMode mode)
 	{
-		this.mode = mode;
-		setProperty("mode", Integer.toString(mode.getID()));
+		if (mode != null)
+		{
+			this.mode = mode;
+			setProperty("mode", Integer.toString(mode.getID()));
+		}
 	}
 	
 	/**
@@ -430,8 +444,11 @@ public class Hat {
 	 */
 	public void setType (ParticleType type)
 	{
-		this.type = type;
-		setProperty("type", Integer.toString(type.getID()));
+		if (type != null)
+		{
+			this.type = type;
+			setProperty("type", Integer.toString(type.getID()));
+		}
 	}
 	
 	/**
@@ -456,8 +473,11 @@ public class Hat {
 	 */
 	public void setAnimation (ParticleAnimation animation)
 	{
-		this.animation = animation;
-		setProperty("animation", Integer.toString(animation.getID()));
+		if (animation != null)
+		{
+			this.animation = animation;
+			setProperty("animation", Integer.toString(animation.getID()));
+		}
 	}
 	
 	/**
@@ -500,17 +520,21 @@ public class Hat {
 	 * Set this hats custom effect
 	 * @param customEffect
 	 */
-	public void setCustomType (CustomEffect customEffect)
+	public void setCustomType (PixelEffect customEffect)
 	{
-		this.customEffect = customEffect;
-		setProperty("custom_type", "'" + customEffect.getImageName() + "'");
+		if (customEffect != null)
+		{
+			this.customEffect = customEffect;
+			setProperty("custom_type", "'" + customEffect.getImageName() + "'");
+		}
 	}
 	
 	/**
 	 * Get this hats custom effect, null if nothing is set
 	 * @return
 	 */
-	public CustomEffect getCustomEffect () {
+	@Nullable
+	public PixelEffect getCustomEffect () {
 		return customEffect;
 	}
 	
@@ -610,8 +634,13 @@ public class Hat {
 	 */
 	public void setUpdateFrequency (int updateFrequency) 
 	{
-		this.updateFrequency = updateFrequency;
-		setProperty("update_frequency", Integer.toString(updateFrequency));
+		this.updateFrequency = MathUtil.clamp(updateFrequency, 1, 100); // 5 seconds max delay
+		
+		// Update our potion timer
+		if (potion != null) {
+			setPotion(potion.getType(), potion.getAmplifier());
+		}
+		setProperty("update_frequency", Integer.toString(this.updateFrequency));
 	}
 	
 	/**
