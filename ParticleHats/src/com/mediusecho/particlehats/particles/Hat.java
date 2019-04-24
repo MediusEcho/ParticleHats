@@ -582,10 +582,8 @@ public class Hat {
 	 * Set whether this hat should display particles
 	 * @param isVanished
 	 */
-	public void setVanished (boolean isVanished) 
-	{
+	public void setVanished (boolean isVanished) {
 		this.isVanished = isVanished;
-		setProperty("isVanished", Boolean.toString(isVanished));
 	}
 	
 	/**
