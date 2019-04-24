@@ -126,16 +126,16 @@ public class PixelEffect extends Effect {
 					int rgb = image.getRGB(x, y);
 					int b = rgb & 0xff;
 					int g = (rgb & 0xff00) >> 8;
-				    int r = (rgb & 0xff0000) >> 16;
-			        Color color = Color.fromRGB(r, g, b);
+					int r = (rgb & 0xff0000) >> 16;
+					Color color = Color.fromRGB(r, g, b);
 			        
-			        if (color.asRGB() != IGNORED_COLOR)
-			        {
-			        	double xx = ((x - centerX) * -1) * scale;
-			        	double yy = ((y - centerY) * -1) * scale;
+					if (color.asRGB() != IGNORED_COLOR)
+					{
+						double xx = ((x - centerX) * -1) * scale;
+						double yy = ((y - centerY) * -1) * scale;
 				        
-				        pixels.add(new PixelData(new Vector(xx, yy, 0), color));
-			        }
+						pixels.add(new PixelData(new Vector(xx, yy, 0), color));
+					}
 				}
 			}
 		}
