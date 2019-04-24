@@ -64,6 +64,7 @@ public class Hat {
 	private int speed               = 0;
 	private int count               = 1;
 	private int slot                = -1;
+	private int index               = -1;
 	private int demoDuration        = 200; // (10 Seconds in ticks)
 	private int editingAction       = -1;
 	
@@ -827,6 +828,23 @@ public class Hat {
 	 */
 	public int getSlot () {
 		return slot;
+	}
+	
+	/**
+	 * Set this hats index value<br>
+	 * Used for node lookups
+	 * @param index
+	 */
+	public void setIndex (int index) {
+		this.index = index;
+	}
+	
+	/**
+	 * Get this hats index value
+	 * @return
+	 */
+	public int getIndex () {
+		return index;
 	}
 	
 	/**
