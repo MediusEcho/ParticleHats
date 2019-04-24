@@ -109,7 +109,7 @@ public class MySQLDatabase implements Database {
 	}
 
 	@Override
-	public MenuInventory loadInventory(String menuName, Player player)
+	public MenuInventory loadInventory(String menuName, PlayerState playerState)
 	{		
 		try (Connection connection = dataSource.getConnection())
 		{

@@ -27,7 +27,7 @@ public interface Database {
 	 * @return
 	 */
 	@Nullable
-	public MenuInventory loadInventory (String menuName, Player player);
+	public MenuInventory loadInventory (String menuName, PlayerState playerState);
 	
 	/**
 	 * Creates and inserts an empty menu into our database

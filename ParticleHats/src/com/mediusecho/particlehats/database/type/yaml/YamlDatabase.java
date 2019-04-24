@@ -21,7 +21,7 @@ public class YamlDatabase implements Database {
 	}
 	
 	@Override
-	public MenuInventory loadInventory (String menuName, Player player) 
+	public MenuInventory loadInventory (String menuName, PlayerState playerState) 
 	{
 		return null;
 	}
