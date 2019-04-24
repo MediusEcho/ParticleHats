@@ -1237,6 +1237,16 @@ public class Hat {
 		return sound;
 	}
 	
+	public boolean playSound (Player player)
+	{
+		if (sound == null) {
+			return false;
+		}
+		
+		player.playSound(player.getLocation(), sound, (float) volume, (float) pitch);
+		return true;
+	}
+	
 	/**
 	 * Set this hats sound volume
 	 * @param volume
