@@ -51,9 +51,12 @@ public class Hat {
 	
 	private CustomEffect customEffect;
 	
-	private boolean isVanished      = false;
-	private boolean isPermanent     = true;
-	private boolean isLoaded        = false;
+	private boolean isVanished  = false;
+	private boolean isHidden    = false;
+	private boolean isPermanent = true;
+	private boolean isLoaded    = false;
+	private boolean isDeleted   = false;
+	private boolean isLocked    = false;
 	
 	//private int referenceID         = 0;
 	private int updateFrequency     = 2;
@@ -575,6 +578,22 @@ public class Hat {
 	}
 	
 	/**
+	 * Set wheter this hat is hidden
+	 * @param hidden
+	 */
+	public void setHidden (boolean hidden) {
+		isHidden = hidden;
+	}
+	
+	/**
+	 * Returns whether this hat is hidden and will not display particles
+	 * @return
+	 */
+	public boolean isHidden () {
+		return isHidden;
+	}
+	
+	/**
 	 * Set whether this hat will un-equip itself
 	 * @param isPermanent
 	 */
@@ -627,6 +646,29 @@ public class Hat {
 //	public int getReferenceID () {
 //		return referenceID;
 //	}
+	/**
+	 * Set whether this hat is locked or not
+	 * @param locked
+	 */
+	public void setLocked (boolean locked) {
+		isLocked = locked;
+	}
+	
+	/**
+	 * Get whether this hat can be locked
+	 * @return
+	 */
+	public boolean canBeLocked () {
+		return leftAction == ParticleAction.EQUIP || rightAction == ParticleAction.EQUIP;
+	}
+	
+	/**
+	 * Check to see if this hat is locked
+	 * @return
+	 */
+	public boolean isLocked () {
+		return isLocked;
+	}
 	
 	/**
 	 * Set how often this hat displays particles
