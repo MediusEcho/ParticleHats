@@ -61,7 +61,12 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 	{
 		if (menus.containsKey(currentPage))
 		{
-			menuBuilder.setOwnerState(MenuState.SWITCHING);
+			if (addedMenu) {
+				rebuild();
+			}
+			
+			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
+			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(menus.get(currentPage));
 		}
 	}

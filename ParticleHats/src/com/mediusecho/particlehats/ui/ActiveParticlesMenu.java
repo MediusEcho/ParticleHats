@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.managers.MenuManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -60,9 +59,7 @@ public class ActiveParticlesMenu extends Menu {
 	}
 	
 	@Override
-	public void open ()
-	{
-		ownerState.setMenuState(MenuState.SWITCHING);
+	public void open () {
 		owner.openInventory(inventory);
 	}
 	
@@ -122,12 +119,13 @@ public class ActiveParticlesMenu extends Menu {
 			inventory.setItem(49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_GO_BACK));
 			setAction(49, (event, slot) ->
 			{
-				MenuManager menuManager = core.getMenuManager();
-				Menu menu = menuManager.getLastMenu(ownerID);
+				PlayerState playerState = core.getPlayerState(ownerID);
+				Menu menu = playerState.getPreviousOpenMenu();
 				
-				if (menu != null) {
-					menuManager.openMenu(menu, true);
-				}
+				playerState.setOpenMenu(menu);
+				playerState.setGuiState(GuiState.SWITCHING_MENU);
+				
+				menu.open();
 				return true;
 			});
 		}

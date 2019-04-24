@@ -362,7 +362,9 @@ public enum ParticleAction {
 					menu = new StaticMenu(core, player, inv);
 				}
 				
-				core.getMenuManager().openMenu(menu, true);
+				playerState.setGuiState(GuiState.SWITCHING_MENU);
+				playerState.setOpenMenu(menu);
+				menu.open();
 				break;
 			}
 			
@@ -394,10 +396,9 @@ public enum ParticleAction {
 			case ACTIVE_PARTICLES:
 			{
 				ActiveParticlesMenu activeParticlesMenu = new ActiveParticlesMenu(core, player, true);
-				PlayerState playerState = core.getPlayerState(player.getUniqueId());
 				
-				playerState.setActiveParticlesMenu(activeParticlesMenu);
-				playerState.setMenuState(MenuState.ACTIVE_PARTICLES);
+				playerState.setOpenMenu(activeParticlesMenu, false);
+				playerState.setGuiState(GuiState.SWITCHING_MENU);
 				
 				activeParticlesMenu.open();
 				break;
@@ -416,5 +417,16 @@ public enum ParticleAction {
 			return actionID.get(id);
 		}
 		return EQUIP;
+	}
+	
+	private void gotoPreviousMenu (PlayerState playerState)
+	{
+		Menu menu = playerState.getPreviousOpenMenu();
+		
+		playerState.setOpenMenu(menu);
+		playerState.setGuiState(GuiState.SWITCHING_MENU);
+		playerState.setPurchaseMenu(null);
+		
+		menu.open();
 	}
 }

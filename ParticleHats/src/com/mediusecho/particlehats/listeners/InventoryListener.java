@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.GuiState;
 
 public class InventoryListener implements Listener {
 
@@ -30,7 +30,7 @@ public class InventoryListener implements Listener {
 		
 		Player player = (Player)event.getWhoClicked();
 		PlayerState playerState = core.getPlayerState(player.getUniqueId());
-		playerState.getMenuState().onClick(event, playerState);
+		playerState.getGuiState().onClick(event, playerState);
 	}
 	
 	@EventHandler
@@ -42,7 +42,7 @@ public class InventoryListener implements Listener {
 		
 		Player player = (Player)event.getPlayer();
 		PlayerState playerState = core.getPlayerState(player.getUniqueId());
-		playerState.getMenuState().onClose(playerState);
+		playerState.getGuiState().onClose(playerState);
 	}
 	
 	@EventHandler
@@ -54,14 +54,14 @@ public class InventoryListener implements Listener {
 		
 		Player player = (Player)event.getPlayer();
 		PlayerState playerState = core.getPlayerState(player.getUniqueId());
-		MenuState menuState = playerState.getMenuState();
-
-		if (menuState == MenuState.OPEN_FROM_COMMAND) {
-			playerState.setMenuState(MenuState.OPEN);
+		GuiState guiState = playerState.getGuiState();
+		
+		if (guiState == GuiState.SWITCHING_MENU) {
+			playerState.setGuiState(GuiState.ACTIVE);
 		}
 		
-		else if (menuState == MenuState.SWITCHING || menuState == MenuState.PURCHASING) {
-			playerState.setMenuState(playerState.getPreviousMenuState());
+		else if (guiState == GuiState.SWITCHING_EDITOR) {
+			playerState.setGuiState(GuiState.EDITOR);
 		}
 	}
 }

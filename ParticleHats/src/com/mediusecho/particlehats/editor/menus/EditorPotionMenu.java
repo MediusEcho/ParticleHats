@@ -19,7 +19,7 @@ import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -88,7 +88,8 @@ public class EditorPotionMenu extends EditorMenu {
 	{
 		if (menus.containsKey(currentPage))
 		{
-			menuBuilder.setOwnerState(MenuState.SWITCHING);
+			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
+			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(menus.get(currentPage));
 		}
 	}

@@ -19,7 +19,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 
@@ -206,7 +206,8 @@ public abstract class EditorMenu {
 	 */
 	public void open ()
 	{
-		menuBuilder.setOwnerState(MenuState.SWITCHING);
+		menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
+		//menuBuilder.setOwnerState(MenuState.SWITCHING);
 		owner.openInventory(inventory);
 		
 		logBuildTime();
