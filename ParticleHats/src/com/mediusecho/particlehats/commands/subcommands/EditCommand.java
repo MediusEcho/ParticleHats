@@ -50,12 +50,6 @@ public class EditCommand extends Command {
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
 	{
-//		if (!sender.isPlayer()) 
-//		{
-//			sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
-//			return false;
-//		}
-		
 		if (args.size() < 1) 
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_ARGUMENTS);
