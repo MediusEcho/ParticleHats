@@ -1421,6 +1421,121 @@ public class Hat {
 		return hat;
 	}
 	
+	public Hat clone ()
+	{
+		Hat clone = new Hat();
+		
+		clone.menu = menu;
+		clone.name = name;
+		clone.displayName = displayName;
+		clone.permission = permission;
+		clone.permissionDeniedMessage = permissionDeniedMessage;
+		clone.equipMessage = equipMessage;
+		clone.leftClickArgument = leftClickArgument;
+		clone.rightClickArgument = rightClickArgument;
+		clone.location = location;
+		clone.leftAction = leftAction;
+		clone.rightAction = rightAction;
+		clone.mode = mode;
+		clone.type = type;
+		clone.animation = animation;
+		clone.trackingMethod = trackingMethod;
+		clone.isPermanent = isPermanent;
+		clone.updateFrequency = updateFrequency;
+		clone.price = price;
+		clone.speed = speed;
+		clone.count = count;
+		clone.slot = slot;
+		clone.index = index;
+		clone.demoDuration = demoDuration;
+		clone.scale = scale;
+		clone.normalDescription = new ArrayList<String>(normalDescription);
+		clone.permissionDescription = new ArrayList<String>(permissionDescription);
+		clone.tags = new ArrayList<ParticleTag>(tags);
+		clone.potion = potion;
+		clone.sound = sound;
+		clone.volume = volume;
+		clone.pitch = pitch;
+		clone.material = material;
+		clone.offset = offset.clone();
+		clone.angle = angle.clone();
+		clone.iconData = iconData.clone();
+		
+		if (customEffect != null) {
+			clone.customEffect = customEffect.clone();
+		}
+		
+		for (Hat node : nodes) {
+			clone.addNode(node.equippableClone());
+		}
+		
+		for (int i = 0; i < type.getParticlesSupported(); i++) {
+			clone.setParticleData(i, getParticleData(i).clone());
+		}
+		
+		return clone;
+	}
+	
+	@Override
+	public boolean equals (Object o)
+	{
+		if (this == o) return true;
+		if (o == null) return false;
+		if (!(o instanceof Hat)) return false;
+		
+		Hat hat = (Hat)o;
+		
+		if (!hat.menu.equals(menu)) return false;	
+		if (hat.slot != slot) return false;
+		if (!hat.permission.equals(permission)) return false;
+		if (!hat.getType().equals(type)) return false;
+		if (!hat.getLocation().equals(location)) return false;
+		if (!hat.getMode().equals(mode)) return false;
+		if (!hat.getAnimation().equals(animation)) return false;
+		if (!hat.getTrackingMethod().equals(trackingMethod)) return false;
+		if (!hat.getOffset().equals(offset)) return false;	
+		if (!hat.getAngle().equals(angle)) return false; 
+		
+		if (hat.getCustomEffect() != null) {
+			if (!hat.getCustomEffect().equals(customEffect)) return false;
+		} else {
+			if (customEffect != null) return false;
+		}
+		
+		if (hat.getCount() != count) return false;
+		if (hat.getSpeed() != speed) return false;
+		if (!hat.getLabel().equals(label)) return false;
+		if (!hat.getLeftClickAction().equals(leftAction)) return false;		
+		if (!hat.getRightClickAction().equals(rightAction)) return false;
+		
+		if (!hat.getLeftClickArgument().equals(leftClickArgument)) return false;		
+		if (!hat.getRightClickArgument().equals(rightClickArgument)) return false;
+		
+		if (hat.getPotion() != null) {
+			if (!hat.getPotion().equals(potion)) return false;
+		} else {
+			if (potion != null) return false;
+		}
+		
+		for (int i = 0; i < particleData.size(); i++) {
+			if (!hat.getParticleData(i).equals(getParticleData(i))) return false;
+		}
+		
+		for (int i = 0; i < nodes.size(); i++) 
+		{
+			Hat node = hat.getNode(i);
+			Hat n = getNode(i);
+			
+			if (node != null) {
+				if (!node.equals(n)) return false;
+			} else {
+				if (n != null) return false;
+			}
+		}
+		
+		return true;
+	}
+
 	/**
 	 * Adds a modified property for reference when saving this hat
 	 * @param key
