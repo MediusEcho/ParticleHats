@@ -471,6 +471,25 @@ public class Hat {
 	}
 	
 	/**
+	 * Displays this hats ParticleType
+	 * @param ticks
+	 * @param e
+	 */
+	public void displayType (int ticks, Entity e)
+	{
+		if (!type.equals(ParticleType.CUSTOM)) {
+			type.getEffect().display(ticks, e, this);
+		}
+		
+		else
+		{
+			if (customEffect != null) {
+				customEffect.display(ticks, e, this);
+			}
+		}
+	}
+	
+	/**
 	 * Set this hats ParticleAnimation value
 	 * @param animation
 	 */
