@@ -746,8 +746,8 @@ public class Hat {
 	 */
 	public void setPrice (int price) 
 	{
-		this.price = price;
-		setProperty("price", Integer.toString(price));
+		this.price = MathUtil.clamp(price, 0, 2000000000);
+		setProperty("price", Integer.toString(this.price));
 	}
 	
 	/**
@@ -765,8 +765,8 @@ public class Hat {
 	 */
 	public void setSpeed (int speed)
 	{
-		this.speed = speed;
-		setProperty("speed", Integer.toString(speed));
+		this.speed = MathUtil.clamp(speed, 0, 10);
+		setProperty("speed", Integer.toString(this.speed));
 	}
 	
 	/**
@@ -783,8 +783,8 @@ public class Hat {
 	 */
 	public void setCount (int count)
 	{
-		this.count = count;
-		setProperty("count", Integer.toString(count));
+		this.count = MathUtil.clamp(count, 1, 15);
+		setProperty("count", Integer.toString(this.count));
 	}
 	
 	/**
@@ -821,6 +821,12 @@ public class Hat {
 		setProperty("duration", Integer.toString(demoDuration));
 	}
 	
+	public void setDuration (int seconds) 
+	{
+		this.demoDuration = MathUtil.clamp(seconds, 1, 1800) * 20;
+		setProperty("duration", Integer.toString(demoDuration));
+	}
+	
 	/**
 	 * Get how many ticks this hat has before being unequipped
 	 * @return
@@ -835,6 +841,24 @@ public class Hat {
 	 */
 	public void setEditingAction (int editingAction) {
 		this.editingAction = editingAction;
+	}
+	
+	/**
+	 * Get this hats scale
+	 * @return
+	 */
+	public double getScale () {
+		return scale;
+	}
+	
+	/**
+	 * Set this hats scale
+	 * @param scale
+	 */
+	public void setScale (double scale)
+	{
+		this.scale = MathUtil.clamp(scale, 0.1, 10);
+		setProperty("scale", Double.toString(this.scale));
 	}
 	
 	/**
@@ -956,6 +980,15 @@ public class Hat {
 	 */
 	public int getNodeCount () {
 		return isLoaded ? nodes.size() : nodeCountPreview;
+	}
+	/**
+	 * Set this hats potion amplifier
+	 * @param amplifier
+	 */
+	public void setPotionAmplifier (int amplifier) 
+	{
+		int amp = MathUtil.clamp(amplifier, 0, 9);
+		setPotion(potion.getType(), amp);
 	}
 	 * Get the ParticleData found at this index
 	 * @param index
