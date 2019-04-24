@@ -134,7 +134,12 @@ public class StaticMenu extends Menu {
 					if (SettingsManager.MENU_LOCK_HATS_WITHOUT_PERMISSION.getBoolean())
 					{		
 						item.setType(lockedMaterial);
-						ItemUtil.setNameAndDescription(item, lockedTitle);
+						
+						if (SettingsManager.MENU_SHOW_DESCRIPTION_WHEN_LOCKKED.getBoolean()) {
+							ItemUtil.setItemName(item, lockedTitle);
+						} else {
+							ItemUtil.setNameAndDescription(item, lockedTitle);
+						}
 					}
 				}
 			}
