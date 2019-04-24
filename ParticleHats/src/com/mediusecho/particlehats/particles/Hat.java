@@ -1143,6 +1143,14 @@ public class Hat {
 	}
 	
 	/**
+	 * Get how many particles this hat has
+	 * @return
+	 */
+	public int getParticleCount () {
+		return particleData.size();
+	}
+	
+	/**
 	 * Set this hats particle item data
 	 * @param index
 	 * @param item
