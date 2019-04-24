@@ -170,7 +170,7 @@ public class Hat {
 	 * @return permission formatted as <b>particlehats.particle.[permission]></b>
 	 */
 	public String getFullPermission () {
-		return "particlehats.particle." + permission;
+		return Permission.PARTICLE.append(permission);
 	}
 	
 	/**
