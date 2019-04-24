@@ -646,23 +646,21 @@ public class Hat {
 		return isLoaded;
 	}
 	
-//	/**
-//	 * Set this hats referenceID<br>
-//	 * Used in the MySQL database
-//	 * @param referenceID
-//	 */
-//	public void setReferenceID (int referenceID) {
-//		this.referenceID = referenceID;
-//	}
-//	
-//	/**
-//	 * Get this hats referenceID<br>
-//	 * Used in the MySQL database
-//	 * @return
-//	 */
-//	public int getReferenceID () {
-//		return referenceID;
-//	}
+	/**
+	 * Flags this hat for deletion
+	 */
+	public void delete () {
+		isDeleted = true;
+	}
+	
+	/**
+	 * Check to see if this hat is flagged for deletion
+	 * @return
+	 */
+	public boolean isDeleted () {
+		return isDeleted;
+	}
+	
 	/**
 	 * Set whether this hat is locked or not
 	 * @param locked
