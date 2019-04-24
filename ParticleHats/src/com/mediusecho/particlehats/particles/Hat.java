@@ -1021,6 +1021,15 @@ public class Hat {
 	}
 	
 	/**
+	 * Set this hats particle data for the given index
+	 * @param index
+	 * @param data
+	 */
+	public void setParticleData (int index, ParticleData data) {
+		particleData.put(index, data);
+	}
+	
+	/**
 	 * Assign a particle to an index
 	 * @param index
 	 * @param particle
