@@ -103,7 +103,6 @@ public class HookManager {
 			// VanishNoPacket
 			else if (pluginManager.isPluginEnabled("VanishNoPacket"))
 			{
-				// TODO: Check VanishNoPacket support
 				vanishHook = new VanishNoPacketHook(core);
 				Core.log("hooking into VanishNoPacket");
 			}
