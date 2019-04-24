@@ -89,6 +89,11 @@ public class OpenCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "open menu";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "open";
 	}
 

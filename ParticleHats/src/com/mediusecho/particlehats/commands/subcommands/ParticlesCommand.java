@@ -37,6 +37,11 @@ public class ParticlesCommand extends Command {
 	public String getName() {
 		return "particles";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "particles";
+	}
 
 	@Override
 	public Message getUsage() {

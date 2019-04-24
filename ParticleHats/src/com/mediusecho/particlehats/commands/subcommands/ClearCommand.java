@@ -73,6 +73,11 @@ public class ClearCommand extends Command {
 	public String getName() {
 		return "clear";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "clear";
+	}
 
 	@Override
 	public Message getUsage() {

@@ -29,6 +29,11 @@ public class DebugDeleteMenu extends Command {
 	public String getName() {
 		return "delete";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "delete";
+	}
 
 	@Override
 	public Message getUsage() {

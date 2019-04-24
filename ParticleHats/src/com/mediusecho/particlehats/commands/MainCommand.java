@@ -92,6 +92,11 @@ public class MainCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "main";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "h";
 	}
 	

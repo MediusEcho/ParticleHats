@@ -47,6 +47,11 @@ public class DeleteGroupCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "remove group";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "remove";
 	}
 

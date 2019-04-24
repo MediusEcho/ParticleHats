@@ -71,6 +71,11 @@ public class EditGroupCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "edit group";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "edit";
 	}
 

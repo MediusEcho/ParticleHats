@@ -28,6 +28,11 @@ public class DebugCommand extends Command {
 	public String getName() {
 		return "debug";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "debug";
+	}
 
 	@Override
 	public Message getUsage() {

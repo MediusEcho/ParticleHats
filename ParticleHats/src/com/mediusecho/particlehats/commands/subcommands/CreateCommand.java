@@ -53,6 +53,11 @@ public class CreateCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "create menu";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "create";
 	}
 

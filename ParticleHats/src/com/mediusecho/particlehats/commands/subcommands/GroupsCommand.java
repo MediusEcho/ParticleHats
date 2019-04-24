@@ -78,6 +78,11 @@ public class GroupsCommand extends Command {
 	public String getName() {
 		return "group";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "group";
+	}
 
 	@Override
 	public Message getUsage() {

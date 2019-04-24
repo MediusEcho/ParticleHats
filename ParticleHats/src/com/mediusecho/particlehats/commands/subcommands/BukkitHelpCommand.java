@@ -108,6 +108,11 @@ public class BukkitHelpCommand extends Command {
 	public String getName() {
 		return "help";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "help";
+	}
 
 	@Override
 	public Message getUsage() {

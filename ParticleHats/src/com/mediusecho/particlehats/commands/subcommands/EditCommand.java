@@ -102,6 +102,11 @@ public class EditCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "edit menu";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "edit";
 	}
 

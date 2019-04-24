@@ -22,6 +22,11 @@ public class ReloadCommand extends Command {
 	public String getName() {
 		return "reload";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "reload";
+	}
 
 	@Override
 	public Message getUsage() {

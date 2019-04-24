@@ -123,6 +123,11 @@ public class SetCommand extends Command {
 	public String getName() {
 		return "set";
 	}
+	
+	@Override
+	public String getArgumentName () {
+		return "set";
+	}
 
 	@Override
 	public Message getUsage() {

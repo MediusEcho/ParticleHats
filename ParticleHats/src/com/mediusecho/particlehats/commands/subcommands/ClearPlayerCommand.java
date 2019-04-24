@@ -36,6 +36,11 @@ public class ClearPlayerCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "clear player";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "player";
 	}
 

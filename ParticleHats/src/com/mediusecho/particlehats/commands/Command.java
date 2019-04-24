@@ -80,6 +80,12 @@ public abstract class Command {
 	public abstract String getName ();
 	
 	/**
+	 * Returns the argument name this command starts off with
+	 * @return
+	 */
+	public abstract String getArgumentName ();
+	
+	/**
 	 * Returns this commands arguments
 	 * @return
 	 */
@@ -114,7 +120,7 @@ public abstract class Command {
 	 * @param command
 	 */
 	public void register (Command command) {
-		subCommands.put(command.getName(), command);
+		subCommands.put(command.getArgumentName(), command);
 	}
 	
 	/**

@@ -62,6 +62,11 @@ public class AddGroupCommand extends Command {
 
 	@Override
 	public String getName() {
+		return "add group";
+	}
+	
+	@Override
+	public String getArgumentName () {
 		return "add";
 	}
 
