@@ -28,26 +28,27 @@ import com.mediusecho.particlehats.util.ItemUtil;
 
 public enum ParticleAction {
 
-	EQUIP                (0, false),
-	TOGGLE               (1, false),
-	CLOSE                (2, false),
-	DUMMY                (3, false),
-	OVERRIDE             (4, false),
-	CLEAR                (5, false),
+	EQUIP                (0),
+	TOGGLE               (1),
+	CLOSE                (2),
+	DUMMY                (3),
+	OVERRIDE             (4),
+	CLEAR                (5),
 	COMMAND              (6, true),
 	OPEN_MENU            (7, true),
 	OPEN_MENU_PERMISSION (8, true),
-	PURCHASE_CONFIRM     (9, false),
-	PURCHASE_DENY        (10, false),
-	PURCHASE_ITEM        (11, false),
-	MIMIC                (12, false),
+	PURCHASE_CONFIRM     (9, false, true),
+	PURCHASE_DENY        (10, false, true),
+	PURCHASE_ITEM        (11, false, true),
+	MIMIC                (12),
 	DEMO                 (13, true),
-	ACTIVE_PARTICLES     (14, false);
+	ACTIVE_PARTICLES     (14);
 	
 	private final Core core = Core.instance;
 	
 	private final int id;
 	private final boolean hasData;
+	private final boolean isHidden;
 	private static final Map<Integer, ParticleAction> actionID = new HashMap<Integer, ParticleAction>();
 	
 	static
@@ -57,10 +58,21 @@ public enum ParticleAction {
 		}
 	}
 	
-	private ParticleAction (final int id, final boolean hasData)
+	private ParticleAction (final int id, final boolean hasData, final boolean isHidden)
 	{
 		this.id = id;
 		this.hasData = hasData;
+		this.isHidden = isHidden;
+	}
+	
+	private ParticleAction (final int id, final boolean hasData)
+	{
+		this(id, hasData, false);
+	}
+	
+	private ParticleAction (final int id)
+	{
+		this(id, false, false);
 	}
 	
 	/**
@@ -77,6 +89,14 @@ public enum ParticleAction {
 	 */
 	public boolean hasData () {
 		return hasData;
+	}
+	
+	/**
+	 * Checks to see if this Action should be hidden from the menu editor
+	 * @return
+	 */
+	public boolean isHidden () {
+		return isHidden;
 	}
 	
 	/**
