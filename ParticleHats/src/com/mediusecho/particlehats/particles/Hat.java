@@ -1390,10 +1390,10 @@ public class Hat {
 	}
 	
 	/**
-	 * Returns a copy of this hat with only data necessary for a gui
+	 * Returns a copy of this hat with only data necessary for a menu
 	 * @return
 	 */
-	public Hat visualCopy ()
+	public Hat visualClone ()
 	{
 		Hat hat = new Hat();
 		
