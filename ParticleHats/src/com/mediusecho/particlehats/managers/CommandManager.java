@@ -21,11 +21,14 @@ import com.mediusecho.particlehats.commands.subcommands.DebugCommand;
 import com.mediusecho.particlehats.commands.subcommands.DebugDeleteMenu;
 import com.mediusecho.particlehats.commands.subcommands.EditCommand;
 import com.mediusecho.particlehats.commands.subcommands.GroupsCommand;
+import com.mediusecho.particlehats.commands.subcommands.ImportCommand;
+import com.mediusecho.particlehats.commands.subcommands.MetaCommand;
 import com.mediusecho.particlehats.commands.subcommands.OpenCommand;
 import com.mediusecho.particlehats.commands.subcommands.ParticlesCommand;
 import com.mediusecho.particlehats.commands.subcommands.ReloadCommand;
 import com.mediusecho.particlehats.commands.subcommands.SetCommand;
 import com.mediusecho.particlehats.commands.subcommands.SpigotHelpCommand;
+import com.mediusecho.particlehats.commands.subcommands.TypeCommand;
 
 public class CommandManager implements CommandExecutor, TabCompleter {
 
@@ -48,6 +51,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand.register(new SetCommand());
 		mainCommand.register(new ParticlesCommand());
 		mainCommand.register(new GroupsCommand());
+		mainCommand.register(new TypeCommand());
+		mainCommand.register(new ImportCommand());
+		mainCommand.register(new MetaCommand());
 		
 		if (core.canUseBungee()) {
 			mainCommand.register(new SpigotHelpCommand(core, this));
