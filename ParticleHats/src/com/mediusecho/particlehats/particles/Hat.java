@@ -1196,6 +1196,24 @@ public class Hat {
 	}
 	
 	/**
+	 * Set the current animation frame at index
+	 * @param index
+	 * @param frame
+	 */
+	public void setAnimationIndex (int index, int frame) {
+		animationIndex.put(index, frame);
+	}
+	
+	/**
+	 * Get the current animation frame at index
+	 * @param index
+	 * @return
+	 */
+	public int getAnimationIndex (int index) {
+		return animationIndex.containsKey(index) ? animationIndex.get(index) : 0;
+	}
+	
+	/**
 	 * Set the sound this hat will play when clicked
 	 * @param sound
 	 */
