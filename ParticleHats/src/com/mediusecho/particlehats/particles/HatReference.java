@@ -49,17 +49,17 @@ public class HatReference {
 			return false;
 		}
 		
-		if (!(obj instanceof Hat)) {
+		if (!(obj instanceof HatReference)) {
 			return false;
 		}
 		
-		Hat hat = (Hat)obj;
+		HatReference hat = (HatReference)obj;
 		
 		if (slot != hat.getSlot()) {
 			return false;
 		}
 		
-		if (!menuName.equals(hat.getMenu())) {
+		if (!menuName.equals(hat.getMenuName())) {
 			return false;
 		}
 		
