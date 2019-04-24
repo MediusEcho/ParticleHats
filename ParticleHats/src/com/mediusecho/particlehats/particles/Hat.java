@@ -1015,8 +1015,29 @@ public class Hat {
 	 * @return
 	 */
 	public int getNodeCount () {
-		return isLoaded ? nodes.size() : nodeCountPreview;
+		return nodes.size();
 	}
+	
+	/**
+	 * Sets this hats potion effect
+	 * @param potion
+	 */
+	public void setPotion (PotionEffect potion)
+	{
+		this.potion = potion;
+		setProperty("potion", "'" + potion.getType().getName() + "'");
+		setProperty("potion_strength", Integer.toString(potion.getAmplifier()));
+	}
+	
+	/**
+	 * Sets this hats potion effect
+	 * @param type
+	 * @param amplifier
+	 */
+	public void setPotion (PotionEffectType type, int amplifier) {
+		setPotion(new PotionEffect(type, updateFrequency + 4, amplifier, false, false));
+	}
+	
 	/**
 	 * Set this hats potion amplifier
 	 * @param amplifier
@@ -1026,6 +1047,37 @@ public class Hat {
 		int amp = MathUtil.clamp(amplifier, 0, 9);
 		setPotion(potion.getType(), amp);
 	}
+	
+	/**
+	 * Get this hats potion amplifier
+	 * @return
+	 */
+	public int getPotionAmplifier ()
+	{
+		if (potion != null) {
+			return potion.getAmplifier();
+		}
+		return 0;
+	}
+	
+	/**
+	 * Get this hats potion effect
+	 * @return
+	 */
+	public PotionEffect getPotion () {
+		return potion;
+	}
+	
+	/**
+	 * Removes this hats potion effect
+	 */
+	public void removePotion () 
+	{
+		potion = null;
+		setProperty("potion", "NULL");
+	}
+	
+	/**
 	 * Get the ParticleData found at this index
 	 * @param index
 	 * @return
