@@ -1352,24 +1352,41 @@ public class Hat {
 	 * Returns a copy of this object with only data necessary for displaying particles
 	 * @return
 	 */
-	public Hat essentialCopy ()
+	public Hat equippableClone ()
 	{
-		Hat hat = new Hat();
+		Hat clone = new Hat();
 		
-		hat.setLocation(location);
-		hat.setMode(mode);
-		hat.setType(type);
-		hat.setAnimation(animation);
-		hat.setTrackingMethod(trackingMethod);
+		clone.menu = menu;
 		
-		hat.setUpdateFrequency(updateFrequency);
-		hat.setCount(count);
-		hat.setSpeed(speed);
-		hat.setOffset(offset);
-		hat.setAngle(angle);
+		clone.location = location;
+		clone.animation = animation;
+		clone.mode = mode;
+		clone.type = type;
+		clone.animation = animation;
+		clone.trackingMethod = trackingMethod;
+		clone.customEffect = customEffect;
 		
-		hat.clearPropertyChanges();
-		return hat;
+		clone.updateFrequency = updateFrequency;
+		clone.count = count;
+		clone.slot = slot;
+		clone.speed = speed;
+		clone.demoDuration = demoDuration;
+		clone.offset = offset.clone();
+		clone.angle = angle.clone();
+		clone.scale = scale;
+		
+		for (int i = 0; i < type.getParticlesSupported(); i++) {
+			clone.setParticleData(i, getParticleData(i).clone());
+		}
+		
+		for (Hat node : nodes) {
+			clone.addNode(node.equippableClone());
+		}
+		
+		clone.tags = new ArrayList<ParticleTag>(tags);
+		clone.clearPropertyChanges();
+		
+		return clone;
 	}
 	
 	/**
