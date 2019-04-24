@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.Hat;
@@ -150,14 +149,6 @@ public class PixelEffect extends Effect {
 			Location location = entity.getLocation();
 			if (hat.getTrackingMethod() == ParticleTracking.TRACK_HEAD_MOVEMENT && entity instanceof Player) {
 				location = ((Player)entity).getEyeLocation();
-			}
-			
-			if (entity instanceof Player)
-			{			
-				if (((Player)entity).isSneaking())
-				{
-					Core.debug(location);
-				}
 			}
 			
 			double yaw = Math.toRadians(location.getYaw());
