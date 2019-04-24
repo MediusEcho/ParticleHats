@@ -4,6 +4,7 @@ import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.listeners.ChatListener;
 import com.mediusecho.particlehats.listeners.ConnectionListener;
 import com.mediusecho.particlehats.listeners.EntityListener;
+import com.mediusecho.particlehats.listeners.InteractListener;
 import com.mediusecho.particlehats.listeners.InventoryListener;
 import com.mediusecho.particlehats.listeners.MovementListener;
 
@@ -13,11 +14,12 @@ public class EventManager {
 	private final Core core;
 	
 	// Events
-	private InventoryListener  inventoryListener;
-	private ChatListener       chatListener;
-	private MovementListener   movementListener;
-	private EntityListener     entityListener;
-	private ConnectionListener connectionListener;
+	private final InventoryListener  inventoryListener;
+	private final ChatListener       chatListener;
+	private final MovementListener   movementListener;
+	private final EntityListener     entityListener;
+	private final ConnectionListener connectionListener;
+	private final InteractListener   interactListener;
 	
 	public EventManager (final Core core)
 	{
@@ -28,5 +30,6 @@ public class EventManager {
 		movementListener   = new MovementListener(core);
 		entityListener     = new EntityListener(core);
 		connectionListener = new ConnectionListener(core);
+		interactListener   = new InteractListener(core);
 	}
 }
