@@ -14,6 +14,22 @@ import com.mediusecho.particlehats.locale.Message;
 public class ItemUtil {
 
 	/**
+	 * Tries to return the Material enum that matches the name provided.<br>
+	 * Returns fallback if nothing is found
+	 * @param material The name of the material
+	 * @param fallback Material returned if no match is found
+	 * @return
+	 */
+	public static Material getMaterial(String material, Material fallback)
+	{
+		try {
+			return Material.valueOf(material);
+		} catch (IllegalArgumentException e) {
+			return fallback;
+		}
+	}
+	
+	/**
 	 * Creates and returns a new ItemStack
 	 * @param material
 	 * @param title
