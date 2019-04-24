@@ -49,7 +49,7 @@ public class Hat {
 	private ParticleAnimation animation     = ParticleAnimation.STATIC;
 	private ParticleTracking trackingMethod = ParticleTracking.TRACK_NOTHING;
 	
-	private CustomEffect customEffect;
+	private PixelEffect customEffect;
 	
 	private boolean isVanished  = false;
 	private boolean isHidden    = false;
