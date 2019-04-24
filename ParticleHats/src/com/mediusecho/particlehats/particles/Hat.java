@@ -1256,8 +1256,8 @@ public class Hat {
 		case HEAD:
 			y = 2.3;
 			break;
-		case WAIST:
-			y = 0.9f;
+		case CHEST:
+			y = 1.3f;
 			break;
 		default:
 			y = 0;
