@@ -6,14 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.particles.effects.CustomEffect;
+import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -24,6 +30,8 @@ import com.mediusecho.particlehats.particles.properties.ParticleMode;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
+import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -58,7 +66,6 @@ public class Hat {
 	private boolean isDeleted   = false;
 	private boolean isLocked    = false;
 	
-	//private int referenceID         = 0;
 	private int updateFrequency     = 2;
 	private int price               = 0;
 	private int speed               = 0;
@@ -68,12 +75,18 @@ public class Hat {
 	private int demoDuration        = 200; // (10 Seconds in ticks)
 	private int editingAction       = -1;
 	
+	private double scale = 1;
+	
 	private List<String> normalDescription;
 	private List<String> permissionDescription;
 	
 	private List<ParticleTag> tags;
+	private List<Hat> nodes;
+	
+	private PotionEffect potion;
 	
 	private Map<Integer, ParticleData> particleData;
+	private Map<Integer, Integer> animationIndex;
 	
 	private Sound sound;
 	private double volume = 1D;
@@ -742,8 +755,6 @@ public class Hat {
 	 */
 	public void setParticleScale (int index, double scale) {
 		getParticleData(index).setScale(scale);
-		//this.particleScale = particleScale;
-		//setProperty("particle_scale", Double.toString(particleScale));
 	}
 	
 	/**
@@ -752,7 +763,6 @@ public class Hat {
 	 */
 	public double getParticleScale (int index) {
 		return getParticleData(index).getScale();
-		//return particleScale;
 	}
 	
 	/**
@@ -1500,6 +1510,14 @@ public class Hat {
 	 */
 	public void clearPropertyChanges () {
 		modifiedProperties.clear();
+	}
+	
+	/**
+	 * Get all properties changed
+	 * @return
+	 */
+	public Map<String, String> getPropertyChanges () {
+		return new HashMap<String, String>(modifiedProperties);
 	}
 	
 	/**
