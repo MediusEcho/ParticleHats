@@ -27,6 +27,11 @@ public class PlayerState {
 	private MenuState previousMenuState = MenuState.CLOSED;
 
 	private ActiveParticlesMenu activeParticlesMenu;
+	private Menu purchaseMenu;
+	
+	private Menu openMenu;
+	private Menu previousOpenMenu;
+	private Map<String, Menu> openMenuCache;
 	
 	private MetaState metaState = MetaState.NONE;
 	private int metaStateTime = 15;
@@ -40,6 +45,8 @@ public class PlayerState {
 	
 	private Location afkLocation;
 	
+	private Hat pendingPurchaseHat;
+	
 	private List<Hat> activeHats;
 	private List<HatReference> purchasedHats;
 	
@@ -50,6 +57,8 @@ public class PlayerState {
 		
 		activeHats = new ArrayList<Hat>();
 		purchasedHats = new ArrayList<HatReference>();
+		
+		openMenuCache = new HashMap<String, Menu>();
 	}
 	
 	/**
@@ -85,45 +94,105 @@ public class PlayerState {
 	}
 	
 	/**
-	 * Sets this players menu state class
-	 * @param menuState
+	 * Set this players purchase menu
+	 * @param purchaseMenu
 	 */
-	public void setMenuState (MenuState menuState) 
+	public void setPurchaseMenu (Menu purchaseMenu) {
+		this.purchaseMenu = purchaseMenu;
+	}
+	
+	/**
+	 * Get this players purchase menu
+	 * @return
+	 */
+	@Nullable
+	public Menu getPurchaseMenu () {
+		return purchaseMenu;
+	}
+	
+	/**
+	 * Remove this players purchase menu
+	 */
+	public void removePurchaseMenu () {
+		purchaseMenu = null;
+	}
+	
+	public void setOpenMenu (Menu menu, boolean cacheMenu)
 	{
-		this.previousMenuState = this.menuState;
-		this.menuState = menuState;
+		if (menu != null)
+		{
+			previousOpenMenu = openMenu;
+			openMenu = menu;
+			
+			if (cacheMenu) 
+			{
+				if (!openMenuCache.containsKey(menu.getName())) {
+					openMenuCache.put(menu.getName(), menu);
+				}
+			}
+		}
 	}
 	
 	/**
-	 * Returns this players menu state
+	 * Set the players current open menu
+	 * @param menu
+	 */
+	public void setOpenMenu (Menu menu) {
+		setOpenMenu(menu, true);
+	}
+	
+	/**
+	 * Gets the players current open menu
 	 * @return
 	 */
-	public MenuState getMenuState () {
-		return menuState;
+	@Nullable
+	public Menu getOpenMenu () {
+		return openMenu;
 	}
 	
 	/**
-	 * Returns this players previous menu state
+	 * Get the players previously open menu
 	 * @return
 	 */
-	public MenuState getPreviousMenuState () {
-		return previousMenuState;
+	@Nullable
+	public Menu getPreviousOpenMenu () {
+		return previousOpenMenu;
 	}
 	
 	/**
-	 * Set this players active particles menu
-	 * @param activeParticlesMenu
-	 */
-	public void setActiveParticlesMenu (ActiveParticlesMenu activeParticlesMenu) {
-		this.activeParticlesMenu = activeParticlesMenu;
-	}
-	
-	/**
-	 * Get this players active particles menu
+	 * Gets a cached menu the player has recently opened
+	 * @param menuName
 	 * @return
 	 */
-	public ActiveParticlesMenu getActiveParticlesMenu () {
-		return activeParticlesMenu;
+	@Nullable
+	public Menu getOpenMenu (String menuName)
+	{
+		if (openMenuCache.containsKey(menuName)) {
+			return openMenuCache.get(menuName);
+		}
+		return null;
+	}
+	
+	/**
+	 * Resets the players current open menu
+	 */
+	public void closeOpenMenu () {
+		openMenu = null;
+	}
+	
+	/**
+	 * Clears the players menu cache
+	 */
+	public void clearMenuCache () {
+		openMenuCache.clear();
+	}
+	
+	/**
+	 * Checks to see if the player has a menu open
+	 * @return
+	 */
+	public boolean hasMenuOpen () {
+		return openMenu != null;
 	}
 	
 	/**
@@ -221,6 +290,23 @@ public class PlayerState {
 	@Nullable
 	public Location getAFKLocation () {
 		return afkLocation;
+	}
+	
+	/**
+	 * Set which hat this player is trying to purchase
+	 * @param hat
+	 */
+	public void setPendingPurchase (Hat hat) {
+		pendingPurchaseHat = hat;
+	}
+	
+	/**
+	 * Gets the hat this player is trying to purchase
+	 * @return
+	 */
+	@Nullable
+	public Hat getPendingPurchase () {
+		return pendingPurchaseHat;
 	}
 	
 	/**
