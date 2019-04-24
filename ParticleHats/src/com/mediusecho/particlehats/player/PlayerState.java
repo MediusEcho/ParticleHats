@@ -94,6 +94,30 @@ public class PlayerState {
 	}
 	
 	/**
+	 * Set this players active particles menu
+	 * @param activeParticlesMenu
+	 */
+	public void setActiveParticlesMenu (ActiveParticlesMenu activeParticlesMenu) {
+		this.activeParticlesMenu = activeParticlesMenu;
+	}
+	
+	/**
+	 * Get this players active particles menu
+	 * @return
+	 */
+	@Nullable
+	public ActiveParticlesMenu getActiveParticlesMenu () {
+		return activeParticlesMenu;
+	}
+	
+	/**
+	 * Sets this players active particle menu as null
+	 */
+	public void removeActiveParticlesMenu () {
+		activeParticlesMenu = null;
+	}
+	
+	/**
 	 * Set this players purchase menu
 	 * @param purchaseMenu
 	 */
