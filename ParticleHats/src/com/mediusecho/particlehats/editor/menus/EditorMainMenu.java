@@ -329,7 +329,7 @@ public class EditorMainMenu extends EditorMenu {
 		setButton(16, speedItem, (event, slot) ->
 		{
 			final int increment = event.isLeftClick() ? 1 : -1;
-			final int speed = (int) MathUtil.clamp(targetHat.getSpeed() + increment, 0, 10);
+			final int speed = targetHat.getSpeed() + increment;
 			
 			targetHat.setSpeed(speed);
 			EditorLore.updateIntegerDescription(getItem(16), speed, Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
@@ -370,7 +370,11 @@ public class EditorMainMenu extends EditorMenu {
 		setButton(22, frequencyItem, (event, slot) ->
 		{
 			final int increment = event.isLeftClick() ? 1 : -1;
-			final int frequency = (int) MathUtil.clamp(targetHat.getUpdateFrequency() + increment, 1, 63);
+			int frequency = targetHat.getUpdateFrequency() + increment;
+			
+			if (event.isMiddleClick()) {
+				frequency = 2;
+			}
 			
 			targetHat.setUpdateFrequency(frequency);
 			EditorLore.updateFrequencyDescription(getItem(22), frequency, Message.EDITOR_MAIN_MENU_UPDATE_FREQUENCY_DESCRIPTION);
