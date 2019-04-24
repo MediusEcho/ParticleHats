@@ -81,11 +81,10 @@ public class Hat {
 	private Material material = Material.SUNFLOWER;
 	private IconData iconData;
 	
-	// Particle Size
-	//private double particleScale = 1f;
-	
 	private Vector offset;
 	private Vector angle;
+	
+	private ItemStack menuItem;
 	
 	public Hat ()
 	{
@@ -1323,6 +1322,27 @@ public class Hat {
 	 */
 	public Vector getAngle () {
 		return angle;
+	}
+	
+	/**
+	 * Set the item that is displayed in menus
+	 * @param menuItem
+	 */
+	public void setMenuItem (ItemStack menuItem) {
+		this.menuItem = menuItem;
+	}
+	
+	/**
+	 * Get this hats ItemStack that is displayed in menus
+	 * @return
+	 */
+	public ItemStack getMenuItem ()
+	{
+		if (menuItem != null) {
+			return menuItem;
+		}
+		
+		return ItemUtil.createItem(material, displayName, normalDescription);
 	}
 	
 	/**
