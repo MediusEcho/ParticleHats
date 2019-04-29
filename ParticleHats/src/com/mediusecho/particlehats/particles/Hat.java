@@ -1120,6 +1120,16 @@ public class Hat {
 	}
 	
 	/**
+	 * Gets all ParticleData from this hat
+	 * @return
+	 */
+	public Map<Integer, ParticleData> getParticleData ()
+	{
+		final Map<Integer, ParticleData> data = new HashMap<Integer, ParticleData>(particleData);
+		return data;
+	}
+	
+	/**
 	 * Set this hats particle data for the given index
 	 * @param index
 	 * @param data
