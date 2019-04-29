@@ -40,8 +40,11 @@ public class ParticleData {
 	 */
 	public void setParticle (ParticleEffect particle) 
 	{
-		this.particle = particle;
-		setProperty("particle_id", Integer.toString(particle.getID()));
+		if (particle != null)
+		{
+			this.particle = particle;
+			setProperty("particle_id", Integer.toString(particle.getID()));
+		}
 	}
 	
 	/**
