@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ public abstract class Command {
 	
 	public Command ()
 	{		
-		subCommands = new HashMap<String, Command>();
+		subCommands = new LinkedHashMap<String, Command>();
 	}
 	
 	/**
@@ -144,7 +143,7 @@ public abstract class Command {
 			Command cmd = entry.getValue();
 			
 			if (cmd.showInHelp()) {
-			commands.put(cmd.getName(), cmd);
+				commands.put(cmd.getName(), cmd);
 			}
 			
 			cmd.getSubCommands(commands);
