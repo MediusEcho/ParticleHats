@@ -12,7 +12,7 @@ public class PlaceholderEffect extends Effect {
 
 	@Override
 	public String getName() {
-		return "placeholder";
+		return "none";
 	}
 
 	@Override
