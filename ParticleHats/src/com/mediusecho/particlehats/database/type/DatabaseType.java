@@ -30,12 +30,12 @@ public enum DatabaseType {
 		case MYSQL:
 			return new MySQLDatabase(core, callback);
 		default:
-			return new YamlDatabase();
+			return new YamlDatabase(core);
 		}
 	}
 	
-	public Database getDatabase () {
-		return new YamlDatabase();
+	public Database getDatabase (Core core) {
+		return new YamlDatabase(core);
 	}
 	
 	/**
