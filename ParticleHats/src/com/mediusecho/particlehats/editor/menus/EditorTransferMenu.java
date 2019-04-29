@@ -26,7 +26,7 @@ public class EditorTransferMenu extends EditorMenu {
 		super(core, owner, menuBuilder);
 		this.menuName = menuName;
 		
-		menuInventory = core.getDatabase().loadInventory(menuName, owner);
+		menuInventory = core.getDatabase().loadInventory(menuName, core.getPlayerState(ownerID));
 		inventory = Bukkit.createInventory(null, menuInventory.getSize(), EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_MOVE_MENU_TITLE));
 		
 		build();
