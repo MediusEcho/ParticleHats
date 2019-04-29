@@ -143,6 +143,11 @@ public class ActiveParticlesMenu extends Menu {
 		final MenuAction editAction = (event, slot) ->
 		{
 			int index = getClampedIndex(slot, 10, 2);
+			
+			if (index >= activeHats.size()) {
+				return false;
+			}
+			
 			Hat hat = activeHats.get(index);
 			if (hat != null)
 			{
