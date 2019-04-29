@@ -9,6 +9,8 @@ import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.ui.Menu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
@@ -43,7 +45,8 @@ public class MainCommand extends Command {
 			
 			String menuName = defaultMenu.contains(".") ? defaultMenu.split("\\.")[0] : defaultMenu;
 			Database database = core.getDatabase();
-			MenuInventory inventory = database.loadInventory(menuName, sender.getPlayer());
+			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+			MenuInventory inventory = database.loadInventory(menuName, playerState);
 			
 			if (inventory == null)
 			{
@@ -52,7 +55,11 @@ public class MainCommand extends Command {
 			}
 			
 			Menu menu = new StaticMenu(core, sender.getPlayer(), inventory);
-			core.getMenuManager().openMenu(menu, true);
+			
+			playerState.setGuiState(GuiState.SWITCHING_MENU);
+			playerState.setOpenMenu(menu);
+			menu.open();
+			
 			return true;
 		}
 		
