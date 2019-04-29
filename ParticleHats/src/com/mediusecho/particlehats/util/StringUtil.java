@@ -195,6 +195,10 @@ public class StringUtil {
 	 */
 	public final static String toRomanNumeral (int number)
 	{
+		if (number <= 0) {
+			return "";
+		}
+		
 		int n = romanNumerals.floorKey(number);
 		if (number == n) {
 			return romanNumerals.get(number);
