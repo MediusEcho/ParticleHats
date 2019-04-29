@@ -21,7 +21,6 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class StaticMenu extends Menu {
 
-	// TODO: Finish Static Menu
 	public StaticMenu(Core core, Player owner) 
 	{
 		super(core, owner);
@@ -63,9 +62,7 @@ public class StaticMenu extends Menu {
 				core.getDatabase().loadHat(getName(), hat.getSlot(), hat);
 			}
 			
-			if (hat.getSound() != null) {
-				owner.playSound(owner.getLocation(), hat.getSound(), (float) hat.getSoundVolume(), (float) hat.getSoundPitch()); 
-			} else {
+			if (!hat.playSound(owner)) {
 				playSound();
 			}
 			
