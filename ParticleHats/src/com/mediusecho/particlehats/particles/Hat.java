@@ -966,6 +966,19 @@ public class Hat {
 	}
 	
 	/**
+	 * Gets a list of all ParticleTag names that belong to this hat
+	 * @return
+	 */
+	public List<String> getTagNames ()
+	{
+		List<String> tagNames = new ArrayList<String>();
+		for (ParticleTag tag : tags) {
+			tagNames.add(tag.getName());
+		}
+		return tagNames;
+	}
+	
+	/**
 	 * Adds a node to this hats node list
 	 * @param node
 	 */
