@@ -98,6 +98,9 @@ menu:
   # Hat icons will be replaced if the player does not have permission to equip them
   lock-hats-without-permission: false
   #
+  # Shows the hats description when it is locked
+  show-description-when-locked: false
+  #
   locked-item:
     #
     # This item will replace the hats normal icon
