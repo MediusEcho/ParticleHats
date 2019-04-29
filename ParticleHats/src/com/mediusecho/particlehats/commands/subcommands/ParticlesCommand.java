@@ -9,25 +9,18 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.GuiState;
 
 public class ParticlesCommand extends Command {
 
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
-	{
-//		if (!sender.isPlayer())
-//		{
-//			sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
-//			return false;
-//		}
-		
-		//EditorActiveParticlesMenu activeParticlesMenu = new EditorActiveParticlesMenu(core, sender.getPlayer(), false);
+	{		
 		ActiveParticlesMenu activeParticlesMenu = new ActiveParticlesMenu(core, sender.getPlayer(), false);
 		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 		
-		playerState.setActiveParticlesMenu(activeParticlesMenu);
-		playerState.setMenuState(MenuState.ACTIVE_PARTICLES);
+		playerState.setOpenMenu(activeParticlesMenu, false);
+		playerState.setGuiState(GuiState.SWITCHING_MENU);
 		
 		activeParticlesMenu.open();
 		return true;
