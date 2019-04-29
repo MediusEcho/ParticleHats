@@ -1,0 +1,18 @@
+##################################################################
+#                                                                #
+#         Here you can configure unique groups that will         #
+#              each have access to a different menu              #
+#                                                                #
+# Groups should be ordered by lowest -> highest for best results #
+# Example:                                                       #
+# default:                                                       #
+#   default_menu: 'particles.yml'                                #
+# member:                                                        #
+#   default_menu: 'members.yml'                                  #
+# vip:                                                           #
+#   default_menu: 'vip.yml'                                      #
+#                                                                #
+##################################################################
+#
+default:
+  default_menu: 'particles.yml'
