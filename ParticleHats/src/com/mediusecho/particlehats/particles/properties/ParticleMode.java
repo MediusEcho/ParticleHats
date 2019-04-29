@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.particles.properties;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.mediusecho.particlehats.locale.Message;
 
@@ -17,6 +16,7 @@ public enum ParticleMode {
 	WHEN_SWIMMING  (6);
 	
 	private final int id;
+	
 	private static final Map<Integer, ParticleMode> modeID = new HashMap<Integer, ParticleMode>();
 	
 	static
@@ -37,6 +37,14 @@ public enum ParticleMode {
 	 */
 	public int getID () {
 		return id;
+	}
+	
+	/**
+	 * Get the name of this ParticleMode
+	 * @return
+	 */
+	public String getName () {
+		return this.toString().toLowerCase();
 	}
 	
 	/**
@@ -78,5 +86,23 @@ public enum ParticleMode {
 			return modeID.get(id);
 		}
 		return ACTIVE;
+	}
+	
+	/**
+	 * Returns the ParticleMode that matches this name
+	 * @param name
+	 * @return
+	 */
+	public static ParticleMode fromName (String name)
+	{
+		if (name == null) {
+			return ParticleMode.ACTIVE;
+		}
+		
+		try {
+			return ParticleMode.valueOf(name.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return ParticleMode.ACTIVE;
+		}
 	}
 }

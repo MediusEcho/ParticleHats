@@ -83,6 +83,10 @@ public enum ParticleAction {
 		return id;
 	}
 	
+	public String getName () {
+		return this.toString().toLowerCase();
+	}
+	
 	/**
 	 * Returns true if this action relies on additional data
 	 * @return
