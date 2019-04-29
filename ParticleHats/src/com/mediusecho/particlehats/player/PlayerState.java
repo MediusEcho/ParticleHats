@@ -1,7 +1,9 @@
 package com.mediusecho.particlehats.player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -9,13 +11,15 @@ import javax.annotation.Nullable;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.Menu;
 
 public class PlayerState {
 	
@@ -23,8 +27,6 @@ public class PlayerState {
 	private final UUID ownerID;
 	
 	private MenuBuilder menuBuilder;
-	private MenuState menuState         = MenuState.CLOSED;
-	private MenuState previousMenuState = MenuState.CLOSED;
 
 	private ActiveParticlesMenu activeParticlesMenu;
 	private Menu purchaseMenu;
@@ -34,6 +36,10 @@ public class PlayerState {
 	private Map<String, Menu> openMenuCache;
 	
 	private MetaState metaState = MetaState.NONE;
+	
+	private GuiState guiState = GuiState.INNACTIVE;
+	private GuiState previousGuiState = GuiState.NONE;
+	
 	private int metaStateTime = 15;
 	private int metaDescriptionLine = 0;
 	
@@ -91,6 +97,10 @@ public class PlayerState {
 	 */
 	public MenuBuilder getMenuBuilder () {
 		return menuBuilder;
+	}
+	
+	public boolean isEditing () {
+		return menuBuilder != null;
 	}
 	
 	/**
@@ -388,7 +398,7 @@ public class PlayerState {
 	 * @return
 	 */
 	public boolean canEquip () {
-		return activeHats.size() < 28;
+		return activeHats.size() < SettingsManager.MAXIMUM_HAT_LIMIT.getInt();
 	}
 	
 	/**
@@ -450,8 +460,35 @@ public class PlayerState {
 	 * @param hat
 	 * @return
 	 */
-	public boolean hasPurchased (Hat hat) {
-		return purchasedHats.contains(hat);
+	public boolean hasPurchased (Hat hat) 
+	{
+		HatReference reference = new HatReference(hat.getMenu(), hat.getSlot());
+		Core.debug("purchased hats contains " + reference.getMenuName() + ":" + reference.getSlot() + " ? " + purchasedHats.contains(reference));
+		return purchasedHats.contains(reference);
+	}
+	
+	/**
+	 * Set this players GuiState
+	 * @param guiState
+	 */
+	public void setGuiState (GuiState guiState) {
+		this.guiState = guiState;
+	}
+	
+	/**
+	 * Get this players GuiState
+	 * @return
+	 */
+	public GuiState getGuiState () {
+		return guiState;
+	}
+	
+	/**
+	 * Get this players previous GuiState
+	 * @return
+	 */
+	public GuiState getPreviousGuiState () {
+		return previousGuiState;
 	}
 	
 	public enum AFKState
