@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -56,6 +57,10 @@ public class PixelEffect extends Effect {
 	 */
 	public String getImageName () {
 		return name;
+	}
+	
+	public String getImageNameWithoutExtension () {
+		return FilenameUtils.removeExtension(name);
 	}
 	
 	public String getImageDisplayName () {
