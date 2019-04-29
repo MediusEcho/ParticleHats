@@ -88,7 +88,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 			setLineDescription(item, line);
 			
 			editingLine = -1;
-			EditorLore.updatePreviewDecription(getItem(49), description);
+			EditorLore.updatePreviewDecription(getItem(49), description, targetHat);
 		}
 		
 		super.open();
@@ -135,7 +135,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 			ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(size + 1)));
 			
 			description.add("");
-			EditorLore.updatePreviewDecription(getItem(49), getDescription());
+			EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
 			
 			setLineDescription(item, "");
 			setItem(getNormalIndex(size, 10, 2), item);
@@ -157,7 +157,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		
 		int clampedIndex = getClampedIndex(slot, 10, 2);
 		getDescription().remove(clampedIndex);
-		EditorLore.updatePreviewDecription(getItem(49), getDescription());
+		EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
 		
 		for (int i = clampedIndex; i <= 27; i++)
 		{
@@ -199,7 +199,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 			}
 			
 			ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(index + 1)));
-			EditorLore.updatePreviewDecription(getItem(49), getDescription());
+			EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
 			
 			setLineDescription(item, "");
 			setItem(getNormalIndex(index, 10, 2), item);
@@ -214,7 +214,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		setButton(46, backButton, backAction);
 		
 		ItemStack previewItem = ItemUtil.createItem(Material.WRITABLE_BOOK, Message.EDITOR_DESCRIPTION_MENU_PREVIEW);
-		EditorLore.updatePreviewDecription(previewItem, getDescription());
+		EditorLore.updatePreviewDecription(previewItem, getDescription(), targetHat);
 		setButton(49, previewItem, (event, slot) ->
 		{
 			if (event.isShiftRightClick())
@@ -224,7 +224,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 					setItem(getNormalIndex(i, 10, 2), null);
 				}
 				
-				EditorLore.updatePreviewDecription(getItem(49), getDescription());
+				EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
 				insertEmptyItem();
 				isModified = true;
 				
