@@ -228,7 +228,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 			}
 			
 			Material material = pe.getMaterial();
-			String name = pe.getName();
+			String name = pe.getDisplayName();
 			ItemStack item = ItemUtil.createItem(material, name);
 			
 			boolean selected = false;
@@ -269,12 +269,17 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		for (ParticleEffect pe : core.getParticleManager().getRecentlyUsedParticles(ownerID))
 		{
 			Material material = pe.getMaterial();
-			String name = pe.getName();
+			String name = pe.getDisplayName();
 			ItemStack item = ItemUtil.createItem(material, name);
 			
-			if (pe.equals(currentEffect)) {
+			boolean selected = false;
+			if (pe.equals(currentEffect)) 
+			{
 				ItemUtil.highlightItem(item);
+				selected = true;
 			}
+			
+			EditorLore.updateParticleItemDescription(item, pe, selected);
 			
 			particleData.put(recentIndex++, pe);
 			recentFilterMenu.setItem(getNormalIndex(index++, 10, 2), item);
