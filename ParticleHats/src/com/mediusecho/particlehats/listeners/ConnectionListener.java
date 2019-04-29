@@ -35,6 +35,7 @@ public class ConnectionListener implements Listener {
 		{
 			if (loadedHats instanceof List)
 			{
+				@SuppressWarnings("unchecked")
 				List<Hat> hats = (ArrayList<Hat>)loadedHats;				
 				for (Hat hat : hats) {
 					playerState.addHat(hat);
@@ -47,6 +48,7 @@ public class ConnectionListener implements Listener {
 		{
 			if (purchasedHats instanceof List)
 			{
+				@SuppressWarnings("unchecked")
 				List<HatReference> hats = (ArrayList<HatReference>)purchasedHats;
 				for (HatReference hat : hats) {
 					playerState.addPurchasedHat(hat);
