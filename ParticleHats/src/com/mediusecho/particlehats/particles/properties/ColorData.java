@@ -45,6 +45,8 @@ public class ColorData {
 	{
 		this.color = color;
 		parent.setProperty("color", Integer.toString(color.asRGB()));
+		
+		setRandom(false);
 	}
 	
 	/**
