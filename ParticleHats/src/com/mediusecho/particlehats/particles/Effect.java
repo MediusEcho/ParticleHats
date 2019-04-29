@@ -211,12 +211,17 @@ public abstract class Effect {
 		
 		if (particleEffect != ParticleEffect.NONE)
 		{
+			Vector randomOffset = hat.getRandomOffset();
+			double rxo = randomOffset.getX();
+			double ryo = randomOffset.getY();
+			double rzo = randomOffset.getZ();
+			
 			Particle particle = particleEffect.getParticle();
 			switch (particleEffect.getProperty())
 			{
 				case NO_DATA:
 				{
-					world.spawnParticle(particle, location, count, 0, 0, 0, speed);
+					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed);
 					break;
 				}
 				
@@ -225,21 +230,21 @@ public abstract class Effect {
 					ParticleData data = hat.getParticleData(index);
 					double size = data.getScale();
 					DustOptions dustOptions = new DustOptions(data.getColorData().getColor(), (float) size);
-					world.spawnParticle(particle, location, count, 0, 0, 0, speed, dustOptions);
+					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed, dustOptions);
 					break;
 				}
 				
 				case BLOCK_DATA:
 				{
 					BlockData blockData = hat.getParticleData(index).getBlock();
-					world.spawnParticle(particle, location, count, 0, 0, 0, speed, blockData);
+					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed, blockData);
 					break;
 				}
 				
 				case ITEM_DATA:
 				{
 					ItemStack itemData = hat.getParticleData(index).getItem();
-					world.spawnParticle(particle, location, count, 0, 0, 0, speed, itemData);
+					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed, itemData);
 					break;
 				}
 				

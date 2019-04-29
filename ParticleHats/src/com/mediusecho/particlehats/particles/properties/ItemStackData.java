@@ -185,6 +185,19 @@ public class ItemStackData {
 	}
 	
 	/**
+	 * Get all item names
+	 * @return
+	 */
+	public List<String> getItemNames ()
+	{
+		List<String> items = new ArrayList<String>();
+		for (ItemStack item : this.items) {
+			items.add(item.getType().toString());
+		}
+		return items;
+	}
+ 	
+	/**
 	 * Set whether items obey gravity when spawned
 	 * @param gravity
 	 */
@@ -218,11 +231,26 @@ public class ItemStackData {
 		return hasDirectionalVelocity;
 	}
 	
+	/**
+	 * Drops an item into the world
+	 * @param world
+	 * @param location
+	 * @param hat
+	 */
 	public void dropItem (World world, Location location, Hat hat)
 	{
 		try
 		{
-			Item item = world.dropItem(location, getRandomItem());
+			Vector randomOffset = hat.getRandomOffset();
+			double rx = randomOffset.getX();
+			double ry = randomOffset.getY();
+			double rz = randomOffset.getZ();
+			
+			double x = (random.nextDouble() * (rx * 2)) - rx;
+			double y = (random.nextDouble() * (ry * 2)) - ry;
+			double z = (random.nextDouble() * (rz * 2)) - rz;
+			
+			Item item = world.dropItem(location.add(x, y, z), getRandomItem());
 			item.setPickupDelay(36000); // 30 Minutes
 			item.setGravity(hasGravity);
 			

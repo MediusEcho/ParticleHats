@@ -96,6 +96,7 @@ public class Hat {
 	private IconData iconData;
 	
 	private Vector offset;
+	private Vector randomOffset;
 	private Vector angle;
 	
 	private ItemStack menuItem;
@@ -104,6 +105,7 @@ public class Hat {
 	{
 		modifiedProperties    = new HashMap<String, String>();
 		offset                = new Vector();
+		randomOffset          = new Vector();
 		angle                 = new Vector();
 		iconData              = new IconData();
 		normalDescription     = new ArrayList<String>();
@@ -1374,6 +1376,63 @@ public class Hat {
 	}
 	
 	/**
+	 * Set this hats x random offset value
+	 * @param x
+	 */
+	public void setRandomOffsetX (double x) {
+		setRandomOffset(x, randomOffset.getY(), randomOffset.getZ());
+	}
+	
+	/**
+	 * Set this hats y random offset value
+	 * @param y
+	 */
+	public void setRandomOffsetY (double y) {
+		setRandomOffset(randomOffset.getX(), y, randomOffset.getZ());
+	}
+	
+	/**
+	 * Set this hats z random offset value
+	 * @param z
+	 */
+	public void setRandomOffsetZ (double z) {
+		setRandomOffset(randomOffset.getX(), randomOffset.getY(), z);
+	}
+	
+	/**
+	 * Set this hats offset
+	 * @param offset
+	 */
+	public void setRandomOffset (Vector offset) {
+		setRandomOffset(offset.getX(), offset.getY(), offset.getZ());
+	}
+	
+	/**
+	 * Set this hats random offset
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void setRandomOffset (double x, double y, double z)
+	{
+		randomOffset.setX(MathUtil.clamp(x, -20, 20));
+		randomOffset.setY(MathUtil.clamp(y, -20, 20));
+		randomOffset.setZ(MathUtil.clamp(z, -20, 20));
+		
+		setProperty("random_offset_x", Double.toString(randomOffset.getX()));
+		setProperty("random_offset_y", Double.toString(randomOffset.getY()));
+		setProperty("random_offset_z", Double.toString(randomOffset.getZ()));
+	}
+	
+	/**
+	 * Get this hats random offset
+	 * @return
+	 */
+	public Vector getRandomOffset () {
+		return randomOffset;
+	}
+	
+	/**
 	 * Returns this hats offset including location offset
 	 * @return
 	 */
@@ -1544,6 +1603,7 @@ public class Hat {
 		clone.speed = speed;
 		clone.demoDuration = demoDuration;
 		clone.offset = offset.clone();
+		clone.randomOffset = randomOffset.clone();
 		clone.angle = angle.clone();
 		clone.scale = scale;
 		
@@ -1615,6 +1675,7 @@ public class Hat {
 		clone.pitch = pitch;
 		clone.material = material;
 		clone.offset = offset.clone();
+		clone.randomOffset = randomOffset.clone();
 		clone.angle = angle.clone();
 		clone.iconData = iconData.clone();
 		
