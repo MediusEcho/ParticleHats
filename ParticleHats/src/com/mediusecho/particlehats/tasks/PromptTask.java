@@ -51,9 +51,6 @@ public class PromptTask extends BukkitRunnable {
 					
 					String description = metaState.getDescription() + StringUtil.colorize(" &f(" + time + ")");
 					prompt(player, description);
-					
-//					BaseComponent[] bc = TextComponent.fromLegacyText(description);
-//					player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
 				}
 			}
 		}
