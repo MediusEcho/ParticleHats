@@ -8,10 +8,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.entity.Player;
-
-import com.mediusecho.particlehats.database.Database.DatabaseCallback;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
 
 public interface Database {
@@ -106,12 +104,28 @@ public interface Database {
 	public void loadHat (String menuName, int slot, Hat hat);
 	
 	/**
+	 * Saves this hats modified values
+	 * @param menuName
+	 * @param slot
+	 * @param hat
+	 */
+	public void saveHat (String menuName, int slot, Hat hat);
+	
+	/**
+	 * Saves this nodes modified values
+	 * @param menuName
+	 * @param nodeIndex
+	 * @param hat
+	 */
+	public void saveNode (String menuName, int nodeIndex, Hat hat);
+	
+	/**
 	 * Creates a duplicate copy of this hat in a different slot
 	 * @param menuName
 	 * @param currentSlot
 	 * @param newSlot
 	 */
-	public void cloneHat (String menuName, int currentSlot, int newSlot);
+	public void cloneHat (String menuName, Hat hat, int newSlot);
 	
 	/**
 	 * Moves this hat and all data to a new menu
@@ -136,12 +150,6 @@ public interface Database {
 	 * @param slot
 	 */
 	public void deleteNode (String menuName, int slot, int nodeIndex);
-	
-	/**
-	 * Gets all stored images on the database
-	 * @return
-	 */
-	public Map<String, BufferedImage> getImages (boolean forceUpdate);
 	
 	/**
 	 * Save this hats particle data to the menu
@@ -172,13 +180,67 @@ public interface Database {
 	 */
 	public void saveMenuSize (String menuName, int rows);
 	
+	/**
+	 * Saves the players equipped hats
+	 * @param id
+	 * @param hats
+	 */
 	public void savePlayerEquippedHats (UUID id, List<Hat> hats);
 	
+	/**
+	 * Loads the players equipped hats
+	 * @param id
+	 * @param callback
+	 */
 	public void loadPlayerEquippedHats (UUID id, DatabaseCallback callback);
 	
+	/**
+	 * Saves the players purchased hat
+	 * @param id
+	 * @param hat
+	 */
 	public void savePlayerPurchase (UUID id, Hat hat);
 	
+	/**
+	 * Loads all hats the player has purchased
+	 * @param id
+	 * @param callback
+	 */
 	public void loadPlayerPurchasedHats (UUID id, DatabaseCallback callback);
+	
+	/**
+	 * Adds a new group to the database
+	 * @param groupName
+	 * @param defaultMenu
+	 * @param weight
+	 */
+	public void addGroup (String groupName, String defaultMenu, int weight);
+	
+	/**
+	 * Deletes a group from the database
+	 * @param groupName
+	 */
+	public void deleteGroup (String groupName);
+	
+	/**
+	 * Edits an existing group
+	 * @param groupName
+	 * @param defaultMenu
+	 * @param weight
+	 */
+	public void editGroup (String groupName, String defaultMenu, int weight);
+	
+	/***
+	 * Removes a custom type image from the database
+	 * @param imageName
+	 * @return
+	 */
+	public boolean deleteImage (String imageName);
+	
+	/**
+	 * Reloads any important data in this database
+	 */
+	public void onReload ();
 	
 	@FunctionalInterface
 	public interface DatabaseCallback {
