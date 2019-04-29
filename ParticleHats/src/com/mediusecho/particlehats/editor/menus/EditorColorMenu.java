@@ -46,7 +46,7 @@ public class EditorColorMenu extends EditorMenu {
 			{
 				ColorData color = targetHat.getParticleData(particleIndex).getColorData();
 				color.setColor(colors.get(slot));
-				color.setRandom(false);
+				//color.setRandom(false);
 				
 				menuBuilder.goBack();
 			}
