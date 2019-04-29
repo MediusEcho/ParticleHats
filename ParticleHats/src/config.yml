@@ -127,8 +127,9 @@ menu:
   sound:
     #
     # Enable sound
-    # A sound effect players anytime the player uses a menu
-    enabled: true;
+    # A sound effect players any time the player uses a menu
+    # If a hat has a custom sound, this sound will not be played
+    enabled: true
     #
     # Name of the sound you want to play
     id: UI_BUTTON_CLICK
