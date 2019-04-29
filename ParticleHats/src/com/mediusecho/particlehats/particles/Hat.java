@@ -1573,7 +1573,6 @@ public class Hat {
 		{
 			String varName = entry.getKey();
 			String value = entry.getValue();
-			//queryBuilder.append(varName + " = " + value + ",");
 			queryBuilder.append(varName).append("=").append(value).append(",");
 		}
 		
