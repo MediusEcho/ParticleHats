@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.particles.properties;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.mediusecho.particlehats.locale.Message;
 
@@ -24,6 +23,7 @@ public enum ParticleLocation
 	
 	private static final Map<Integer, ParticleLocation> locationID = new HashMap<Integer, ParticleLocation>();
 	private static final Map<String, ParticleLocation> locationName = new HashMap<String, ParticleLocation>();
+	private static final Map<String, ParticleLocation> locationLegacyName = new HashMap<String, ParticleLocation>();
 	
 	static 
 	{
@@ -31,6 +31,7 @@ public enum ParticleLocation
 		{
 			locationID.put(location.id, location);
 			locationName.put(location.name, location);
+			locationLegacyName.put(location.legacyName, location);
 		}
 	}
 	
@@ -104,12 +105,14 @@ public enum ParticleLocation
 	 */
 	public static ParticleLocation fromName (String name)
 	{
-		for (Entry<String, ParticleLocation> entry : locationName.entrySet()) {
-			if (!entry.getKey().equalsIgnoreCase(name)) {
-				continue;
-			}
-			return entry.getValue();
+		if (locationName.containsKey(name)) {
+			return locationName.get(name);
 		}
+		
+		if (locationLegacyName.containsKey(name)) {
+			return locationLegacyName.get(name);
+		}
+		
 		return HEAD;
 	}
 }
