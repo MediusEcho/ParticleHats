@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
@@ -44,6 +45,25 @@ public class ResourceManager {
 	 */
 	public Map<String, BufferedImage> getImages () {
 		return new HashMap<String, BufferedImage>(images);
+	}
+	
+	/**
+	 * Checks to see if an images exists with the given name
+	 * @param name
+	 * @return
+	 */
+	public boolean imageExists (String name) {
+		return images.containsKey(name);
+	}
+	
+	/**
+	 * Gets a BufferedImage with the give name
+	 * @param name
+	 * @return
+	 */
+	@Nullable
+	public BufferedImage getImage (String name) {
+		return images.get(name);
 	}
 	
 	/**
