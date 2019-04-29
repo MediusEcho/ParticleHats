@@ -16,7 +16,7 @@ import com.mediusecho.particlehats.locale.Message;
 
 public enum ParticleEffect {
 
-	NONE              (0, -1, "", "", Material.SCUTE),
+	NONE              (0, -1, "NONE", "", Material.SCUTE),
 	BARRIER           (1, 8, "BARRIER", "barrier", Material.BARRIER),
 	BLOCK_CRACK       (2, -1, "BLOCK_CRACK", "blockcrack", Material.COBBLESTONE),
 	BLOCK_DUST        (3, 7, "BLOCK_DUST", "blockdust", Material.GUNPOWDER),
@@ -175,10 +175,18 @@ public enum ParticleEffect {
 	}
 	
 	/**
+	 * Get the string name of this enum
+	 * @return
+	 */
+	public String getName () {
+		return this.toString();
+	}
+	
+	/**
 	 * Get this ParticleEffect's name
 	 * @return The name of this effect as defined in the current messages.yml file
 	 */
-	public String getName ()
+	public String getDisplayName ()
 	{
 		String key = "PARTICLE_" + this.toString() + "_NAME";
 		try {
@@ -193,7 +201,7 @@ public enum ParticleEffect {
 	 * @return
 	 */
 	public String getStrippedName () {
-		return ChatColor.stripColor(getName());
+		return ChatColor.stripColor(getDisplayName());
 	}
 	
 	/**
@@ -307,7 +315,7 @@ public enum ParticleEffect {
 	{
 		for (Entry<String, ParticleEffect> entry : NAMES.entrySet())
 		{
-			if (!entry.getValue().getName().equalsIgnoreCase(name)) {
+			if (!entry.getValue().getDisplayName().equalsIgnoreCase(name)) {
 				continue;
 			}
 			return entry.getValue();
