@@ -103,6 +103,19 @@ public class IconData {
 	}
 	
 	/**
+	 * Get all material names
+	 * @return
+	 */
+	public List<String> getMaterialNames ()
+	{
+		List<String> materials = new ArrayList<String>();
+		for (Material material : this.materials) {
+			materials.add(material.toString());
+		}
+		return materials;
+	}
+	
+	/**
 	 * Get all materials as their string version
 	 * @return
 	 */
