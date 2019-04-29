@@ -30,6 +30,10 @@ public enum ParticleTracking {
 		return id;
 	}
 	
+	public String getName () {
+		return this.toString().toLowerCase();
+	}
+	
 	/**
 	 * Get the name of this ParticleTracking
 	 * @return The name of this tracking as defined in the current messages.yml file
@@ -55,5 +59,18 @@ public enum ParticleTracking {
 			return trackingID.get(id);
 		}
 		return TRACK_NOTHING;
+	}
+	
+	public static ParticleTracking fromName (String name)
+	{
+		if (name == null) {
+			return ParticleTracking.TRACK_NOTHING;
+		}
+		
+		try {
+			return ParticleTracking.valueOf(name.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return ParticleTracking.TRACK_NOTHING;
+		}
 	}
 }
