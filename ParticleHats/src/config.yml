@@ -103,6 +103,21 @@ menu:
     # This title will replace the hats normal display name
     title: &8Locked
   #
+  # Open a menu when the player right clicks while holding an item
+  open-menu-with-item:
+    #
+    enabled: false
+    #
+    # The default menu the player will open
+    default-menu: particles
+    #
+    # Opens the players group menu instead of the default_menu
+    use-player-group: true
+    #
+    # Which item the player needs to interact with
+    id: NETHER_STAR
+    damage-value: 0
+  #
   sound:
     #
     # Enable sound
