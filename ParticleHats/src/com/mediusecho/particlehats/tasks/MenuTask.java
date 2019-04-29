@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.GuiState;
 
 public class MenuTask extends BukkitRunnable {
 
@@ -30,14 +30,14 @@ public class MenuTask extends BukkitRunnable {
 			for (Player player : onlinePlayers)
 			{
 				PlayerState playerState = core.getPlayerState(player.getUniqueId());
-				MenuState menuState = playerState.getMenuState();
+				GuiState guiState = playerState.getGuiState();
 				
 				// Skip this player if they don't have a menu open
-				if (!menuState.equals(MenuState.OPEN) && !menuState.equals(MenuState.BUILDING)) {
+				if (guiState == GuiState.INNACTIVE) {
 					continue;
 				}
 				
-				menuState.onTick(playerState, ticks);
+				guiState.onTick(playerState, ticks);
 			}
 			
 			if (ticks < 0) {
