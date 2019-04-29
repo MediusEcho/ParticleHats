@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import com.mediusecho.particlehats.particles.Hat;
+
 public class StringUtil {
 
 	//private final static char[] chars = new char[] {'~','`','!','@','#','$','%','^','&','*','(',')','_','-','=','+','[',']','{','}',';','\'','"',':',',','<','>','.','/','?','|','\\'};
@@ -238,6 +240,30 @@ public class StringUtil {
 		}
 		
 		return desc;
+	}
+	
+	public static String parseString (String string, Hat hat)
+	{
+		return string
+				.replace("{type}", hat.getType().getDisplayName())
+				.replace("{location}", hat.getLocation().getDisplayName())
+				.replace("{mode}", hat.getMode().getDisplayName())
+				
+				.replace("<locked>", "").replace("</locked>", "");
+	}
+	
+	public static String parseRegex (String string, String regex)
+	{
+		String begin = "<%>".replace("%", regex);
+		String end = "</%>".replace("%", regex);
+		
+		if (string.contains(begin) && string.contains(end))
+		{
+			String r = "(?<=<%>).*?(?=</%>)".replaceAll("%", regex);
+			return string.replaceAll(r, "");
+			
+		}
+		return string;
 	}
 	
 	public static String getParseValue (String description, String regex) {		
