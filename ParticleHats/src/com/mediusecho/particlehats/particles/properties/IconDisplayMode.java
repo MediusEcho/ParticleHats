@@ -65,11 +65,8 @@ public enum IconDisplayMode {
 	 */
 	public static IconDisplayMode fromId (int id) 
 	{
-		for (Entry<Integer, IconDisplayMode> entry : modeID.entrySet()) {
-			if (entry.getKey() != id) {
-				continue;
-			}
-			return entry.getValue();
+		if (modeID.containsKey(id)) {
+			return modeID.get(id);
 		}
 		return DISPLAY_IN_ORDER;
 	}

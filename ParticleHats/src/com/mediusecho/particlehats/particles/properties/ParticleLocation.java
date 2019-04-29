@@ -91,11 +91,8 @@ public enum ParticleLocation
 	 */
 	public static ParticleLocation fromId (int id) 
 	{
-		for (Entry<Integer, ParticleLocation> entry : locationID.entrySet()) {
-			if (entry.getKey() != id) {
-				continue;
-			}
-			return entry.getValue();
+		if (locationID.containsKey(id)) {
+			return locationID.get(id);
 		}
 		return HEAD;
 	}

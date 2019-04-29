@@ -74,11 +74,8 @@ public enum ParticleMode {
 	 */
 	public static ParticleMode fromId (int id) 
 	{
-		for (Entry<Integer, ParticleMode> entry : modeID.entrySet()) {
-			if (entry.getKey() != id) {
-				continue;
-			}
-			return entry.getValue();
+		if (modeID.containsKey(id)) {
+			return modeID.get(id);
 		}
 		return ACTIVE;
 	}
