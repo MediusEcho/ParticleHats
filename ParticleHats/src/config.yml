@@ -65,7 +65,7 @@ flags:
   experience: false
   #
   # Allow players to equip hats based on permissions
-  permission: false
+  permission: true
   #
   # Use a supported vanish plugin, and hide particles anytime a player vanishes
   # Supported plugins are: SuperVanish, PremiumVanish, & VanishNoPacket
