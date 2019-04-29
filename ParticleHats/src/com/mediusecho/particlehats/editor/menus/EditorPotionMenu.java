@@ -106,15 +106,15 @@ public class EditorPotionMenu extends EditorMenu {
 			int strength = 1;
 			PotionEffect pe = targetHat.getPotion();
 			
-			if (pe != null) {
+			if (pe != null) 
+			{
 				strength = pe.getAmplifier();
+				strength += event.isLeftClick() ? 1 : -1;
+				targetHat.setPotionAmplifier(strength);
 			}
 			
-			strength += event.isLeftClick() ? 1 : -1;
-			targetHat.setPotionAmplifier(strength);
-			
 			ItemStack item = menus.get(currentPage).getItem(52);
-			EditorLore.updatePotionStrengthDescription(item, targetHat.getPotionAmplifier());
+			EditorLore.updatePotionStrengthDescription(item, targetHat.getPotion());
 			
 			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
@@ -148,7 +148,7 @@ public class EditorPotionMenu extends EditorMenu {
 			
 			// Potion Strength
 			menu.setItem(52, ItemUtil.createItem(Material.GHAST_TEAR, Message.EDITOR_POTION_MENU_SET_STRENGTH));
-			EditorLore.updatePotionStrengthDescription(menu.getItem(52), targetHat.getPotionAmplifier());
+			EditorLore.updatePotionStrengthDescription(menu.getItem(52), targetHat.getPotion());
 			
 			menus.put(i, menu);
 		}
