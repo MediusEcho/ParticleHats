@@ -41,9 +41,9 @@ public class SetCommand extends Command {
 			return false;
 		}
 		
-		boolean premanent = true;
+		boolean permanent = true;
 		if (args.size() >= 3) {
-			premanent = Boolean.valueOf(args.get(2));
+			permanent = Boolean.valueOf(args.get(2));
 		}
 		
 		boolean tellPlayer = true;
@@ -80,7 +80,7 @@ public class SetCommand extends Command {
 			return false;
 		}
 		
-		hat.setPermanent(premanent);
+		hat.setPermanent(permanent);
 		core.getParticleManager().equipHat(player.getUniqueId(), hat);
 		
 		if (tellPlayer) {
