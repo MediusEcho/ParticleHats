@@ -37,6 +37,9 @@ live-menus: true
 # Set how often menus are updated (1 = fastest)
 live-menu-update-frequency: 5
 #
+# Set the maximum amount of hats a player can be wearing at once. Range is (1 - 28)
+max-hats: 7
+#
 database:
   #
   # Choose how the plugin saves data
