@@ -1337,6 +1337,10 @@ public class Hat {
 		return material;
 	}
 	
+	/**
+	 * Get this hats IconData
+	 * @return
+	 */
 	public IconData getIconData () {
 		return iconData;
 	}
