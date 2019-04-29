@@ -31,6 +31,8 @@ public class InventoryListener implements Listener {
 		Player player = (Player)event.getWhoClicked();
 		PlayerState playerState = core.getPlayerState(player.getUniqueId());
 		playerState.getGuiState().onClick(event, playerState);
+		
+		Core.debug("clicking, state: " + playerState.getGuiState().toString());
 	}
 	
 	@EventHandler
@@ -43,6 +45,8 @@ public class InventoryListener implements Listener {
 		Player player = (Player)event.getPlayer();
 		PlayerState playerState = core.getPlayerState(player.getUniqueId());
 		playerState.getGuiState().onClose(playerState);
+		
+		Core.debug("----- closing");
 	}
 	
 	@EventHandler
@@ -63,5 +67,7 @@ public class InventoryListener implements Listener {
 		else if (guiState == GuiState.SWITCHING_EDITOR) {
 			playerState.setGuiState(GuiState.EDITOR);
 		}
+		
+		Core.debug("----- opening");
 	}
 }
