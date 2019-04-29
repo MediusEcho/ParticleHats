@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.particles.properties;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.mediusecho.particlehats.locale.Message;
 
@@ -28,6 +27,10 @@ public enum IconDisplayMode {
 	
 	public int getID () {
 		return id;
+	}
+	
+	public String getName () {
+		return this.toString().toLowerCase();
 	}
 	
 	/**
@@ -69,5 +72,17 @@ public enum IconDisplayMode {
 			return modeID.get(id);
 		}
 		return DISPLAY_IN_ORDER;
+	}
+	
+	public static IconDisplayMode fromName (String name)
+	{
+		if (name == null) {
+			return IconDisplayMode.DISPLAY_IN_ORDER;
+		}
+		try {
+			return IconDisplayMode.valueOf(name.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return IconDisplayMode.DISPLAY_IN_ORDER;
+		}
 	}
 }
