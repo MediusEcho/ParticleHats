@@ -10,6 +10,7 @@ import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.effects.AngelWingsEffect;
+import com.mediusecho.particlehats.particles.effects.AnimatedEffect;
 import com.mediusecho.particlehats.particles.effects.ArchEffect;
 import com.mediusecho.particlehats.particles.effects.AtomEffect;
 import com.mediusecho.particlehats.particles.effects.CapeEffect;
@@ -52,6 +53,7 @@ public enum ParticleType {
 	CLEAN_TRAIL    (16, new CleanTrailEffect()),
 	TORNADO        (17, new TornadoEffect()),
 	CUSTOM         (18, new PixelEffect()),
+	ANIMATED       (19, new AnimatedEffect(), true),
 	DEBUG_5X5      (-1, new Debug5x5Effect(), true),
 	DEBUG_6X6      (-2, new Debug6x6Effect(), true);
 	
@@ -192,6 +194,10 @@ public enum ParticleType {
 	 */
 	public static ParticleType fromName (String name)
 	{
+		if (name == null) {
+			return ParticleType.NONE;
+		}
+		
 		if (typeName.containsKey(name)) {
 			return typeName.get(name);
 		}
