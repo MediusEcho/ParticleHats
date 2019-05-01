@@ -444,7 +444,7 @@ public enum Message {
 	EDITOR_BASE_MENU_TITLE         ("Editing ({1=...}&r)"),
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
 	EDITOR_SLOT_DESCRIPTION        ("&3Left Click to Edit/n&3Right Click for Settings"),
-	EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}/n&7Particles: &f{7=None}/n&7Nodes: &f{8}"),
+	EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}/n&7Particles: &f{7=None}/n&7Nodes: &f{8}/n/n&3Left Click to Edit/n&3Right Click for Settings/n&cShift Right Click to Delete"),
 	EDITOR_HAT_COMMAND_DESCRIPTION ("&7Slot: &f{1}/n&7Left Click: &f{2}/n&7Right Click: &f{3}"),
 	EDITOR_HAT_MENU_DESCRIPTION (""),
 	
@@ -502,6 +502,7 @@ public enum Message {
 	EDITOR_MAIN_MENU_SPEED_DESCRIPTION                    ("/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
 	EDITOR_MAIN_MENU_PRICE_DESCRIPTION                    ("/n&8» &e{1=Free} &8{2}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"),
 	EDITOR_MAIN_MENU_VECTOR_DESCRIPTION                   ("/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"),
+	EDITOR_MAIN_MENU_OFFSET_DESCRIPTION                   ("/n&8Offset:/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&8Random Offset:/n&8» X: &e{4}/n&8» Y: &e{5}/n&8» Z: &e{6}/n/n&3Left Click to Change"),
 	EDITOR_MAIN_MENU_LOCATION_DESCRIPTION                 ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	EDITOR_MAIN_MENU_MODE_DESCRIPTION                     ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n{4}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	EDITOR_MAIN_MENU_UPDATE_FREQUENCY_DESCRIPTION         ("/n&8Updates Every:/n&8» &e{1} &8tick{2=s}/n/n&8Set how often this particle/n&8is updated, 1 = fastest/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cMiddle Click to Reset"),//("/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
