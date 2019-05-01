@@ -423,6 +423,24 @@ public enum ParticleAction {
 		return EQUIP;
 	}
 	
+	/**
+	 * Returns the ParticleAction that matches this name
+	 * @param name
+	 * @return
+	 */
+	public static ParticleAction fromName (String name, ParticleAction fallback)
+	{
+		if (name == null) {
+			return fallback;
+		}
+		
+		try {
+			return ParticleAction.valueOf(name.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return fallback;
+		}
+	}
+	
 	private void gotoPreviousMenu (PlayerState playerState)
 	{
 		Menu menu = playerState.getPreviousOpenMenu();
