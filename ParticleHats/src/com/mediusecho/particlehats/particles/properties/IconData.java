@@ -6,6 +6,8 @@ import java.util.Random;
 
 import org.bukkit.Material;
 
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 
 public class IconData {
@@ -22,7 +24,7 @@ public class IconData {
 	public IconData ()
 	{
 		materials = new ArrayList<Material>();
-		setMainMaterial(Material.SUNFLOWER);
+		setMainMaterial(CompatibleMaterial.SUNFLOWER.getMaterial());
 	}
 	
 	public IconData (List<Material> materials)
