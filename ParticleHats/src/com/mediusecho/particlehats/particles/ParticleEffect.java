@@ -6,79 +6,86 @@ import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Particle.DustOptions;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 
 public enum ParticleEffect {
 
-	NONE              (0, -1, "NONE", "", Material.SCUTE),
-	BARRIER           (1, 8, "BARRIER", "barrier", Material.BARRIER),
-	BLOCK_CRACK       (2, -1, "BLOCK_CRACK", "blockcrack", Material.COBBLESTONE),
-	BLOCK_DUST        (3, 7, "BLOCK_DUST", "blockdust", Material.GUNPOWDER),
-	BUBBLE_COLUMN_UP  (4, 13, "BUBBLE_COLUMN_UP", "", Material.HORN_CORAL),
-	BUBBLE_POP        (5, 13, "BUBBLE_POP", "", Material.PURPLE_DYE),
-	CLOUD             (6, -1, "CLOUD", "cloud", Material.WHITE_WOOL),
-	CRIT              (7, -1, "CRIT", "crit", Material.DIAMOND_CHESTPLATE),
-	CRIT_MAGIC        (8, -1, "CRIT_MAGIC", "magicCrit", Material.DIAMOND_SWORD),
-	CURRENT_DOWN      (9, 13, "CURRENT_DOWN", "", Material.LAPIS_LAZULI),
-	DAMAGE_INDICATOR  (10, 9, "DAMAGE_INDICATOR", "damageIndicator", Material.IRON_SWORD),
-	DRAGON_BREATH     (11, 9, "DRAGON_BREATH", "dragonbreath", Material.DRAGON_HEAD), 
-	DRIP_LAVA         (12, -1, "DRIP_LAVA", "dripLava", Material.LAVA_BUCKET),
-	DRIP_WATER        (13, -1, "DRIP_WATER", "dripWater", Material.WATER_BUCKET),
-	DOLPHIN           (14, 13, "DOLPHIN", "", Material.PRISMARINE_SHARD),
-	ENCHANTMENT_TABLE (15, -1, "ENCHANTMENT_TABLE", "enchantmenttable", Material.ENCHANTING_TABLE),
-	END_ROD           (16, 9, "END_ROD", "endRod", Material.END_ROD),
-	EXPLOSION_HUGE    (17, -1, "EXPLOSION_HUGE", "hugeexplosion", Material.TNT),
-	EXPLOSION_LARGE   (18, -1, "EXPLOSION_LARGE", "largeexplode", Material.TNT),
-	EXPLOSION_NORMAL  (19, -1, "EXPLOSION_NORMAL", "explode", Material.TNT),
-	FALLING_DUST      (20, 10, "FALLING_DUST", "fallingdust", Material.SAND),
-	FIREWORKS_SPARK   (21, -1, "FIREWORKS_SPARK", "fireworksspark", Material.FIREWORK_ROCKET),
-	FLAME             (22, -1, "FLAME", "flame", Material.TORCH),
-	HEART             (23, -1, "HEART", "heart", Material.REDSTONE_BLOCK),
-	ITEM_CRACK        (24, -1, "ITEM_CRACK", "itemcrack", Material.APPLE),
-	LAVA              (25, -1, "LAVA", "lava", Material.MAGMA_BLOCK),
-	MOB_APPEARANCE    (26, 8, "MOB_APPEARANCE", "mobappearance", Material.PLAYER_HEAD),
-	NAUTILUS          (27, 13, "NAUTILUS", "", Material.CONDUIT),
-	NOTE              (28, -1, "NOTE", "note", Material.NOTE_BLOCK),
-	PORTAL            (29, -1, "PORTAL", "portal", Material.SOUL_SAND),
-	REDSTONE          (30, -1, "REDSTONE", "reddust", Material.REDSTONE),
-	SLIME             (31, -1, "SLIME", "slime", Material.SLIME_BALL),
-	SMOKE_LARGE       (32, -1, "SMOKE_LARGE", "largesmoke", Material.BONE_MEAL),
-	SMOKE_NORMAL      (33, -1, "SMOKE_NORMAL", "smoke", Material.FLINT_AND_STEEL),
-	SNOW_SHOVEL       (34, -1, "SNOW_SHOVEL", "", Material.SNOW_BLOCK),
-	SNOWBALL          (35, -1, "SNOWBALL", "snowballpoof", Material.SNOWBALL),
-	SPELL             (36, -1, "SPELL", "spell", Material.POTION),
-	SPELL_INSTANT     (37, -1, "SPELL_INSTANT", "instantSpell", Material.SPLASH_POTION),
-	SPELL_MOB         (38, -1, "SPELL_MOB", "mobSpell", Material.ZOMBIE_HEAD),
-	SPELL_MOB_AMBIENT (39, -1, "SPELL_MOB_AMBIENT", "mobSpellAmbient", Material.POTION),
-	SPELL_WITCH       (40, -1, "SPELL_WITCH", "witchMagic", Material.SPLASH_POTION),
-	SPIT              (41, 11, "SPIT", "spit", Material.BONE_MEAL),
-	SQUID_INK         (42, 13, "SQUID_INK", "", Material.INK_SAC),
-	SUSPENDED         (43, -1, "SUSPENDED", "suspended", Material.BEDROCK),
-	SUSPENDED_DEPTH   (44, -1, "SUSPENDED_DEPTH", "depthSuspend", Material.BEDROCK),
-	SWEEP_ATTACK      (45, 9, "SWEEP_ATTACK", "sweepAttack", Material.DIAMOND_SWORD),
-	TOTEM             (46, 11, "TOTEM", "totem", Material.TOTEM_OF_UNDYING),
-	TOWN_AURA         (47, -1, "TOWN_AURA", "townaura", Material.BEACON),
-	VILLAGER_ANGRY    (48, -1, "VILLAGER_ANGRY", "angryVillager", Material.WITHER_SKELETON_SKULL),
-	VILLAGER_HAPPY    (49, -1, "VILLAGER_HAPPY", "happyVillager", Material.PLAYER_HEAD),
-	WATER_BUBBLE      (50, -1, "WATER_BUBBLE", "bubble", Material.FISHING_ROD),
-	WATER_DROP        (51, 8, "WATER_DROP", "", Material.WATER_BUCKET),
-	WATER_SPLASH      (52, -1, "WATER_SPLASH", "splash", Material.BIRCH_BOAT),
-	WATER_WAKE        (53, 7, "WATER_WAKE", "wake", Material.OAK_BOAT),
-	ITEMSTACK         (54, -1, "", "", Material.DIAMOND);
+	// TODO: Update items to reflect their particle for all versions
+	NONE                   (0,  0, -1, CompatibleMaterial.SCUTE),
+	BARRIER                (1,  35, 8, "barrier", CompatibleMaterial.BARRIER),
+	BLOCK_CRACK            (2,  37, -1, "blockcrack", Material.COBBLESTONE, ParticleProperty.BLOCK_DATA),
+	BLOCK_DUST             (3,  38, 7, "blockdust", CompatibleMaterial.GUNPOWDER, ParticleProperty.BLOCK_DATA),
+	BUBBLE_COLUMN_UP       (4,  -1, 13, CompatibleMaterial.HORN_CORAL),
+	BUBBLE_POP             (5,  -1, 13, CompatibleMaterial.PURPLE_DYE),
+	CLOUD                  (6,  29, -1, "cloud", CompatibleMaterial.BONE_MEAL),
+	CRIT                   (7,  9, -1, "crit", Material.DIAMOND_CHESTPLATE),
+	CRIT_MAGIC             (8,  10, -1, "magicCrit", Material.DIAMOND_SWORD),
+	CURRENT_DOWN           (9,  -1, 13, CompatibleMaterial.LAPIS_LAZULI),
+	DAMAGE_INDICATOR       (10, 44, 9, "damageIndicator", Material.IRON_SWORD),
+	DRAGON_BREATH          (11, 42, 9, "dragonbreath", CompatibleMaterial.DRAGON_HEAD), 
+	DRIP_LAVA              (12, 19, -1, "dripLava", Material.LAVA_BUCKET),
+	DRIP_WATER             (13, 18, -1, "dripWater", Material.WATER_BUCKET),
+	DOLPHIN                (14, -1, 13, CompatibleMaterial.PRISMARINE_SHARD),
+	ENCHANTMENT_TABLE      (15, 25, -1, "enchantmenttable", CompatibleMaterial.ENCHANTING_TABLE),
+	END_ROD                (16, 43, 9, "endRod", CompatibleMaterial.END_ROD),
+	EXPLOSION_HUGE         (17, 2, -1, "hugeexplosion", Material.TNT),
+	EXPLOSION_LARGE        (18, 1, -1, "largeexplode", Material.TNT),
+	EXPLOSION_NORMAL       (19, 0, -1, "explode", Material.TNT),
+	FALLING_DUST           (20, 46, 10, "fallingdust", Material.SAND, ParticleProperty.BLOCK_DATA),
+	FIREWORKS_SPARK        (21, 3, -1, "fireworksspark", CompatibleMaterial.FIREWORK_ROCKET),
+	FLAME                  (22, 26, -1, "flame", Material.TORCH),
+	HEART                  (23, 34, -1, "heart", Material.REDSTONE_BLOCK),
+	ITEM_CRACK             (24, 36, -1, "iconcrack", Material.APPLE, ParticleProperty.ITEM_DATA),
+	LAVA                   (25, 27, -1, "lava", CompatibleMaterial.MAGMA_BLOCK),
+	MOB_APPEARANCE         (26, 41, 8, "mobappearance", CompatibleMaterial.PLAYER_HEAD),
+	NAUTILUS               (27, -1, 13, CompatibleMaterial.CONDUIT),
+	NOTE                   (28, 23, -1, "note", Material.NOTE_BLOCK),
+	PORTAL                 (29, 24, -1, "portal", Material.SOUL_SAND),
+	REDSTONE               (30, 30, -1, "reddust", Material.REDSTONE, ParticleProperty.COLOR),
+	SLIME                  (31, 33, -1, "slime", Material.SLIME_BALL),
+	SMOKE_LARGE            (32, 12, -1, "largesmoke", CompatibleMaterial.BONE_MEAL),
+	SMOKE_NORMAL           (33, 11, -1, "smoke", Material.FLINT_AND_STEEL),
+	SNOW_SHOVEL            (34, 32, -1, Material.SNOW_BLOCK),
+	SNOWBALL               (35, 31, -1, "snowballpoof", CompatibleMaterial.SNOWBALL),
+	SPELL                  (36, 13, -1, "spell", Material.POTION),
+	SPELL_INSTANT          (37, 14, -1, "instantSpell", CompatibleMaterial.SPLASH_POTION),
+	SPELL_MOB              (38, 15, -1, "mobSpell", CompatibleMaterial.ZOMBIE_HEAD),
+	SPELL_MOB_AMBIENT      (39, 16, -1, "mobSpellAmbient", Material.POTION),
+	SPELL_WITCH            (40, 17, -1, "witchMagic", CompatibleMaterial.SPLASH_POTION),
+	SPIT                   (41, 48, 11, "spit", CompatibleMaterial.BONE_MEAL),
+	SQUID_INK              (42, -1, 13, CompatibleMaterial.INK_SAC),
+	SUSPENDED              (43, 7, -1, "suspended", Material.BEDROCK),
+	SUSPENDED_DEPTH        (44, 8, -1, "depthSuspend", Material.BEDROCK),
+	SWEEP_ATTACK           (45, 45, 9, "sweepAttack", Material.DIAMOND_SWORD),
+	TOTEM                  (46, 47, 11, "totem", CompatibleMaterial.TOTEM_OF_UNDYING),
+	TOWN_AURA              (47, 22, -1, "townaura", Material.BEACON),
+	VILLAGER_ANGRY         (48, 20, -1, "angryVillager", CompatibleMaterial.WITHER_SKELETON_SKULL),
+	VILLAGER_HAPPY         (49, 21, -1, "happyVillager", CompatibleMaterial.PLAYER_HEAD),
+	WATER_BUBBLE           (50, 4, -1, "bubble", Material.FISHING_ROD),
+	WATER_DROP             (51, 39, 8, Material.WATER_BUCKET),
+	WATER_SPLASH           (52, 5, -1, "splash", CompatibleMaterial.BIRCH_BOAT),
+	WATER_WAKE             (53, 6, 7, "wake", CompatibleMaterial.OAK_BOAT),
+	ITEMSTACK              (54, -1, -1, Material.DIAMOND, ParticleProperty.ITEMSTACK_DATA),
+	CAMPFIRE_COSY_SMOKE    (55, -1, 14, Material.STONE),
+	CAMPFIRE_SIGNAL_SMOKE  (56, -1, 14, Material.STONE),
+	COMPOSTER              (57, -1, 14, CompatibleMaterial.PLAYER_HEAD),
+	FALLING_LAVA           (58, -1, 14, Material.LAVA_BUCKET),
+	FALLING_WATER          (59, -1, 14, Material.WATER_BUCKET),
+	FLASH                  (60, -1, 14, CompatibleMaterial.FIREWORK_STAR),
+	SNEEZE                 (61, -1, 14, CompatibleMaterial.GRAY_DYE);
 	
 	private static final Map<String, ParticleEffect> NAMES   = new HashMap<String, ParticleEffect>();
 	private static final Map<Integer, ParticleEffect> IDS    = new HashMap<Integer, ParticleEffect>();
 	private static final Map<String, ParticleEffect> LEGACY  = new HashMap<String, ParticleEffect>();
 	
 	private final int id;
+	private final int legacyID;
 	private final int version;
-	private final Particle particle;
+	//private final Particle particle;
 	private final String legacyName;
 	private final Material material;
 	private final ParticleProperty property;
@@ -93,37 +100,43 @@ public enum ParticleEffect {
 		}
 	}
 	
-	private ParticleEffect (final int id, final int version, final String particleName, String legacyName, Material material)
+	private ParticleEffect (final int id, final int legacyID, final int version, String legacyName, final Material material, final ParticleProperty property)
 	{
 		this.id = id;
+		this.legacyID = legacyID;
 		this.version = version;
 		this.legacyName = legacyName;
 		this.material = material;
-		particle = getParticle(particleName);
-		
-		if (particle == null)
-		{
-			if (this.id == 54) {
-				property = ParticleProperty.ITEMSTACK_DATA;
-			} else {
-				property = ParticleProperty.NO_DATA;
-			}
-		}
-		
-		else
-		{
-			Class<?> c = particle.getDataType();
-			
-			if (c.equals(DustOptions.class)) {
-				property = ParticleProperty.COLOR;
-			} else if (c.equals(BlockData.class)) {
-				property = ParticleProperty.BLOCK_DATA;
-			} else if (c.equals(ItemStack.class)) {
-				property = ParticleProperty.ITEM_DATA;
-			} else {
-				property = ParticleProperty.NO_DATA;
-			}
-		}
+		this.property = property;
+		//particle = getParticle(toString());
+	}
+	
+	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final CompatibleMaterial material, final ParticleProperty property) {
+		this(id, legacyID, version, legacyName, material.getMaterial(), property);
+	}
+	
+	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final Material material) {
+		this(id, legacyID, version, legacyName, material, ParticleProperty.NO_DATA);
+	}
+	
+	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final CompatibleMaterial material) {
+		this(id, legacyID, version, legacyName, material.getMaterial());
+	}
+	
+	private ParticleEffect (final int id, final int legacyID, final int version, final CompatibleMaterial material, final ParticleProperty property) {
+		this(id, legacyID, version, "", material.getMaterial(), property);
+	}
+	
+	private ParticleEffect (final int id, final int legacyID, final int version, final Material material, final ParticleProperty property) {
+		this(id, legacyID, version, "", material, property);
+	}
+	
+	private ParticleEffect (final int id, final int legacyID, final int version, final CompatibleMaterial material) {
+		this(id, legacyID, version, "", material.getMaterial(), ParticleProperty.NO_DATA);
+	}
+	
+	private ParticleEffect (final int id, final int legacyID, final int version, final Material material) {
+		this(id, legacyID, version, "", material, ParticleProperty.NO_DATA);
 	}
 	
 	/**
@@ -164,6 +177,14 @@ public enum ParticleEffect {
 	 */
 	public int getID () {
 		return id;
+	}
+	
+	/**
+	 * Get the id of this ParticleEffect used on <= 1.12 servers
+	 * @return
+	 */
+	public int getLegacyID () {
+		return legacyID;
 	}
 	
 	/**
@@ -218,13 +239,13 @@ public enum ParticleEffect {
 		}
 	}
 	
-	/**
-	 * Get the Particle value of this ParticleEffect
-	 * @return
-	 */
-	public Particle getParticle () {
-		return particle;
-	}
+//	/**
+//	 * Get the Particle value of this ParticleEffect
+//	 * @return
+//	 */
+//	public Particle getParticle () {
+//		return particle;
+//	}
 	
 	/**
 	 * Get the Material of this ParticleEffect
@@ -232,6 +253,10 @@ public enum ParticleEffect {
 	 */
 	public Material getMaterial () {
 		return material;
+	}
+	
+	public ItemStack getItem () {
+		return new ItemStack(material, 1);
 	}
 	
 	/**
@@ -247,14 +272,14 @@ public enum ParticleEffect {
 	 * @param value
 	 * @return
 	 */
-	private Particle getParticle (String value)
-	{
-		try {
-			return Particle.valueOf(value);
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
-	}
+//	private Particle getParticle (String value)
+//	{
+//		try {
+//			return Particle.valueOf(value);
+//		} catch (IllegalArgumentException e) {
+//			return null;
+//		}
+//	}
 	
 	/**
 	 * Get this ParticleEffects ParticleProperty
@@ -270,6 +295,22 @@ public enum ParticleEffect {
 			return true;
 		}
 		return Core.serverVersion >= version;
+	}
+	
+	/**
+	 * Get how many particles are supported on this server
+	 * @return
+	 */
+	public static int getParticlesSupported ()
+	{
+		int count = 0;
+		for (ParticleEffect pe : values()) 
+		{
+			if (pe.isSupported()) {
+				count++;
+			}
+		}
+		return count;
 	}
 	
 	/**
