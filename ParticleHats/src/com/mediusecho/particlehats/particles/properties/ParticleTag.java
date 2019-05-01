@@ -5,14 +5,15 @@ import java.util.Map;
 
 public enum ParticleTag {
 
-	NONE ("", "", ""),
-	CUSTOM ("custom", "", "Custom"),
-	ARROWS ("arrows", "arrow", "Arrows"),
-	ARMOUR_STAND ("armour_stand", "devtest", "Armour Stand");
+	NONE ("", ""),
+	CUSTOM ("Custom", ""),
+	ARROWS ("arrow", "Arrows", "&8Particles follow the arrows you shoot"),
+	ARMOUR_STAND ("devtest", "Armour Stand", "&8Particles are equipped/n&8to the nearest Armour Stand");
 	
 	private final String name;
 	private final String legacy;
 	private final String displayName;
+	private final String description;
 	
 	private final static Map<String, ParticleTag> legacyName = new HashMap<String, ParticleTag>();
 	private final static Map<String, ParticleTag> names = new HashMap<String, ParticleTag>();
@@ -26,11 +27,16 @@ public enum ParticleTag {
 		}
 	}
 	
-	private ParticleTag (final String name, final String legacy, final String displayName)
+	private ParticleTag (final String legacy, final String displayName, String description)
 	{
-		this.name = name;
+		this.name = toString().toLowerCase();
 		this.legacy = legacy;
 		this.displayName = displayName;
+		this.description = description;
+	}
+	
+	private ParticleTag (final String displayName, String description) {
+		this("", displayName, description);
 	}
 	
 	public String getDisplayName () {
@@ -39,6 +45,10 @@ public enum ParticleTag {
 	
 	public String getName () {
 		return name;
+	}
+	
+	public String getDescription () {
+		return description;
 	}
 	
 	public static ParticleTag fromLegacy (String legacy)
