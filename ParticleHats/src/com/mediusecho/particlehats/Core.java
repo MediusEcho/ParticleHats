@@ -63,6 +63,8 @@ public class Core extends JavaPlugin {
 	private PromptTask promptTask;
 	private ParticleTask particleTask;
 	
+	private boolean enabled = false;
+	
 	// Debugging
 	private static final boolean debugging = true;
 	
@@ -152,16 +154,21 @@ public class Core extends JavaPlugin {
 		}
 		log("");
 		log("" + this.getDescription().getVersion() + " loaded");
+		
+		enabled = true;
 	}
 	
 	@Override
 	public void onDisable () 
 	{
-		database.onDisable();
-		
-		menuTask.cancel();
-		promptTask.cancel();
-		particleTask.cancel();
+		if (enabled)
+		{
+			database.onDisable();
+			
+			menuTask.cancel();
+			promptTask.cancel();
+			particleTask.cancel();
+		}
 	}
 	
 	public void onReload ()
