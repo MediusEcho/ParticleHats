@@ -1,13 +1,12 @@
 package com.mediusecho.particlehats.editor;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.Core;
@@ -45,7 +44,6 @@ public class EditorLore {
 	
 	public static void updateTypeDescription (ItemStack item, Hat hat)
 	{
-		//"/n&8Current:/n&8» {1=/n&8»}{2}/n/n&3Left Click to Change Type/n{3=&cShift Click to Change Animation}"
 		ParticleType type = hat.getType();
 		
 		String description = Message.EDITOR_MAIN_MENU_TYPE_DESCRIPTION.getValue();
@@ -87,7 +85,6 @@ public class EditorLore {
 	
 	public static void updateTypeItemDescription (ItemStack item, ParticleType type, boolean isSelected)
 	{
-		//"{1=/n/n}&8Supports &3{2} &8Particle{3=s}/n/n{4=&3Click to Select}{5=&3Selected}"
 		String description = Message.EDITOR_TYPE_MENU_TYPE_DESCRIPTION.getValue();
 		String[] descriptionInfo = StringUtil.parseValue(description, "1");
 		String[] suffixInfo = StringUtil.parseValue(description, "3");
@@ -106,19 +103,6 @@ public class EditorLore {
 				.replace(selectedInfo[0], selected)
 				.replace("{2}", Integer.toString(type.getParticlesSupported()));
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
-		
-//		String typeDescription = type.getDescription();
-//		description = description.replace(descriptionInfo[0], typeDescription.isEmpty() ? "" : typeDescription + descriptionInfo[1]);
-//		
-//		if (selected) {
-//			description = description.replace(selectInfo[0], "").replace(selectedInfo[0], selectedInfo[1]);
-//		} else {
-//			description = description.replace(selectedInfo[0], "").replace(selectInfo[0], selectInfo[1]);
-//		}
-//		
-//		description = description.replace("{2}", Integer.toString(type.getParticlesSupported()));
-		
-		//ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
 	
 	/**
@@ -191,6 +175,22 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
+	public static void updateOffsetDescription (ItemStack item, Hat hat)
+	{
+		String description = Message.EDITOR_MAIN_MENU_OFFSET_DESCRIPTION.getValue();
+		Vector offset = hat.getOffset();
+		Vector randomOffset = hat.getRandomOffset();
+		
+		String s = description
+				.replace("{1}", Double.toString(offset.getX()))
+				.replace("{2}", Double.toString(offset.getY()))
+				.replace("{3}", Double.toString(offset.getZ()))
+				.replace("{4}", Double.toString(randomOffset.getX()))
+				.replace("{5}", Double.toString(randomOffset.getY()))
+				.replace("{6}", Double.toString(randomOffset.getZ()));
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+	}
+	
 	/**
 	 * Applies a description to this ItemStack using Color data
 	 * @param item
@@ -236,7 +236,8 @@ public class EditorLore {
 	public static void updatePriceDescription (ItemStack item, int price, Message description)
 	{
 		String[] priceData = StringUtil.parseValue(description.getValue(), "1");
-		String c = price > 0 ?  StringUtil.escapeSpecialCharacters(SettingsManager.CURRENCY.getString()) : "";
+//		String c = price > 0 ? StringUtil.escapeSpecialCharacters(SettingsManager.CURRENCY.getString()) : "";
+		String c = price > 0 ? SettingsManager.CURRENCY.getString() : "";
 		
 		String s = description.getValue()
 				.replace(priceData[0], price == 0 ? priceData[1] : Integer.toString(price))
@@ -264,20 +265,6 @@ public class EditorLore {
 		String desc = description.getValue();
 		String s = desc.replace("{1}", formattedTime);
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
-		
-		//"/n&8» {1} second{2=s}/n/n&3Left Click to Add 1/nRight Click to Subtract 1/n&cShift Click to Adjust by 30"
-		//DecimalFormat df = new DecimalFormat("#.#");
-		//String[] suffixInfo = StringUtil.parseValue(description, "2");
-		
-		//SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
-		
-		//double time = duration / 20D;
-		//String suffix = time == 1 ? "" : suffixInfo[1];
-		
-//		description = description.replace(suffixInfo[0], suffix)
-//				.replace("{1}", formattedTime);
-		
-//		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
 	
 	/**
@@ -445,7 +432,6 @@ public class EditorLore {
 	
 	public static void updateNameDescription (ItemStack item, Hat hat)
 	{
-		//"/n&8Current:/n&8» {1}/n/n&3Left Click to Change{2=/n&cShift Right Click to Reset}"
 		String description = Message.EDITOR_META_MENU_NAME_DESCRIPTION.getValue();
 		String[] clearInfo = StringUtil.parseValue(description, "2");
 		String clear = hat.getName().equals(Message.EDITOR_MISC_NEW_PARTICLE.getRawValue()) ? "" : clearInfo[1];
@@ -466,13 +452,11 @@ public class EditorLore {
 		
 		else
 		{
-			//"/n&8Current:/n{1=&7{2} &8» &7{3}}/n/n&3Left Click to Change{4=/n/n&cShift Right Click to Clear}"
 			String description = Message.EDITOR_META_MENU_DESCRIPTION_DESCRIPTION.getValue();
 			
 			String[] clearInfo = StringUtil.parseValue(description, "2");
 			StringBuilder sb = new StringBuilder();
 
-			//int index = 0;
 			for (String s : desc) 
 			{
 				String prefix = "&r";
@@ -509,7 +493,6 @@ public class EditorLore {
 	 */
 	public static void updateLabelDescription (ItemStack item, String label)
 	{
-		//"/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <label>/n/n&8Current:/n&8» {1=&cNot Set}{2=/n/n&cShift Right Click to Clear}"
 		String description = Message.EDITOR_META_MENU_LABEL_DESCRIPTION.getValue();
 		String[] labelInfo = StringUtil.parseValue(description, "1");
 		String[] clearInfo = StringUtil.parseValue(description, "2");
@@ -530,7 +513,6 @@ public class EditorLore {
 	 */
 	public static void updateEquipDescription (ItemStack item, String equip)
 	{
-		//"/n&8Show the player this message when/n&8they equip this hat instead of the/n&8global equip message/n/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
 		String description = Message.EDITOR_META_MENU_EQUIP_DESCRIPTION.getValue();
 		String[] equipInfo = StringUtil.parseValue(description, "1");
 		String[] clearInfo = StringUtil.parseValue(description, "2");
@@ -551,7 +533,6 @@ public class EditorLore {
 	 */
 	public static void updatePermissionDeniedDescription (ItemStack item, String permissionDenied)
 	{
-		//"/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
 		String description = Message.EDITOR_META_MENU_PERMISSION_DENIED_DESCRIPTION.getValue();
 		String[] deniedInfo = StringUtil.parseValue(description, "1");
 		String[] clearInfo = StringUtil.parseValue(description, "2");
@@ -565,9 +546,8 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
-	public static void updatePreviewDecription (ItemStack item, List<String> description)
+	public static void updatePreviewDecription (ItemStack item, List<String> description, Hat hat)
 	{
-		//"/n{1=&cEmpty}{2=/n&cShift Right Click to Clear}"
 		String desc = Message.EDITOR_DESCRIPTION_MENU_PREVIEW_DESCRIPTION.getValue();
 		String[] emptyInfo = StringUtil.parseValue(desc, "1");
 		String[] clearInfo = StringUtil.parseValue(desc, "2");
@@ -586,7 +566,11 @@ public class EditorLore {
 				if (!line.isEmpty() && line.charAt(0) != '&') {
 					prefix = "&5&o";
 				}
-				sb.append("&7- " + prefix + line).append("/n");
+				
+				//line = StringUtil.parseRegex(line, "locked");
+				line = StringUtil.parseString(line, hat);
+				
+				sb.append("&7- ").append(prefix).append(line).append("/n");
 			}
 			s = desc.replace(emptyInfo[0], sb.toString());
 		}
@@ -667,7 +651,7 @@ public class EditorLore {
 				boolean isBlock = property == ParticleProperty.BLOCK_DATA;
 				
 				String description = isBlock? Message.EDITOR_PARTICLE_BLOCK_DESCRIPTION.getValue() : Message.EDITOR_PARTICLE_ITEM_DESCRIPTION.getValue();
-				String name = isBlock ? hat.getParticleBlock(particleIndex).getMaterial().toString() : hat.getParticleItem(particleIndex).getType().toString();
+				String name = isBlock ? hat.getParticleBlock(particleIndex).getType().toString() : hat.getParticleItem(particleIndex).getType().toString();
 				String s = description
 						.replace("{1}", particleName)
 						.replace("{2}", StringUtil.capitalizeFirstLetter(name.toLowerCase()));
@@ -697,21 +681,24 @@ public class EditorLore {
 		}
 	}
 	
-//	public static void updateGravityDescription (ItemStack item, boolean gravity)
-//	{
-//		//"/n&8Gravity:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"
-//		String description = Message.EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION.getValue();
-//		String[] enabledInfo = StringUtil.parseValue(description, "1");
-//		String[] disabledInfo = StringUtil.parseValue(description, "2");
-//		
-//		String enabled = gravity ? enabledInfo[1] : "";
-//		String disabled = gravity ? "" : disabledInfo[1];
-//		
-//		String s = description
-//				.replace(enabledInfo[0], enabled)
-//				.replace(disabledInfo[0], disabled);
-//		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
-//	}
+	public static void updateParticleItemDescription (ItemStack item, ParticleEffect particle, boolean isSelected)
+	{
+		String description = Message.EDITOR_PARTICLE_MENU_PARTICLE_DESCRIPTION.getValue();
+		String[] descriptionInfo = StringUtil.parseValue(description, "1");
+		String[] selectInfo = StringUtil.parseValue(description, "2");
+		String[] selectedInfo = StringUtil.parseValue(description, "3");
+		
+		String desc = particle.getDescription().equals("") ? "" : particle.getDescription() + descriptionInfo[1];
+		String select = isSelected ? "" : selectInfo[1];
+		String selected = isSelected ? selectedInfo[1] : "";
+		
+		description = description
+				.replace(selectInfo[0], select)
+				.replace(selectedInfo[0], selected)
+				.replace(descriptionInfo[0], desc);
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
+	}
 	
 	/**
 	 * Applies a description to this ItemStack using boolean data
@@ -733,12 +720,77 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
-	public static void updateHatDescription (ItemStack item, Hat hat)
+	// TODO: Add extra hat descriptions
+	public static void updateHatGenericDescription (ItemStack item, Hat hat)
 	{
-		//"&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}"
 		String description = Message.EDITOR_HAT_GENERIC_DESCRIPTION.getValue();
-		String s = 
-				description.replace("{1}", String.valueOf(hat.getSlot()));
+		
+		String[] tickInfo = StringUtil.parseValue(description, "6");
+		String[] particleInfo = StringUtil.parseValue(description, "7");
+		
+		String type = hat.getType().isCustom() ? hat.getCustomEffect().getImageDisplayName() : hat.getType().getStrippedName();
+		String ticks = hat.getUpdateFrequency() > 1 ? tickInfo[1] : "";
+		String particles = hat.hasParticles() ? Integer.toString(hat.getParticleCount()) : particleInfo[1];
+		
+		String s = description
+				.replace("{1}", Integer.toString(hat.getSlot()))
+				.replace("{2}", type)
+				.replace("{3}", hat.getLocation().getDisplayName())
+				.replace("{4}", hat.getMode().getDisplayName())
+				.replace("{5}", Integer.toString(hat.getUpdateFrequency()))
+				.replace(particleInfo[0], particles)
+				.replace("{8}", Integer.toString(hat.getNodeCount()))
+				.replace(tickInfo[0], ticks);
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+	}
+	
+	public static void updateHatActionDescription (ItemStack item, Hat hat)
+	{
+		
+	}
+	
+	public static void updateActiveHatDescription (ItemStack item, Hat hat)
+	{
+		String description = Message.ACTIVE_PARTICLES_HAT_DESCRIPTION.getValue();
+		
+		String[] activeInfo = StringUtil.parseValue(description, "1");
+		String[] hiddenInfo = StringUtil.parseValue(description, "2");
+		
+		String active = !hat.isHidden() ? activeInfo[1] : "";
+		String hidden = hat.isHidden() ? hiddenInfo[1] : "";
+		
+		String s = description
+				.replace(activeInfo[0], active)
+				.replace(hiddenInfo[0], hidden);
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+	}
+	
+	public static void updatePotionDescription (ItemStack item, PotionEffect pe)
+	{
+		String description = Message.EDITOR_MAIN_MENU_POTION_DESCRIPTION.getValue();
+		String[] typeInfo = StringUtil.parseValue(description, "1");
+		
+		String name = pe != null ? StringUtil.capitalizeFirstLetter(pe.getType().getName().toLowerCase()) : typeInfo[1];
+		String numeral = pe != null ? StringUtil.toRomanNumeral(pe.getAmplifier() + 1) : "";
+		
+		String s = description
+				.replace(typeInfo[0], name)
+				.replace("{2}", numeral);
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+	}
+	
+	public static void updatePotionStrengthDescription (ItemStack item, PotionEffect pe)
+	{
+		String description = Message.EDITOR_POTION_MENU_STRENGTH_DESCRIPTION.getValue();
+		String[] strengthInfo = StringUtil.parseValue(description, "1");
+		
+		String numerals = pe != null ? StringUtil.toRomanNumeral(pe.getAmplifier() + 1) : strengthInfo[1];
+		
+		String s = description.replace(strengthInfo[0], numerals);
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
 	public static String getTrimmedMenuTitle (String title, Message message)
@@ -756,10 +808,6 @@ public class EditorLore {
 			title = title.substring(0, title.length() - difference) + extraInfo[1];
 		}
 		
-		//String t = title.length() > 28 ? title.substring(0, 28) + extraInfo[1] : title;
-		
-		//Core.log(t);
-		
-		return menuTitle.replace(extraInfo[0], title);
+		return ChatColor.translateAlternateColorCodes('&', menuTitle.replace(extraInfo[0], title));
 	}
 }
