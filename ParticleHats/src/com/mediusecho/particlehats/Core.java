@@ -18,7 +18,6 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.CommandManager;
 import com.mediusecho.particlehats.managers.EventManager;
 import com.mediusecho.particlehats.managers.HookManager;
-import com.mediusecho.particlehats.managers.MenuManager;
 import com.mediusecho.particlehats.managers.ParticleManager;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -45,7 +44,6 @@ public class Core extends JavaPlugin {
 	private DatabaseType databaseType;
 	
 	// Managers
-	private MenuManager menuManager;
 	private EventManager eventManager;
 	private CommandManager commandManager;
 	private ParticleManager particleManager;
@@ -131,7 +129,6 @@ public class Core extends JavaPlugin {
 			locale = new CustomConfig(this, "", SettingsManager.DEFAULT_MESSAGES.getString(), true);
 			
 			// Create our managers
-			menuManager = new MenuManager(this);
 			eventManager = new EventManager(this);
 			commandManager = new CommandManager(this, "h");
 			particleManager = new ParticleManager(this);
@@ -196,11 +193,8 @@ public class Core extends JavaPlugin {
 	}
 	
 	/**
-	 * Get the MenuManager class
 	 * @return
 	 */
-	public MenuManager getMenuManager () {
-		return menuManager;
 	}
 	
 	/**
