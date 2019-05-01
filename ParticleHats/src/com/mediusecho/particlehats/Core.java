@@ -1,5 +1,8 @@
 package com.mediusecho.particlehats;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -7,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,25 +23,33 @@ import com.mediusecho.particlehats.managers.CommandManager;
 import com.mediusecho.particlehats.managers.EventManager;
 import com.mediusecho.particlehats.managers.HookManager;
 import com.mediusecho.particlehats.managers.ParticleManager;
+import com.mediusecho.particlehats.managers.ResourceManager;
 import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
+import com.mediusecho.particlehats.particles.renderer.legacy.LegacyParticleRenderer;
+import com.mediusecho.particlehats.particles.renderer.spigot.SpigotParticleRenderer;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
 import com.mediusecho.particlehats.tasks.ParticleTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
+import com.mediusecho.particlehats.util.ResourceUtil;
 
 @SuppressWarnings("unused")
 public class Core extends JavaPlugin {
-
-	// TODO: Purchasing saving / loading
 	
-	// TODO: [Opt] Add menu cache feature, only load menus that have changes
-	
-	// TODO: [?] Separate menu for block-fixed particles?
+	// TODO: [4.1] Separate menu for block-fixed particles?
 	// Store fixed particles in a menu that is separate from player menus
 	// Players can sort by nearest and teleport to the particle
 	
+	// TODO: Add item damage values for MySQL
+	
+	// TODO: Finish adding config values to SettingsManager
+	
+	// TODO: Test the API
+	
 	public static Core instance;
+	public static int serverVersion;
 	private static Logger logger;
 	
 	private Database database;
@@ -46,6 +58,7 @@ public class Core extends JavaPlugin {
 	private ParticleRenderer particleRenderer;
 	
 	// Managers
+	private ResourceManager resourceManager;
 	private EventManager eventManager;
 	private CommandManager commandManager;
 	private ParticleManager particleManager;
@@ -68,25 +81,28 @@ public class Core extends JavaPlugin {
 	private boolean enabled = false;
 	
 	// Debugging
-	private static final boolean debugging = true;
+	public static final boolean debugging = true;
 	
 	@Override
 	public void onEnable ()
 	{
 		instance = this;	
+		serverVersion = getServerVersion();
 		logger = getServer().getLogger();
 		
 		// Make sure we're running on a supported version
-		if (getServerVersion() < 13)
+		if (serverVersion < 13)
 		{
-			log("-----------------------------------------------------------------------");
-			log("This version of ParticleHats is not compatible with your server version");
-			log("Download version 3.7.5 if your server is on 1.7.10 - 1.12.2");
-			log("-----------------------------------------------------------------------");
 			particleRenderer = new LegacyParticleRenderer();
 			
 			
-			getServer().getPluginManager().disablePlugin(this);
+//			log("-----------------------------------------------------------------------");
+//			log("This version of ParticleHats is not compatible with your server version");
+//			log("Download version 3.7.5 if your server is on 1.7.10 - 1.12.2");
+//			log("-----------------------------------------------------------------------");
+//			
+//			getServer().getPluginManager().disablePlugin(this);
+//			return;
 		} else {
 			particleRenderer = new SpigotParticleRenderer();
 		}
@@ -126,8 +142,10 @@ public class Core extends JavaPlugin {
 				log("---------------------------------------------------");
 				log("");
 				
+				// TODO: Database not switching to yaml correctly
+				
 				databaseType = DatabaseType.YAML;
-				database = DatabaseType.YAML.getDatabase();
+				database = DatabaseType.YAML.getDatabase(this);
 			});
 			
 			// Initialize our player state map
@@ -137,6 +155,7 @@ public class Core extends JavaPlugin {
 			locale = new CustomConfig(this, "", SettingsManager.DEFAULT_MESSAGES.getString(), true);
 			
 			// Create our managers
+			resourceManager = new ResourceManager(this);
 			eventManager = new EventManager(this);
 			commandManager = new CommandManager(this, "h");
 			particleManager = new ParticleManager(this);
@@ -185,7 +204,9 @@ public class Core extends JavaPlugin {
 		SettingsManager.onReload();
 		Message.onReload();
 		
+		database.onReload();
 		particleTask.onReload();
+		resourceManager.onReload();
 		hookManager.onReload();
 	}
 	
@@ -217,6 +238,8 @@ public class Core extends JavaPlugin {
 	 * Get the ResourceManager class
 	 * @return
 	 */
+	public ResourceManager getResourceManager () {
+		return resourceManager;
 	}
 	
 	/**
