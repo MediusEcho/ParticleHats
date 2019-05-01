@@ -11,10 +11,9 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.configuration.CustomConfig;
+import com.mediusecho.particlehats.util.ResourceUtil;
 
 public class ResourceManager {
 
@@ -89,7 +88,7 @@ public class ResourceManager {
 					{
 						File imageFile = imageFiles[i];
 						BufferedImage image = ImageIO.read(imageFile);
-						images.put(FilenameUtils.removeExtension(imageFile.getName()), image);
+						images.put(ResourceUtil.removeExtension(imageFile.getName()), image);
 						
 					} catch (IOException e) {}
 				}
