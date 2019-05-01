@@ -4,24 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Particle.DustOptions;
 import org.bukkit.World;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
+import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.util.MathUtil;
 
 public abstract class Effect {
 
 	private List<List<Vector>> frames;
+	protected ParticleRenderer renderer = Core.instance.getParticleRenderer();
 	
 	public Effect ()
 	{
@@ -216,35 +215,31 @@ public abstract class Effect {
 			double ryo = randomOffset.getY();
 			double rzo = randomOffset.getZ();
 			
-			Particle particle = particleEffect.getParticle();
+			ParticleData data = hat.getParticleData(index);
+			
 			switch (particleEffect.getProperty())
 			{
 				case NO_DATA:
 				{
-					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed);
+					renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed);
 					break;
 				}
 				
 				case COLOR:
 				{
-					ParticleData data = hat.getParticleData(index);
-					double size = data.getScale();
-					DustOptions dustOptions = new DustOptions(data.getColorData().getColor(), (float) size);
-					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed, dustOptions);
+					renderer.spawnParticleColor(world, particleEffect, location, count, rxo, ryo, rzo, speed, data.getColorData().getColor(), data.getScale());
 					break;
 				}
 				
 				case BLOCK_DATA:
 				{
-					BlockData blockData = hat.getParticleData(index).getBlock();
-					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed, blockData);
+					renderer.spawnParticleBlockData(world, particleEffect, location, count, rxo, ryo, rzo, speed, data);
 					break;
 				}
 				
 				case ITEM_DATA:
 				{
-					ItemStack itemData = hat.getParticleData(index).getItem();
-					world.spawnParticle(particle, location, count, rxo, ryo, rzo, speed, itemData);
+					renderer.spawnParticleItemData(world, particleEffect, location, count, rxo, ryo, rzo, speed, data);
 					break;
 				}
 				

@@ -5,16 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.Particle.DustOptions;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.locale.Message;
@@ -60,7 +55,7 @@ public class PixelEffect extends Effect {
 	}
 	
 	public String getImageNameWithoutExtension () {
-		return FilenameUtils.removeExtension(name);
+		return ResourceUtil.removeExtension(name);
 	}
 	
 	public String getImageDisplayName () {
@@ -191,47 +186,44 @@ public class PixelEffect extends Effect {
 		ParticleEffect particleEffect = hat.getParticle(0);		
 		if (particleEffect != ParticleEffect.NONE)
 		{
-			Particle particle = particleEffect.getParticle();
+			ParticleData data = hat.getParticleData(0);
 			switch (particleEffect.getProperty())
 			{
 				case NO_DATA:
 				{
-					world.spawnParticle(particle, location, count, 0, 0, 0, speed);
+					renderer.spawnParticle(world, particleEffect, location, count, 0, 0, 0, speed);
 					break;
 				}
 				
 				case COLOR:
 				{
-					ParticleData data = hat.getParticleData(0);
+					//ParticleData data = hat.getParticleData(0);
 					double scale = data.getScale();
 					
 					if (color.getRed() > BLEND_THRESHOLD.getRed()
 							&& color.getGreen() > BLEND_THRESHOLD.getGreen()
 							&& color.getBlue() > BLEND_THRESHOLD.getBlue())
 					{
-						DustOptions dustOptions = new DustOptions(data.getColorData().getColor(), (float) scale);
-						world.spawnParticle(particle, location, count, 0, 0, 0, speed, dustOptions);
+						Color c = data.getColorData().getColor();
+						renderer.spawnParticleColor(world, particleEffect, location, count, 0, 0, 0, speed, c, scale);
 					}
 					
 					else 
 					{
-						DustOptions dustOptions = new DustOptions(color, (float) scale);
-						world.spawnParticle(particle, location, count, 0, 0, 0, speed, dustOptions);
+						renderer.spawnParticleColor(world, particleEffect, location, count, 0, 0, 0, speed, color, scale);
 					}
 					break;
 				}
 				
 				case BLOCK_DATA:
 				{
-					BlockData blockData = hat.getParticleData(0).getBlock();
-					world.spawnParticle(particle, location, count, 0, 0, 0, speed, blockData);
+					renderer.spawnParticleBlockData(world, particleEffect, location, count, 0, 0, 0, speed, data);
 					break;
 				}
 				
 				case ITEM_DATA:
 				{
-					ItemStack itemData = hat.getParticleData(0).getItem();
-					world.spawnParticle(particle, location, count, 0, 0, 0, speed, itemData);
+					renderer.spawnParticleItemData(world, particleEffect, location, count, 0, 0, 0, speed, data);
 					break;
 				}
 				
