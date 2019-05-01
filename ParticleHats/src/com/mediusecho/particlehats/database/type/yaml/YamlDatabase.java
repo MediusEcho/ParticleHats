@@ -3,28 +3,36 @@ package com.mediusecho.particlehats.database.type.yaml;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.io.FilenameUtils;
+import javax.annotation.Nonnull;
+
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.ColorData;
@@ -32,8 +40,10 @@ import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ItemStackData;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
+import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.permission.Permission;
@@ -41,6 +51,7 @@ import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
+import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
 // TODO: Implement yml database
@@ -50,10 +61,13 @@ public class YamlDatabase implements Database {
 	
 	private final CustomConfig groupConfig;
 	
+	private final double MENU_VERSION = 4.0;
+	
 	private final Map<String, CustomConfig> menus;
 	private final Map<String, String> menuInfo;
-	private final Map<String, String> groups;
-	private final List<String> labels;
+	private final Map<String, ParticleLabel> labels;
+	private final Map<UUID, CustomConfig> playerConfigs;
+	private final List<Group> groups;
 	
 	public YamlDatabase (Core core)
 	{
@@ -63,8 +77,9 @@ public class YamlDatabase implements Database {
 		
 		menus = new HashMap<String, CustomConfig>();
 		menuInfo = new HashMap<String, String>();
-		groups = new HashMap<String, String>();
-		labels = new ArrayList<String>();
+		labels = new HashMap<String, ParticleLabel>();
+		playerConfigs = new HashMap<UUID, CustomConfig>();
+		groups = new ArrayList<Group>();
 		
 		onReload();
 	}
@@ -121,6 +136,8 @@ public class YamlDatabase implements Database {
 						ItemStack item = ItemUtil.createItem(hat.getMaterial(), 1);
 						ItemUtil.setItemName(item, hat.getDisplayName());
 						
+						loadMetaData(config, hat, path, item);
+						
 						inventory.setItem(slot, item);
 						inventory.setHat(slot, hat);
 					}
@@ -176,22 +193,53 @@ public class YamlDatabase implements Database {
 	
 	@Override
 	public List<String> getLabels (boolean forceUpdate) {
-		return labels;
+		return new ArrayList<String>(labels.keySet());
 	}
 	
 	@Override
-	public Map<String, String> getGroups(boolean forceUpdate) {
-		return groups;
+	public Map<String, String> getGroups(boolean forceUpdate) 
+	{	
+		Collections.sort(groups, new Comparator<Group>()
+		{
+			@Override
+			public int compare (Group g1, Group g2) {
+				return Integer.compare(g1.getWeight(), g2.getWeight());
+			}
+		});
+
+		Map<String, String> groupMap = new LinkedHashMap<String, String>();
+		for (Group g : groups) {
+			groupMap.put(g.getName(), g.getMenuName());
+		}
+		return groupMap;
 	}
 	
 	@Override
 	public boolean labelExists(String menuName, String label) {
-		return labels.contains(label);
+		return labels.containsKey(label);
 	}
 	
 	@Override
-	public Hat getHatFromLabel(String label) {
-		return null;
+	public Hat getHatFromLabel(String label) 
+	{
+		if (!labels.containsKey(label)) {
+			return null;
+		}
+		
+		ParticleLabel pl = labels.get(label);
+		if (pl == null) {
+			return null;
+		}
+		
+		CustomConfig menuConfig = pl.getConfig();
+		FileConfiguration config = menuConfig.getConfig();
+		String path = "items." + pl.getSlot() + ".";
+		
+		Hat hat = new Hat();
+		loadBaseHatData(config, hat, path);
+		loadEssentialHatData(config, hat, path, menuConfig.getName(), pl.getSlot());
+		
+		return hat;
 	}
 
 	@Override
@@ -243,7 +291,7 @@ public class YamlDatabase implements Database {
 	}
 	
 	@Override
-	public void moveHat(String fromMenu, String toMenu, int fromSlot, int toSlot, boolean swapping) 
+	public void moveHat(Hat fromHat, Hat toHat, String fromMenu, String toMenu, int fromSlot, int toSlot, boolean swapping) 
 	{
 		if (!menus.containsKey(fromMenu)) {
 			return;
@@ -255,14 +303,50 @@ public class YamlDatabase implements Database {
 			// Working inside the fromMenu only
 			if (toMenu == null)
 			{
-				if (swapping)
+				if (swapping && toHat != null)
 				{
+					config.set("items." + fromSlot, null);
+					config.set("items." + toSlot, null);
 					
+					String toPath = "items." + fromSlot + ".";
+					setBaseHatData(config, toPath, toHat);
+					setEssentialHatData(config, toPath, toHat);
+					
+					String fromPath = "items." + toSlot + ".";
+					setBaseHatData(config, fromPath, fromHat);
+					setEssentialHatData(config, fromPath, fromHat);
+					
+					config.save();
 				}
 				
 				else
 				{
+					config.set("items." + fromSlot, null);
+					String path = "items." + toSlot + ".";
 					
+					setBaseHatData(config, path, fromHat);
+					setEssentialHatData(config, path, fromHat);
+					config.save();
+				}
+			}
+			
+			else
+			{
+				if (!menus.containsKey(toMenu)) {
+					return;
+				}
+				
+				CustomConfig toConfig = menus.get(toMenu);
+				if (toConfig != null)
+				{
+					String path = "items." + toSlot + ".";
+					setBaseHatData(toConfig, path, toHat);
+					setEssentialHatData(toConfig, path, toHat);
+					
+					toConfig.save();
+					
+					config.set("items." + fromSlot, null);
+					config.save();
 				}
 			}
 		}
@@ -433,42 +517,129 @@ public class YamlDatabase implements Database {
 	}
 	
 	@Override
-	public void savePlayerEquippedHats(UUID id, List<Hat> hats) {
+	public void savePlayerEquippedHats(UUID id, List<Hat> hats) 
+	{
+		CustomConfig playerConfig = getPlayerConfig(id);
 		
+		List<String> equippedHats = playerConfig.getConfig().getStringList("equipped-hats");
+		for (Hat hat : hats) {
+			equippedHats.add(hat.getMenu() + ":" + hat.getSlot());
+		}
+		
+		playerConfig.set("equipped-hats", equippedHats);
+		playerConfig.save();
 	}
 
 	@Override
-	public void loadPlayerEquippedHats(UUID id, DatabaseCallback callback) {
+	public void loadPlayerEquippedHats(UUID id, DatabaseCallback callback) 
+	{
+		CustomConfig playerConfig = getPlayerConfig(id);
 		
+		List<String> equippedHats = playerConfig.getConfig().getStringList("equipped-hats");
+		List<Hat> loadedHats = new ArrayList<Hat>();
+		
+		for (String hatReference : equippedHats)
+		{
+			String[] info = hatReference.split(":");
+			String menuName = info[0];
+			
+			if (!menus.containsKey(menuName)) {
+				continue;
+			}
+			
+			CustomConfig menuConfig = menus.get(menuName);
+			if (menuConfig != null)
+			{
+				String path = "items." + info[1] + ".";
+				int slot = StringUtil.toInt(info[1], 0);
+				
+				FileConfiguration config = menuConfig.getConfig();
+				Hat hat = new Hat();
+				
+				loadBaseHatData(config, hat, path);
+				loadEssentialHatData(config, hat, path, info[0], slot);
+				
+				loadedHats.add(hat);
+			}
+		}
+		
+		callback.execute(loadedHats);
 	}
 
 	@Override
-	public void savePlayerPurchase(UUID id, Hat hat) {
+	public void savePlayerPurchase(UUID id, Hat hat) 
+	{
+		CustomConfig playerConfig = getPlayerConfig(id);
 		
+		List<String> purchases = playerConfig.getConfig().getStringList("purchased-hats");
+		purchases.add(hat.getMenu() + ":" + hat.getSlot());
+		
+		playerConfig.set("purchased-hats", purchases);
+		playerConfig.save();
 	}
 
 	@Override
-	public void loadPlayerPurchasedHats(UUID id, DatabaseCallback callback) {
+	public void loadPlayerPurchasedHats(UUID id, DatabaseCallback callback) 
+	{
+		CustomConfig playerConfig = getPlayerConfig(id);
 		
+		List<HatReference> purchasedHats = new ArrayList<HatReference>();
+		List<String> purchases = playerConfig.getConfig().getStringList("purchased-hats");
+		
+		for (String purchase : purchases)
+		{
+			String[] info = purchase.split(":");
+			purchasedHats.add(new HatReference(info[0], StringUtil.toInt(info[1], -1)));
+		}
+		
+		callback.execute(purchasedHats);
 	}
 
 	@Override
-	public void addGroup(String groupName, String defaultMenu, int weight) {
+	public void addGroup(String groupName, String defaultMenu, int weight) 
+	{
+		groupConfig.set(groupName + ".default-menu", defaultMenu);
+		groupConfig.set(groupName + ".weight", weight);
+		groupConfig.save();
 		
+		groups.add(new Group(groupName, defaultMenu, weight));
 	}
 
 	@Override
-	public void deleteGroup(String groupName) {
-		
+	public void deleteGroup(String groupName) 
+	{	
+		Group group = getGroup(groupName);
+		if (group != null) 
+		{
+			groups.remove(group);
+			
+			groupConfig.set(groupName, null);
+			groupConfig.save();
+		}
 	}
 
 	@Override
-	public void editGroup(String groupName, String defaultMenu, int weight) {
-		
+	public void editGroup(String groupName, String defaultMenu, int weight) 
+	{	
+		Group group = getGroup(groupName);
+		if (group != null)
+		{
+			group.setMenuName(defaultMenu);
+			groupConfig.set(groupName + ".default-menu", defaultMenu);
+			
+			if (weight >= 0) 
+			{
+				group.setWeight(weight);
+				groupConfig.set(groupName + ".weight", weight);
+			}
+			
+			groupConfig.save();
+		}
 	}
 
 	@Override
-	public boolean deleteImage(String imageName) {
+	public boolean deleteImage(String imageName) 
+	{
 		return false;
 	}
 
@@ -478,6 +649,7 @@ public class YamlDatabase implements Database {
 		menus.clear();
 		menuInfo.clear();
 		groups.clear();
+		labels.clear();
 		
 		File menusFolder = new File(core.getDataFolder() + File.separator + "menus");
 		if (!menusFolder.isDirectory())
@@ -497,17 +669,53 @@ public class YamlDatabase implements Database {
 					CustomConfig menuConfig = new CustomConfig(core, "menus", menu.getName(), false);
 					if (menuConfig != null)
 					{
-						String menuName = FilenameUtils.removeExtension(menu.getName());
+						String menuName = ResourceUtil.removeExtension(menu.getName());
 						menus.put(menuName, menuConfig);
 						menuInfo.put(menuName, menuConfig.getConfig().getString("settings.title", ""));
+						
+						FileConfiguration config = menuConfig.getConfig();
+						
+						// Update our menus save format if this was created in an older version
+						if (!config.contains("version")) {
+							updateMenuFormat(menuConfig);
+						}
+						
+						// Find any labels in this menu
+						if (config.contains("items"))
+						{
+							Set<String> keys = config.getConfigurationSection("items").getKeys(false);
+							for (String key : keys)
+							{
+								if (key == null) {
+									continue;
+								}
+								
+								String path = "items." + key + ".";
+								if (config.contains(path + "label"))
+								{
+									String label = config.getString(path + "label");
+									if (!labels.containsKey(label)) 
+									{
+										int slot = StringUtil.toInt(key, -1);
+										if (slot != -1) {
+											labels.put(label, new ParticleLabel(menuConfig, slot));
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 		}
 		
 		groupConfig.reload();
-		for (String key : groupConfig.getConfig().getKeys(false)) {
-			groups.put(key, groupConfig.getConfig().getString(key + ".default_menu"));
+		FileConfiguration config = groupConfig.getConfig();
+		for (String key : config.getKeys(false)) 
+		{
+			String menuName = config.getString(key + ".default-menu");
+			int weight = config.getInt(key + ".weight", 0);
+			groups.add(new Group(key, menuName, weight));
 		}
 	}
 	
@@ -517,6 +725,7 @@ public class YamlDatabase implements Database {
 		if (particle != ParticleEffect.NONE)
 		{
 			config.set(path + "particle", particle.getName());
+			ParticleData data = hat.getParticleData(index);
 			
 			switch (particle.getProperty())
 			{
@@ -525,30 +734,37 @@ public class YamlDatabase implements Database {
 					
 				case COLOR:
 				{
-					ColorData colorData = hat.getParticleData(index).getColorData();
+					ColorData colorData = data.getColorData();
 					if (colorData.isRandom()) {
 						config.set(path + "color", "random");
 					} else {
 						config.set(path + "color", colorData.getColor().asRGB());
 					}
+					
+					if (data.getScale() != 1.0) {
+						config.set(path + "size", data.getScale());
+					}
+					
 					break;
 				}
 				
 				case BLOCK_DATA:
 				{
-					config.set(path + "block-data", hat.getParticleData(index).getBlock().getMaterial().toString());
+					ItemStack block = data.getBlock();
+					config.set(path + "block-data.id", block.getType().toString());
+					config.set(path + "block-data.damage-value", block.getDurability());
 					break;
 				}
 				
 				case ITEM_DATA:
 				{
-					config.set(path + "item-data", hat.getParticleData(index).getItem().getType().toString());
+					config.set(path + "item-data", data.getItem().getType().toString());
 					break;
 				}
 				
 				case ITEMSTACK_DATA:
 				{
-					ItemStackData itemStackData = hat.getParticleData(index).getItemStackData();
+					ItemStackData itemStackData = data.getItemStackData();
 					setItemStackItems(config, hat, index, path);
 					
 					if (itemStackData.getDuration() != 20) {
@@ -629,8 +845,11 @@ public class YamlDatabase implements Database {
 						
 						case BLOCK_DATA:
 						{
-							if (config.contains(path + "block-data")) {
-								hat.getParticleData(index).setBlock(ItemUtil.getMaterial(config.getString(path + "block-data"), Material.STONE));
+							if (config.contains(path + "block-data")) 
+							{
+								Material material = ItemUtil.getMaterial(config.getString(path + "block-data.id"), Material.STONE);
+								ItemStack block = new ItemStack(material, 1, (short) config.getInt(path + "block-data.damage-value"));
+								hat.getParticleData(index).setBlock(block);
 							}
 							break;
 						}
@@ -706,9 +925,10 @@ public class YamlDatabase implements Database {
 			
 			case BLOCK_DATA:
 			{
-				if (config.contains(path + "block-data")) {
-					hat.getParticleData(0).setBlock(ItemUtil.getMaterial(config.getString(path + "block-data"), Material.STONE));
-				}
+				// TODO: Update save format when loading menu
+//				if (config.contains(path + "block-data")) {
+//					hat.getParticleData(0).setBlock(ItemUtil.getMaterial(config.getString(path + "block-data"), Material.STONE));
+//				}
 				break;
 			}
 			
@@ -723,70 +943,53 @@ public class YamlDatabase implements Database {
 		
 		hat.getParticleData(0).clearPropertyChanges();
 	}
-
-//	private void loadNodeData (FileConfiguration config, String rootPath, int slot, Hat hat)
-//	{
-//		Set<String> keys = config.getConfigurationSection(rootPath).getKeys(false);
-// 		
-//		if (keys != null)
-//		{
-//			for (String key : keys)
-//			{
-//				if (key == null) {
-//					continue;
-//				}
-//				
-//				String path = rootPath + "." + key + ".";
-//				int index = StringUtil.toInt(key, -1);
-//				if (index > 0)
-//				{
-//					Hat node = new Hat();
-//					
-//					node.setSlot(slot);
-//					node.setLocation(ParticleLocation.fromName(config.getString(path + "location")));
-//					node.setMode(ParticleMode.fromName(config.getString(path + "mode")));
-//					node.setAnimation(ParticleAnimation.fromName(config.getString(path + "animation")));
-//					node.setTrackingMethod(ParticleTracking.fromName(config.getString(path + "tracking")));	
-//					node.setOffset(config.getDouble(path + "offset.x", 0), config.getDouble(path + "offset.y", 0), config.getDouble(path + "offset.z", 0));
-//					node.setAngle(config.getDouble(path + "angle.x"), config.getDouble(path + "angle.y"), config.getDouble(path + "angle.z"));
-//					node.setUpdateFrequency(config.getInt(path + "update-frequency", 2));
-//					node.setSpeed(config.getInt(path + "speed", 0));
-//					node.setCount(config.getInt(path + "count", 1));
-//					node.setScale(config.getDouble(path + "scale", 1.0));
-//					
-//					if (config.isString(path + "type")) {
-//						node.setType(ParticleType.fromName(config.getString(path + "type")));
-//					}
-//					
-//					else
-//					{
-//						node.setType(ParticleType.fromName(config.getString(path + "type.id")));
-//						
-//						String imageName = config.getString(path + "type.name");
-//						if (core.getResourceManager().imageExists(imageName)) {
-//							hat.setCustomType(new PixelEffect(core.getResourceManager().getImage(imageName), imageName));
-//						}
-//					}
-//					
-//					if (config.contains(path + "particles")) {
-//						loadParticleData(config, path + "particles", node);
-//					} else {
-//						loadLegacyParticleData(config, path, node);
-//					}
-//					
-//					node.setIndex(index - 1);
-//					node.setLoaded(true);
-//					node.clearPropertyChanges();
-//					
-//					hat.addNode(node);
-//				}
-//			}
-//		}
-//	}
 	
-	private void loadLegacyNodeData (FileConfiguration config, String path, Hat hat)
+	private void loadLegacyNodeData (FileConfiguration config, String path, Hat hat, Hat parent)
 	{
+		// TODO: Load legacy node data
+	}
+	
+	private void loadMetaData (FileConfiguration config, Hat hat, String path, ItemStack item)
+	{
+		if (config.contains(path + "icons"))
+		{
+			List<Material> icons = new ArrayList<Material>();
+			for (String material : config.getStringList(path + "icons")) {
+				icons.add(ItemUtil.getMaterial(material, Material.STONE));
+			}
+			hat.getIconData().setMaterials(icons);
+		}
 		
+		if (config.contains(path + "tags"))
+		{
+			for (String tag : config.getStringList(path + "tags")) {
+				hat.addTag(ParticleTag.fromName(tag));
+			}
+		}
+		
+		List<String> description = new ArrayList<String>();
+		if (config.contains(path + "description")) 
+		{
+			List<String> desc = config.getStringList(path + "description");
+			description.addAll(StringUtil.colorize(desc));
+			hat.setDescription(desc);
+		}
+		
+		if (config.contains(path + "permission-description"))
+		{
+			List<String> permissionDescription = StringUtil.colorize(config.getStringList(path + "permission-description"));
+			if (SettingsManager.FLAG_PERMISSION.getBoolean() && hat.isLocked()) {
+				description.addAll(permissionDescription);
+			}
+			hat.setPermissionDescription(permissionDescription);
+		}
+		
+		if (!description.isEmpty())
+		{
+			ItemMeta itemMeta = item.getItemMeta();
+			itemMeta.setLore(description);
+			item.setItemMeta(itemMeta);
+		}
 	}
 	
 	/**
@@ -966,7 +1169,7 @@ public class YamlDatabase implements Database {
 	 */
 	private void loadBaseHatData (FileConfiguration config, Hat hat, String path)
 	{
-		hat.setMaterial(ItemUtil.materialFromString(config.getString(path + "id"), Material.SUNFLOWER));
+		hat.setMaterial(ItemUtil.getMaterial(config.getString(path + "id"), CompatibleMaterial.SUNFLOWER.getMaterial()));
 		hat.setName(config.getString(path + "name", Message.EDITOR_MISC_NEW_PARTICLE.getValue()));
 		hat.setPermission(config.getString(path + "permission", "all"));	
 		hat.setLabel(config.getString(path + "label", ""));
@@ -1059,6 +1262,12 @@ public class YamlDatabase implements Database {
 				hat.addNode(node);
 			}
 		}
+		
+		// Legacy node save format
+		else if (config.contains(path + "node"))
+		{
+			
+		}
 //		// TODO: Test legacy format
 //		if (config.contains(path + "nodes")) {
 //			loadNodeData(config, path + "nodes", slot, hat);
@@ -1074,11 +1283,6 @@ public class YamlDatabase implements Database {
 		
 		hat.setLoaded(true);
 		hat.clearPropertyChanges();
-	}
-	
-	private void loadMetaData (FileConfiguration config, Hat hat, String path)
-	{
-		
 	}
 	
 	private void setItemStackItems (CustomConfig config, Hat hat, int index, String path)
@@ -1110,5 +1314,139 @@ public class YamlDatabase implements Database {
 			return "";
 		}
 		return "nodes." + (hat.getIndex() + 1) + ".";
+	}
+	
+	/**
+	 * Get this players CustomConfig file
+	 * @param id
+	 * @return
+	 */
+	private CustomConfig getPlayerConfig (UUID id)
+	{
+		if (playerConfigs.containsKey(id)) {
+			return playerConfigs.get(id);
+		}
+		
+		CustomConfig playerConfig = new CustomConfig(core, "players", id.toString(), false);
+		playerConfigs.put(id, playerConfig);
+		
+		return playerConfig;
+	}
+	
+	/**
+	 * Gets the group matching this name
+	 * @param groupName
+	 * @return
+	 */
+	private Group getGroup (String groupName)
+	{
+		for (Group group : groups)
+		{
+			if (group.getName().equalsIgnoreCase(groupName)) {
+				return group;
+			}
+		}
+		return null;
+	}
+	
+	private void updateMenuFormat (CustomConfig menuConfig)
+	{
+		Core.log("Updating " + menuConfig.getFileName() + " to new save format");
+		FileConfiguration config = menuConfig.getConfig();
+		
+		config.set("version", MENU_VERSION);
+		if (config.contains("items"))
+		{
+			Set<String> keys = config.getConfigurationSection("items").getKeys(false);
+			for (String key : keys)
+			{
+				if (key == null) {
+					continue;
+				}
+				
+				String path = "items." + key + ".";
+				
+				if (config.contains(path + "particle"))
+				{
+					String particleName = config.getString(path + "particle");
+					config.set(path + "particle", null);
+					config.set(path + "particles.1.particle", particleName);
+				}
+				
+				if (config.contains(path + "color"))
+				{
+					int r = config.getInt(path + "color.r");
+					int g = config.getInt(path + "color.g");
+					int b = config.getInt(path + "color.b");
+					
+					config.set(path + "color", null);
+					config.set(path + "particles.1.color.r", r);
+					config.set(path + "particles.1.color.g", g);
+					config.set(path + "particles.1.color.b", b);
+				}
+				
+				if (config.contains("block-data")) 
+				{
+					String blockMaterial = config.getString(path + "block-data.id");
+					
+					config.set(path + "block-data", null);
+					config.set(path + "particles.1.block-data.id", blockMaterial);
+				}
+			}
+		}
+	}
+	
+	private class ParticleLabel {
+		
+		private final CustomConfig config;
+		private final int slot;
+		
+		public ParticleLabel (@Nonnull CustomConfig config, @Nonnull int slot)
+		{
+			this.config = config;
+			this.slot = slot;
+		}
+		
+		public CustomConfig getConfig () {
+			return config;
+		}
+		
+		public int getSlot () {
+			return slot;
+		}
+	}
+	
+	private class Group {
+		
+		private final String name;
+		private String menuName;
+		private int weight;
+		
+		public Group (String name, String menuName, int weight)
+		{
+			this.name = name;
+			this.menuName = menuName;
+			this.weight = weight;
+		}
+		
+		public String getName () {
+			return name;
+		}
+		
+		public String getMenuName () {
+			return menuName;
+		}
+		
+		public void setMenuName (String menuName) {
+			this.menuName = menuName;
+		}
+		
+		public int getWeight () {
+			return weight;
+		}
+		
+		public void setWeight (int weight) {
+			this.weight = weight;
+		}
 	}
 }
