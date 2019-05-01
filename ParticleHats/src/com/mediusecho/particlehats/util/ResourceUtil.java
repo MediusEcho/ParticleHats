@@ -9,6 +9,8 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
+import org.bukkit.Sound;
+
 import com.mediusecho.particlehats.Core;
 
 public class ResourceUtil {
@@ -81,7 +83,36 @@ public class ResourceUtil {
 		in.close();
 	}
 	
+	/**
+	 * Removes the fileNames extension
+	 * @param fileName
+	 * @return
+	 */
 	public static String removeExtension (String fileName) {
 		return fileName.replaceFirst("[.][^.]+$", "");
+	}
+	
+	/**
+	 * Tries to find a matching Sound from the soundName
+	 * @param soundName
+	 * @param fallback
+	 * @return
+	 */
+	public static Sound getSound (String soundName, String fallback)
+	{
+		try {
+			return Sound.valueOf(soundName);
+		}
+		
+		catch (IllegalArgumentException e)
+		{
+			try {
+				return Sound.valueOf(fallback);
+			}
+			
+			catch (IllegalArgumentException ex) {
+				return null;
+			}
+		}
 	}
 }
