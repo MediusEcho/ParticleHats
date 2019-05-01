@@ -45,7 +45,7 @@ public class CustomConfig {
 		}
 	}
 	
-	public CustomConfig (final Core core, final String path, File file,  boolean logOutput)
+	public CustomConfig (final Core core, final String path, File file, boolean logOutput)
 	{
 		this.core = core;
 		this.path = path;
