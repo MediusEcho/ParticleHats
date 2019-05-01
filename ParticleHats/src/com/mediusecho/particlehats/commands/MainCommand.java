@@ -30,7 +30,7 @@ public class MainCommand extends Command {
 			}
 			
 			Map<String, String> groups = core.getDatabase().getGroups(true);
-			String defaultMenu = "";
+			String defaultMenu = null;
 			
 			for (Entry<String, String> entry : groups.entrySet())
 			{
@@ -39,7 +39,7 @@ public class MainCommand extends Command {
 				}
 			}
 			
-			if (defaultMenu.equals("")) {
+			if (defaultMenu != null && defaultMenu.equals("")) {
 				defaultMenu = SettingsManager.DEFAULT_MENU.getString();
 			}
 			
