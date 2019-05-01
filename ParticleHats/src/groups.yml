@@ -3,16 +3,21 @@
 #         Here you can configure unique groups that will         #
 #              each have access to a different menu              #
 #                                                                #
-# Groups should be ordered by lowest -> highest for best results #
+# Groups are ordered by their weight, lower weights will be      #
+# checked first                                                  #
 # Example:                                                       #
 # default:                                                       #
-#   default_menu: 'particles.yml'                                #
+#   default-menu: 'particles.yml'                                #
+#   weight: 0                                                    #
 # member:                                                        #
-#   default_menu: 'members.yml'                                  #
+#   default-menu: 'members.yml'                                  #
+#   weight: 5                                                    $
 # vip:                                                           #
-#   default_menu: 'vip.yml'                                      #
+#   default-menu: 'vip.yml'                                      #
+#   weight: 10                                                   #
 #                                                                #
 ##################################################################
 #
 default:
-  default_menu: 'particles.yml'
+  default-menu: 'particles.yml'
+  weight: 0
