@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -106,7 +106,7 @@ public class EditorActionMenu extends EditorMenu {
 				continue;
 			}
 			
-			ItemStack item = ItemUtil.createItem(Material.FIREWORK_STAR, action.getDisplayName());
+			ItemStack item = ItemUtil.createItem(CompatibleMaterial.FIREWORK_STAR, action.getDisplayName());
 			String description = Message.EDITOR_ACTION_MENU_ACTION_DESCRIPTION.getValue();
 			String[] selectedInfo = StringUtil.parseValue(description, "2");
 			String[] selectInfo = StringUtil.parseValue(description, "3");
@@ -114,7 +114,7 @@ public class EditorActionMenu extends EditorMenu {
 			ParticleAction currentAction = isLeftClick ? targetHat.getLeftClickAction() : targetHat.getRightClickAction();
 			if (currentAction.equals(action)) 
 			{
-				item.setType(Material.GUNPOWDER);
+				ItemUtil.setItemType(item, CompatibleMaterial.GUNPOWDER);
 				ItemUtil.highlightItem(item);
 				
 				description = description.replace(selectedInfo[0], selectedInfo[1]).replace(selectInfo[0], "");

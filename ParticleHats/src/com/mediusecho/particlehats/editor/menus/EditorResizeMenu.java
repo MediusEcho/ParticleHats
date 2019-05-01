@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -24,6 +25,7 @@ public class EditorResizeMenu extends EditorMenu {
 		build();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void build() 
 	{
@@ -56,7 +58,8 @@ public class EditorResizeMenu extends EditorMenu {
 		int currentRows = menuBuilder.getEditingMenu().getRowCount();
 		ItemStack row = getItem(currentRows + 10 - (currentRows < 3 ? 1 : 0));
 
-		row.setType(Material.LIME_DYE);
+		row.setType(CompatibleMaterial.LIME_DYE.getMaterial());
+		row.setDurability((short) CompatibleMaterial.LIME_DYE.getDamage());
 		ItemUtil.highlightItem(row);
 	}
 

@@ -1,12 +1,12 @@
 package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -45,7 +45,7 @@ public class EditorIconMenu extends EditorMenu {
 	@Override
 	protected void build() 
 	{
-		ItemStack info = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, itemName);
+		ItemStack info = ItemUtil.createItem(CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE, itemName);
 		ItemUtil.setItemDescription(info, StringUtil.parseDescription(itemDescription.getValue()));
 		
 		for (int i = 0; i < inventory.getSize(); i++)

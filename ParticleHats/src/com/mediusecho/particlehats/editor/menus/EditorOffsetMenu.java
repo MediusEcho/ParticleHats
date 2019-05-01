@@ -1,12 +1,12 @@
 package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -102,7 +102,7 @@ public class EditorOffsetMenu extends EditorMenu {
 		Hat targetHat = menuBuilder.getTargetHat();
 		
 		// X Offset
-		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_X);
+		ItemStack xItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_X);
 		EditorLore.updateVectorDescription(xItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
 		setButton(14, xItem, (event, slot) ->
 		{
@@ -110,7 +110,7 @@ public class EditorOffsetMenu extends EditorMenu {
 		});
 		
 		// Y Offset
-		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Y);
+		ItemStack yItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Y);
 		EditorLore.updateVectorDescription(yItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
 		setButton(15, yItem, (event, slot) ->
 		{
@@ -118,7 +118,7 @@ public class EditorOffsetMenu extends EditorMenu {
 		});
 		
 		// Z Offset
-		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Z);
+		ItemStack zItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_OFFSET_MENU_SET_OFFSET_Z);
 		EditorLore.updateVectorDescription(zItem, targetHat.getOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
 		setButton(16, zItem, (event, slot) ->
 		{
@@ -126,7 +126,7 @@ public class EditorOffsetMenu extends EditorMenu {
 		});
 		
 		// Random X Offset
-		ItemStack rxItem = ItemUtil.createItem(Material.COMPARATOR, Message.EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_X);
+		ItemStack rxItem = ItemUtil.createItem(CompatibleMaterial.COMPARATOR, Message.EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_X);
 		EditorLore.updateVectorDescription(rxItem, targetHat.getRandomOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
 		setButton(32, rxItem, (event, slot) ->
 		{
@@ -134,7 +134,7 @@ public class EditorOffsetMenu extends EditorMenu {
 		});
 		
 		// Random Y Offset
-		ItemStack ryItem = ItemUtil.createItem(Material.COMPARATOR, Message.EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_Y);
+		ItemStack ryItem = ItemUtil.createItem(CompatibleMaterial.COMPARATOR, Message.EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_Y);
 		EditorLore.updateVectorDescription(ryItem, targetHat.getRandomOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
 		setButton(33, ryItem, (event, slot) ->
 		{
@@ -142,7 +142,7 @@ public class EditorOffsetMenu extends EditorMenu {
 		});
 		
 		// Random Z Offset
-		ItemStack rzItem = ItemUtil.createItem(Material.COMPARATOR, Message.EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_Z);
+		ItemStack rzItem = ItemUtil.createItem(CompatibleMaterial.COMPARATOR, Message.EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_Z);
 		EditorLore.updateVectorDescription(rzItem, targetHat.getRandomOffset(), Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
 		setButton(34, rzItem, (event, slot) ->
 		{

@@ -4,16 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorTagMenu extends EditorMenu {
 
@@ -55,7 +56,7 @@ public class EditorTagMenu extends EditorMenu {
 				continue;
 			}
 			
-			ItemStack tagItem = ItemUtil.createItem(Material.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()));
+			ItemStack tagItem = ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), StringUtil.parseDescription(tag.getDescription()));			
 			setButton(getNormalIndex(index, 10, 2), tagItem, selectAction);
 			
 			tags.put(index++, tag);

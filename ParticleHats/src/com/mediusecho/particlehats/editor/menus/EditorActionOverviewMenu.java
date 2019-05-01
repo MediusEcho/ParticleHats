@@ -1,11 +1,11 @@
 package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -52,7 +52,7 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		setButton(10, backButton, backAction);
 		
 		// Left Click
-		ItemStack leftActionItem = ItemUtil.createItem(Material.GUNPOWDER, Message.EDITOR_ACTION_OVERVIEW_MENU_SET_LEFT_CLICK);
+		ItemStack leftActionItem = ItemUtil.createItem(CompatibleMaterial.GUNPOWDER, Message.EDITOR_ACTION_OVERVIEW_MENU_SET_LEFT_CLICK);
 		EditorLore.updateSpecificActionDescription(leftActionItem, targetHat, targetHat.getLeftClickAction(), targetHat.getLeftClickArgument());
 		setButton(14, leftActionItem, (event, slot) ->
 		{
@@ -65,7 +65,7 @@ public class EditorActionOverviewMenu extends EditorMenu {
 		});
 		
 		// Right Click
-		ItemStack rightActionItem = ItemUtil.createItem(Material.GUNPOWDER, Message.EDITOR_ACTION_OVERVIEW_MENU_SET_RIGHT_CLICK);
+		ItemStack rightActionItem = ItemUtil.createItem(CompatibleMaterial.GUNPOWDER, Message.EDITOR_ACTION_OVERVIEW_MENU_SET_RIGHT_CLICK);
 		EditorLore.updateSpecificActionDescription(rightActionItem, targetHat, targetHat.getRightClickAction(), targetHat.getRightClickArgument());
 		setButton(16, rightActionItem, (event, slot) ->
 		{

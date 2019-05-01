@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -39,9 +40,13 @@ public class EditorBaseMenu extends EditorMenu {
 		this.menuInventory = menuInventory;
 		
 		rows = menuInventory.getSize() / 9;
-		emptyItem = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
 		
-		String title = EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_BASE_MENU_TITLE);//ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + menuInventory.getTitle()));
+		emptyItem = CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE.getItem();
+		ItemUtil.setNameAndDescription(emptyItem, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
+		
+		//emptyItem = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
+		
+		String title = EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_BASE_MENU_TITLE);
 		inventory = Bukkit.createInventory(null, menuInventory.getSize(), title);
 		inventory.setContents(menuInventory.getContents());
 		
@@ -112,7 +117,9 @@ public class EditorBaseMenu extends EditorMenu {
 				if (hat != null)
 				{
 					IconData iconData = hat.getIconData();
-					if (iconData.isLive()) {
+					if (iconData.isLive()) 
+					{
+						// TODO: Apply damage-value
 						getItem(slot).setType(iconData.getNextMaterial(ticks));
 					}
 				}
@@ -288,11 +295,12 @@ public class EditorBaseMenu extends EditorMenu {
 		EditorAction swappingAction = getAction(newSlot);
 		
 		Hat currentHat = getHat(currentSlot);
+		Hat swappingHat = null;
 		currentHat.setSlot(newSlot);
 		
 		if (swapping)
 		{
-			Hat swappingHat = getHat(newSlot);
+			swappingHat = getHat(newSlot);
 			swappingHat.setSlot(currentSlot);
 			setHat(currentSlot, swappingHat);
 		}
@@ -307,7 +315,7 @@ public class EditorBaseMenu extends EditorMenu {
 		
 		menuBuilder.setTargetSlot(newSlot);
 		
-		core.getDatabase().moveHat(getName(), null, currentSlot, newSlot, swapping);
+		core.getDatabase().moveHat(currentHat, swappingHat, getName(), null, currentSlot, newSlot, swapping);
 	}
 	
 	public void cloneHat (int currentSlot, int newSlot)
@@ -321,8 +329,9 @@ public class EditorBaseMenu extends EditorMenu {
 		setButton(newSlot, new ItemStack(clonedHat.getMaterial()), existingParticleAction);
 		
 		onHatNameChange(clonedHat, newSlot);
+		addItemDescription(getItem(newSlot), clonedHat);
 		
-		core.getDatabase().cloneHat(getName(), currentSlot, newSlot);
+		core.getDatabase().cloneHat(getName(), currentHat, newSlot);
 	}
 	
 	public void onHatNameChange (Hat hat, int slot) {
@@ -336,13 +345,15 @@ public class EditorBaseMenu extends EditorMenu {
 	 */
 	private Hat createHat (int slot)
 	{
-		ItemStack emptyItem = ItemUtil.createItem(Material.SUNFLOWER, Message.EDITOR_MISC_NEW_PARTICLE.getValue());
-		setButton(slot, emptyItem, existingParticleAction);
-		
 		Hat hat = new Hat();
 		hat.setSlot(slot);
 		
+		ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, Message.EDITOR_MISC_NEW_PARTICLE.getValue());
+		
+		addItemDescription(emptyItem, hat);
+		
 		setHat(slot, hat);
+		setButton(slot, emptyItem, existingParticleAction);
 		
 		core.getDatabase().createHat(menuInventory.getName(), slot);
 		return hat;
@@ -367,8 +378,30 @@ public class EditorBaseMenu extends EditorMenu {
 		editorSettingsMenu.open();
 	}
 	
+	private void addItemDescription (ItemStack item, Hat hat)
+	{
+		if (hat.getLeftClickAction() == ParticleAction.EQUIP || hat.getRightClickAction() == ParticleAction.EQUIP) {
+			EditorLore.updateHatGenericDescription(item, hat);
+		}
+	}
+	
 	@Override
-	protected void build() 
+	public void open ()
+	{
+		int slot = menuBuilder.getTargetSlot();
+		if (slot >= 0) 
+		{
+			Hat hat = getHat(slot);
+			if (hat != null) {
+				addItemDescription(getItem(slot), hat);
+			}
+		}
+		
+		super.open();
+	}
+	
+	@Override
+	protected void build () 
 	{
 		int size = menuInventory.getSize();
 		for (int i = 0; i < size; i++)
@@ -385,10 +418,7 @@ public class EditorBaseMenu extends EditorMenu {
 			if (hat != null) 
 			{
 				setHat(i, hat);
-				
-				if (hat.getLeftClickAction() == ParticleAction.EQUIP || hat.getRightClickAction() == ParticleAction.EQUIP) {
-					EditorLore.updateHatGenericDescription(getItem(i), hat);
-				}
+				addItemDescription(getItem(i), hat);
 			}
 		}
 	}

@@ -3,11 +3,11 @@ package com.mediusecho.particlehats.editor.menus;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorListMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -28,7 +28,7 @@ public class EditorTagOverviewMenu extends EditorListMenu {
 		super(core, owner, menuBuilder);
 		targetHat = menuBuilder.getBaseHat();
 		
-		addItem = ItemUtil.createItem(Material.TURTLE_HELMET, Message.EDITOR_TAG_OVERVIEW_MENU_ADD_TAG);
+		addItem = ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_TAG_OVERVIEW_MENU_ADD_TAG);
 		editAction = (event, slot) ->
 		{
 			if (event.isShiftRightClick())
@@ -53,7 +53,7 @@ public class EditorTagOverviewMenu extends EditorListMenu {
 		
 		if (size <= 27)
 		{
-			ItemStack tagItem = ItemUtil.createItem(Material.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), Message.EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION);
+			ItemStack tagItem = ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), Message.EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION);
 			setItem(getNormalIndex(size, 10, 2), tagItem);
 			
 			tags.add(tag);
@@ -100,7 +100,7 @@ public class EditorTagOverviewMenu extends EditorListMenu {
 		super.build();
 		
 		setButton(46, backButton, backAction);
-		setItem(49, ItemUtil.createItem(Material.REDSTONE_TORCH, Message.EDITOR_TAG_OVERVIEW_MENU_INFO_TITLE, Message.EDITOR_TAG_OVERVIEW_MENU_INFO));
+		setItem(49, ItemUtil.createItem(CompatibleMaterial.REDSTONE_TORCH, Message.EDITOR_TAG_OVERVIEW_MENU_INFO_TITLE, Message.EDITOR_TAG_OVERVIEW_MENU_INFO));
 		
 		setButton(52, addItem, (event, slot) ->
 		{
@@ -117,7 +117,7 @@ public class EditorTagOverviewMenu extends EditorListMenu {
 		for (int i = 0; i < tags.size(); i++)
 		{
 			ParticleTag tag = tags.get(i);
-			ItemStack tagItem = ItemUtil.createItem(Material.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), Message.EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION);
+			ItemStack tagItem = ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), Message.EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION);
 			
 			setItem(getNormalIndex(i, 10, 2), tagItem);
 		}

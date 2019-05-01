@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -24,7 +25,7 @@ public class EditorDeleteMenu extends EditorMenu {
 	@Override
 	protected void build()
 	{
-		ItemStack yesItem = ItemUtil.createItem(Material.ROSE_RED, Message.EDITOR_DELETE_MENU_YES);
+		ItemStack yesItem = ItemUtil.createItem(CompatibleMaterial.ROSE_RED, Message.EDITOR_DELETE_MENU_YES);
 		setButton(12, yesItem, (event, slot) ->
 		{
 			core.getDatabase().deleteMenu(menuBuilder.getMenuName());

@@ -1,12 +1,12 @@
 package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -66,7 +66,7 @@ public class EditorAngleMenu extends EditorOffsetMenu {
 		Hat targetHat = menuBuilder.getTargetHat();
 		
 		// X Angle
-		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_X);
+		ItemStack xItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_X);
 		EditorLore.updateVectorDescription(xItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION);
 		setButton(14, xItem, (event, slot) ->
 		{
@@ -74,7 +74,7 @@ public class EditorAngleMenu extends EditorOffsetMenu {
 		});
 		
 		// Y Angle
-		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Y);
+		ItemStack yItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Y);
 		EditorLore.updateVectorDescription(yItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION);
 		setButton(15, yItem, (event, slot) ->
 		{
@@ -82,7 +82,7 @@ public class EditorAngleMenu extends EditorOffsetMenu {
 		});
 		
 		// Z Angle
-		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Z);
+		ItemStack zItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_ANGLE_MENU_SET_ANGLE_Z);
 		EditorLore.updateVectorDescription(zItem, targetHat.getAngle(), Message.EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION);
 		setButton(16, zItem, (event, slot) ->
 		{

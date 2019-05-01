@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -50,7 +51,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		menus = new HashMap<Integer, Inventory>();
 		particleData = new HashMap<Integer, ParticleEffect>();
 		
-		totalPages = (int) Math.ceil((double) ParticleEffect.values().length / 45D);
+		totalPages = (int) Math.ceil((double) ParticleEffect.getParticlesSupported() / 45D);
 		
 		particleSelectAction = (event, slot) ->
 		{
@@ -108,17 +109,17 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 			Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
 			
 			menu.setItem(49, backButton);
-			menu.setItem(45, ItemUtil.createItem(Material.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
+			menu.setItem(45, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
 			menu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
 			menu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
 			menu.setItem(53, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
 			
 			if ((i + 1) < totalPages) {
-				menu.setItem(50, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
 			}
 			
 			if ((i + 1) > 1) {
-				menu.setItem(48, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
 			menus.put(i, menu);
@@ -127,21 +128,21 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		// Populate our filter menus
 		colorFilterMenu.setItem(49, backButton);
 		colorFilterMenu.setItem(45, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
-		colorFilterMenu.setItem(46, ItemUtil.createItem(Material.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
+		colorFilterMenu.setItem(46, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
 		colorFilterMenu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
 		colorFilterMenu.setItem(53, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
 		
 		dataFilterMenu.setItem(49, backButton);
 		dataFilterMenu.setItem(45, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
 		dataFilterMenu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
-		dataFilterMenu.setItem(47, ItemUtil.createItem(Material.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
+		dataFilterMenu.setItem(47, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
 		dataFilterMenu.setItem(53, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
 		
 		recentFilterMenu.setItem(49, backButton);
 		recentFilterMenu.setItem(45, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
 		recentFilterMenu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
 		recentFilterMenu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
-		recentFilterMenu.setItem(53, ItemUtil.createItem(Material.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
+		recentFilterMenu.setItem(53, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
 		
 		setAction(49, (clickEvent, slot) ->
 		{

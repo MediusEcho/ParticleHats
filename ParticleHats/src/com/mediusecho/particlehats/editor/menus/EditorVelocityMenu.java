@@ -1,12 +1,12 @@
 package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -73,7 +73,7 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 		Vector velocity = itemStackData.getVelocity();
 		
 		// X Offset
-		ItemStack xItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_X);
+		ItemStack xItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_X);
 		EditorLore.updateVectorDescription(xItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
 		setButton(14, xItem, (event, slot) ->
 		{
@@ -81,7 +81,7 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 		});
 		
 		// Y Offset
-		ItemStack yItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Y);
+		ItemStack yItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Y);
 		EditorLore.updateVectorDescription(yItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
 		setButton(15, yItem, (event, slot) ->
 		{
@@ -89,7 +89,7 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 		});
 		
 		// Z Offset
-		ItemStack zItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Z);
+		ItemStack zItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Z);
 		EditorLore.updateVectorDescription(zItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
 		setButton(16, zItem, (event, slot) ->
 		{

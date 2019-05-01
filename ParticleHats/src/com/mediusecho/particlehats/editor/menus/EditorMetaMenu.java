@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorLore;
@@ -53,7 +54,7 @@ public class EditorMetaMenu extends EditorMenu {
 		setButton(49, backButton, backAction);
 		
 		// Name
-		ItemStack nameItem = ItemUtil.createItem(Material.PLAYER_HEAD, Message.EDITOR_META_MENU_SET_NAME);
+		ItemStack nameItem = ItemUtil.createItem(CompatibleMaterial.PLAYER_HEAD, Message.EDITOR_META_MENU_SET_NAME);
 		setButton(13, nameItem, (event, slot) ->
 		{
 			if (event.isLeftClick())
@@ -73,7 +74,7 @@ public class EditorMetaMenu extends EditorMenu {
 		});
 		
 		// Description
-		ItemStack descriptionItem = ItemUtil.createItem(Material.WRITABLE_BOOK, Message.EDITOR_META_MENU_SET_DESCRIPTION);
+		ItemStack descriptionItem = ItemUtil.createItem(CompatibleMaterial.WRITABLE_BOOK, Message.EDITOR_META_MENU_SET_DESCRIPTION);
 		setButton(11, descriptionItem, (event, slot) ->
 		{
 			if (event.isLeftClick())
@@ -175,7 +176,7 @@ public class EditorMetaMenu extends EditorMenu {
 		});
 		
 		// Permission Denied
-		ItemStack permissionDeniedItem = ItemUtil.createItem(Material.MAP, Message.EDITOR_META_MENU_SET_PERMISSION_MESSAGE);
+		ItemStack permissionDeniedItem = ItemUtil.createItem(CompatibleMaterial.MAP, Message.EDITOR_META_MENU_SET_PERMISSION_MESSAGE);
 		setButton(25, permissionDeniedItem, (event, slot) ->
 		{
 			if (event.isLeftClick())

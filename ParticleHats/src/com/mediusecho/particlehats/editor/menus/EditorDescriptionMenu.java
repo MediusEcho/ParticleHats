@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorListMenu;
@@ -39,7 +40,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		this.editingDescription = editingDescription;
 		this.targetHat = menuBuilder.getBaseHat();
 		
-		addItem = ItemUtil.createItem(Material.TURTLE_HELMET, Message.EDITOR_DESCRIPTION_MENU_ADD_LINE);
+		addItem = ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_DESCRIPTION_MENU_ADD_LINE);
 		editAction = (event, slot) ->
 		{
 			if (event.isLeftClick())
@@ -213,7 +214,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		
 		setButton(46, backButton, backAction);
 		
-		ItemStack previewItem = ItemUtil.createItem(Material.WRITABLE_BOOK, Message.EDITOR_DESCRIPTION_MENU_PREVIEW);
+		ItemStack previewItem = ItemUtil.createItem(CompatibleMaterial.WRITABLE_BOOK, Message.EDITOR_DESCRIPTION_MENU_PREVIEW);
 		EditorLore.updatePreviewDecription(previewItem, getDescription(), targetHat);
 		setButton(49, previewItem, (event, slot) ->
 		{

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorListMenu;
 import com.mediusecho.particlehats.editor.EditorLore;
@@ -48,7 +49,7 @@ public class EditorItemStackMenu extends EditorListMenu {
 					String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
 					ItemStack i = getItem(slot);
 				
-					i.setType(material);
+					ItemUtil.setItemType(i, material, item.getDurability());
 					ItemUtil.setItemName(i, displayName);
 					
 					ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
@@ -178,7 +179,7 @@ public class EditorItemStackMenu extends EditorListMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		ItemStack durationItem = ItemUtil.createItem(Material.FIREWORK_STAR, Message.EDITOR_ITEMSTACK_MENU_SET_DURATION);
+		ItemStack durationItem = ItemUtil.createItem(CompatibleMaterial.FIREWORK_STAR, Message.EDITOR_ITEMSTACK_MENU_SET_DURATION);
 		EditorLore.updateDurationDescription(durationItem, itemStackData.getDuration(), Message.EDITOR_ITEMSTACK_MENU_DURATION_DESCRIPTION);
 		setButton(50, durationItem, (event, slot) ->
 		{
@@ -195,7 +196,7 @@ public class EditorItemStackMenu extends EditorListMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		ItemStack addItem = ItemUtil.createItem(Material.TURTLE_HELMET, Message.EDITOR_ITEMSTACK_MENU_ADD_ITEM);
+		ItemStack addItem = ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_ITEMSTACK_MENU_ADD_ITEM);
 		setButton(52, addItem, (event, slot) ->
 		{
 			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconName, iconDescription, (item) ->

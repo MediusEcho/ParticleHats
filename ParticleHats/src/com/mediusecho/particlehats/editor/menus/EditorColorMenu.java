@@ -6,11 +6,11 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -117,7 +117,7 @@ public class EditorColorMenu extends EditorMenu {
 	private void setColor (int slot, Color color, String colorName)
 	{
 		String title = Message.fromString("EDITOR_COLOUR_MENU_SET_" + colorName).getValue();
-		Material material = ItemUtil.materialFromString(colorName + "_STAINED_GLASS_PANE", Material.BLACK_STAINED_GLASS_PANE);
+		CompatibleMaterial material = CompatibleMaterial.fromName(colorName + "_STAINED_GLASS_PANE", CompatibleMaterial.BLACK_STAINED_GLASS_PANE);
 		
 		setColor(slot, color);
 		setItem(slot, ItemUtil.createItem(material, title, StringUtil.parseDescription(getColorDescription(color, title))));
@@ -134,28 +134,28 @@ public class EditorColorMenu extends EditorMenu {
 		ColorData pc = targetHat.getParticleData(particleIndex).getColorData();
 		Color color = pc.getColor();
 		
-		ItemStack redItem = ItemUtil.createItem(Material.ROSE_RED, Message.EDITOR_COLOUR_MENU_SET_RED_VALUE);
+		ItemStack redItem = ItemUtil.createItem(CompatibleMaterial.ROSE_RED, Message.EDITOR_COLOUR_MENU_SET_RED_VALUE);
 		EditorLore.updateColorDescription(redItem, color, pc.isRandom(), Message.EDITOR_COLOUR_MENU_R_DESCRIPTION);
 		setButton(16, redItem, (event, slot) ->
 		{
 			return updateRGB(event, targetHat, RGB.R);
 		});
 		
-		ItemStack greenItem = ItemUtil.createItem(Material.CACTUS_GREEN, Message.EDITOR_COLOUR_MENU_SET_GREEN_VALUE);
+		ItemStack greenItem = ItemUtil.createItem(CompatibleMaterial.CACTUS_GREEN, Message.EDITOR_COLOUR_MENU_SET_GREEN_VALUE);
 		EditorLore.updateColorDescription(greenItem, color, pc.isRandom(), Message.EDITOR_COLOUR_MENU_G_DESCRIPTION);
 		setButton(25, greenItem, (event, slot) ->
 		{
 			return updateRGB(event, targetHat, RGB.G);
 		});
 		
-		ItemStack blueItem = ItemUtil.createItem(Material.LAPIS_LAZULI, Message.EDITOR_COLOUR_MENU_SET_BLUE_VALUE);
+		ItemStack blueItem = ItemUtil.createItem(CompatibleMaterial.LAPIS_LAZULI, Message.EDITOR_COLOUR_MENU_SET_BLUE_VALUE);
 		EditorLore.updateColorDescription(blueItem, color, pc.isRandom(), Message.EDITOR_COLOUR_MENU_B_DESCRIPTION);
 		setButton(34, blueItem, (event, slot) ->
 		{
 			return updateRGB(event, targetHat, RGB.B);
 		});
 		
-		ItemStack sizeItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_COLOUR_MENU_SET_SIZE);
+		ItemStack sizeItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_COLOUR_MENU_SET_SIZE);
 		EditorLore.updateDoubleDescription(sizeItem, targetHat.getParticleData(particleIndex).getScale(), Message.EDITOR_COLOUR_MENU_SIZE_DESCRIPTION);
 		setButton(50, sizeItem, (event, slot) ->
 		{
@@ -172,7 +172,7 @@ public class EditorColorMenu extends EditorMenu {
 			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
-		ItemStack randomItem = ItemUtil.createItem(Material.EXPERIENCE_BOTTLE, Message.EDITOR_COLOUR_MENU_SET_RANDOM, Message.EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION);
+		ItemStack randomItem = ItemUtil.createItem(CompatibleMaterial.EXPERIENCE_BOTTLE, Message.EDITOR_COLOUR_MENU_SET_RANDOM, Message.EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION);
 		setButton(51, randomItem, (event, slot) ->
 		{
 			targetHat.getParticleData(particleIndex).getColorData().setRandom(true);

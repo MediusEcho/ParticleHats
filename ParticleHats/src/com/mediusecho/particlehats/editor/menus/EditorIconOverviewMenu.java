@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorListMenu;
@@ -40,7 +41,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		this.callback = callback;
 		targetHat = menuBuilder.getBaseHat();
 		
-		addItem = ItemUtil.createItem(Material.TURTLE_HELMET, Message.EDITOR_ICON_MENU_ADD_ICON);
+		addItem = ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_ICON_MENU_ADD_ICON);
 		addAction = (event, slot) ->
 		{
 			editingIndex = getClampedIndex(slot, 10, 2);
@@ -65,7 +66,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 					String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
 					ItemStack i = getItem(slot);
 				
-					i.setType(material);
+					ItemUtil.setItemType(i, material, item.getDurability());
 					ItemUtil.setItemName(i, displayName);
 					
 					targetHat.getIconData().updateMaterial(editingIndex, material);
@@ -143,7 +144,8 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 				targetHat.setMaterial(material);
 				menuBuilder.getEditingMenu().setItemMaterial(menuBuilder.getTargetSlot(), material);
 				
-				getItem(10).setType(material);
+				ItemUtil.setItemType(getItem(10), material, item.getDurability());
+				
 				callback.onSelect(item);
 				targetHat.setMaterial(material);
 			});
@@ -153,10 +155,10 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		});
 		
 		// Preview Icon
-		setItem(48, ItemUtil.createItem(Material.SUNFLOWER, Message.EDITOR_ICON_MENU_PREVIEW));
+		setItem(48, ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, Message.EDITOR_ICON_MENU_PREVIEW));
 		
 		// Display Mode 48
-		ItemStack displayItem = ItemUtil.createItem(Material.ROSE_RED, Message.EDITOR_ICON_MENU_SET_DISPLAY_MODE);
+		ItemStack displayItem = ItemUtil.createItem(CompatibleMaterial.ROSE_RED, Message.EDITOR_ICON_MENU_SET_DISPLAY_MODE);
 		EditorLore.updateDisplayModeDescription(displayItem, targetHat.getIconData().getDisplayMode(), Message.EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION);
 		setButton(50, displayItem, (event, slot) ->
 		{			
@@ -170,7 +172,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		});
 		
 		// Update Frequency
-		ItemStack frequencyItem = ItemUtil.createItem(Material.REPEATER, Message.EDITOR_ICON_MENU_SET_UPDATE_FREQUENCY);
+		ItemStack frequencyItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_ICON_MENU_SET_UPDATE_FREQUENCY);
 		EditorLore.updateFrequencyDescription(frequencyItem, targetHat.getIconUpdateFrequency(), Message.EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION);
 		setButton(49, frequencyItem, (event, slot) ->
 		{

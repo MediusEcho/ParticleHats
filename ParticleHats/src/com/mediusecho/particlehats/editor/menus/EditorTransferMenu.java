@@ -1,11 +1,11 @@
 package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -17,7 +17,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 public class EditorTransferMenu extends EditorMenu {
 
 	private final MenuInventory menuInventory;
-	private final ItemStack emptyItem = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_MOVE_MENU_MOVE, Message.EDITOR_MOVE_MENU_MOVE_DESCRIPTION);
+	private final ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_MOVE_MENU_MOVE, Message.EDITOR_MOVE_MENU_MOVE_DESCRIPTION);
 	
 	private final String menuName;
 	
@@ -45,7 +45,7 @@ public class EditorTransferMenu extends EditorMenu {
 			
 			int currentSlot = menuBuilder.getBaseHat().getSlot();
 			
-			core.getDatabase().moveHat(menuBuilder.getMenuName(), menuName, currentSlot, slot, false);
+			core.getDatabase().moveHat(null, menuBuilder.getBaseHat(), menuBuilder.getMenuName(), menuName, currentSlot, slot, false);
 			menuBuilder.getEditingMenu().removeButton(currentSlot);
 			menuBuilder.openEditingMenu();
 			

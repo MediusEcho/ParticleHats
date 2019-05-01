@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorListMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
@@ -122,7 +123,7 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		ItemStack addItem = ItemUtil.createItem(Material.TURTLE_HELMET, Message.EDITOR_NODE_OVERVIEW_MENU_ADD_NODE);
+		ItemStack addItem = ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_NODE_OVERVIEW_MENU_ADD_NODE);
 		setButton(52, addItem, (event, slot) ->
 		{
 			onAdd(slot);
