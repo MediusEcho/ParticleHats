@@ -58,7 +58,7 @@ public class EditCommand extends Command {
 		}
 		
 		String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
-		if (!sender.hasPermission(getPermission().append(menuName)) && !sender.hasPermission(Permission.COMMAND_EDIT_ALLL))
+		if (!sender.hasPermission(getPermission().append(menuName)) && !sender.hasPermission(Permission.COMMAND_EDIT_ALL))
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
 			return false;
@@ -77,7 +77,7 @@ public class EditCommand extends Command {
 		
 		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 		MenuBuilder menuBuilder = playerState.getMenuBuilder();
-		MenuInventory inventory = database.loadInventory(menuName, sender.getPlayer());
+		MenuInventory inventory = database.loadInventory(menuName, playerState);
 		
 		if (inventory == null) {
 			return false;
@@ -90,7 +90,6 @@ public class EditCommand extends Command {
 		}
 		
 		menuBuilder.startEditing();
-		
 		return false;
 	}
 
