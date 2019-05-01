@@ -80,4 +80,8 @@ public class ResourceUtil {
 		out.close();
 		in.close();
 	}
+	
+	public static String removeExtension (String fileName) {
+		return fileName.replaceFirst("[.][^.]+$", "");
+	}
 }
