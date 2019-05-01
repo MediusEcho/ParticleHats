@@ -17,26 +17,43 @@ public class CustomConfig {
 	private FileConfiguration config;
 	
 	private final String path;
+	private final String fileName;
 	private final String name;
 	private final String directory;
 	
 	public CustomConfig (final Core core, final String path, final String name, boolean logOutput)
 	{
 		this.core = core;
-		
 		this.path = path;
-		this.name = name;
-		
-		directory = core.getDataFolder() + File.separator + path;
-		file = new File(directory + File.separator + name);
-		config = new YamlConfiguration();
+		this.fileName = name;
+		this.name = ResourceUtil.removeExtension(name);
+		this.directory = core.getDataFolder() + File.separator + path;
+		this.file = new File(directory + File.separator + name);
+		this.config = new YamlConfiguration();
 		
 		// Load the configuration file
 		if (!file.exists()) {
 			file = createFile(logOutput);
-		} else {
-			Core.log("Loadaing " + path + File.separator + name);
+		} else if (logOutput) {
+			Core.log("Loading " + path + File.separator + fileName);
 		}
+		
+		try {
+			config.load(file);
+		} catch (Exception e) {
+			Core.log("There was an error loading " + name + ", error: " + e.getClass().getSimpleName());
+		}
+	}
+	
+	public CustomConfig (final Core core, final String path, File file,  boolean logOutput)
+	{
+		this.core = core;
+		this.path = path;
+		this.fileName = file.getName();
+		this.name = ResourceUtil.removeExtension(file.getName());
+		this.file = file;
+		this.directory = core.getDataFolder() + File.separator + path;
+		this.config = new YamlConfiguration();
 		
 		try {
 			config.load(file);
@@ -68,6 +85,30 @@ public class CustomConfig {
 	}
 	
 	/**
+	 * Tries to delete this Configuration File
+	 * @return
+	 */
+	public boolean delete () {
+		return file.delete();
+	}
+	
+	public String getFileName () {
+		return fileName;
+	}
+	
+	/**
+	 * Returns the name of this file
+	 * @return
+	 */
+	public String getName () {
+		return name;
+	}
+	
+	public void set (String path, Object value) {
+		config.set(path, value);
+	}
+	
+	/**
 	 * Get this CustomConfig configuration file
 	 * @return
 	 */
@@ -84,13 +125,13 @@ public class CustomConfig {
 	private File createFile (boolean logOutput)
 	{
 		file.getParentFile().mkdirs();
-		file = new File(directory + File.separator + name);
+		file = new File(directory + File.separator + fileName);
 		
 		// Try to copy an existing .yml file into this one
-		if (core.getResource(name) != null) 
+		if (core.getResource(fileName) != null) 
 		{
 			try {
-				ResourceUtil.copyFile(core.getResource(name), file);
+				ResourceUtil.copyFile(core.getResource(fileName), file);
 			} catch (IOException e) { }
 		}
 		
@@ -107,7 +148,7 @@ public class CustomConfig {
 		}
 		
 		if (logOutput) {
-			Core.log("Creating " + path + File.separator + name);
+			Core.log("Creating " + path + File.separator + fileName);
 		}
 		
 		return file;
