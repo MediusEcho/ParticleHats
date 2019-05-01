@@ -43,6 +43,8 @@ public class Core extends JavaPlugin {
 	private Database database;
 	private DatabaseType databaseType;
 	
+	private ParticleRenderer particleRenderer;
+	
 	// Managers
 	private EventManager eventManager;
 	private CommandManager commandManager;
@@ -81,8 +83,12 @@ public class Core extends JavaPlugin {
 			log("This version of ParticleHats is not compatible with your server version");
 			log("Download version 3.7.5 if your server is on 1.7.10 - 1.12.2");
 			log("-----------------------------------------------------------------------");
+			particleRenderer = new LegacyParticleRenderer();
+			
 			
 			getServer().getPluginManager().disablePlugin(this);
+		} else {
+			particleRenderer = new SpigotParticleRenderer();
 		}
 		
 		// Check to see if we're running on Spigot
@@ -200,6 +206,15 @@ public class Core extends JavaPlugin {
 	}
 	
 	/**
+	 * Get the ParticleRenderer for this server version
+	 * @return
+	 */
+	public ParticleRenderer getParticleRenderer () {
+		return particleRenderer;
+	}
+	
+	/**
+	 * Get the ResourceManager class
 	 * @return
 	 */
 	}
