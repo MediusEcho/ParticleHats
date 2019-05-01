@@ -129,13 +129,14 @@ public interface Database {
 	
 	/**
 	 * Moves this hat and all data to a new menu
+	 * @param hat
 	 * @param fromMenu Current menu the hat is inside of
 	 * @param toMenu Menu we're moving this hat to, leave as <b>NULL</b> if moving slots in the same menu
 	 * @param fromSlot Current slot the hat is in
 	 * @param toSlot New slot the hat will be moved to
 	 * @param swapping Swap this hat with the hat existing at the toSlot slot
 	 */
-	public void moveHat (String fromMenu, String toMenu, int fromSlot, int toSlot, boolean swapping);
+	public void moveHat (Hat fromHat, Hat toHat, String fromMenu, String toMenu, int fromSlot, int toSlot, boolean swapping);
 	
 	/**
 	 * Deletes a hat from this menu
