@@ -13,7 +13,8 @@ public enum ParticleMode {
 	WHEN_PEACEFUL  (3),
 	WHEN_GLIDING   (4),
 	WHEN_SPRINTING (5),
-	WHEN_SWIMMING  (6);
+	WHEN_SWIMMING  (6),
+	WHEN_FLYING    (7);
 	
 	private final int id;
 	
