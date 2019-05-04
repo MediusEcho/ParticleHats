@@ -16,7 +16,6 @@ import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.particles.renderer.legacy.ReflectionUtils.PackageType;
-import com.mediusecho.particlehats.particles.renderer.spigot.SpigotParticleRenderer;
 
 /**
  * <b>ParticleEffect Library</b>
@@ -65,8 +64,11 @@ public class LegacyParticleRenderer implements ParticleRenderer {
 	
 	@Override
 	public void spawnParticleItemData (World world, ParticleEffect particle, Location location, int count, 
-			double offsetX, double offsetY, double offsetZ, double extra, ParticleData data) {
-		spawnParticleBlockData(world, particle, location, count, offsetX, offsetY, offsetZ, extra, data);
+			double offsetX, double offsetY, double offsetZ, double extra, ParticleData data) 
+	{
+		if (particle.isSupported()) {
+			spawnParticleBlockData(world, particle, location, count, offsetX, offsetY, offsetZ, extra, data);
+		}
 	}
 	
 	@Override
