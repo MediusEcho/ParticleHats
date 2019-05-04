@@ -95,14 +95,16 @@ public class Core extends JavaPlugin {
 		{
 			particleRenderer = new LegacyParticleRenderer();
 			
-			
-//			log("-----------------------------------------------------------------------");
-//			log("This version of ParticleHats is not compatible with your server version");
-//			log("Download version 3.7.5 if your server is on 1.7.10 - 1.12.2");
-//			log("-----------------------------------------------------------------------");
-//			
-//			getServer().getPluginManager().disablePlugin(this);
-//			return;
+			if (serverVersion < 8)
+			{
+				log("-----------------------------------------------------------------------");
+				log("This version of ParticleHats is not compatible with your server version");
+				log("Download version 3.7.5 if your server is on 1.7.10");
+				log("-----------------------------------------------------------------------");
+				
+				getServer().getPluginManager().disablePlugin(this);
+				return;	
+			}
 		} else {
 			particleRenderer = new SpigotParticleRenderer();
 		}
@@ -132,21 +134,19 @@ public class Core extends JavaPlugin {
 		{		
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
-			database = databaseType.getDatabase(this, (e) ->
+			database = databaseType.getDatabase(this);
+			
+			if (!database.isEnabled())
 			{
-				// Default to YAML if our mysql database can't connect
 				log("---------------------------------------------------");
 				log("There was an error connecting to the MySQL database");
-				log("Error: " + e.getClass().getSimpleName());
 				log("Switching to yaml");
 				log("---------------------------------------------------");
 				log("");
 				
-				// TODO: Database not switching to yaml correctly
-				
 				databaseType = DatabaseType.YAML;
-				database = DatabaseType.YAML.getDatabase(this);
-			});
+				database = databaseType.getDatabase(this);
+			}
 			
 			// Initialize our player state map
 			playerState = new HashMap<UUID, PlayerState>();
