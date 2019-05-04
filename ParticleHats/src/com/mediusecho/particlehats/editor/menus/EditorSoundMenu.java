@@ -14,10 +14,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -48,36 +50,48 @@ public class EditorSoundMenu extends EditorMenu {
 	private final EditorAction setSoundAction;
 	
 	// Disable sounds that are too long
-	private final List<Sound> blacklist = Arrays.asList(
-			Sound.MUSIC_CREATIVE,
-			Sound.MUSIC_CREDITS,
-			Sound.MUSIC_DISC_11,
-			Sound.MUSIC_DISC_13,
-			Sound.MUSIC_DISC_BLOCKS,
-			Sound.MUSIC_DISC_CAT,
-			Sound.MUSIC_DISC_CHIRP,
-			Sound.MUSIC_DISC_FAR,
-			Sound.MUSIC_DISC_MALL,
-			Sound.MUSIC_DISC_MELLOHI,
-			Sound.MUSIC_DISC_STAL,
-			Sound.MUSIC_DISC_STRAD,
-			Sound.MUSIC_DISC_WAIT,
-			Sound.MUSIC_DISC_WARD,
-			Sound.MUSIC_DRAGON,
-			Sound.MUSIC_END,
-			Sound.MUSIC_GAME,
-			Sound.MUSIC_MENU,
-			Sound.MUSIC_NETHER,
-			Sound.MUSIC_UNDER_WATER,
-			Sound.AMBIENT_CAVE,
-			Sound.AMBIENT_UNDERWATER_ENTER,
-			Sound.AMBIENT_UNDERWATER_EXIT,
-			Sound.AMBIENT_UNDERWATER_LOOP,
-			Sound.AMBIENT_UNDERWATER_LOOP_ADDITIONS,
-			Sound.AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE,
-			Sound.AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE,
-			Sound.ITEM_ELYTRA_FLYING,
-			Sound.ENTITY_ENDER_DRAGON_DEATH);
+	private final List<String> blacklist = Arrays.asList(
+			"MUSIC_CREATIVE",
+			"MUSIC_CREDITS",
+			"MUSIC_DRAGON",
+			"MUSIC_END",
+			"MUSIC_GAME",
+			"MUSIC_MENU",
+			"MUSIC_NETHER",
+			"MUSIC_UNDER_WATER",
+			"AMBIENT_CAVE",
+			"AMBIENT_UNDERWATER_ENTER",
+			"AMBIENT_UNDERWATER_EXIT",
+			"AMBIENT_UNDERWATER_LOOP",
+			"AMBIENT_UNDERWATER_LOOP_ADDITIONS",
+			"AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE",
+			"AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE",
+			"ITEM_ELYTRA_FLYING",
+			"ENTITY_ENDER_DRAGON_DEATH",
+			"MUSIC_DISC_11",
+			"MUSIC_DISC_13",
+			"MUSIC_DISC_BLOCKS",
+			"MUSIC_DISC_CAT",
+			"MUSIC_DISC_CHIRP",
+			"MUSIC_DISC_FAR",
+			"MUSIC_DISC_MALL",
+			"MUSIC_DISC_MELLOHI",
+			"MUSIC_DISC_STAL",
+			"MUSIC_DISC_STRAD",
+			"MUSIC_DISC_WAIT",
+			"MUSIC_DISC_WARD",
+		    "RECORD_11",
+		    "RECORD_13",
+		    "RECORD_BLOCKS",
+		    "RECORD_CAT",
+		    "RECORD_CHIRP",
+		    "RECORD_FAR",
+		    "RECORD_MALL",
+		    "RECORD_MELLOHI",
+		    "RECORD_STAL",
+		    "RECORD_STRAD",
+		    "RECORD_WAIT",
+		    "RECORD_WARD");
 	
 	public EditorSoundMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorSoundCallback soundCallback)
 	{
@@ -126,6 +140,14 @@ public class EditorSoundMenu extends EditorMenu {
 	}
 	
 	@Override
+	public void onClose (boolean forced)
+	{
+		if (currentPlayingSound != null) {
+			owner.stopSound(currentPlayingSound);
+		}
+	}
+	
+	@Override
 	public void open () {
 		openMenu(menus, currentMiscPage);
 	}
@@ -151,9 +173,11 @@ public class EditorSoundMenu extends EditorMenu {
 		entitySounds = new ArrayList<Sound>();
 		miscSounds   = new ArrayList<Sound>();
 		
+		boolean useBlacklist = !SettingsManager.EDITOR_SHOW_BLACKLISTED_SOUNDS.getBoolean();
+		
 		for (Sound s : Sound.values())
 		{
-			if (blacklist.contains(s)) {
+			if (useBlacklist && blacklist.contains(s.toString())) {
 				continue;
 			}
 			
@@ -182,9 +206,9 @@ public class EditorSoundMenu extends EditorMenu {
 		generateSoundMenu(entityMenus, entityPages, Message.EDITOR_SOUND_MENU_ENTITY_TITLE, 2);
 		
 		// Fill our menus with sound
-		populateSoundMenu(miscSounds, menus, Material.MUSIC_DISC_CAT);
-		populateSoundMenu(blockSounds, blockMenus, Material.MUSIC_DISC_BLOCKS);
-		populateSoundMenu(entitySounds, entityMenus, Material.MUSIC_DISC_FAR);
+		populateSoundMenu(miscSounds, menus, CompatibleMaterial.MUSIC_DISC_CAT);
+		populateSoundMenu(blockSounds, blockMenus, CompatibleMaterial.MUSIC_DISC_BLOCKS);
+		populateSoundMenu(entitySounds, entityMenus, CompatibleMaterial.MUSIC_DISC_FAR);
 		
 		// Setup buttons
 		setAction(49, (event, slot) ->
@@ -287,26 +311,26 @@ public class EditorSoundMenu extends EditorMenu {
 			
 			switch (categoryIndex)
 			{
-			case 0: menu.getItem(45).setType(Material.MUSHROOM_STEW); break;
-			case 1: menu.getItem(46).setType(Material.MUSHROOM_STEW); break;
-			case 2: menu.getItem(47).setType(Material.MUSHROOM_STEW); break;
+			case 0: ItemUtil.setItemType(menu.getItem(45), CompatibleMaterial.MUSHROOM_STEW); break;//menu.getItem(45).setType(CompatibleMaterial.MUSHROOM_STEW); break;
+			case 1: ItemUtil.setItemType(menu.getItem(46), CompatibleMaterial.MUSHROOM_STEW); break;
+			case 2: ItemUtil.setItemType(menu.getItem(47), CompatibleMaterial.MUSHROOM_STEW); break;
 			}
 			
 			// Next Page
 			if ((i + 1) < pages) {
-				menu.setItem(50, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
 			}
 			
 			// Previous Page
 			if ((i + 1) > 1) {
-				menu.setItem(48, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
 			menus.put(i, menu);
 		}
 	}
 	
-	private void populateSoundMenu (List<Sound> sounds, Map<Integer, Inventory> menus, Material disc)
+	private void populateSoundMenu (List<Sound> sounds, Map<Integer, Inventory> menus, CompatibleMaterial disc)
 	{
 		int index = 0;
 		int page = 0;
