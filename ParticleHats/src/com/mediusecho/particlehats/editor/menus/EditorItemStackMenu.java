@@ -47,9 +47,9 @@ public class EditorItemStackMenu extends EditorListMenu {
 				{
 					Material material = item.getType();
 					String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
+					
 					ItemStack i = getItem(slot);
-				
-					ItemUtil.setItemType(i, material, item.getDurability());
+					ItemUtil.setItemType(i, item);
 					ItemUtil.setItemName(i, displayName);
 					
 					ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
