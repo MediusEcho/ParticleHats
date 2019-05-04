@@ -196,7 +196,7 @@ public enum Message {
 	PARTICLE_NOTE_NAME                     ("&bNoteblock Notes"),
 	PARTICLE_NOTE_DESCRIPTION              ("Notes, have random colors when/n&8speed is set to 1"),
 	PARTICLE_PORTAL_NAME                   ("&bPortal"),
-	PARTICLE_PORTAL_DESCRIPTION            ("Nether Portals, Endermen, Endermites,/n&8& Ender Pearls"),
+	PARTICLE_PORTAL_DESCRIPTION            ("Nether Portals, Endermen,/n&8Endermites, & Ender Pearls"),
 	PARTICLE_REDSTONE_NAME                 ("&bRedstone Dust"),
 	PARTICLE_REDSTONE_DESCRIPTION          ("From redstone, can have unique/n&8colors & be scaled"),
 	PARTICLE_SLIME_NAME                    ("&bSlime"),
@@ -247,6 +247,21 @@ public enum Message {
 	PARTICLE_WATER_WAKE_DESCRIPTION        ("Fishing particles"),
 	PARTICLE_ITEMSTACK_NAME                ("&bItem Stack"),
 	PARTICLE_ITEMSTACK_DESCRIPTION         ("&8Drops items instead of particles/n/n&cWarning: Too many items spawning/n&cmay cause lag"),
+	PARTICLE_CAMPFIRE_COSY_SMOKE_NAME      ("&bCosy Smoke"),
+	PARTICLE_CAMPFIRE_COSY_SMOKE_DESCRIPTION (""),
+	PARTICLE_CAMPFIRE_SIGNAL_SMOKE_NAME      ("&bSignal Smoke"),
+	PARTICLE_CAMPFIRE_SIGNAL_SMOKE_DESCRIPTION (""),
+	PARTICLE_COMPOSTER_NAME                ("&bComposter"),
+	PARTICLE_COMPOSTER_DESCRIPTION         (""),
+	PARTICLE_FALLING_LAVA_NAME             ("&bFalling Lava"),
+	PARTICLE_FALLING_LAVA_DESCRIPTION      (""),
+	PARTICLE_FALLING_WATER_NAME            ("&bFalling Water"),
+	PARTICLE_FALLING_WATER_DESCRIPTION     (""),
+	PARTICLE_FLASH_NAME                    ("&eFlash"),
+	PARTICLE_FLASH_DESCRIPTION             (""),
+	PARTICLE_SNEEZE_NAME                   ("&bSneeze"),
+	PARTICLE_SNEEZE_DESCRIPTION            (""),
+	
 	
 	/**
 	 * Location
@@ -306,6 +321,8 @@ public enum Message {
 	MODE_WHEN_SPRINTING_DESCRIPTION ("&8Only display particles while/n&8the player is running"),
 	MODE_WHEN_SWIMMING_NAME         ("When Swimming"),
 	MODE_WHEN_SWIMMING_DESCRIPTION  ("&8Only display particles while/n&8the player is swimming"),
+	MODE_WHEN_FLYING_NAME           ("When Flying"),
+	MODE_WHEN_FLYING_DESCRIPTION    ("&8Only display particles while/n&8the player has creative flight"),
 	
 	/**
 	 * Types
