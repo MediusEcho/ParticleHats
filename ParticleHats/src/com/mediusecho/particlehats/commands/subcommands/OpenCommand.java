@@ -11,6 +11,8 @@ import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.ui.Menu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
@@ -45,19 +47,11 @@ public class OpenCommand extends Command {
 			return result;
 		}
 		return Arrays.asList("");
-		
-		//return new ArrayList<String>(database.getMenus(false).keySet());
 	}
 	
 	@Override
 	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
-	{
-//		if (!sender.isPlayer())
-//		{
-//			sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
-//			return false;
-//		}
-		
+	{		
 		// No argument
 		if (args.size() == 0)
 		{
@@ -68,20 +62,31 @@ public class OpenCommand extends Command {
 		
 		if (args.size() >= 1)
 		{
+			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+			
 			// Grab the name without any extensions
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
 			
-			Database database = core.getDatabase();
-			MenuInventory inventory = database.loadInventory(menuName, sender.getPlayer());
-			
-			if (inventory == null)
+			Menu menu = playerState.getOpenMenu(menuName);
+			if (menu == null)
 			{
-				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
-				return false;
+				Core.debug("cache didnt exist, loading menu " + menuName);
+				Database database = core.getDatabase();
+				MenuInventory inventory = database.loadInventory(menuName, core.getPlayerState(sender.getPlayerID()));
+				
+				if (inventory == null)
+				{
+					sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
+					return false;
+				}
+				
+				menu = new StaticMenu(core, sender.getPlayer(), inventory);
 			}
 			
-			Menu menu = new StaticMenu(core, sender.getPlayer(), inventory);
-			core.getMenuManager().openMenu(menu, true);
+			playerState.setGuiState(GuiState.SWITCHING_MENU);
+			playerState.setOpenMenu(menu);
+			menu.open();
+			
 			return true;
 		}
 		return false;
