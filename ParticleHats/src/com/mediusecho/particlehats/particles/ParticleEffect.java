@@ -11,10 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.util.ItemUtil;
 
 public enum ParticleEffect {
 
-	// TODO: Update items to reflect their particle for all versions
 	NONE                   (0,  0, -1, CompatibleMaterial.SCUTE),
 	BARRIER                (1,  35, 8, "barrier", CompatibleMaterial.BARRIER),
 	BLOCK_CRACK            (2,  37, -1, "blockcrack", Material.COBBLESTONE, ParticleProperty.BLOCK_DATA),
@@ -70,12 +70,12 @@ public enum ParticleEffect {
 	WATER_SPLASH           (52, 5, -1, "splash", CompatibleMaterial.BIRCH_BOAT),
 	WATER_WAKE             (53, 6, 7, "wake", CompatibleMaterial.OAK_BOAT),
 	ITEMSTACK              (54, -1, -1, Material.DIAMOND, ParticleProperty.ITEMSTACK_DATA),
-	CAMPFIRE_COSY_SMOKE    (55, -1, 14, Material.STONE),
-	CAMPFIRE_SIGNAL_SMOKE  (56, -1, 14, Material.STONE),
+	CAMPFIRE_COSY_SMOKE    (55, -1, 14, CompatibleMaterial.CAMPFIRE),
+	CAMPFIRE_SIGNAL_SMOKE  (56, -1, 14, CompatibleMaterial.CAMPFIRE),
 	COMPOSTER              (57, -1, 14, CompatibleMaterial.PLAYER_HEAD),
 	FALLING_LAVA           (58, -1, 14, Material.LAVA_BUCKET),
 	FALLING_WATER          (59, -1, 14, Material.WATER_BUCKET),
-	FLASH                  (60, -1, 14, CompatibleMaterial.FIREWORK_STAR),
+	FLASH                  (60, -1, 14, CompatibleMaterial.LANTERN),
 	SNEEZE                 (61, -1, 14, CompatibleMaterial.GRAY_DYE);
 	
 	private static final Map<String, ParticleEffect> NAMES   = new HashMap<String, ParticleEffect>();
@@ -87,7 +87,8 @@ public enum ParticleEffect {
 	private final int version;
 	//private final Particle particle;
 	private final String legacyName;
-	private final Material material;
+	//private final Material material;
+	private final ItemStack item;
 	private final ParticleProperty property;
 	
 	static
@@ -100,43 +101,48 @@ public enum ParticleEffect {
 		}
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, String legacyName, final Material material, final ParticleProperty property)
+	private ParticleEffect (final int id, final int legacyID, final int version, String legacyName, final ItemStack item, final ParticleProperty property)
 	{
 		this.id = id;
 		this.legacyID = legacyID;
 		this.version = version;
 		this.legacyName = legacyName;
-		this.material = material;
+		//this.material = material;
+		this.item = item;
 		this.property = property;
 		//particle = getParticle(toString());
 	}
 	
+	private ParticleEffect (final int id, final int legacyID, final int version, String legacyName, final Material material, final ParticleProperty property) {
+		this(id, legacyID, version, legacyName, ItemUtil.createItem(material, 1), property);
+	}
+	
 	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final CompatibleMaterial material, final ParticleProperty property) {
-		this(id, legacyID, version, legacyName, material.getMaterial(), property);
+		this(id, legacyID, version, legacyName, material.getItem(), property);
 	}
 	
 	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final Material material) {
-		this(id, legacyID, version, legacyName, material, ParticleProperty.NO_DATA);
+		this(id, legacyID, version, legacyName, ItemUtil.createItem(material, 1), ParticleProperty.NO_DATA);
 	}
 	
 	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final CompatibleMaterial material) {
-		this(id, legacyID, version, legacyName, material.getMaterial());
+		this(id, legacyID, version, legacyName, material.getItem(), ParticleProperty.NO_DATA);
 	}
 	
 	private ParticleEffect (final int id, final int legacyID, final int version, final CompatibleMaterial material, final ParticleProperty property) {
-		this(id, legacyID, version, "", material.getMaterial(), property);
+		this(id, legacyID, version, "", material.getItem(), property);
 	}
 	
 	private ParticleEffect (final int id, final int legacyID, final int version, final Material material, final ParticleProperty property) {
-		this(id, legacyID, version, "", material, property);
+		this(id, legacyID, version, "", ItemUtil.createItem(material, 1), property);
 	}
 	
 	private ParticleEffect (final int id, final int legacyID, final int version, final CompatibleMaterial material) {
-		this(id, legacyID, version, "", material.getMaterial(), ParticleProperty.NO_DATA);
+		this(id, legacyID, version, "", material.getItem(), ParticleProperty.NO_DATA);
 	}
 	
 	private ParticleEffect (final int id, final int legacyID, final int version, final Material material) {
-		this(id, legacyID, version, "", material, ParticleProperty.NO_DATA);
+		this(id, legacyID, version, "", ItemUtil.createItem(material, 1), ParticleProperty.NO_DATA);
 	}
 	
 	/**
@@ -247,16 +253,16 @@ public enum ParticleEffect {
 //		return particle;
 //	}
 	
-	/**
-	 * Get the Material of this ParticleEffect
-	 * @return The Material of this ParticleEffect for use in menus
-	 */
-	public Material getMaterial () {
-		return material;
-	}
+//	/**
+//	 * Get the Material of this ParticleEffect
+//	 * @return The Material of this ParticleEffect for use in menus
+//	 */
+//	public Material getMaterial () {
+//		return material;
+//	}
 	
 	public ItemStack getItem () {
-		return new ItemStack(material, 1);
+		return item;
 	}
 	
 	/**
