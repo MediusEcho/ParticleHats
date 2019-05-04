@@ -19,6 +19,7 @@ import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -41,14 +42,14 @@ public class EditorPotionMenu extends EditorMenu {
 	private int currentPage = 0;
 	private int pages = 0;
 	
-	private final List<PotionEffectType> potionBlacklist = Arrays.asList(
-			PotionEffectType.CONFUSION,
-			PotionEffectType.HARM,
-			PotionEffectType.POISON,
-			PotionEffectType.WEAKNESS,
-			PotionEffectType.WITHER,
-			PotionEffectType.UNLUCK,
-			PotionEffectType.HUNGER);
+	private final List<String> potionBlacklist = Arrays.asList(
+			"CONFUSION",
+			"HARM",
+			"POISON",
+			"WEAKNESS",
+			"WITHER",
+			"UNLUCK",
+			"HUNGER");
 	
 	public EditorPotionMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
 	{
@@ -120,12 +121,23 @@ public class EditorPotionMenu extends EditorMenu {
 			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
+		boolean useBlacklist = !SettingsManager.EDITOR_SHOW_BLACKLISTED_POTIONS.getBoolean();
 		int potionCount = 0;
+		
 		for (PotionEffectType potionType : PotionEffectType.values())
 		{
-			if (potionBlacklist.contains(potionType)) {
+			if (potionType == null) {
 				continue;
 			}
+			
+			if (useBlacklist && potionBlacklist.contains(potionType.getName())) {
+				continue;
+			}
+			
+			if (potionType.getName().equals("INVISIBILITY")) {
+				continue;
+			}
+			
 			potionCount++;
 		}
 		
@@ -169,7 +181,15 @@ public class EditorPotionMenu extends EditorMenu {
 		
 		for (PotionEffectType potionType : PotionEffectType.values())
 		{
-			if (potionBlacklist.contains(potionType)) {
+			if (potionType == null) {
+				continue;
+			}
+			
+			if (useBlacklist && potionBlacklist.contains(potionType.getName())) {
+				continue;
+			}
+			
+			if (potionType.getName().equals("INVISIBILITY")) {
 				continue;
 			}
 			
