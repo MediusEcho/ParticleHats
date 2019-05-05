@@ -322,6 +322,53 @@ public class MySQLHelper {
 				.replace("{3}", updateBuilder.toString());
 	}
 	
+	public String getImportQuery (String menuName)
+	{
+		return "INSERT INTO " + Table.ITEMS.format(menuName) + " ("
+				+ "slot,"
+				+ "ver,"
+				+ "id,"
+				+ "durability,"
+				+ "title,"
+				+ "permission,"
+				+ "permission_denied,"
+				+ "type,"
+				+ "custom_type,"
+				+ "location,"
+				+ "mode,"
+				+ "animation,"
+				+ "tracking,"
+				+ "label,"
+				+ "equip_message,"
+				+ "offset_x,"
+				+ "offset_y,"
+				+ "offset_z,"
+				+ "random_offset_x,"
+				+ "random_offset_y,"
+				+ "random_offset_z,"
+				+ "angle_x,"
+				+ "angle_y,"
+				+ "angle_z,"
+				+ "update_frequency,"
+				+ "icon_update_frequency,"
+				+ "speed,"
+				+ "count,"
+				+ "price,"
+				+ "sound,"
+				+ "volume,"
+				+ "pitch,"
+				+ "left_action,"
+				+ "right_action,"
+				+ "left_argument,"
+				+ "right_argument,"
+				+ "duration,"
+				+ "display_mode,"
+				+ "scale,"
+				+ "potion,"
+				+ "potion_strength"
+				+ ") VALUES {1}";
+	}
+	
 	/**
 	 * Creates a new InputStream from an existing InputStream removing comments
 	 * @param stream
