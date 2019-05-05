@@ -19,11 +19,13 @@ public class MenuInventory {
 	
 	private String name;
 	private String title;
+	private String alias;
 	
-	public MenuInventory (String name, String title, int rows)
+	public MenuInventory (String name, String title, int rows, String alias)
 	{
 		this.name = name;
 		this.title = title;
+		this.alias = alias;
 		
 		inventory = Bukkit.createInventory(null, rows * 9, StringUtil.colorize(title));
 		hats = new HashMap<Integer, Hat>();
@@ -75,11 +77,27 @@ public class MenuInventory {
 	}
 	
 	/**
-	 * Set this menus inventory title
+	 * Set this menu's inventory title
 	 * @param title
 	 */
 	public void setTitle (String title) {
 		this.title = title;
+	}
+	
+	/**
+	 * Get this menu's alias
+	 * @return
+	 */
+	public String getAlias () {
+		return alias;
+	}
+	
+	/**
+	 * Set this menu's alias
+	 * @param alias
+	 */
+	public void setAlias (String alias) {
+		this.alias = alias;
 	}
 	
 	/**
@@ -139,7 +157,7 @@ public class MenuInventory {
 	 */
 	public MenuInventory clone ()
 	{
-		MenuInventory inventory = new MenuInventory(name, title, getSize() / 9);
+		MenuInventory inventory = new MenuInventory(name, title, getSize() / 9, alias);
 		for (Entry<Integer, Hat> entry : getHats().entrySet())
 		{
 			int slot = entry.getKey();
