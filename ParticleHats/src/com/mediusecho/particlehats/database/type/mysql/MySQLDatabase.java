@@ -167,53 +167,8 @@ public class MySQLDatabase implements Database {
 	}
 	
 	@Override
-	public void createMenu(String menuName) 
-	{
-		async(() ->
-		{
-			connect((connection) ->
-			{
-				// Menu Entry
-				String createMenuStatement= "INSERT INTO " + Table.MENUS.getFormat() + " VALUES(?, ?, ?, ?)";
-				try (PreparedStatement statement = connection.prepareStatement(createMenuStatement))
-				{
-					statement.setString(1, menuName); // Name
-					statement.setString(2, menuName); // Title (Same until title is changed)
-					statement.setInt(3, 6);
-					statement.setString(4, null);
-					
-					if (statement.executeUpdate() > 0)
-					{						
-						// Items Table
-						String createMenuItemsTable = helper.getItemTableQuery(menuName);
-						try (PreparedStatement itemsStatement = connection.prepareStatement(createMenuItemsTable)) {
-							itemsStatement.execute();
-						}
-						
-						// Nodes Table
-						String createMenuNodesTable = helper.getNodeTableQuery(menuName);
-						try (PreparedStatement nodesStatement = connection.prepareStatement(createMenuNodesTable)) {
-							nodesStatement.execute();
-						}
-						
-						// Meta Table
-						String createMenuMetaTable = helper.getMetaTableQuery(menuName);
-						try (PreparedStatement metaStatement = connection.prepareStatement(createMenuMetaTable)) {
-							metaStatement.execute();
-						}
-						
-						// Particle Table
-						String createMenuParticleTable = helper.getParticleTableQuery(menuName);
-						try (PreparedStatement particleStatement = connection.prepareCall(createMenuParticleTable)) {
-							particleStatement.execute();
-						}
-						
-						// Add this menu to the cache
-						menuCache.put(menuName, menuName);
-					}
-				}
-			});
-		});
+	public void createMenu(String menuName) {
+		createMenu(menuName, menuName, 6, null);
 	}
 
 	@Override
@@ -1035,6 +990,62 @@ public class MySQLDatabase implements Database {
 		catch (SQLException e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * Creates an empty menu in the database
+	 * @param menuName
+	 * @param title
+	 * @param rows
+	 * @param alias
+	 */
+	private void createMenu (String menuName, String title, int rows, String alias)
+	{
+		async(() ->
+		{
+			connect((connection) ->
+			{
+				// Menu Entry
+				String createMenuStatement= "INSERT INTO " + Table.MENUS.getFormat() + " VALUES(?, ?, ?, ?)";
+				try (PreparedStatement statement = connection.prepareStatement(createMenuStatement))
+				{
+					statement.setString(1, menuName); // Name
+					statement.setString(2, menuName); // Title (Same until title is changed)
+					statement.setInt(3, 6);
+					statement.setString(4, null);
+					
+					if (statement.executeUpdate() > 0)
+					{						
+						// Items Table
+						String createMenuItemsTable = helper.getItemTableQuery(menuName);
+						try (PreparedStatement itemsStatement = connection.prepareStatement(createMenuItemsTable)) {
+							itemsStatement.execute();
+						}
+						
+						// Nodes Table
+						String createMenuNodesTable = helper.getNodeTableQuery(menuName);
+						try (PreparedStatement nodesStatement = connection.prepareStatement(createMenuNodesTable)) {
+							nodesStatement.execute();
+						}
+						
+						// Meta Table
+						String createMenuMetaTable = helper.getMetaTableQuery(menuName);
+						try (PreparedStatement metaStatement = connection.prepareStatement(createMenuMetaTable)) {
+							metaStatement.execute();
+						}
+						
+						// Particle Table
+						String createMenuParticleTable = helper.getParticleTableQuery(menuName);
+						try (PreparedStatement particleStatement = connection.prepareCall(createMenuParticleTable)) {
+							particleStatement.execute();
+						}
+						
+						// Add this menu to the cache
+						menuCache.put(menuName, menuName);
+					}
+				}
+			});
+		});
 	}
 	
 	private MenuInventory loadInventory (Connection connection, String menuName, PlayerState playerState) throws SQLException
