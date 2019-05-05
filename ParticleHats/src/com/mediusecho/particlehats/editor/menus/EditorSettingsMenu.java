@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -58,7 +59,7 @@ public class EditorSettingsMenu extends EditorMenu {
 		});
 		
 		// Set Size
-		ItemStack sizeItem = ItemUtil.createItem(Material.COMPARATOR, Message.EDITOR_SETTINGS_MENU_SET_SIZE);
+		ItemStack sizeItem = ItemUtil.createItem(CompatibleMaterial.COMPARATOR, Message.EDITOR_SETTINGS_MENU_SET_SIZE);
 		setButton(12, sizeItem, (event, slot) ->
 		{
 			EditorResizeMenu editorResizeMenu = new EditorResizeMenu(core, owner, menuBuilder);
@@ -98,7 +99,7 @@ public class EditorSettingsMenu extends EditorMenu {
 		});
 		
 		// Sync Icons
-		ItemStack syncItem = ItemUtil.createItem(Material.CONDUIT, Message.EDITOR_SETTINGS_MENU_SYNC_ICONS, Message.EDITOR_SETTINGS_SYNC_DESCRIPTION);
+		ItemStack syncItem = ItemUtil.createItem(CompatibleMaterial.CONDUIT, Message.EDITOR_SETTINGS_MENU_SYNC_ICONS, Message.EDITOR_SETTINGS_SYNC_DESCRIPTION);
 		setButton(32, syncItem, (event, slot) ->
 		{
 			for (Entry<Integer, Hat> hats : menuBuilder.getEditingMenu().getHats().entrySet())
