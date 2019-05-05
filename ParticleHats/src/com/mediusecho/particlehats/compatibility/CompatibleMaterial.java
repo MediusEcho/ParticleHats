@@ -14,7 +14,6 @@ import com.mediusecho.particlehats.util.ItemUtil;
  * @author MediusEcho
  *
  */
-// TODO: Finish adding alternate materials (1.8 compatible)
 public enum CompatibleMaterial {
 
 	BARRIER ("INK_SACK", 8),
@@ -29,11 +28,11 @@ public enum CompatibleMaterial {
 	CAMPFIRE ("TORCH", 0),
 	CAULDRON ("CAULDRON_ITEM", 0),
 	COMPARATOR ("REDSTONE_COMPARATOR", 0),
-	CONDUIT,
+	CONDUIT ("CLAY_BALL", 0),
 	CYAN_DYE ("INK_SACK", 6),
 	CYAN_STAINED_GLASS_PANE ("STAINED_GLASS_PANE", 9),
 	
-	DRAGON_HEAD,
+	DRAGON_HEAD ("SKULL_ITEM", 5),
 	
 	EXPERIENCE_BOTTLE ("EXP_BOTTLE", 0),
 	ENCHANTING_TABLE ("ENCHANTMENT_TABLE", 0),
@@ -48,7 +47,7 @@ public enum CompatibleMaterial {
 	GREEN_STAINED_GLASS_PANE ("STAINED_GLASS_PANE", 13),
 	GUNPOWDER ("SULPHUR", 0),
 	
-	HORN_CORAL,
+	HORN_CORAL ("ROSE_RED", 8),
 	
 	INK_SAC (0, "INK_SACK"),
 	
@@ -97,7 +96,7 @@ public enum CompatibleMaterial {
 	TURTLE_HELMET ("LEATHER_HELMET", 0),
 	
 	WHEAT_SEEDS ("SEEDS", 0),
-	WHITE_DYE,
+	WHITE_DYE ("INK_SACK", 15),
 	WHITE_STAINED_GLASS_PANE ("STAINED_GLASS_PANE", 0),
 	WITHER_SKELETON_SKULL ("SKULL_ITEM", 1),
 	WRITABLE_BOOK ("BOOK_AND_QUILL", 0),
