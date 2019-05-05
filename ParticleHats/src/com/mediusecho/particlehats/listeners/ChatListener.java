@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,18 +45,21 @@ public class ChatListener implements Listener {
 			{
 				MetaState metaState = playerState.getMetaState();
 				if (!metaState.equals(MetaState.NONE))
-				{
-					if (ChatColor.stripColor(event.getMessage()).equalsIgnoreCase("cancel")) {
-						metaState.reopenEditor(menuBuilder);
-					}
-					
-					else
-					{
-						List<String> arguments = Arrays.asList(event.getMessage().split(" "));
-						metaState.onMetaSet(menuBuilder, event.getPlayer(), arguments);
-					}
-					
+				{					
 					event.setCancelled(true);
+					
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Core.instance, () ->
+					{
+						if (ChatColor.stripColor(event.getMessage()).equalsIgnoreCase("cancel")) {
+							metaState.reopenEditor(menuBuilder);
+						}
+						
+						else
+						{
+							List<String> arguments = Arrays.asList(event.getMessage().split(" "));
+							metaState.onMetaSet(menuBuilder, event.getPlayer(), arguments);
+						}
+					});
 				}
 			}
 		}
