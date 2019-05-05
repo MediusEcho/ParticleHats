@@ -241,22 +241,6 @@ public enum ParticleEffect {
 		}
 	}
 	
-//	/**
-//	 * Get the Particle value of this ParticleEffect
-//	 * @return
-//	 */
-//	public Particle getParticle () {
-//		return particle;
-//	}
-	
-//	/**
-//	 * Get the Material of this ParticleEffect
-//	 * @return The Material of this ParticleEffect for use in menus
-//	 */
-//	public Material getMaterial () {
-//		return material;
-//	}
-	
 	public ItemStack getItem () {
 		return item;
 	}
@@ -268,20 +252,6 @@ public enum ParticleEffect {
 	public boolean canDisplay () {
 		return this != NONE && this != ITEMSTACK;
 	}
-	
-	/**
-	 * Get the Particle that is associated with this ParticleEffect
-	 * @param value
-	 * @return
-	 */
-//	private Particle getParticle (String value)
-//	{
-//		try {
-//			return Particle.valueOf(value);
-//		} catch (IllegalArgumentException e) {
-//			return null;
-//		}
-//	}
 	
 	/**
 	 * Get this ParticleEffects ParticleProperty
@@ -338,23 +308,6 @@ public enum ParticleEffect {
 		
 		return NONE;
 	}
-	
-	/**
-	 * Returns the <b>ParticleEffect</b> with the given name, or <b>NONE</b> if there is no match
-	 * @param name
-	 * @return
-	 */
-//	public static ParticleEffect fromLegacyName (String name)
-//	{
-//		for (Entry<String, ParticleEffect> entry : LEGACY.entrySet())
-//		{
-//			if (!entry.getKey().equalsIgnoreCase(name)) {
-//				continue;
-//			}
-//			return entry.getValue();
-//		}
-//		return NONE;
-//	}
 	
 	/**
 	 * Returns the <b>ParticleEffect</b> with the given name, or <b>NONE</b> if there is no match
