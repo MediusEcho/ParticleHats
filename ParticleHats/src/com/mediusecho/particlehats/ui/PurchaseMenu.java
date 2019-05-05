@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -15,7 +16,7 @@ public class PurchaseMenu extends StaticMenu {
 	{
 		super(core, owner);
 		
-		this.inventory = new MenuInventory("", Message.PURCHASE_MENU_TITLE.getValue(), 5);
+		this.inventory = new MenuInventory("", Message.PURCHASE_MENU_TITLE.getValue(), 5, null);
 		
 		Hat confirm = new Hat();
 		confirm.setLeftClickAction(ParticleAction.PURCHASE_CONFIRM);
@@ -27,7 +28,7 @@ public class PurchaseMenu extends StaticMenu {
 		cancel.setLeftClickAction(ParticleAction.PURCHASE_DENY);
 		cancel.setLoaded(true);
 		inventory.setHat(32, cancel);
-		inventory.setItem(32, ItemUtil.createItem(Material.ROSE_RED, Message.PURCHASE_MENU_CANCEL));
+		inventory.setItem(32, ItemUtil.createItem(CompatibleMaterial.ROSE_RED, Message.PURCHASE_MENU_CANCEL));
 		
 		Hat pending = core.getPlayerState(ownerID).getPendingPurchase().clone();
 		pending.setLeftClickAction(ParticleAction.PURCHASE_ITEM);
