@@ -13,11 +13,14 @@ public enum ParticleTracking {
 	
 	private final int id;
 	private static final Map<Integer, ParticleTracking> trackingID = new HashMap<Integer, ParticleTracking>();
+	private static final Map<String, ParticleTracking> trackingName = new HashMap<String, ParticleTracking>();
 	
 	static
 	{
-		for (ParticleTracking pt : values()) {
+		for (ParticleTracking pt : values()) 
+		{
 			trackingID.put(pt.id, pt);
+			trackingName.put(pt.toString(), pt);
 		}
 	}
 	
@@ -64,13 +67,14 @@ public enum ParticleTracking {
 	public static ParticleTracking fromName (String name)
 	{
 		if (name == null) {
-			return ParticleTracking.TRACK_NOTHING;
+			return TRACK_NOTHING;
 		}
 		
-		try {
-			return ParticleTracking.valueOf(name.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			return ParticleTracking.TRACK_NOTHING;
+		String tracking = name.toUpperCase();
+		
+		if (trackingName.containsKey(tracking)) {
+			return trackingName.get(tracking);
 		}
+		return TRACK_NOTHING;
 	}
 }

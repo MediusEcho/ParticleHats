@@ -107,9 +107,15 @@ public enum ParticleAnimation {
 	 */
 	public static ParticleAnimation fromName (String name)
 	{
-		if (animationName.containsKey(name)) {
-			return animationName.get(name);
+		if (name == null) {
+			return STATIC;
 		}
-		return ParticleAnimation.STATIC;
+		
+		String animation = name.toLowerCase();
+		
+		if (animationName.containsKey(animation)) {
+			return animationName.get(animation);
+		}
+		return STATIC;
 	}
 }

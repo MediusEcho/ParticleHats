@@ -198,10 +198,12 @@ public enum ParticleType {
 			return ParticleType.NONE;
 		}
 		
-		if (typeName.containsKey(name)) {
-			return typeName.get(name);
+		String type = name.toLowerCase();
+		
+		if (typeName.containsKey(type)) {
+			return typeName.get(type);
 		}
-		return ParticleType.NONE;
+		return NONE;
 	}
 	
 	/**
@@ -214,6 +216,6 @@ public enum ParticleType {
 		if (typeID.containsKey(id)) {
 			return typeID.get(id);
 		}
-		return ParticleType.NONE;
+		return NONE;
 	}
 }

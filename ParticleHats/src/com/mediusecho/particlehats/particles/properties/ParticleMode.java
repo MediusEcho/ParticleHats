@@ -19,11 +19,14 @@ public enum ParticleMode {
 	private final int id;
 	
 	private static final Map<Integer, ParticleMode> modeID = new HashMap<Integer, ParticleMode>();
+	private static final Map<String, ParticleMode> modeName = new HashMap<String, ParticleMode>();
 	
 	static
 	{
-		for (ParticleMode pm : values()) {
+		for (ParticleMode pm : values()) 
+		{
 			modeID.put(pm.id, pm);
+			modeName.put(pm.toString(), pm);
 		}
 	}
 	
@@ -97,13 +100,14 @@ public enum ParticleMode {
 	public static ParticleMode fromName (String name)
 	{
 		if (name == null) {
-			return ParticleMode.ACTIVE;
+			return ACTIVE;
 		}
 		
-		try {
-			return ParticleMode.valueOf(name.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			return ParticleMode.ACTIVE;
+		String mode = name.toUpperCase();
+		
+		if (modeName.containsKey(mode)) {
+			return modeName.get(mode);
 		}
+		return ACTIVE;
 	}
 }

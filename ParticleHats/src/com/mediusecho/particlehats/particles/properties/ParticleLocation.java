@@ -105,12 +105,18 @@ public enum ParticleLocation
 	 */
 	public static ParticleLocation fromName (String name)
 	{
-		if (locationName.containsKey(name)) {
-			return locationName.get(name);
+		if (name == null) {
+			return HEAD;
 		}
 		
-		if (locationLegacyName.containsKey(name)) {
-			return locationLegacyName.get(name);
+		final String location = name.toLowerCase();
+		
+		if (locationName.containsKey(location)) {
+			return locationName.get(location);
+		}
+		
+		if (locationLegacyName.containsKey(location)) {
+			return locationLegacyName.get(location);
 		}
 		
 		return HEAD;
