@@ -1643,23 +1643,6 @@ public class MySQLDatabase implements Database {
 	}
 
 	
-//	private void setMenusLastUpdateTime (Connection connection, String menuName) throws SQLException
-//	{
-//		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-//		Date date = new Date();
-//		
-//		String format = dateFormat.format(date);
-//		String menuQuery = "UPDATE menus SET modified = ? WHERE name = ?";
-//		
-//		try (PreparedStatement statement = connection.prepareStatement(menuQuery))
-//		{
-//			statement.setString(1, format);
-//			statement.setString(2, menuName);
-//			
-//			statement.executeUpdate();
-//		}
-//	}
-	
 	/**
 	 * Returns the value stored at the column label, or the default value if null
 	 * @param set
