@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
@@ -115,7 +113,6 @@ public class PlayerState {
 	 * Get this players active particles menu
 	 * @return
 	 */
-	@Nullable
 	public ActiveParticlesMenu getActiveParticlesMenu () {
 		return activeParticlesMenu;
 	}
@@ -139,7 +136,6 @@ public class PlayerState {
 	 * Get this players purchase menu
 	 * @return
 	 */
-	@Nullable
 	public Menu getPurchaseMenu () {
 		return purchaseMenu;
 	}
@@ -179,7 +175,6 @@ public class PlayerState {
 	 * Gets the players current open menu
 	 * @return
 	 */
-	@Nullable
 	public Menu getOpenMenu () {
 		return openMenu;
 	}
@@ -188,7 +183,6 @@ public class PlayerState {
 	 * Get the players previously open menu
 	 * @return
 	 */
-	@Nullable
 	public Menu getPreviousOpenMenu () {
 		return previousOpenMenu;
 	}
@@ -198,7 +192,6 @@ public class PlayerState {
 	 * @param menuName
 	 * @return
 	 */
-	@Nullable
 	public Menu getOpenMenu (String menuName)
 	{
 		if (openMenuCache.containsKey(menuName)) {
@@ -321,7 +314,6 @@ public class PlayerState {
 	 * Get the location this player went afk at
 	 * @return
 	 */
-	@Nullable
 	public Location getAFKLocation () {
 		return afkLocation;
 	}
@@ -338,7 +330,6 @@ public class PlayerState {
 	 * Gets the hat this player is trying to purchase
 	 * @return
 	 */
-	@Nullable
 	public Hat getPendingPurchase () {
 		return pendingPurchaseHat;
 	}
@@ -463,7 +454,7 @@ public class PlayerState {
 	public boolean hasPurchased (Hat hat) 
 	{
 		HatReference reference = new HatReference(hat.getMenu(), hat.getSlot());
-		Core.debug("purchased hats contains " + reference.getMenuName() + ":" + reference.getSlot() + " ? " + purchasedHats.contains(reference));
+		ParticleHats.debug("purchased hats contains " + reference.getMenuName() + ":" + reference.getSlot() + " ? " + purchasedHats.contains(reference));
 		return purchasedHats.contains(reference);
 	}
 	

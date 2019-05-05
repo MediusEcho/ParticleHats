@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 
@@ -91,7 +91,7 @@ public class ItemUtil {
 	@SuppressWarnings("deprecation")
 	public static ItemStack createItem (Material material, short durability)
 	{
-		if (Core.serverVersion < 13) 
+		if (ParticleHats.serverVersion < 13) 
 		{
 			ItemStack item = new ItemStack(material, 1, durability);
 			ItemMeta itemMeta = item.getItemMeta();
@@ -517,7 +517,7 @@ public class ItemUtil {
 	 */
 	public static void highlightItem (ItemStack item)
 	{
-		if (Core.serverVersion >= 8) 
+		if (ParticleHats.serverVersion >= 8) 
 		{
 			ItemMeta itemMeta = item.getItemMeta();
 			addItemFlags(itemMeta);
@@ -550,7 +550,7 @@ public class ItemUtil {
 	{
 		item.setType(material);
 		
-		if (Core.serverVersion < 13) {
+		if (ParticleHats.serverVersion < 13) {
 			item.setDurability(damage);
 		}
 	}
@@ -582,7 +582,7 @@ public class ItemUtil {
 	@SuppressWarnings("deprecation")
 	public static void setItemType (ItemStack item, ItemStack i) 
 	{
-		if (Core.serverVersion < 13) {
+		if (ParticleHats.serverVersion < 13) {
 			setItemType(item, i.getType(), i.getDurability());
 		} else {
 			item.setType(i.getType());

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -15,7 +15,7 @@ import com.mediusecho.particlehats.util.ItemUtil;
 
 public class EditorAngleMenu extends EditorOffsetMenu {
 	
-	public EditorAngleMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
+	public EditorAngleMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
 	{
 		super(core, owner, menuBuilder, callback);
 

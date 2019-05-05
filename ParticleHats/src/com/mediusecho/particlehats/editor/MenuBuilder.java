@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.EditorMenu.EditorClickType;
 import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
@@ -18,7 +18,7 @@ import com.mediusecho.particlehats.ui.MenuInventory;
 
 public class MenuBuilder {
 
-	private final Core core;
+	private final ParticleHats core;
 	private PlayerState ownerState;
 	
 	private Deque<EditorMenu> activeMenus;
@@ -29,7 +29,7 @@ public class MenuBuilder {
 	private Hat targetNodeHat;
 	private int targetSlot;
 	
-	public MenuBuilder (final Core core,  final Player owner, final PlayerState ownerState, MenuInventory inventory)
+	public MenuBuilder (final ParticleHats core,  final Player owner, final PlayerState ownerState, MenuInventory inventory)
 	{
 		this.core = core;
 		this.ownerState = ownerState;

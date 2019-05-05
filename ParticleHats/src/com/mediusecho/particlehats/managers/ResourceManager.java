@@ -10,17 +10,17 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.util.ResourceUtil;
 
 public class ResourceManager {
 
-	private final Core core;
+	private final ParticleHats core;
 	private final Map<String, BufferedImage> images;
 	private final List<CustomConfig> menus;
 	
-	public ResourceManager (final Core core)
+	public ResourceManager (final ParticleHats core)
 	{
 		this.core = core;
 		images = new HashMap<String, BufferedImage>();

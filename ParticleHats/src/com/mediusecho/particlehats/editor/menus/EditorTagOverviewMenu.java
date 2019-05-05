@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorListMenu;
@@ -23,7 +23,7 @@ public class EditorTagOverviewMenu extends EditorListMenu {
 	
 	private boolean modified = false;
 	
-	public EditorTagOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorTagOverviewMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
 	{
 		super(core, owner, menuBuilder);
 		targetHat = menuBuilder.getBaseHat();

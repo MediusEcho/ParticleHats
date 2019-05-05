@@ -9,7 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
@@ -20,7 +20,7 @@ import com.mediusecho.particlehats.util.MathUtil;
 public abstract class Effect {
 
 	private List<List<Vector>> frames;
-	protected ParticleRenderer renderer = Core.instance.getParticleRenderer();
+	protected ParticleRenderer renderer = ParticleHats.instance.getParticleRenderer();
 	
 	public Effect ()
 	{

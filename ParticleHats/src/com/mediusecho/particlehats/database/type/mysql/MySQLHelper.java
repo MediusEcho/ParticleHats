@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.Table;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.TableType;
 import com.mediusecho.particlehats.managers.SettingsManager;
@@ -32,7 +32,7 @@ public class MySQLHelper {
 	 * Creates our initial database
 	 * @throws SQLException 
 	 */
-	public void initDatabase (Core core) throws SQLException
+	public void initDatabase (ParticleHats core) throws SQLException
 	{	
 		database.async(() -> 
 		{

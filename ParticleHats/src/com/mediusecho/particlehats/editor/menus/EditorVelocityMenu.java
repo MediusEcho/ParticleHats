@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -18,7 +18,7 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 
 	private final int particleIndex;
 	
-	public EditorVelocityMenu(Core core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorGenericCallback callback) 
+	public EditorVelocityMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorGenericCallback callback) 
 	{
 		super(core, owner, menuBuilder, callback);
 		this.particleIndex = particleIndex;

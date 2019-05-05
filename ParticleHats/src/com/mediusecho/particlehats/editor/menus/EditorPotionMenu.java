@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -51,7 +51,7 @@ public class EditorPotionMenu extends EditorMenu {
 			"UNLUCK",
 			"HUNGER");
 	
-	public EditorPotionMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
+	public EditorPotionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		

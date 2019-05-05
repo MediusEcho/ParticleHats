@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
@@ -21,13 +21,13 @@ public class OpenCommand extends Command {
 
 	private final Database database;
 	
-	public OpenCommand (final Core core)
+	public OpenCommand (final ParticleHats core)
 	{			
 		database = core.getDatabase();
 	}
 	
 	@Override
-	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		if (args.size() == 1) 
 		{
@@ -50,7 +50,7 @@ public class OpenCommand extends Command {
 	}
 	
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
 		// No argument
 		if (args.size() == 0)
@@ -70,7 +70,7 @@ public class OpenCommand extends Command {
 			Menu menu = playerState.getOpenMenu(menuName);
 			if (menu == null)
 			{
-				Core.debug("cache didnt exist, loading menu " + menuName);
+				ParticleHats.debug("cache didnt exist, loading menu " + menuName);
 				Database database = core.getDatabase();
 				MenuInventory inventory = database.loadInventory(menuName, core.getPlayerState(sender.getPlayerID()));
 				

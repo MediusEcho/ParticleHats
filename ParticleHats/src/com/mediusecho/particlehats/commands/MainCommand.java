@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
@@ -18,7 +18,7 @@ import com.mediusecho.particlehats.ui.StaticMenu;
 public class MainCommand extends Command {
 
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
 		// Execute this command
 		if (args.size() == 0)

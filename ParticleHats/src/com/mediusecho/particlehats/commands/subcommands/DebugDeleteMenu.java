@@ -3,7 +3,7 @@ package com.mediusecho.particlehats.commands.subcommands;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
@@ -12,13 +12,13 @@ import com.mediusecho.particlehats.permission.Permission;
 public class DebugDeleteMenu extends Command {
 
 	@Override
-	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		return new ArrayList<String>(core.getDatabase().getMenus(false).keySet());
 	}
 	
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
 		String menuName = args.get(0);
 		core.getDatabase().deleteMenu(menuName);

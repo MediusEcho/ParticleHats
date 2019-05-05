@@ -10,7 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.MainCommand;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.commands.Command;
@@ -32,11 +32,11 @@ import com.mediusecho.particlehats.commands.subcommands.TypeCommand;
 
 public class CommandManager implements CommandExecutor, TabCompleter {
 
-	private final Core core;
+	private final ParticleHats core;
 	
 	private final MainCommand mainCommand;
 	
-	public CommandManager (final Core core, final String command)
+	public CommandManager (final ParticleHats core, final String command)
 	{
 		this.core = core;
 		

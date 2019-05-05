@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.managers.CommandManager;
@@ -19,7 +19,7 @@ public class SpigotHelpCommand extends BukkitHelpCommand {
 
 	private Map<Command, BaseComponent[]> commands;
 	
-	public SpigotHelpCommand(Core core, CommandManager commandManager) 
+	public SpigotHelpCommand(ParticleHats core, CommandManager commandManager) 
 	{
 		super(core, commandManager);
 		

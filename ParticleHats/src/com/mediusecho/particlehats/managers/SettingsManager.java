@@ -8,7 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.ResourceUtil;
@@ -65,7 +66,7 @@ public enum SettingsManager {
 	 */
 	MENU_LOCK_HATS_WITHOUT_PERMISSION ("menu.lock-hats-without-permission", Type.BOOLEAN, false),
 	MENU_SHOW_DESCRIPTION_WHEN_LOCKKED ("menu.show-description-when-locked", Type.BOOLEAN, false),
-	MENU_LOCKED_ITEM ("menu.locked-item.id", Type.MATERIAL, ItemUtil.getMaterial("LAPIS_LAZULI", "LAPIS_ORE")),
+	MENU_LOCKED_ITEM ("menu.locked-item.id", Type.MATERIAL, CompatibleMaterial.LAPIS_LAZULI.getMaterial()),
 	MENU_LOCKED_ITEM_TITLE ("menu.locked-item.title", Type.STRING, "&cLocked"),
 	
 	MENU_OPEN_WITH_ITEM ("menu.open-menu-with-item.enabled", Type.BOOLEAN, false),
@@ -75,20 +76,20 @@ public enum SettingsManager {
 	MENU_OPEN_WITH_ITEM_DAMAGE ("menu.open-menu-with-item.damage-value", Type.INT, 0),
 	
 	MENU_SOUND_ENABLED ("menu.sound.enabled", Type.BOOLEAN, true),
-	MENU_SOUND_ID ("menu.sound.id", Type.SOUND,   ResourceUtil.getSound("UI_BUTTON_CLICK", "CLICK")),
-	MENU_SOUND_VOLUME ("menu.sound.volume", Type.DOUBLE,  1.0),
-	MENU_SOUND_PITCH ("menu.sound.pitch", Type.DOUBLE,  1.0),
+	MENU_SOUND_ID ("menu.sound.id", Type.SOUND, ResourceUtil.getSound("UI_BUTTON_CLICK", "CLICK")),
+	MENU_SOUND_VOLUME ("menu.sound.volume", Type.DOUBLE, 1.0),
+	MENU_SOUND_PITCH ("menu.sound.pitch", Type.DOUBLE, 1.0),
 	
 	/**
 	 * Editor Properties
 	 */
 	EDITOR_USE_ACTION_BAR ("editor.use-actionbar", Type.BOOLEAN, true),
-	EDITOR_META_TIME_LIMIT ("editor.meta-time-limit", Type.INT,     30),
+	EDITOR_META_TIME_LIMIT ("editor.meta-time-limit", Type.INT, 30),
 	EDITOR_SOUND_ENABLED ("editor.sound.enabled", Type.BOOLEAN, true),
 	EDITOR_SOUND_ID ("editor.sound.id", Type.SOUND, ResourceUtil.getSound("BLOCK_METAL_PLACE", "STEP_STONE")),
-	EDITOR_SOUND_VOLUME ("editor.sound.volume", Type.DOUBLE,  1.0),
-	EDITOR_SOUND_PITCH ("editor.sound.pitch", Type.DOUBLE,  1.0),
-	EDITOR_SOUND_MODIFIER ("editor.sound.modifier", Type.DOUBLE,  0.25),
+	EDITOR_SOUND_VOLUME ("editor.sound.volume", Type.DOUBLE, 1.0),
+	EDITOR_SOUND_PITCH ("editor.sound.pitch", Type.DOUBLE, 1.0),
+	EDITOR_SOUND_MODIFIER ("editor.sound.modifier", Type.DOUBLE, 0.25),
 	EDITOR_SHOW_BLACKLISTED_SOUNDS ("editor.show-blacklisted-sounds", Type.BOOLEAN, false),
 	EDITOR_SHOW_BLACKLISTED_POTIONS ("editor.show-blacklisted-potions", Type.BOOLEAN, false);
 	
@@ -99,7 +100,7 @@ public enum SettingsManager {
 	private final int range;
 	
 	private static Map<String, Object> data = new HashMap<String, Object>();
-	private static final Core plugin = Core.instance;
+	private static final ParticleHats plugin = ParticleHats.instance;
 	
 	static {
 		loadData();

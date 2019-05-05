@@ -2,7 +2,7 @@ package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
@@ -11,7 +11,7 @@ import com.mediusecho.particlehats.permission.Permission;
 public class ReloadCommand extends Command {
 
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
 		core.onReload();
 		sender.sendMessage(Message.COMMAND_RELOAD_SUCCESS);

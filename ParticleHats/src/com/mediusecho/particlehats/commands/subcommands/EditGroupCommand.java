@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
@@ -15,7 +15,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 public class EditGroupCommand extends Command {
 
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
 		if (args.size() < 2)
 		{
@@ -53,7 +53,7 @@ public class EditGroupCommand extends Command {
 	}
 	
 	@Override
-	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		switch (args.size())
 		{

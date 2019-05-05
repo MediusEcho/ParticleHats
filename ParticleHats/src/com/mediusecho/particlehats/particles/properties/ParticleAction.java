@@ -3,26 +3,25 @@ package com.mediusecho.particlehats.particles.properties;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.events.EquipEvent;
 import com.mediusecho.particlehats.hooks.CurrencyHook;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.managers.MenuManager;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.ui.Menu;
 import com.mediusecho.particlehats.ui.MenuInventory;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.ui.PurchaseMenu;
 import com.mediusecho.particlehats.ui.StaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 
@@ -44,11 +43,12 @@ public enum ParticleAction {
 	DEMO                 (13, true),
 	ACTIVE_PARTICLES     (14);
 	
-	private final Core core = Core.instance;
+	private final ParticleHats core = ParticleHats.instance;
 	
 	private final int id;
 	private final boolean hasData;
 	private final boolean isHidden;
+	
 	private static final Map<Integer, ParticleAction> actionID = new HashMap<Integer, ParticleAction>();
 	
 	static
@@ -145,6 +145,8 @@ public enum ParticleAction {
 	@SuppressWarnings("incomplete-switch")
 	public void onClick (Player player, Hat hat, int slot, MenuInventory inventory, String argument)
 	{
+		PlayerState playerState = core.getPlayerState(player.getUniqueId());
+	
 		switch (this)
 		{
 			case EQUIP:
@@ -153,9 +155,8 @@ public enum ParticleAction {
 				Bukkit.getPluginManager().callEvent(event);
 				
 				if (!event.isCancelled()) 
-				{
-					PlayerState playerState = core.getPlayerState(player.getUniqueId());
-					
+				{					
+					// Remove an already equipped hat
 					List<Hat> equippedHats = playerState.getActiveHats();
 					if (equippedHats.contains(hat))
 					{
@@ -166,9 +167,10 @@ public enum ParticleAction {
 						return;
 					}
 					
+					// Stop if the player has more than the maximum allowed hats
 					if (!playerState.canEquip())
 					{
-						player.sendMessage(Message.HAT_EQUIPPED_OVERFLOW.getValue());
+						player.sendMessage(Message.HAT_EQUIPPED_OVERFLOW.replace("{1}", Integer.toString(SettingsManager.MAXIMUM_HAT_LIMIT.getInt())));
 						return;
 					}
 					
@@ -207,6 +209,11 @@ public enum ParticleAction {
 					if (playerState.hasPurchased(hat))
 					{
 						core.getParticleManager().equipHat(player.getUniqueId(), hat);
+						
+						if (canClose) {
+							player.closeInventory();
+						}
+						
 						return;
 					}
 					
@@ -250,7 +257,6 @@ public enum ParticleAction {
 						}
 					}
 					
-					// Try to purchase this hat
 					double playerBalance = -1;
 					
 					if (canUseCurrency) 
@@ -280,6 +286,19 @@ public enum ParticleAction {
 						}
 						
 						// TODO: Add Purchase Menu
+						else
+						{	
+							ParticleHats.debug("creating purchase menu");
+							
+							playerState.setPendingPurchase(hat);
+							Menu purchaseMenu = new PurchaseMenu(core, player);
+							
+							playerState.setPurchaseMenu(purchaseMenu);
+							playerState.setGuiState(GuiState.SWITCHING_MENU);
+							
+							playerState.setOpenMenu(purchaseMenu);
+							purchaseMenu.open();
+						}
 					}
 					
 					else
@@ -298,7 +317,6 @@ public enum ParticleAction {
 			
 			case TOGGLE:
 			{
-				PlayerState playerState = core.getPlayerState(player.getUniqueId());
 				List<Hat> hats = playerState.getActiveHats();
 				
 				// Toggles all active hats based on the first hats toggle state
@@ -337,8 +355,8 @@ public enum ParticleAction {
 			{
 				if (!argument.equals("")) 
 				{
-					player.performCommand(argument);
 					player.closeInventory();
+					player.performCommand(argument);
 				}
 				break;
 			}
@@ -350,13 +368,11 @@ public enum ParticleAction {
 					break;
 				}
 				
-				MenuManager menuManager = core.getMenuManager();
-				UUID playerID = player.getUniqueId();
-				Menu menu = menuManager.getMenu(playerID, argument);
+				Menu menu = playerState.getOpenMenu(argument);
 				
 				if (menu == null)
 				{
-					MenuInventory inv = core.getDatabase().loadInventory(argument, player);
+					MenuInventory inv = core.getDatabase().loadInventory(argument, playerState);
 					if (inv == null)
 					{
 						player.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.getValue().replace("{1}", argument));

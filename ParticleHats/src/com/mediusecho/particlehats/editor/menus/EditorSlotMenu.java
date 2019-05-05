@@ -8,7 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -23,7 +23,7 @@ public class EditorSlotMenu extends EditorMenu {
 	private final EditorBaseMenu editorBaseMenu;
 	private final int size;
 	
-	public EditorSlotMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean cloning) 
+	public EditorSlotMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean cloning) 
 	{
 		super(core, owner, menuBuilder);
 		this.cloning = cloning;

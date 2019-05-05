@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -23,7 +23,7 @@ public class EditorTagMenu extends EditorMenu {
 	
 	private final String tagTitle = Message.EDITOR_TAG_MENU_TAG_TITLE.getValue();
 	
-	public EditorTagMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorObjectCallback callback) 
+	public EditorTagMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorObjectCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		tags = new HashMap<Integer, ParticleTag>();

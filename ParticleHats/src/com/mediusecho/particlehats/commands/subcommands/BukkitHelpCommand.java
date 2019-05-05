@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
@@ -20,12 +20,12 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class BukkitHelpCommand extends Command {
 
-	protected final Core core;
+	protected final ParticleHats core;
 	protected int pages;
 	
 	private Map<Integer, String> commands;
 	
-	public BukkitHelpCommand (Core core, CommandManager commandManager)
+	public BukkitHelpCommand (ParticleHats core, CommandManager commandManager)
 	{
 		this.core = core;
 		commands = new HashMap<Integer, String>();
@@ -73,7 +73,7 @@ public class BukkitHelpCommand extends Command {
 	}
 	
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
 		if (!sender.hasPermission(getPermission()))
 		{
@@ -96,7 +96,7 @@ public class BukkitHelpCommand extends Command {
 	}
 	
 	@Override
-	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		if (args.size() == 1) {
 			return Arrays.asList("page");

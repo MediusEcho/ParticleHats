@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -42,7 +42,7 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 	private final int totalPages;
 	private int currentPage = 0;
 	
-	public EditorParticleSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorParticleCallback callback) 
+	public EditorParticleSelectionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorParticleCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		this.particleIndex = particleIndex;

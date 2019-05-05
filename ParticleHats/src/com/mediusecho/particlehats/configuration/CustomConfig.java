@@ -6,12 +6,12 @@ import java.io.IOException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.util.ResourceUtil;
 
 public class CustomConfig {
 
-	private final Core core;
+	private final ParticleHats core;
 	
 	private File file;
 	private FileConfiguration config;
@@ -21,7 +21,7 @@ public class CustomConfig {
 	private final String name;
 	private final String directory;
 	
-	public CustomConfig (final Core core, final String path, final String name, boolean logOutput)
+	public CustomConfig (final ParticleHats core, final String path, final String name, boolean logOutput)
 	{
 		this.core = core;
 		this.path = path;
@@ -35,17 +35,17 @@ public class CustomConfig {
 		if (!file.exists()) {
 			file = createFile(logOutput);
 		} else if (logOutput) {
-			Core.log("Loading " + path + File.separator + fileName);
+			ParticleHats.log("Loading " + path + File.separator + fileName);
 		}
 		
 		try {
 			config.load(file);
 		} catch (Exception e) {
-			Core.log("There was an error loading " + name + ", error: " + e.getClass().getSimpleName());
+			ParticleHats.log("There was an error loading " + name + ", error: " + e.getClass().getSimpleName());
 		}
 	}
 	
-	public CustomConfig (final Core core, final String path, File file, boolean logOutput)
+	public CustomConfig (final ParticleHats core, final String path, File file, boolean logOutput)
 	{
 		this.core = core;
 		this.path = path;
@@ -58,7 +58,7 @@ public class CustomConfig {
 		try {
 			config.load(file);
 		} catch (Exception e) {
-			Core.log("There was an error loading " + name + ", error: " + e.getClass().getSimpleName());
+			ParticleHats.log("There was an error loading " + name + ", error: " + e.getClass().getSimpleName());
 		}
 	}
 	
@@ -80,7 +80,7 @@ public class CustomConfig {
 		try {
 			config = YamlConfiguration.loadConfiguration(file);
 		} catch (Exception e) {
-			Core.log("There was an error loading " + name + ", error: " + e.getClass().getSimpleName());
+			ParticleHats.log("There was an error loading " + name + ", error: " + e.getClass().getSimpleName());
 		}
 	}
 	
@@ -148,7 +148,7 @@ public class CustomConfig {
 		}
 		
 		if (logOutput) {
-			Core.log("Creating " + path + File.separator + fileName);
+			ParticleHats.log("Creating " + path + File.separator + fileName);
 		}
 		
 		return file;

@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -23,7 +23,7 @@ public class EditorActionOverviewMenu extends EditorMenu {
 	private boolean editingLeftCommand = false;
 	private boolean editingRightCommand = false;
 	
-	public EditorActionOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
+	public EditorActionOverviewMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		this.callback = callback;

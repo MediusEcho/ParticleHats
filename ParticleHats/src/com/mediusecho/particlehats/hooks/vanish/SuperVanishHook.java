@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -15,9 +15,9 @@ import de.myzelyam.api.vanish.VanishAPI;
 
 public class SuperVanishHook implements Listener, VanishHook {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public SuperVanishHook (final Core core)
+	public SuperVanishHook (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);

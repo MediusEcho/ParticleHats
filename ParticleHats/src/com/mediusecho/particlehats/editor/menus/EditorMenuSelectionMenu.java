@@ -10,11 +10,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.ui.MenuState;
+import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.util.ItemUtil;
 
 public class EditorMenuSelectionMenu extends EditorMenu {
@@ -29,10 +32,9 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 	private Map<Integer, String> storedMenus;
 	private int pages;
 	private int currentPage = 0;
-	
-	// TODO: Remove any menu that is being edited from the list when we're moving
-	
-	public EditorMenuSelectionMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean transfering, EditorStringCallback callback) 
+	private boolean addedMenu = false;
+		
+	public EditorMenuSelectionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean transfering, EditorStringCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		this.transfering = transfering;
@@ -70,6 +72,53 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 			owner.openInventory(menus.get(currentPage));
 		}
 	}
+	
+	private void rebuild ()
+	{
+		loadedMenus = core.getDatabase().getMenus(false);
+		
+		int pages = (int) Math.max(Math.ceil((double) (loadedMenus.size() - 1) / 28D), 1);
+		ParticleHats.debug(pages);
+		if (pages > this.pages)
+		{
+			this.pages = pages;
+			menus.put(pages-1, createMenu(pages-1));
+			
+			Inventory menu = menus.get(pages-2);
+			if (menu != null) {
+				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+			}
+		}
+		
+		addedMenu = false;
+		// TODO: Rebuild menu selection menu
+	}
+	
+	private Inventory createMenu (int index)
+	{
+		String menuTitle = title
+				.replace("{1}", Integer.toString(index + 1)).replace("{2}", Integer.toString(pages));
+		
+		Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
+		menu.setItem(49, backButton);
+		
+		// Next Page
+		if ((index + 1) < pages) {
+			menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+		}
+		
+		// Previous Page
+		if ((index + 1) > 1) {
+			menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+		}
+		
+		// Create Menu
+		if (!transfering && owner.hasPermission(Permission.COMMAND_CREATE.getPermission())) {
+			menu.setItem(52, ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_MENU_SELECTION_CREATE));
+		}
+		
+		return menu;
+	}
 
 	@Override
 	protected void build() 
@@ -93,31 +142,19 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 			return EditorClickType.NEUTRAL;
 		});
 		
-		if (!transfering)
+		setAction(52, (event, slot) ->
 		{
-			// TODO: Add option to create menu	
-		}
+			menuBuilder.setOwnerState(MetaState.NEW_MENU);
+			core.prompt(owner, MetaState.HAT_NAME);
+			owner.closeInventory();
+			
+			addedMenu = true;
+			return EditorClickType.NEUTRAL;
+		});
 		
 		// Create our menus
-		for (int i = 0; i < pages; i++)
-		{
-			String menuTitle = title
-					.replace("{1}", Integer.toString(i + 1)).replace("{2}", Integer.toString(pages));
-			
-			Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
-			menu.setItem(49, backButton);
-			
-			// Next Page
-			if ((i + 1) < pages) {
-				menu.setItem(50, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
-			}
-			
-			// Previous Page
-			if ((i + 1) > 1) {
-				menu.setItem(48, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
-			}
-			
-			menus.put(i, menu);
+		for (int i = 0; i < pages; i++) {			
+			menus.put(i, createMenu(i));
 		}
 		
 		int index = 0;

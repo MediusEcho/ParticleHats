@@ -14,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mediusecho.particlehats.api.ParticleHatsAPI;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.DatabaseType;
@@ -36,21 +37,20 @@ import com.mediusecho.particlehats.tasks.PromptTask;
 import com.mediusecho.particlehats.util.ResourceUtil;
 
 @SuppressWarnings("unused")
-public class Core extends JavaPlugin {
+public class ParticleHats extends JavaPlugin {
 	
 	// TODO: [4.1] Separate menu for block-fixed particles?
 	// Store fixed particles in a menu that is separate from player menus
 	// Players can sort by nearest and teleport to the particle
 	
-	// TODO: Add item damage values for MySQL
-	
-	// TODO: Finish adding config values to SettingsManager
-	
 	// TODO: Test the API
 	
-	public static Core instance;
+	// TODO: Implement action-bar alternative
+	
+	public static ParticleHats instance;
 	public static int serverVersion;
 	private static Logger logger;
+	private static ParticleHatsAPI hatAPI;
 	
 	private Database database;
 	private DatabaseType databaseType;
@@ -89,6 +89,7 @@ public class Core extends JavaPlugin {
 		instance = this;	
 		serverVersion = getServerVersion();
 		logger = getServer().getLogger();
+		hatAPI = new ParticleHatsAPI(this);
 		
 		// Make sure we're running on a supported version
 		if (serverVersion < 13)
@@ -208,6 +209,14 @@ public class Core extends JavaPlugin {
 		particleTask.onReload();
 		resourceManager.onReload();
 		hookManager.onReload();
+	}
+	
+	/**
+	 * Get the ParticleHats Hat API
+	 * @return
+	 */
+	public ParticleHatsAPI getAPI () {
+		return hatAPI;
 	}
 	
 	/**

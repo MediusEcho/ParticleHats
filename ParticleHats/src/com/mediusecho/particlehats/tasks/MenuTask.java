@@ -6,16 +6,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.GuiState;
 
 public class MenuTask extends BukkitRunnable {
 
-	private final Core core;
+	private final ParticleHats core;
 	private static int ticks = 0;
 	
-	public MenuTask (final Core core)
+	public MenuTask (final ParticleHats core)
 	{
 		this.core = core;
 	}

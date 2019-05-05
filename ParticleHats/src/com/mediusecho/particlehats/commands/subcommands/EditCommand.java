@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
@@ -17,19 +17,19 @@ import com.mediusecho.particlehats.ui.MenuInventory;
 
 public class EditCommand extends Command {
 
-	private final Database database;
+	//private final Database database;
 	
-	public EditCommand (final Core core)
+	public EditCommand (final ParticleHats core)
 	{
-		database = core.getDatabase();
+		//database = core.getDatabase();
 	}
 	
 	@Override
-	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		if (args.size() == 1) 
 		{
-			Set<String> menus = database.getMenus(false).keySet();
+			Set<String> menus = core.getDatabase().getMenus(false).keySet();
 			List<String> result = new ArrayList<String>();
 			
 			if (sender.hasPermission(getPermission()))
@@ -48,8 +48,8 @@ public class EditCommand extends Command {
 	}
 
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
-	{
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
+	{		
 		if (args.size() < 1) 
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_ARGUMENTS);
@@ -69,7 +69,8 @@ public class EditCommand extends Command {
 			// TODO: edit purchase menu
 		}
 		
-		if (!core.getDatabase().menuExists(menuName))
+		Database database = core.getDatabase();
+		if (!database.menuExists(menuName))
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
 			return false;

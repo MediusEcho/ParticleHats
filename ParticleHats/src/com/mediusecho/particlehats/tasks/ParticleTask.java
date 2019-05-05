@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
@@ -25,7 +25,7 @@ import com.mediusecho.particlehats.player.PlayerState.PVPState;
 
 public class ParticleTask extends BukkitRunnable {
 
-	private final Core core;
+	private final ParticleHats core;
 	
 	private int ticks = 0;
 	private int afkCooldown = SettingsManager.AFK_COOLDOWN.getInt();
@@ -34,7 +34,7 @@ public class ParticleTask extends BukkitRunnable {
 	private List<String> disabledWorlds;
 	private boolean checkWorldPermission;
 	
-	public ParticleTask (Core core)
+	public ParticleTask (ParticleHats core)
 	{
 		this.core = core;
 		disabledWorlds = SettingsManager.DISABLED_WORLDS.getList();

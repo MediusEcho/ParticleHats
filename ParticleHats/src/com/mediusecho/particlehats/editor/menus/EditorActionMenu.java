@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -33,7 +33,7 @@ public class EditorActionMenu extends EditorMenu {
 	
 	private final EditorAction selectAction;
 	
-	public EditorActionMenu(Core core, Player owner, MenuBuilder menuBuilder, boolean isLeftClick, EditorActionCallback actionCallback) 
+	public EditorActionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean isLeftClick, EditorActionCallback actionCallback) 
 	{
 		super(core, owner, menuBuilder);
 		

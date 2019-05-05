@@ -9,16 +9,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.player.PlayerState;
 
 public class ConnectionListener implements Listener {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public ConnectionListener (final Core core)
+	public ConnectionListener (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);

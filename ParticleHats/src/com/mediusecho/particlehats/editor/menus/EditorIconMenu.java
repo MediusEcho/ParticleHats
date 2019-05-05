@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -20,7 +20,7 @@ public class EditorIconMenu extends EditorMenu {
 	private final Message itemName;
 	private final Message itemDescription;
 	
-	public EditorIconMenu(Core core, Player owner, MenuBuilder menuBuilder, Message title, Message name, Message description, EditorItemCallback itemCallback) 
+	public EditorIconMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, Message title, Message name, Message description, EditorItemCallback itemCallback) 
 	{
 		super(core, owner, menuBuilder);
 		this.itemName = name;

@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
@@ -27,7 +27,7 @@ public class ActiveParticlesMenu extends Menu {
 	
 	private Map<Integer, MenuAction> actions;
 	
-	public ActiveParticlesMenu(Core core, Player owner, boolean fromMenu) 
+	public ActiveParticlesMenu(ParticleHats core, Player owner, boolean fromMenu) 
 	{
 		super(core, owner);
 		

@@ -29,7 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
@@ -62,7 +62,6 @@ import com.zaxxer.hikari.HikariDataSource;
 public class MySQLDatabase implements Database {
 
 	// TODO: [Opt] ability to update tables
-	// TODO: Check random offset values in MySQL
 	
 	private HikariDataSource dataSource;
 	private MySQLHelper helper;
@@ -91,14 +90,14 @@ public class MySQLDatabase implements Database {
 	// Fetch MySQL changes every 30 seconds
 	private final long UPDATE_INTERVAL = 30000L;
 	
-	public MySQLDatabase (Core core)
+	public MySQLDatabase (ParticleHats core)
 	{		
 		menuCache = new HashMap<String, String>();
 		imageCache = new HashMap<String, BufferedImage>();
 		groupCache = new LinkedHashMap<String, String>();
 		labelCache = new ArrayList<String>();
 		
-		legacy = Core.serverVersion < 13;
+		legacy = ParticleHats.serverVersion < 13;
 		helper = new MySQLHelper(this);
 		
 		HikariConfig config = new HikariConfig();
@@ -112,7 +111,7 @@ public class MySQLDatabase implements Database {
 			helper.initDatabase(core);
 			connected = true;
 			
-			Core.log("Using database: MySQL");
+			ParticleHats.log("Using database: MySQL");
 		}
 		
 		catch (Exception e) {
@@ -435,7 +434,7 @@ public class MySQLDatabase implements Database {
 	@Override
 	public void loadHat (String menuName, int slot, Hat hat)
 	{		
-		Core.debug("loading hat");
+		ParticleHats.debug("loading hat");
 		connect((connection) ->
 		{
 			String hatQuery = "SELECT * FROM " + Table.ITEMS.format(menuName) + " WHERE slot = ?";
@@ -477,7 +476,7 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{
-				Core.debug(insertQuery);
+				ParticleHats.debug(insertQuery);
 				try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
 					statement.executeUpdate();
 				}
@@ -572,7 +571,7 @@ public class MySQLDatabase implements Database {
 			connect((connection) ->
 			{
 				String insertQuery = helper.getParticleInsertQuery(menuName, hat, index);
-				Core.debug(insertQuery);
+				ParticleHats.debug(insertQuery);
 				try (PreparedStatement statement = connection.prepareStatement(insertQuery)) 
 				{
 					statement.executeUpdate();
@@ -1385,8 +1384,6 @@ public class MySQLDatabase implements Database {
 						else {
 							data.setBlock(new ItemStack(ItemUtil.getMaterial(blockData, Material.STONE)));
 						}
-						// TODO: Fix MySQL missing damage-value table columns
-						//data.setBlock(ItemUtil.materialFromString(blockData, Material.STONE));
 					}
 					
 					data.clearPropertyChanges();
@@ -1624,7 +1621,7 @@ public class MySQLDatabase implements Database {
 			public void run () {
 				callback.execute();
 			}
-		}.runTaskAsynchronously(Core.instance);
+		}.runTaskAsynchronously(ParticleHats.instance);
 	}
 	
 	public void sync (TaskCallback callback)
@@ -1634,7 +1631,7 @@ public class MySQLDatabase implements Database {
 			public void run () {
 				callback.execute();
 			}
-		}.runTask(Core.instance);
+		}.runTask(ParticleHats.instance);
 	}
 	
 	@FunctionalInterface

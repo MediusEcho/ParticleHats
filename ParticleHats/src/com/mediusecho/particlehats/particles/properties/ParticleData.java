@@ -7,7 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.util.MathUtil;
 
@@ -38,7 +38,7 @@ public class ParticleData {
 		scale = 1;
 		stackData = new ItemStackData(this);
 		
-		supportsLegacy = Core.serverVersion <= 12;
+		supportsLegacy = ParticleHats.serverVersion <= 12;
 		if (supportsLegacy)
 		{
 			legacyItemPacketData = new int[] {Material.APPLE.getId(), 0};

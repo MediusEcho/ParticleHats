@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -93,7 +93,7 @@ public class EditorSoundMenu extends EditorMenu {
 		    "RECORD_WAIT",
 		    "RECORD_WARD");
 	
-	public EditorSoundMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorSoundCallback soundCallback)
+	public EditorSoundMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorSoundCallback soundCallback)
 	{
 		super(core, owner, menuBuilder);
 		this.targetHat = menuBuilder.getBaseHat();

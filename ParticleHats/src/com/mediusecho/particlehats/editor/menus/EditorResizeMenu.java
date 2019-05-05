@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -16,7 +16,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorResizeMenu extends EditorMenu {
 
-	public EditorResizeMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorResizeMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
 	{
 		super(core, owner, menuBuilder);
 		

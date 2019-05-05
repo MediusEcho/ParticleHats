@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -20,7 +20,7 @@ public class EditorDurationMenu extends EditorMenu {
 	
 	private final Hat targetHat;
 	
-	public EditorDurationMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorActionOverviewMenu editorActionOverviewMenu, boolean leftClick)
+	public EditorDurationMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorActionOverviewMenu editorActionOverviewMenu, boolean leftClick)
 	{
 		super(core, owner, menuBuilder);
 		this.editorActionOverviewMenu = editorActionOverviewMenu;

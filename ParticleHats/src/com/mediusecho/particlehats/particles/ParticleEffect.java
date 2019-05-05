@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -266,7 +266,7 @@ public enum ParticleEffect {
 		if (version == -1) {
 			return true;
 		}
-		return Core.serverVersion >= version;
+		return ParticleHats.serverVersion >= version;
 	}
 	
 	/**

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -31,7 +31,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorLore {
 
-	private static final Core core = Core.instance;
+	private static final ParticleHats core = ParticleHats.instance;
 	
 	/**
 	 * Applies a generic description without any special properties to an item
@@ -653,7 +653,7 @@ public class EditorLore {
 				ItemStack i = isBlock ? hat.getParticleBlock(particleIndex) : hat.getParticleItem(particleIndex);
 				
 				String name = StringUtil.capitalizeFirstLetter(i.getType().toString().toLowerCase());
-				if (Core.serverVersion < 13) {
+				if (ParticleHats.serverVersion < 13) {
 					name += " [" + Short.toString(i.getDurability()) + "]";
 				}
 				

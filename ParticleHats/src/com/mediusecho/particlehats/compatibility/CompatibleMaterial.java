@@ -3,7 +3,7 @@ package com.mediusecho.particlehats.compatibility;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.util.ItemUtil;
 
 /**
@@ -162,7 +162,7 @@ public enum CompatibleMaterial {
 	 */
 	public ItemStack getItem (int quantity)
 	{
-		if (Core.serverVersion >= 13) {
+		if (ParticleHats.serverVersion >= 13) {
 			return ItemUtil.createItem(material, 1);
 		} else {
 			return ItemUtil.createItem(material, (short) durability);

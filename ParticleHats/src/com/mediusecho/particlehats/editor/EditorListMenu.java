@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.util.ItemUtil;
 
@@ -23,7 +23,7 @@ public abstract class EditorListMenu extends EditorMenu {
 	protected ItemStack addItem;
 	protected final ItemStack emptyItem = ItemUtil.createItem(Material.BARRIER, Message.EDITOR_MISC_EMPTY_MENU);
 	
-	public EditorListMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorListMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
 	{
 		super(core, owner, menuBuilder);
 	}

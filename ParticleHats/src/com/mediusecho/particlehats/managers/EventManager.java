@@ -1,6 +1,6 @@
 package com.mediusecho.particlehats.managers;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.listeners.ChatListener;
 import com.mediusecho.particlehats.listeners.CommandListener;
 import com.mediusecho.particlehats.listeners.ConnectionListener;
@@ -12,7 +12,7 @@ import com.mediusecho.particlehats.listeners.MovementListener;
 @SuppressWarnings("unused")
 public class EventManager {
 
-	private final Core core;
+	private final ParticleHats core;
 	
 	// Events
 	private final InventoryListener  inventoryListener;
@@ -23,7 +23,7 @@ public class EventManager {
 	private final InteractListener   interactListener;
 	private final CommandListener    commandListener;
 	
-	public EventManager (final Core core)
+	public EventManager (final ParticleHats core)
 	{
 		this.core = core;
 		

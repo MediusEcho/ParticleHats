@@ -6,27 +6,27 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.util.MathUtil;
 
 public abstract class Menu {
 
-	protected final Core core;
+	protected final ParticleHats core;
 	
 	protected Player owner;
 	protected UUID ownerID;
 	
 	protected MenuInventory inventory;
 	
-	public Menu (Core core, final Player owner)
+	public Menu (ParticleHats core, final Player owner)
 	{
 		this.core = core;
 		this.owner = owner;
 		this.ownerID = owner.getUniqueId();
 	}
 	
-	public Menu (Core core, final Player owner, final MenuInventory inventory)
+	public Menu (ParticleHats core, final Player owner, final MenuInventory inventory)
 	{
 		this(core, owner);
 		this.inventory = inventory;

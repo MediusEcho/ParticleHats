@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
@@ -1315,7 +1315,7 @@ public class Hat {
 		iconData.setMainItem(item);
 		
 		setProperty("id", "'" + item.getType().toString() + "'");
-		if (Core.serverVersion < 13) {
+		if (ParticleHats.serverVersion < 13) {
 			setProperty("durability", Short.toString(item.getDurability()));
 		}
 	}

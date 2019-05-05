@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.ui.MenuInventory;
@@ -13,9 +13,9 @@ import com.mediusecho.particlehats.ui.StaticMenu;
 
 public class CommandListener implements Listener {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public CommandListener (final Core core)
+	public CommandListener (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);

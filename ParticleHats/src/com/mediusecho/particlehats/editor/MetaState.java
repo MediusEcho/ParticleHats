@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
@@ -29,7 +29,7 @@ public enum MetaState {
 	MENU_ALIAS,
 	NEW_MENU;
 	
-	private final Core core = Core.instance;
+	private final ParticleHats core = ParticleHats.instance;
 	
 	/**
 	 * Get the name of this MetaState

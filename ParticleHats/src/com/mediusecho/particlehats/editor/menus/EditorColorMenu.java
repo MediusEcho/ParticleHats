@@ -9,7 +9,7 @@ import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -31,7 +31,7 @@ public class EditorColorMenu extends EditorMenu {
 	private final EditorAction setColorAction;
 	private final Hat targetHat;
 	
-	public EditorColorMenu(Core core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorGenericCallback callback) 
+	public EditorColorMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorGenericCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		this.particleIndex = particleIndex;

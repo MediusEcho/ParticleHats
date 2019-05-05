@@ -7,7 +7,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
@@ -71,7 +71,7 @@ public class IconData {
 	@SuppressWarnings("deprecation")
 	public void addItem (ItemStack item) 
 	{
-		if (Core.serverVersion < 13) {
+		if (ParticleHats.serverVersion < 13) {
 			items.add(new ItemStackTemplate(item.getType(), item.getDurability()));
 		} else {
 			items.add(new ItemStackTemplate(item.getType()));
@@ -107,7 +107,7 @@ public class IconData {
 	public List<String> getItemNames ()
 	{
 		List<String> itemNames = new ArrayList<String>();
-		boolean legacy = Core.serverVersion < 13;
+		boolean legacy = ParticleHats.serverVersion < 13;
 		
 		for (ItemStackTemplate item : items)
 		{
@@ -249,7 +249,7 @@ public class IconData {
 		public void set (ItemStack item)
 		{
 			this.material = item.getType();
-			if (Core.serverVersion < 13) {
+			if (ParticleHats.serverVersion < 13) {
 				this.durability = item.getDurability();
 			}
 		}

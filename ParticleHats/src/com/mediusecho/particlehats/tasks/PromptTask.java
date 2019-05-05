@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -18,9 +18,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class PromptTask extends BukkitRunnable {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public PromptTask (final Core core)
+	public PromptTask (final ParticleHats core)
 	{
 		this.core = core;
 	}

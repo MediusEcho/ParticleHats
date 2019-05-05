@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -16,7 +16,7 @@ import com.mediusecho.particlehats.player.PlayerState;
 public class MetaCommand extends Command {
 
 	@Override
-	public boolean execute(Core core, Sender sender, String label, ArrayList<String> args) 
+	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
 		if (!sender.hasPermission(Permission.COMMAND_EDIT) && !sender.hasPermission(Permission.COMMAND_EDIT_ALL))
 		{
@@ -52,7 +52,7 @@ public class MetaCommand extends Command {
 	}
 	
 	@Override
-	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		if (sender.isPlayer())
 		{

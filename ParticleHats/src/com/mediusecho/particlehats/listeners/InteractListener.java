@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
@@ -26,14 +26,15 @@ import com.mediusecho.particlehats.ui.StaticMenu;
 
 public class InteractListener implements Listener {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public InteractListener (final Core core)
+	public InteractListener (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onInteract (PlayerInteractEvent event)
 	{
@@ -43,6 +44,11 @@ public class InteractListener implements Listener {
 			Material checkAgainst = SettingsManager.MENU_OPEN_WITH_ITEM_MATERIAL.getMaterial();
 			if (item.getType().equals(checkAgainst))
 			{
+				short durability = (short) SettingsManager.MENU_OPEN_WITH_ITEM_DAMAGE.getInt();
+				if (ParticleHats.serverVersion < 13 && item.getDurability() != durability) {
+					return;
+				}
+				
 				Database database = core.getDatabase();
 				Player player = event.getPlayer();
 				String menuName = "";

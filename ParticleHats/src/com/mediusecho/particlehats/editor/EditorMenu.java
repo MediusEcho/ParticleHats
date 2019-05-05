@@ -13,7 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -25,12 +25,12 @@ import com.mediusecho.particlehats.util.MathUtil;
 
 public abstract class EditorMenu {
 
-	protected final Core core;
+	protected final ParticleHats core;
 	protected final Player owner;
 	protected final UUID ownerID;
 	protected final MenuBuilder menuBuilder;
 	
-	protected final static EditorAction emptyAction = (event, slot) -> { Core.debug("empty action"); return EditorClickType.NONE; };
+	protected final static EditorAction emptyAction = (event, slot) -> { ParticleHats.debug("empty action"); return EditorClickType.NONE; };
 	private final ItemStack emptyItem = new ItemStack(Material.STONE);
 	
 	protected final Map<Integer, EditorAction> actions;
@@ -44,7 +44,7 @@ public abstract class EditorMenu {
 	private long buildTime = 0L;
 	private boolean buildLogged = false;
 	
-	public EditorMenu (Core core, Player owner, final MenuBuilder menuBuilder)
+	public EditorMenu (ParticleHats core, Player owner, final MenuBuilder menuBuilder)
 	{
 		buildTime = System.nanoTime();
 		
@@ -217,7 +217,7 @@ public abstract class EditorMenu {
 	{
 		if (!buildLogged)
 		{
-			Core.debug("menu took " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - buildTime) + "ms to open");
+			ParticleHats.debug("menu took " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - buildTime) + "ms to open");
 			buildLogged = true;
 		}
 	}

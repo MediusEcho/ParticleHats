@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.Database.DataType;
@@ -21,7 +21,7 @@ public class EditorMetaMenu extends EditorMenu {
 
 	private final Hat targetHat;
 	
-	public EditorMetaMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorMetaMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
 	{
 		super(core, owner, menuBuilder);
 		

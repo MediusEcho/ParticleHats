@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.MathUtil;
 
@@ -255,7 +255,7 @@ public class ItemStackData {
 			item.setGravity(hasGravity);
 			
 			// Give this item a unique metadata so we can cancel any pickup
-			item.setMetadata("PH_DroppedItem", new FixedMetadataValue(Core.instance, ""));
+			item.setMetadata("PH_DroppedItem", new FixedMetadataValue(ParticleHats.instance, ""));
 			
 			Vector velocity = this.velocity;
 			item.setVelocity(velocity);
@@ -271,11 +271,11 @@ public class ItemStackData {
 		}
 		
 		catch (NoSuchFieldException e) {
-			Core.debug("NoSuchFieldException");
+			ParticleHats.debug("NoSuchFieldException");
 		}
 		
 		catch (IllegalAccessException e) {
-			Core.debug("IllegalAccessException");
+			ParticleHats.debug("IllegalAccessException");
 		}
 	}
 	

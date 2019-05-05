@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -22,12 +22,12 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class StaticMenu extends Menu {
 
-	public StaticMenu(Core core, Player owner) 
+	public StaticMenu(ParticleHats core, Player owner) 
 	{
 		super(core, owner);
 	}
 	
-	public StaticMenu(Core core, Player owner, MenuInventory inventory)
+	public StaticMenu(ParticleHats core, Player owner, MenuInventory inventory)
 	{
 		super(core, owner, inventory);
 		build();

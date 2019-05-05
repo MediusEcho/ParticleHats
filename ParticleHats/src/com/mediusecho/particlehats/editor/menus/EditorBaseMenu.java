@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -35,7 +35,7 @@ public class EditorBaseMenu extends EditorMenu {
 	
 	private int rows = 0;
 	
-	public EditorBaseMenu(Core core, Player owner, MenuBuilder menuBuilder, MenuInventory menuInventory) 
+	public EditorBaseMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, MenuInventory menuInventory) 
 	{
 		super(core, owner, menuBuilder);
 		this.menuInventory = menuInventory;

@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorListMenu;
@@ -32,7 +32,7 @@ public class EditorItemStackMenu extends EditorListMenu {
 	private final Message iconName = Message.EDITOR_ICON_MENU_ITEM_INFO;
 	private final Message iconDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
 	
-	public EditorItemStackMenu(Core core, Player owner, MenuBuilder menuBuilder, final int particleIndex, EditorGenericCallback callback) 
+	public EditorItemStackMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, final int particleIndex, EditorGenericCallback callback) 
 	{
 		super(core, owner, menuBuilder);
 		targetHat = menuBuilder.getTargetHat();

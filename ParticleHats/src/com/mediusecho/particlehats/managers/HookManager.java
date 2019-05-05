@@ -2,7 +2,7 @@ package com.mediusecho.particlehats.managers;
 
 import org.bukkit.plugin.PluginManager;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.hooks.CurrencyHook;
 import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.hooks.economy.PlayerPointsHook;
@@ -12,12 +12,12 @@ import com.mediusecho.particlehats.hooks.vanish.VanishNoPacketHook;
 
 public class HookManager {
 
-	private final Core core;
+	private final ParticleHats core;
 	
 	private CurrencyHook currencyHook;
 	private VanishHook vanishHook;
 	
-	public HookManager (final Core core)
+	public HookManager (final ParticleHats core)
 	{
 		this.core = core;
 		loadHooks();
@@ -54,7 +54,7 @@ public class HookManager {
 			if (pluginManager.isPluginEnabled("Vault"))
 			{
 				currencyHook = new VaultHook(core);
-				Core.log("hooking into Vault");
+				ParticleHats.log("hooking into Vault");
 			}
 		}
 		
@@ -64,7 +64,7 @@ public class HookManager {
 			if (pluginManager.isPluginEnabled("PlayerPoints"))
 			{
 				currencyHook = new PlayerPointsHook();
-				Core.log("hooking into PlayerPoints");
+				ParticleHats.log("hooking into PlayerPoints");
 			}
 		}
 		
@@ -86,26 +86,26 @@ public class HookManager {
 			if (pluginManager.isPluginEnabled("SuperVanish"))
 			{
 				vanishHook = new SuperVanishHook(core);
-				Core.log("hooking into SuperVanish");
+				ParticleHats.log("hooking into SuperVanish");
 			}
 			
 			// PremiumVanish
 			else if (pluginManager.isPluginEnabled("PremiumVanish"))
 			{
 				vanishHook = new SuperVanishHook(core);
-				Core.log("hooking into PremiumVanish");
+				ParticleHats.log("hooking into PremiumVanish");
 			}
 			
 			// VanishNoPacket
 			else if (pluginManager.isPluginEnabled("VanishNoPacket"))
 			{
 				vanishHook = new VanishNoPacketHook(core);
-				Core.log("hooking into VanishNoPacket");
+				ParticleHats.log("hooking into VanishNoPacket");
 			}
 			
 			else
 			{
-				Core.log("Unable to find a supported vanish plugin, disabling vanish support");
+				ParticleHats.log("Unable to find a supported vanish plugin, disabling vanish support");
 				SettingsManager.FLAG_VANISH.addOverride(false);
 			}
 		}

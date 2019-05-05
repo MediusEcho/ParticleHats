@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 
@@ -36,7 +36,7 @@ public abstract class Command {
 	 * @param args
 	 * @return
 	 */
-	public abstract boolean execute (Core core, Sender sender, String label, ArrayList<String> args);
+	public abstract boolean execute (ParticleHats core, Sender sender, String label, ArrayList<String> args);
 	
 	/**
 	 * Generic tab complete method
@@ -46,7 +46,7 @@ public abstract class Command {
 	 * @param args
 	 * @return
 	 */
-	public List<String> tabCompelete (Core core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		if (args.size() == 1)
 		{

@@ -7,15 +7,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.GuiState;
 
 public class InventoryListener implements Listener {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public InventoryListener (final Core core)
+	public InventoryListener (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);

@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -21,7 +21,7 @@ public class EditorTransferMenu extends EditorMenu {
 	
 	private final String menuName;
 	
-	public EditorTransferMenu(Core core, Player owner, MenuBuilder menuBuilder, String menuName) 
+	public EditorTransferMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, String menuName) 
 	{
 		super(core, owner, menuBuilder);
 		this.menuName = menuName;

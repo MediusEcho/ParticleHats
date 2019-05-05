@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -27,7 +27,7 @@ public class EditorParticleOverviewMenu extends EditorMenu {
 	private final EditorAction editAction;
 	private final Map<Integer, Boolean> modifiedParticles;
 	
-	public EditorParticleOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
+	public EditorParticleOverviewMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorMainMenu editorMainMenu) 
 	{
 		super(core, owner, menuBuilder);
 		

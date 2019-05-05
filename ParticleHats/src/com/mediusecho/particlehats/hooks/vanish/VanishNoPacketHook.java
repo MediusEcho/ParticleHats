@@ -5,16 +5,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
 
 public class VanishNoPacketHook implements VanishHook, Listener {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public VanishNoPacketHook (final Core core)
+	public VanishNoPacketHook (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);

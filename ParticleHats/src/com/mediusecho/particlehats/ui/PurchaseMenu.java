@@ -3,7 +3,7 @@ package com.mediusecho.particlehats.ui;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
@@ -12,7 +12,7 @@ import com.mediusecho.particlehats.util.ItemUtil;
 
 public class PurchaseMenu extends StaticMenu {
 
-	public PurchaseMenu(Core core, Player owner) 
+	public PurchaseMenu(ParticleHats core, Player owner) 
 	{
 		super(core, owner);
 		

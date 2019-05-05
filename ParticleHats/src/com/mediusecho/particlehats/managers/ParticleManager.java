@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
@@ -18,12 +18,12 @@ import com.mediusecho.particlehats.player.PlayerState;
 
 public class ParticleManager 
 {
-	private final Core core;
+	private final ParticleHats core;
 	private final Deque<ParticleEffect> emptyRecents = new ArrayDeque<ParticleEffect>();
 	
 	private Map<UUID, Deque<ParticleEffect>> recentParticles;
 	
-	public ParticleManager (Core core)
+	public ParticleManager (ParticleHats core)
 	{
 		this.core = core;
 		

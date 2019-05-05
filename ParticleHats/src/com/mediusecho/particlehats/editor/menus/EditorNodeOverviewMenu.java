@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorListMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -21,7 +21,7 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 	private final Hat targetHat;
 	private final String nodeTitle = Message.EDITOR_NODE_OVERVIEW_NODE_TITLE.getValue();
 	
-	public EditorNodeOverviewMenu(Core core, Player owner, MenuBuilder menuBuilder) 
+	public EditorNodeOverviewMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
 	{
 		super(core, owner, menuBuilder);
 		targetHat = menuBuilder.getBaseHat();
@@ -31,8 +31,8 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 			if (event.isLeftClick())
 			{
 				int index = getClampedIndex(slot, 10, 2);
-				Core.debug("looking for node at index: " + index);
-				Core.debug("node size: " + targetHat.getNodes().size());
+				ParticleHats.debug("looking for node at index: " + index);
+				ParticleHats.debug("node size: " + targetHat.getNodes().size());
 				
 				Hat node = targetHat.getNode(index);
 				if (node != null)

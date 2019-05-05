@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
@@ -50,7 +50,7 @@ public class EditorTypeMenu extends EditorMenu {
 	
 	private boolean selectingFromIncludedTypes = true;
 	
-	public EditorTypeMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
+	public EditorTypeMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
 	{
 		super(core, owner, menuBuilder);
 		this.callback = callback;
@@ -173,7 +173,7 @@ public class EditorTypeMenu extends EditorMenu {
 			
 			if (type.isDebug()) 
 			{
-				if (!Core.debugging) {
+				if (!ParticleHats.debugging) {
 					continue;
 				}
 			}

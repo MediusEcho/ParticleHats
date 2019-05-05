@@ -11,7 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
@@ -24,9 +24,9 @@ import com.mediusecho.particlehats.player.PlayerState;
  */
 public class ChatListener implements Listener {
 
-	private final Core core;
+	private final ParticleHats core;
 	
-	public ChatListener (final Core core)
+	public ChatListener (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);
@@ -48,7 +48,7 @@ public class ChatListener implements Listener {
 				{					
 					event.setCancelled(true);
 					
-					Bukkit.getScheduler().scheduleSyncDelayedTask(Core.instance, () ->
+					Bukkit.getScheduler().scheduleSyncDelayedTask(ParticleHats.instance, () ->
 					{
 						if (ChatColor.stripColor(event.getMessage()).equalsIgnoreCase("cancel")) {
 							metaState.reopenEditor(menuBuilder);

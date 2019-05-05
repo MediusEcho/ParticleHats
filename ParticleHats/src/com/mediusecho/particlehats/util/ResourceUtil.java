@@ -11,11 +11,11 @@ import javax.imageio.ImageIO;
 
 import org.bukkit.Sound;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 
 public class ResourceUtil {
 
-	private final static Core core = Core.instance;
+	private final static ParticleHats core = ParticleHats.instance;
 	
 	public static BufferedImage getImage (String resourceName)
 	{

@@ -23,7 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
@@ -55,7 +55,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class YamlDatabase implements Database {
 
-	private final Core core;
+	private final ParticleHats core;
 	
 	private final CustomConfig groupConfig;
 	
@@ -68,7 +68,7 @@ public class YamlDatabase implements Database {
 	private final Map<UUID, CustomConfig> playerConfigs;
 	private final List<Group> groups;
 	
-	public YamlDatabase (Core core)
+	public YamlDatabase (ParticleHats core)
 	{
 		this.core = core;
 		
@@ -263,7 +263,7 @@ public class YamlDatabase implements Database {
 	
 	@Override
 	public void loadHat(String menuName, int slot, Hat hat) {
-		Core.debug("should we load a hat?");
+		ParticleHats.debug("should we load a hat?");
 	}
 	
 	@Override
@@ -414,7 +414,7 @@ public class YamlDatabase implements Database {
 		{
 			String path = "items." + slot + ".nodes." + (nodeIndex + 1);
 			
-			Core.debug("deleting node " + (nodeIndex + 1));
+			ParticleHats.debug("deleting node " + (nodeIndex + 1));
 			
 			config.set(path, null);
 			config.save();
@@ -694,7 +694,7 @@ public class YamlDatabase implements Database {
 		File menusFolder = new File(core.getDataFolder() + File.separator + "menus");
 		if (!menusFolder.isDirectory())
 		{
-			Core.log("Unable to find menus folder");
+			ParticleHats.log("Unable to find menus folder");
 			return;
 		}
 		
@@ -797,7 +797,7 @@ public class YamlDatabase implements Database {
 				case BLOCK_DATA:
 				{
 					ItemStack block = data.getBlock();
-					if (Core.serverVersion < 13)
+					if (ParticleHats.serverVersion < 13)
 					{
 						config.set(path + "block-data.id", block.getType().toString());
 						config.set(path + "block-data.damage-value", block.getDurability());
@@ -812,7 +812,7 @@ public class YamlDatabase implements Database {
 				case ITEM_DATA:
 				{
 					ItemStack item = data.getItem();
-					if (Core.serverVersion < 13)
+					if (ParticleHats.serverVersion < 13)
 					{
 						config.set(path + "item-data.id", item.getType().toString());
 						config.set(path + "item-data.damage-value", item.getDurability());
@@ -974,7 +974,7 @@ public class YamlDatabase implements Database {
 		if (config.contains(path + "icons"))
 		{
 			IconData iconData = hat.getIconData();
-			boolean legacy = Core.serverVersion < 13;
+			boolean legacy = ParticleHats.serverVersion < 13;
 			
 			for (String material : config.getStringList(path + "icons")) 
 			{
@@ -1046,7 +1046,7 @@ public class YamlDatabase implements Database {
 		}
 		
 		config.set(path + "id", hat.getItem().getType().toString());
-		if (Core.serverVersion < 13)  {
+		if (ParticleHats.serverVersion < 13)  {
 			config.set(path + "damage-value", hat.getItem().getDurability());
 		}
 		
@@ -1204,7 +1204,7 @@ public class YamlDatabase implements Database {
 	private void loadBaseHatData (FileConfiguration config, Hat hat, String path)
 	{
 		Material material = ItemUtil.getMaterial(config.getString(path + "id"), CompatibleMaterial.SUNFLOWER.getMaterial());
-		if (Core.serverVersion < 13) {
+		if (ParticleHats.serverVersion < 13) {
 			hat.setItem(ItemUtil.createItem(material, (short) config.getInt(path + "damage-value")));
 		} else {
 			hat.setItem(ItemUtil.createItem(material, 1));
@@ -1377,7 +1377,7 @@ public class YamlDatabase implements Database {
 	
 	private void updateMenuFormat (CustomConfig menuConfig)
 	{
-		Core.log("Updating " + menuConfig.getFileName() + " to new save format");
+		ParticleHats.log("Updating " + menuConfig.getFileName() + " to new save format");
 		FileConfiguration config = menuConfig.getConfig();
 		
 		config.set("version", MENU_VERSION);
