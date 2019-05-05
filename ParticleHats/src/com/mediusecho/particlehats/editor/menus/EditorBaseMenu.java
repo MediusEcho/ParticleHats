@@ -135,12 +135,10 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
-	 * Changes the Material type of the item in this slot
-	 * @param slot Slot where the item exists
-	 * @param material New material of this item
+	 * Changes the items material type and durability
 	 */
-	public void setItemMaterial (int slot, Material material) {
-		getItem(slot).setType(material);
+	public void setItemType (int slot, ItemStack item) {
+		ItemUtil.setItemType(getItem(slot), item);
 	}
 	
 	/**
