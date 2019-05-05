@@ -7,10 +7,10 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.util.MathUtil;
 
-// TODO: Removed unused code after checking
 public class ParticleData {
 
 	private Map<String, String> modifiedProperties;
@@ -24,6 +24,7 @@ public class ParticleData {
 	
 	private int[] legacyItemPacketData;
 	private int[] legacyBlockPacketData;
+	private boolean supportsLegacy = false;
 	
 	@SuppressWarnings("deprecation")
 	public ParticleData ()
@@ -37,8 +38,12 @@ public class ParticleData {
 		scale = 1;
 		stackData = new ItemStackData(this);
 		
-		legacyItemPacketData = new int[] {Material.APPLE.getId(), 0};
-		legacyBlockPacketData = new int[] {Material.STONE.getId(), (byte) 0};
+		supportsLegacy = Core.serverVersion <= 12;
+		if (supportsLegacy)
+		{
+			legacyItemPacketData = new int[] {Material.APPLE.getId(), 0};
+			legacyBlockPacketData = new int[] {Material.STONE.getId(), (byte) 0};
+		}
 	}
 	
 	/**
@@ -86,9 +91,16 @@ public class ParticleData {
 	public void setItem (ItemStack item) 
 	{
 		this.item = item;
-		setProperty("item_data", "'" + item.getType().toString() + "'");
 		
-		legacyItemPacketData = new int[] {item.getType().getId(), (byte) item.getDurability()};
+		if (supportsLegacy) 
+		{
+			legacyItemPacketData = new int[] {item.getType().getId(), (byte) item.getDurability()};
+			setProperty("item_data", "'" + item.getType().toString() + ":" + item.getDurability() + "'");
+		}
+		
+		else {
+			setProperty("item_data", "'" + item.getType().toString() + "'");
+		}
 	}
 	
 	/**
@@ -102,36 +114,25 @@ public class ParticleData {
 	/**
 	 * Set the BlockData for this ParticleData class
 	 * @param block
-	 * 
-	 * @deprecated Use {@link #setBlock(Material)}
-	 */
-//	@Deprecated
-//	public void setBlock (BlockData block) 
-//	{
-//		//this.block = block;
-//		//setProperty("block_data", "'" + block.getMaterial().toString() + "'");
-//	}
-	
-	/**
-	 * Set the BlockData for this ParticleData class
-	 * @param block
 	 */
 	@SuppressWarnings("deprecation")
 	public void setBlock (ItemStack block) 
 	{
 		this.block = block;
-		setProperty("block_data", "'" + block.toString() + "'");
 		
-		legacyBlockPacketData = new int[] {block.getType().getId(), (byte) block.getDurability()};
+		if (supportsLegacy) 
+		{
+			short durability = block.getDurability();
+			Material material = block.getType();
+			
+			legacyBlockPacketData = new int[] {material.getId(), durability};
+			setProperty("block_data", "'" + material.toString() + ":" + durability + "'");
+		}
+		
+		else {
+			setProperty("block_data", "'" + block.getType().toString() + "'");
+		}
 	}
-	
-//	/**
-//	 * Get the BlockData for this ParticleData class
-//	 * @return
-//	 */
-//	public BlockData getBlock () {
-//		return block.createBlockData();
-//	}
 	
 	public ItemStack getBlock () {
 		return block;
@@ -175,6 +176,10 @@ public class ParticleData {
 		this.stackData = stackData;
 	}
 	
+	/**
+	 * Gets the legacy item packet data
+	 * @return
+	 */
 	public int[] getLegacyPacketData () 
 	{
 		if (particle.hasItemData()) {
@@ -183,6 +188,10 @@ public class ParticleData {
 		return legacyBlockPacketData;
 	}
 	
+	/**
+	 * Gets the legacy item packet data as a string
+	 * @return
+	 */
 	public String getLegacyPacketDataString () 
 	{
 		if (particle.hasItemData()) {
@@ -235,8 +244,12 @@ public class ParticleData {
 		data.scale = scale;
 		data.color = color.clone(this);
 		data.stackData = stackData.clone(this);
-		data.legacyItemPacketData = legacyItemPacketData.clone();
-		data.legacyBlockPacketData = legacyBlockPacketData.clone();
+		
+		if (supportsLegacy) 
+		{
+			data.legacyItemPacketData = legacyItemPacketData.clone();
+			data.legacyBlockPacketData = legacyBlockPacketData.clone();
+		}
 		
 		return data;
 	}
