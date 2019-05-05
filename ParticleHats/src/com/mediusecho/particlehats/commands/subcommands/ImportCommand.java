@@ -14,7 +14,6 @@ import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 
-// TODO: Finish import command
 public class ImportCommand extends Command {
 
 	@Override
