@@ -11,6 +11,22 @@ import org.bukkit.Bukkit;
 
 import com.mediusecho.particlehats.util.StringUtil;
 
+/**
+ * <b>ReflectionUtils</b>
+ * <p>
+ * This class provides useful methods which makes dealing with reflection much easier, especially when working with Bukkit
+ * <p>
+ * You are welcome to use it, modify it and redistribute it under the following conditions:
+ * <ul>
+ * <li>Don't claim this class as your own
+ * <li>Don't remove this disclaimer
+ * </ul>
+ * <p>
+ * <i>It would be nice if you provide credit to me if you use this class in a published project</i>
+ * 
+ * @author DarkBlade12
+ * @version 1.1
+ */
 public class ReflectionUtils {
 
 	// Prevent accidental construction
