@@ -26,6 +26,7 @@ public enum MetaState {
 	HAT_EQUIP_MESSAGE,
 	HAT_TAG,
 	MENU_TITLE,
+	MENU_ALIAS,
 	NEW_MENU;
 	
 	private final Core core = Core.instance;
@@ -103,6 +104,13 @@ public enum MetaState {
 			{
 				String title = value.length() <= 40 ? value : value.substring(0, 40);
 				menuBuilder.getEditingMenu().setTitle(title);
+				reopenEditor(menuBuilder);
+			}
+			break;
+			
+			case MENU_ALIAS:
+			{
+				menuBuilder.getEditingMenu().setAlias(ChatColor.stripColor(args.get(0)));
 				reopenEditor(menuBuilder);
 			}
 			break;
