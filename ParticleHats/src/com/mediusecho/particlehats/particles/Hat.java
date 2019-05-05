@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
@@ -570,7 +568,6 @@ public class Hat {
 	 * Get this hats custom effect, null if nothing is set
 	 * @return
 	 */
-	@Nullable
 	public PixelEffect getCustomEffect () {
 		return customEffect;
 	}

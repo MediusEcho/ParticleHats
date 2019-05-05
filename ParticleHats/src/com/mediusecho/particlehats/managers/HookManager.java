@@ -1,7 +1,5 @@
 package com.mediusecho.particlehats.managers;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.plugin.PluginManager;
 
 import com.mediusecho.particlehats.Core;
@@ -34,7 +32,6 @@ public class HookManager {
 	 * Get this plugin's CurrencyHook
 	 * @return
 	 */
-	@Nullable
 	public CurrencyHook getCurrencyHook () {
 		return currencyHook;
 	}
@@ -43,7 +40,6 @@ public class HookManager {
 	 * Get this plugin's VanishHook
 	 * @return
 	 */
-	@Nullable
 	public VanishHook getVanishHook () {
 		return vanishHook;
 	}

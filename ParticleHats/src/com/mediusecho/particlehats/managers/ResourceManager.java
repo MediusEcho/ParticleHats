@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
 import com.mediusecho.particlehats.Core;
@@ -60,7 +59,6 @@ public class ResourceManager {
 	 * @param name
 	 * @return
 	 */
-	@Nullable
 	public BufferedImage getImage (String name) {
 		return images.get(name);
 	}
