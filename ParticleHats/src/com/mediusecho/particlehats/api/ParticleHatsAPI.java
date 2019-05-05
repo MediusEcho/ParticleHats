@@ -1,28 +1,29 @@
 package com.mediusecho.particlehats.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.api.exceptions.InvalidHatException;
 import com.mediusecho.particlehats.api.exceptions.InvalidLabelException;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 
-public class HatAPI {
+public class ParticleHatsAPI {
 
-	private static Core core = Core.instance;
+	private final ParticleHats core;
+	
+	public ParticleHatsAPI (final ParticleHats core)
+	{
+		this.core = core;
+	}
 	
 	/**
 	 * Checks to see if the given label exists
 	 * @param label
 	 * @return
 	 */
-	public static boolean labelExists (String label)
-	{
+	public boolean labelExists (String label) {
 		return core.getDatabase().getLabels(false).contains(label);
 	}
 	
@@ -33,7 +34,7 @@ public class HatAPI {
 	 * @param tellPlayer Shows the player the HAT_EQUIPPED message
 	 * @param permanent You can decide whether to equip this hat temporarily or permanently
 	 */
-	public static void equipHatFromLabel (Player player, String label, boolean tellPlayer, boolean permanent) throws InvalidLabelException
+	public void equipHatFromLabel (Player player, String label, boolean tellPlayer, boolean permanent) throws InvalidLabelException
 	{
 		Database database = core.getDatabase();
 		Hat hat = database.getHatFromLabel(label);
@@ -57,8 +58,7 @@ public class HatAPI {
 	 * @param tellPlayer Shows the player the HAT_EQUIPPED message
 	 * @throws InvalidLabelException
 	 */
-	public static void equipHatFromLabel (Player player, String label, boolean tellPlayer) throws InvalidLabelException
-	{
+	public void equipHatFromLabel (Player player, String label, boolean tellPlayer) throws InvalidLabelException {
 		equipHatFromLabel(player, label, tellPlayer, true);
 	}
 	
@@ -68,8 +68,7 @@ public class HatAPI {
 	 * @param label The unique label that defines this hat
 	 * @throws InvalidLabelException
 	 */
-	public static void equipHatFromLabel (Player player, String label) throws InvalidLabelException
-	{
+	public void equipHatFromLabel (Player player, String label) throws InvalidLabelException {
 		equipHatFromLabel(player, label, false, true);
 	}
 	
@@ -78,20 +77,8 @@ public class HatAPI {
 	 * @param player
 	 * @return
 	 */
-	public static int getHatCount (Player player)
-	{
+	public int getHatCount (Player player) {
 		return core.getPlayerState(player.getUniqueId()).getHatCount();
-	}
-	
-	/**
-	 * Get a list of all hats this player is wearing
-	 * @param player
-	 * @return
-	 */
-	public List<Hat> getHatsWorn (Player player)
-	{
-		final List<Hat> hats = new ArrayList<Hat>(core.getPlayerState(player.getUniqueId()).getActiveHats());
-		return hats;
 	}
 	
 	/**
@@ -101,7 +88,7 @@ public class HatAPI {
 	 * @param toggleStatus
 	 * @throws InvalidHatException
 	 */
-	public static void toggleHat (Player player, int index, boolean toggleStatus) throws IndexOutOfBoundsException
+	public void toggleHat (Player player, int index, boolean toggleStatus) throws IndexOutOfBoundsException
 	{
 		Hat hat = core.getPlayerState(player.getUniqueId()).getActiveHats().get(index);
 		hat.setHidden(toggleStatus);
@@ -112,7 +99,7 @@ public class HatAPI {
 	 * @param player
 	 * @param toggleStatus
 	 */
-	public static void toggleAllHats (Player player, boolean toggleStatus)
+	public void toggleAllHats (Player player, boolean toggleStatus)
 	{
 		for (Hat hat : core.getPlayerState(player.getUniqueId()).getActiveHats()) {
 			hat.setHidden(toggleStatus);
