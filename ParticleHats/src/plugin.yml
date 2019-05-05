@@ -1,5 +1,5 @@
 name: ParticleHats
-main: com.mediusecho.particlehats.Core
+main: com.mediusecho.particlehats.ParticleHats
 version: 4.0
 api-version: 1.13
 author: MediusEcho
@@ -8,3 +8,5 @@ commands:
   h:
     description: Main command for ParticleHats
     aliases: ph
+  hats:
+    description: Allows players to manage their equipped hats
