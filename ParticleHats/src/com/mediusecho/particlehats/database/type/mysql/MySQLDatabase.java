@@ -1560,43 +1560,7 @@ public class MySQLDatabase implements Database {
 				}
 			});
 		});
-	}
-	
-//	/**
-//	 * Checks to see if a table exists in the database
-//	 * @param tableName
-//	 * @return
-//	 */
-//	private boolean tableExists (String tableName)
-//	{
-//		try (Connection connection = dataSource.getConnection())
-//		{
-//			String tableQuery = "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_name = ?";
-//			try (PreparedStatement statement = connection.prepareStatement(tableQuery))
-//			{
-//				statement.setString(1, tableName);
-//				ResultSet set = statement.executeQuery();
-//				while (set.next()) {
-//					return set.getInt("count") > 0;
-//				}
-//				return false;
-//			}
-//		}
-//		
-//		catch (SQLException e) {
-//			return false;
-//		}
-//	}
-	
-	/**
-	 * Get the name of this table
-	 * @param menuName
-	 * @param table
-	 * @return
-	 */
-//	private String getTable (String menuName, Table table) {
-//		return table.getFormat().replace("%", menuName);
-//	}
+	}	
 	
 	public void connect (ConnectionCallback callback)
 	{
@@ -1607,8 +1571,6 @@ public class MySQLDatabase implements Database {
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-//			Core.debug(e.getStackTrace());
-//			Core.log(e.getMessage());
 		}
 	}
 	
@@ -1641,7 +1603,6 @@ public class MySQLDatabase implements Database {
 	public static interface TaskCallback {
 		public void execute();
 	}
-
 	
 	/**
 	 * Returns the value stored at the column label, or the default value if null
