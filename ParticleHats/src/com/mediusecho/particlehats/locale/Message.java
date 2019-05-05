@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -468,13 +468,15 @@ public enum Message {
 	// Settings Menu
 	EDITOR_SETTINGS_MENU_TITLE             ("Menu Settings"),
 	EDITOR_SETTINGS_MENU_SET_TITLE         ("&bSet Menu Title"),
+	EDITOR_SETTINGS_MENU_SET_ALIAS         ("&bSet Menu Alias"),
 	EDITOR_SETTINGS_MENU_SET_SIZE          ("&bSet Menu Size"),
 	EDITOR_SETTINGS_MENU_DELETE            ("&cDelete"),
 	EDITOR_SETTINGS_MENU_SET_PURCHASE_MENU ("&bPurchase Menu"),
 	EDITOR_SETTINGS_MENU_TOGGLE_LIVE_MENU  ("&bToggle Live Updates"),
 	EDITOR_SETTINGS_MENU_SYNC_ICONS        ("&bSync Icons"),
 	
-	EDITOR_SETTINGS_MENU_TITLE_DESCRIPTION     ("&8Current Title: {1}"),
+	EDITOR_SETTINGS_MENU_TITLE_DESCRIPTION     ("/n&8Current Title:/n&8» &r{1}"),
+	EDITOR_SETTINGS_MENU_ALIAS_DESCRIPTION     ("/n&8Current Alias:/n&8» &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu"),
 	EDITOR_SETTINGS_MENU_ANIMATION_DESCRIPTION ("/n&8Live Updates:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&8Hats will cycle through their/n&8icons and display them/n/n&3Click to Toggle"),
 	EDITOR_SETTINGS_SYNC_DESCRIPTION           ("&8Resets each hat's animation index to 0/n&8so each hat is synced"), 
 	
@@ -855,7 +857,7 @@ public enum Message {
 	 */
 	private static void loadMessages ()
 	{
-		CustomConfig locale = Core.instance.getLocaleConfig();
+		CustomConfig locale = ParticleHats.instance.getLocaleConfig();
 		FileConfiguration config = locale.getConfig();
 		
 		for (Message message : values())
