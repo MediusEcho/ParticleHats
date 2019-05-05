@@ -751,14 +751,30 @@ public class YamlDatabase implements Database {
 				case BLOCK_DATA:
 				{
 					ItemStack block = data.getBlock();
-					config.set(path + "block-data.id", block.getType().toString());
-					config.set(path + "block-data.damage-value", block.getDurability());
+					if (Core.serverVersion < 13)
+					{
+						config.set(path + "block-data.id", block.getType().toString());
+						config.set(path + "block-data.damage-value", block.getDurability());
+					}
+					
+					else {
+						config.set(path + "block-data", block.getType().toString());
+					}
 					break;
 				}
 				
 				case ITEM_DATA:
 				{
-					config.set(path + "item-data", data.getItem().getType().toString());
+					ItemStack item = data.getItem();
+					if (Core.serverVersion < 13)
+					{
+						config.set(path + "item-data.id", item.getType().toString());
+						config.set(path + "item-data.damage-value", item.getDurability());
+					}
+					
+					else {
+						config.set(path + "item-data", data.getItem().getType().toString());
+					}
 					break;
 				}
 				
