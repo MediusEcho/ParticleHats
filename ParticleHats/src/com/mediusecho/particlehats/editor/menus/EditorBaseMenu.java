@@ -220,6 +220,12 @@ public class EditorBaseMenu extends EditorMenu {
 		core.getDatabase().saveMenuTitle(getName(), title);
 	}
 	
+	public void setAlias (String alias)
+	{
+		menuInventory.setAlias(alias);
+		core.getDatabase().saveMenuAlias(getName(), alias);
+	}
+	
 	/**
 	 * Set this menus size
 	 * @param rows How many rows this menu will have (chest = 3, double chest = 6)
@@ -260,8 +266,20 @@ public class EditorBaseMenu extends EditorMenu {
 		return rows;
 	}
 	
+	/**
+	 * Get this menu's title
+	 * @return
+	 */
 	public String getTitle ()  {
 		return menuInventory.getTitle();
+	}
+	
+	/**
+	 * Get this menu's alias
+	 * @return
+	 */
+	public String getAlias () {
+		return menuInventory.getAlias();
 	}
 	
 	/**
