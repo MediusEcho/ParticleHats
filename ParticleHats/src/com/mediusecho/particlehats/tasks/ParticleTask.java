@@ -196,6 +196,14 @@ public class ParticleTask extends BukkitRunnable {
 				}
 				break;
 			}
+			
+			case WHEN_FLYING:
+			{
+				if (player.isFlying()) {
+					displayHat(player, hat, checkNode);
+				}
+				break;
+			}
 		}
 		
 		// Loop through and check each node hat
