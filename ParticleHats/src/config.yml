@@ -164,3 +164,11 @@ editor:
     #
     # Some menus will alter the sound to reflect the current action (eg: increasing / decreasing a value, deleting an item)
     modifier: 0.25
+  #
+  # Includes all blacklisted sounds in the sound editor menu
+  # Blacklisted sounds are any sounds that are longer than a few seconds
+  show-blacklisted-sounds: false
+  #
+  # Includes all blacklisted potion effects in the potion editor menu
+  # Blacklisted potions are any potion that is harmful to the player
+  show-blacklisted-potions: false
