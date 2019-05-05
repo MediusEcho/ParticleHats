@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
+import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
@@ -15,22 +17,18 @@ public class IconData {
 	private final Random random = new Random();
 	
 	private IconDisplayMode displayMode = IconDisplayMode.DISPLAY_IN_ORDER;
-	private List<Material> materials;
-	private Material previousMaterial;
+	private List<ItemStackTemplate> items;
+	private ItemStackTemplate previousItem;
 	
 	private int index = 0;
 	private int updateFrequency = 1;
 	
+	private static final ItemStack tempMainItem = ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, 1);
+	
 	public IconData ()
 	{
-		materials = new ArrayList<Material>();
-		setMainMaterial(CompatibleMaterial.SUNFLOWER.getMaterial());
-	}
-	
-	public IconData (List<Material> materials)
-	{
-		this.materials = materials;
-		setMainMaterial(materials.get(0));
+		items = new ArrayList<ItemStackTemplate>();
+		setMainItem(tempMainItem);
 	}
 	
 	/**
@@ -41,130 +39,124 @@ public class IconData {
 		this.displayMode = displayMode;
 	}
 	
-	public void setMainMaterial (Material material) 
+	/**
+	 * Set the main item displayed in menus
+	 * @param item
+	 */
+	public void setMainItem (ItemStack item)
 	{
-		if (materials.size() == 0) {
-			materials.add(material);
+		if (items.size() == 0) {
+			items.add(new ItemStackTemplate(item));
 		} else {
-			materials.set(0, material);
+			items.get(0).set(item);
 		}
 		
-		if (previousMaterial == null) {
-			previousMaterial = material;
+		if (previousItem == null) {
+			previousItem = items.get(0);
 		}
 	}
 	
 	/**
-	 * Set all materials for this IconData class
-	 * @param materials
+	 * Set all items for this IconData class
+	 * @param items
 	 */
-	public void setMaterials (List<Material> materials) {
-		this.materials = materials;
+	public void setItems (List<ItemStackTemplate> items) {
+		this.items = items;
 	}
 	
 	/**
-	 * Add a new material to the list
-	 * @param material
+	 * Adds a new item to the list
+	 * @param item
 	 */
-	public void addMaterial (Material material) {
-		materials.add(material);
+	@SuppressWarnings("deprecation")
+	public void addItem (ItemStack item) 
+	{
+		if (Core.serverVersion < 13) {
+			items.add(new ItemStackTemplate(item.getType(), item.getDurability()));
+		} else {
+			items.add(new ItemStackTemplate(item.getType()));
+		}
 	}
 	
 	/**
-	 * Remove the material found at the index
+	 * Removes the item found at the index
 	 * @param index
 	 */
-	public void removeMaterial (int index) {
-		materials.remove(index);
+	public void removeItem (int index) {
+		items.remove(index);
+	}
+	
+	public void updateItem (int index, ItemStack item) {
+		items.get(index).set(item);
 	}
 	
 	/**
-	 * Removes all materials
-	 */
-	public void clearMaterials () {
-		materials.clear();
-	}
-	
-	/**
-	 * Replaces the Material found at this index with a new Material
-	 * @param index
-	 * @param material
-	 */
-	public void updateMaterial (int index, Material material) {
-		materials.set(index, material);
-	}
-	
-	/**
-	 * Get all materials
+	 * Get all items
 	 * @return
 	 */
-	public List<Material> getMaterials ()
+	public List<ItemStackTemplate> getItems ()
 	{
-		final List<Material> mats = new ArrayList<Material>(materials);
-		return mats;
+		final List<ItemStackTemplate> i = new ArrayList<ItemStackTemplate>(items);
+		return i;
 	}
 	
 	/**
 	 * Get all material names
 	 * @return
 	 */
-	public List<String> getMaterialNames ()
+	public List<String> getItemNames ()
 	{
-		List<String> materials = new ArrayList<String>();
-		for (Material material : this.materials) {
-			materials.add(material.toString());
+		List<String> itemNames = new ArrayList<String>();
+		boolean legacy = Core.serverVersion < 13;
+		
+		for (ItemStackTemplate item : items)
+		{
+			if (legacy) {
+				itemNames.add(item.getMaterial().toString() + ":" + item.getDurability());
+			} else {
+				itemNames.add(item.getMaterial().toString());
+			}
 		}
-		return materials;
+		
+		return itemNames;
 	}
 	
 	/**
-	 * Get all materials as their string version
+	 * Gets the next ItemStack according to the IconDisplayMode
+	 * @param ticks
 	 * @return
 	 */
-	public List<String> getMaterialsAsStringList ()
+	public ItemStackTemplate getNextItem (int ticks)
 	{
-		final List<String> mats = new ArrayList<String>();
-		for (Material m : materials) {
-			mats.add(m.toString());
-		}
-		return mats;
-	}
-	
-	/**
-	 * Returns the next material in the list according to the IconDisplayMode
-	 * @return
-	 */
-	public Material getNextMaterial (int ticks)
-	{		
-		if (materials.size() == 1) {
-			return materials.get(0);
+		if (items.size() == 1) {
+			return items.get(0);
 		}
 		
 		if (ticks % updateFrequency != 0) {
-			return previousMaterial;
+			return previousItem;
 		}
 		
 		switch (displayMode)
 		{
-			default: return previousMaterial;
+			default: return previousItem;
 			case DISPLAY_RANDOMLY:
 			{
 				int attempts = 0;
-				Material nextMaterial = materials.get(random.nextInt(materials.size()));
+				ItemStackTemplate nextItem = items.get(random.nextInt(items.size()));
 				
-				while (nextMaterial == previousMaterial && attempts < 50) 
+				while (nextItem == previousItem && attempts < 50) 
 				{
-					nextMaterial = materials.get(random.nextInt(materials.size()));
+					nextItem = items.get(random.nextInt(items.size()));
 					attempts++;
 				}
-				previousMaterial = nextMaterial;
-				return nextMaterial;
+				previousItem = nextItem;
+				return nextItem;
 			}
 		
 			case DISPLAY_IN_ORDER:
 			{
-				previousMaterial = materials.get(MathUtil.wrap(index++, materials.size(), 0));
-				return previousMaterial;
+				previousItem = items.get(MathUtil.wrap(index++, items.size(), 0));
+				return previousItem;
 			}		
 		}
 	}
@@ -174,7 +166,7 @@ public class IconData {
 	 * @return True if there are more than 1 icon to change to
 	 */
 	public boolean isLive () {
-		return materials.size() > 1;
+		return items.size() > 1;
 	}
 	
 	/**
@@ -213,10 +205,53 @@ public class IconData {
 		IconData iconData = new IconData();
 		
 		iconData.displayMode = displayMode;
-		iconData.materials = new ArrayList<Material>(materials);
+		iconData.items = new ArrayList<ItemStackTemplate>(items);
 		iconData.index = index;
 		iconData.updateFrequency = updateFrequency;
 		
 		return iconData;
+	}
+	
+	/**
+	 * Represents a stripped down version of an ItemStack, containing only the material and durability
+	 * 
+	 * @author MediusEcho
+	 *
+	 */
+	public class ItemStackTemplate {
+		
+		private Material material;
+		private short durability;
+		
+		public ItemStackTemplate (Material material, short durability)
+		{
+			this.material = material;
+			this.durability = durability;
+		}
+		
+		public ItemStackTemplate (Material material) {
+			this(material, (short) 0);
+		}
+		
+		public ItemStackTemplate (ItemStack item) {
+			set(item);
+		}
+		
+		public Material getMaterial () {
+			return material;
+		}
+		
+		public short getDurability () {
+			return durability;
+		}
+		
+		@SuppressWarnings("deprecation")
+		public void set (ItemStack item)
+		{
+			this.material = item.getType();
+			if (Core.serverVersion < 13) {
+				this.durability = item.getDurability();
+			}
+		}
 	}
 }
