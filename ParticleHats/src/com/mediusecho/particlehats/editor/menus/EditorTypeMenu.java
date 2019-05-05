@@ -7,13 +7,9 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
-import org.bukkit.inventory.meta.tags.ItemTagType;
 
 import com.mediusecho.particlehats.Core;
 import com.mediusecho.particlehats.editor.EditorLore;
@@ -32,7 +28,6 @@ public class EditorTypeMenu extends EditorMenu {
 	private final Hat targetHat;
 	private final EditorGenericCallback callback;
 	private final EditorAction setTypeAction;
-	private final NamespacedKey key;
 	
 	private final String title = Message.EDITOR_TYPE_MENU_TITLE.getValue();
 	private final String typePrefix = Message.EDITOR_TYPE_MENU_TYPE_PREFIX.getValue();
@@ -185,8 +180,6 @@ public class EditorTypeMenu extends EditorMenu {
 			ItemStack item = ItemUtil.createItem(Material.FIREWORK_STAR, StringUtil.colorize(title));
 			EditorLore.updateTypeItemDescription(item, type, selected);
 			
-			item.getItemMeta().getCustomTagContainer().setCustomTag(key, ItemTagType.INTEGER, type.getID());
-			
 			if (selected) 
 			{
 				item.setType(Material.CYAN_DYE);
@@ -244,8 +237,6 @@ public class EditorTypeMenu extends EditorMenu {
 						.replace(selectInfo[0], select)
 						.replace(selectedInfo[0], selected);
 				ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
-				
-				item.getItemMeta().getCustomTagContainer().setCustomTag(key, ItemTagType.STRING, name);
 				
 				if (isSelected) 
 				{
