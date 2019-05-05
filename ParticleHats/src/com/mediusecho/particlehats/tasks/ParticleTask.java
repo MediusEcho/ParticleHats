@@ -120,7 +120,6 @@ public class ParticleTask extends BukkitRunnable {
 			final long timeAFK = System.currentTimeMillis() - playerState.getLastMoveTime();
 			if (timeAFK > afkCooldown)
 			{
-				//Core.debug("setting player as AFK");
 				playerState.setAFKState(AFKState.AFK);
 				playerState.setAFKLocation(player.getLocation());
 			}
