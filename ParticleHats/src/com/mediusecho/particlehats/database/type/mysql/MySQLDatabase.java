@@ -989,6 +989,23 @@ public class MySQLDatabase implements Database {
 	@Override
 	public void onReload () {}
 	
+	/**
+	 * Adds an exiting .yml menu into the database
+	 * @param menuConfig
+	 * @return
+	 * @throws SQLException 
+	 */
+	public void importMenu (CustomConfig menuConfig) throws SQLException
+	{
+		Connection connection = dataSource.getConnection();
+	}
+	
+	/**
+	 * Inserts an image into the database
+	 * @param imageName
+	 * @param image
+	 * @return
+	 */
 	public boolean insertImage (String imageName, BufferedImage image)
 	{
 		try (Connection connection = dataSource.getConnection())
@@ -1102,7 +1119,6 @@ public class MySQLDatabase implements Database {
 		hat.setSoundVolume(set.getDouble("volume"));
 		hat.setSoundPitch(set.getDouble("pitch"));
 		
-		//hat.setMaterial(ItemUtil.getMaterial(set.getString("id"), CompatibleMaterial.SUNFLOWER.getMaterial()));
 		Material material = ItemUtil.getMaterial(set.getString("id"), CompatibleMaterial.SUNFLOWER.getMaterial());
 		if (legacy) {
 			hat.setItem(ItemUtil.createItem(material, set.getShort("durability")));
@@ -1171,35 +1187,6 @@ public class MySQLDatabase implements Database {
 				}
 			});
 		});
-	}
-	
-//	public void saveNodeIncremental (String menuName, Hat parent, Hat node, int index)
-//	{
-//		Core.debug("saving node in slot: " + parent.getSlot());
-//		
-//		async(() ->
-//		{
-//			connect((connection) ->
-//			{
-//				String insertQuery = helper.getNodeInsertQuery(menuName, node, parent.getSlot(), index);
-//				Core.debug(insertQuery);
-//				try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-//					statement.executeUpdate();
-//				}
-//			});
-//		});
-//	}
-	
-	public boolean importMenu (CustomConfig menuConfig)
-	{
-		try (Connection connection = dataSource.getConnection())
-		{
-			return true;
-		}
-		
-		catch (SQLException e) {
-			return false;
-		}
 	}
 	
 	@SuppressWarnings("incomplete-switch")
