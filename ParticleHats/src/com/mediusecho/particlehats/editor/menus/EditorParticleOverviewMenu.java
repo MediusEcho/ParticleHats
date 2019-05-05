@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,7 +50,8 @@ public class EditorParticleOverviewMenu extends EditorMenu {
 					core.getParticleManager().addParticleToRecents(ownerID, particle);
 					
 					ItemStack item = getItem(slot);
-					item.setType(particle.getMaterial());
+					ItemUtil.setItemType(item, particle.getItem());
+					//item.setType(particle.getMaterial());
 					
 					EditorLore.updateParticleDescription(item, targetHat, particleIndex);	
 					modifiedParticles.put(particleIndex, true);
@@ -102,8 +102,9 @@ public class EditorParticleOverviewMenu extends EditorMenu {
 		for (int i = 0; i < particlesSupported; i++)
 		{
 			ParticleEffect particle = targetHat.getParticle(i);
-			Material material = particle.getMaterial();
-			ItemStack item = ItemUtil.createItem(material, itemTitle.replace("{1}", Integer.toString(i + 1)));
+			ItemStack item = particle.getItem().clone();
+			ItemUtil.setItemName(item, itemTitle.replace("{1}", Integer.toString(i + 1)));
+			//ItemStack item = ItemUtil.createItem(particleItem.getType(), itemTitle.replace("{1}", Integer.toString(i + 1)));
 			
 			particles.put(i, particle);
 			modifiedParticles.put(i, false);
