@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -167,8 +169,15 @@ public class MySQLDatabase implements Database {
 	}
 	
 	@Override
-	public void createMenu(String menuName) {
-		createMenu(menuName, menuName, 6, null);
+	public void createMenu(String menuName) 
+	{
+		async(() ->
+		{
+			connect ((connection) ->
+			{
+				createMenu(connection, menuName, menuName, 6, null);
+			});
+		});
 	}
 
 	@Override
@@ -952,7 +961,30 @@ public class MySQLDatabase implements Database {
 	 */
 	public void importMenu (CustomConfig menuConfig) throws SQLException
 	{
-		Connection connection = dataSource.getConnection();
+		async (() ->
+		{
+			connect ((connection) ->
+			{
+				FileConfiguration config = menuConfig.getConfig();
+				
+				// Create the initial menu
+				String name = menuConfig.getName();
+				String title = config.getString("settings.title");
+				int size = config.getInt("settings.size");
+				
+				createMenu(connection, name, title, size, null);
+				
+				// Loop through each slot
+				if (config.contains("items"))
+				{
+					Set<String> keys = config.getConfigurationSection("items").getKeys(false);
+					for (String key : keys)
+					{
+						
+					}
+				}
+			});
+		});
 	}
 	
 	/**
@@ -998,54 +1030,49 @@ public class MySQLDatabase implements Database {
 	 * @param title
 	 * @param rows
 	 * @param alias
+	 * @throws SQLException 
 	 */
-	private void createMenu (String menuName, String title, int rows, String alias)
+	private void createMenu (Connection connection, String menuName, String title, int rows, String alias) throws SQLException
 	{
-		async(() ->
-		{
-			connect((connection) ->
+			// Menu Entry
+			String createMenuStatement= "INSERT INTO " + Table.MENUS.getFormat() + " VALUES(?, ?, ?, ?)";
+			try (PreparedStatement statement = connection.prepareStatement(createMenuStatement))
 			{
-				// Menu Entry
-				String createMenuStatement= "INSERT INTO " + Table.MENUS.getFormat() + " VALUES(?, ?, ?, ?)";
-				try (PreparedStatement statement = connection.prepareStatement(createMenuStatement))
-				{
-					statement.setString(1, menuName); // Name
-					statement.setString(2, menuName); // Title (Same until title is changed)
-					statement.setInt(3, 6);
-					statement.setString(4, null);
-					
-					if (statement.executeUpdate() > 0)
-					{						
-						// Items Table
-						String createMenuItemsTable = helper.getItemTableQuery(menuName);
-						try (PreparedStatement itemsStatement = connection.prepareStatement(createMenuItemsTable)) {
-							itemsStatement.execute();
-						}
-						
-						// Nodes Table
-						String createMenuNodesTable = helper.getNodeTableQuery(menuName);
-						try (PreparedStatement nodesStatement = connection.prepareStatement(createMenuNodesTable)) {
-							nodesStatement.execute();
-						}
-						
-						// Meta Table
-						String createMenuMetaTable = helper.getMetaTableQuery(menuName);
-						try (PreparedStatement metaStatement = connection.prepareStatement(createMenuMetaTable)) {
-							metaStatement.execute();
-						}
-						
-						// Particle Table
-						String createMenuParticleTable = helper.getParticleTableQuery(menuName);
-						try (PreparedStatement particleStatement = connection.prepareCall(createMenuParticleTable)) {
-							particleStatement.execute();
-						}
-						
-						// Add this menu to the cache
-						menuCache.put(menuName, menuName);
+				statement.setString(1, menuName); // Name
+				statement.setString(2, menuName); // Title (Same until title is changed)
+				statement.setInt(3, 6);
+				statement.setString(4, null);
+				
+				if (statement.executeUpdate() > 0)
+				{						
+					// Items Table
+					String createMenuItemsTable = helper.getItemTableQuery(menuName);
+					try (PreparedStatement itemsStatement = connection.prepareStatement(createMenuItemsTable)) {
+						itemsStatement.execute();
 					}
+					
+					// Nodes Table
+					String createMenuNodesTable = helper.getNodeTableQuery(menuName);
+					try (PreparedStatement nodesStatement = connection.prepareStatement(createMenuNodesTable)) {
+						nodesStatement.execute();
+					}
+					
+					// Meta Table
+					String createMenuMetaTable = helper.getMetaTableQuery(menuName);
+					try (PreparedStatement metaStatement = connection.prepareStatement(createMenuMetaTable)) {
+						metaStatement.execute();
+					}
+					
+					// Particle Table
+					String createMenuParticleTable = helper.getParticleTableQuery(menuName);
+					try (PreparedStatement particleStatement = connection.prepareCall(createMenuParticleTable)) {
+						particleStatement.execute();
+					}
+					
+					// Add this menu to the cache
+					menuCache.put(menuName, menuName);
 				}
-			});
-		});
+			}
 	}
 	
 	private MenuInventory loadInventory (Connection connection, String menuName, PlayerState playerState) throws SQLException
