@@ -126,6 +126,7 @@ public enum Message {
 	COMMAND_IMPORT_DESCRIPTION ("Adds an existing .yml menu into the MySQL database"),
 	COMMAND_IMPORT_USAGE       ("/h import <menu>"),
 	COMMAND_IMPORT_SUCCESS     ("&aAdded '&3{1}&a' to the MySQL database"),
+	COMMAND_IMPORT_ERROR       ("&cThere was an error importing this menu error: {1}"),
 	
 	/**
 	 * Purchase Menu
