@@ -3,7 +3,7 @@ package com.mediusecho.particlehats.editor.menus;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +16,7 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -40,11 +41,7 @@ public class EditorBaseMenu extends EditorMenu {
 		this.menuInventory = menuInventory;
 		
 		rows = menuInventory.getSize() / 9;
-		
-		emptyItem = CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE.getItem();
-		ItemUtil.setNameAndDescription(emptyItem, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
-		
-		//emptyItem = ItemUtil.createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
+		emptyItem = ItemUtil.createItem(CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
 		
 		String title = EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_BASE_MENU_TITLE);
 		inventory = Bukkit.createInventory(null, menuInventory.getSize(), title);
@@ -119,8 +116,8 @@ public class EditorBaseMenu extends EditorMenu {
 					IconData iconData = hat.getIconData();
 					if (iconData.isLive()) 
 					{
-						// TODO: Apply damage-value
-						getItem(slot).setType(iconData.getNextMaterial(ticks));
+						ItemStackTemplate itemTemplate = iconData.getNextItem(ticks);
+						ItemUtil.setItemType(getItem(slot), itemTemplate.getMaterial(), itemTemplate.getDurability());
 					}
 				}
 			}
@@ -211,7 +208,7 @@ public class EditorBaseMenu extends EditorMenu {
 	public void setTitle (String title)
 	{
 		menuInventory.setTitle(title);
-		String editingTitle =  EditorLore.getTrimmedMenuTitle(title, Message.EDITOR_BASE_MENU_TITLE);// ChatColor.translateAlternateColorCodes('&', StringUtil.getTrimmedMenuTitle("Editing (" + title));
+		String editingTitle =  EditorLore.getTrimmedMenuTitle(title, Message.EDITOR_BASE_MENU_TITLE);
 		
 		Inventory replacementInventory = Bukkit.createInventory(null, inventory.getSize(), editingTitle);
 		replacementInventory.setContents(inventory.getContents());
