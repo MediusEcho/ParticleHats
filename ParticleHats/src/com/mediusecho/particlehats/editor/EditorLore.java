@@ -612,6 +612,7 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void updateParticleDescription (ItemStack item, Hat hat, int particleIndex)
 	{
 		ParticleEffect particle = hat.getParticle(particleIndex);
@@ -649,9 +650,15 @@ public class EditorLore {
 			case BLOCK_DATA:
 			{
 				boolean isBlock = property == ParticleProperty.BLOCK_DATA;
+				ItemStack i = isBlock ? hat.getParticleBlock(particleIndex) : hat.getParticleItem(particleIndex);
+				
+				String name = StringUtil.capitalizeFirstLetter(i.getType().toString().toLowerCase());
+				if (Core.serverVersion < 13) {
+					name += " [" + Short.toString(i.getDurability()) + "]";
+				}
 				
 				String description = isBlock? Message.EDITOR_PARTICLE_BLOCK_DESCRIPTION.getValue() : Message.EDITOR_PARTICLE_ITEM_DESCRIPTION.getValue();
-				String name = isBlock ? hat.getParticleBlock(particleIndex).getType().toString() : hat.getParticleItem(particleIndex).getType().toString();
+				//String name = isBlock ? hat.getParticleBlock(particleIndex).getType().toString() : hat.getParticleItem(particleIndex).getType().toString();
 				String s = description
 						.replace("{1}", particleName)
 						.replace("{2}", StringUtil.capitalizeFirstLetter(name.toLowerCase()));
@@ -717,6 +724,22 @@ public class EditorLore {
 		
 		String s = description
 				.replace(enabledInfo[0], e).replace(disabledInfo[0], d);
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+	}
+	
+	/**
+	 * Applies a description to this ItemStack using an alias
+	 * @param item
+	 * @param alias
+	 * @param message
+	 */
+	public static void updateAliasDescription (ItemStack item, String alias, Message message)
+	{
+		String description = message.getValue();
+		String[] aliasInfo = StringUtil.parseValue(description, "1");
+		String a = alias != null ? alias : aliasInfo[1];
+		
+		String s = description.replace(aliasInfo[0], a);
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
