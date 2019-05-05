@@ -18,13 +18,13 @@ public class ResourceManager {
 
 	private final ParticleHats core;
 	private final Map<String, BufferedImage> images;
-	private final List<CustomConfig> menus;
+	private final Map<String, CustomConfig> menus;
 	
 	public ResourceManager (final ParticleHats core)
 	{
 		this.core = core;
 		images = new HashMap<String, BufferedImage>();
-		menus = new ArrayList<CustomConfig>();
+		menus = new HashMap<String, CustomConfig>();
 		
 		loadResources();
 	}
@@ -67,8 +67,16 @@ public class ResourceManager {
 	 * Get all menus stored locally on this server
 	 * @return
 	 */
-	public List<CustomConfig> getMenus () {
-		return new ArrayList<CustomConfig>(menus);
+	public List<String> getMenus () {
+		return new ArrayList<String>(menus.keySet());
+	}
+	
+	public CustomConfig getConfig (String menuName)
+	{
+		if (menus.containsKey(menuName)) {
+			return menus.get(menuName);
+		}
+		return null;
 	}
 	
 	private void loadResources ()
@@ -106,7 +114,7 @@ public class ResourceManager {
 					if (menuFile.getName().endsWith("yml") && !menuFile.getName().startsWith("."))
 					{
 						CustomConfig menu = new CustomConfig(core, "menus", menuFile, true);
-						menus.add(menu);
+						menus.put(menu.getName(), menu);
 					}
 				}
 			}
