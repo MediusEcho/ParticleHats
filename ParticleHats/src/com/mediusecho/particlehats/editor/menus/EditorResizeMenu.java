@@ -3,7 +3,6 @@ package com.mediusecho.particlehats.editor.menus;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,7 +24,6 @@ public class EditorResizeMenu extends EditorMenu {
 		build();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void build() 
 	{
@@ -51,15 +49,14 @@ public class EditorResizeMenu extends EditorMenu {
 			String t = title.replace("{1}", Integer.toString((i + 1) - (i > 3 ? 1 : 0)))
 				.replace(suffixInfo[0], i == 0 ? "" : suffixInfo[1]);
 			
-			ItemStack row = ItemUtil.createItem(Material.GRAY_DYE, t, description);
+			ItemStack row = ItemUtil.createItem(CompatibleMaterial.GRAY_DYE, t, description);
 			setButton(i + 10, row, setRowAction);
 		}
 		
 		int currentRows = menuBuilder.getEditingMenu().getRowCount();
 		ItemStack row = getItem(currentRows + 10 - (currentRows < 3 ? 1 : 0));
 
-		row.setType(CompatibleMaterial.LIME_DYE.getMaterial());
-		row.setDurability((short) CompatibleMaterial.LIME_DYE.getDamage());
+		ItemUtil.setItemType(row, CompatibleMaterial.LIME_DYE);
 		ItemUtil.highlightItem(row);
 	}
 
