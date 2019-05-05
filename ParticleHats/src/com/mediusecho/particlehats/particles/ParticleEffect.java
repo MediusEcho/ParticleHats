@@ -78,16 +78,14 @@ public enum ParticleEffect {
 	FLASH                  (60, -1, 14, CompatibleMaterial.LANTERN),
 	SNEEZE                 (61, -1, 14, CompatibleMaterial.GRAY_DYE);
 	
-	private static final Map<String, ParticleEffect> NAMES   = new HashMap<String, ParticleEffect>();
-	private static final Map<Integer, ParticleEffect> IDS    = new HashMap<Integer, ParticleEffect>();
-	private static final Map<String, ParticleEffect> LEGACY  = new HashMap<String, ParticleEffect>();
+	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
+	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
+	private static final Map<Integer, ParticleEffect> particleIDs    = new HashMap<Integer, ParticleEffect>();
 	
 	private final int id;
 	private final int legacyID;
 	private final int version;
-	//private final Particle particle;
 	private final String legacyName;
-	//private final Material material;
 	private final ItemStack item;
 	private final ParticleProperty property;
 	
@@ -95,9 +93,9 @@ public enum ParticleEffect {
 	{
 		for (ParticleEffect pe : values())
 		{
-			NAMES.put(pe.toString(), pe);
-			IDS.put(pe.id, pe);
-			LEGACY.put(pe.legacyName, pe);
+			particleNames.put(pe.toString().toLowerCase(), pe);
+			particleLegacyNames.put(pe.legacyName, pe);
+			particleIDs.put(pe.id, pe);
 		}
 	}
 	
@@ -107,10 +105,8 @@ public enum ParticleEffect {
 		this.legacyID = legacyID;
 		this.version = version;
 		this.legacyName = legacyName;
-		//this.material = material;
 		this.item = item;
 		this.property = property;
-		//particle = getParticle(toString());
 	}
 	
 	private ParticleEffect (final int id, final int legacyID, final int version, String legacyName, final Material material, final ParticleProperty property) {
@@ -326,13 +322,20 @@ public enum ParticleEffect {
 	 */
 	public static ParticleEffect fromName (String name)
 	{
-		for (Entry<String, ParticleEffect> entry : NAMES.entrySet())
-		{
-			if (!entry.getKey().equalsIgnoreCase(name)) {
-				continue;
-			}
-			return entry.getValue();
+		if (name == null) {
+			return NONE;
 		}
+		
+		String particle = name.toLowerCase();
+		
+		if (particleNames.containsKey(particle)) {
+			return particleNames.get(particle);
+		}
+		
+		if (particleLegacyNames.containsKey(particle)) {
+			return particleLegacyNames.get(particle);
+		}
+		
 		return NONE;
 	}
 	
@@ -341,17 +344,17 @@ public enum ParticleEffect {
 	 * @param name
 	 * @return
 	 */
-	public static ParticleEffect fromLegacyName (String name)
-	{
-		for (Entry<String, ParticleEffect> entry : LEGACY.entrySet())
-		{
-			if (!entry.getKey().equalsIgnoreCase(name)) {
-				continue;
-			}
-			return entry.getValue();
-		}
-		return NONE;
-	}
+//	public static ParticleEffect fromLegacyName (String name)
+//	{
+//		for (Entry<String, ParticleEffect> entry : LEGACY.entrySet())
+//		{
+//			if (!entry.getKey().equalsIgnoreCase(name)) {
+//				continue;
+//			}
+//			return entry.getValue();
+//		}
+//		return NONE;
+//	}
 	
 	/**
 	 * Returns the <b>ParticleEffect</b> with the given name, or <b>NONE</b> if there is no match
@@ -360,7 +363,7 @@ public enum ParticleEffect {
 	 */
 	public static ParticleEffect fromDisplayName (String name)
 	{
-		for (Entry<String, ParticleEffect> entry : NAMES.entrySet())
+		for (Entry<String, ParticleEffect> entry : particleNames.entrySet())
 		{
 			if (!entry.getValue().getDisplayName().equalsIgnoreCase(name)) {
 				continue;
@@ -377,8 +380,8 @@ public enum ParticleEffect {
 	 */
 	public static ParticleEffect fromID (int id)
 	{
-		if (IDS.containsKey(id)) {
-			return IDS.get(id);
+		if (particleIDs.containsKey(id)) {
+			return particleIDs.get(id);
 		}
 		return NONE;
 	}
