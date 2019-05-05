@@ -374,13 +374,56 @@ public enum ParticleAction {
 			
 			case PURCHASE_CONFIRM:
 			{
-				// TODO: Finish purchase confirm action
+				Hat pendingHat = playerState.getPendingPurchase();
+				
+				// Go back to the previous menu if the pending hat is null
+				if (pendingHat == null) {
+					gotoPreviousMenu(playerState);
+				}
+				
+				int price = pendingHat.getPrice();
+				boolean purchased = false;
+				
+				if (SettingsManager.FLAG_VAULT.getBoolean() || SettingsManager.FLAG_PLAYERPOINTS.getBoolean())
+				{
+					CurrencyHook currencyHook = core.getHookManager().getCurrencyHook();
+					if (currencyHook != null && currencyHook.isEnabled())
+					{
+						if (currencyHook.withdraw(player, price)) {
+							purchased = true;
+						}
+					}
+				}
+				
+				else if (SettingsManager.FLAG_EXPERIENCE.getBoolean())
+				{
+					double currentBalance = player.getLevel();
+					double newBalance = currentBalance - price;
+					player.setLevel((int) newBalance);
+					
+					purchased = true;
+				}
+				
+				if (purchased)
+				{
+					playerState.addPurchasedHat(pendingHat);
+					
+					core.getDatabase().savePlayerPurchase(player.getUniqueId(), pendingHat);
+					core.getParticleManager().equipHat(player.getUniqueId(), hat);
+					
+					if (SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean()) {
+						player.closeInventory();
+					} else {
+						gotoPreviousMenu(playerState);
+					}
+				}
+				
 				break;
 			}
 			
 			case PURCHASE_DENY:
 			{
-				// TODO: Finish purchase deny action
+				gotoPreviousMenu(playerState);
 				break;
 			}
 			
