@@ -207,10 +207,7 @@ public abstract class EditorMenu {
 	public void open ()
 	{
 		menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-		//menuBuilder.setOwnerState(MenuState.SWITCHING);
 		owner.openInventory(inventory);
-		
-		logBuildTime();
 	}
 	
 	/**
