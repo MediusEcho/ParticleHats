@@ -13,7 +13,8 @@ import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 
 import com.mediusecho.particlehats.Core;
-import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.Table;
+import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.TableType;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 
@@ -37,16 +38,34 @@ public class MySQLHelper {
 		{
 			database.connect((connection) ->
 			{
-				String menuTable = "CREATE TABLE IF NOT EXISTS menus ("
+				String versionTable = "CREATE TABLE IF NOT EXISTS " + Table.VERSION.getFormat() + "("
+						+ "type VARCHAR(32) PRIMARY KEY,"
+						+ "version DECIMAL(4,2)"
+						+ ")";
+				try (PreparedStatement versionStatement = connection.prepareStatement(versionTable)) {
+					versionStatement.execute();
+				}
+				
+				String menuTable = "CREATE TABLE IF NOT EXISTS " + Table.MENUS.getFormat() + " ("
 						+ "name VARCHAR(128) PRIMARY KEY,"
 						+ "title VARCHAR(40) NOT NULL DEFAULT '',"
-						+ "size TINYINT(3) NOT NULL DEFAULT 6"
+						+ "size TINYINT(3) NOT NULL DEFAULT 6,"
+						+ "alias VARCHAR(64)"
 						+ ")";
 				try (PreparedStatement menuStatement = connection.prepareStatement(menuTable)) {
 					menuStatement.execute();
 				}
 				
-				String imageTable = "CREATE TABLE IF NOT EXISTS images ("
+				String groupTable = "CREATE TABLE IF NOT EXISTS " + Table.GROUPS.getFormat() + " ("
+						+ "name VARCHAR(128) PRIMARY KEY,"
+						+ "menu VARCHAR(128) NOT NULL,"
+						+ "weight INT NOT NULL"
+						+ ")";
+				try (PreparedStatement groupStatement = connection.prepareStatement(groupTable)) {
+					groupStatement.execute();
+				}
+				
+				String imageTable = "CREATE TABLE IF NOT EXISTS " + Table.IMAGES.getFormat() + "("
 						+ "name VARCHAR(64) PRIMARY KEY,"
 						+ "image BLOB"
 						+ ")";
@@ -54,10 +73,45 @@ public class MySQLHelper {
 					imageStatement.execute();
 				}
 				
+				String equippedQuery = "CREATE TABLE IF NOT EXISTS " + Table.EQUIPPED.getFormat() + " ("
+						+ "id VARCHAR(36),"
+						+ "name VARCHAR(128),"
+						+ "slot TINYINT,"
+						+ "hidden BOOLEAN,"
+						+ "PRIMARY KEY(id, name, slot)"
+						+ ")";
+				try (PreparedStatement equippedStatement = connection.prepareStatement(equippedQuery)) {
+					equippedStatement.execute();
+				}
+				
+				String purchasedQuery = "CREATE TABLE IF NOT EXISTS " + Table.PURCHASED.getFormat() + " ("
+						+ "id VARCHAR(36),"
+						+ "name VARCHAR(128),"
+						+ "slot TINYINT,"
+						+ "PRIMARY KEY(id, name, slot)"
+						+ ")";
+				try (PreparedStatement purchasedStatement = connection.prepareStatement(purchasedQuery)) {
+					purchasedStatement.execute();
+				}
+				
+				// Insert our versions
+				String versionQuery = "INSERT IGNORE INTO " + Table.VERSION.getFormat() + " VALUES (?,?)";
+				try (PreparedStatement verStatement = connection.prepareStatement(versionQuery))
+				{
+					for (TableType type : TableType.values())
+					{
+						verStatement.setString(1, type.getValue());
+						verStatement.setDouble(2, 1.0);
+						verStatement.addBatch();
+					}
+					
+					verStatement.executeBatch();
+				}
+				
 				// Try to add our included custom types to the database
 				if (SettingsManager.LOAD_INCLUDED_CUSTOM_TYPES.getBoolean())
 				{
-					String imageInsertQuery = "INSERT IGNORE INTO images VALUES(?,?)";
+					String imageInsertQuery = "INSERT IGNORE INTO " + Table.IMAGES.getFormat() + " VALUES(?,?)";
 					try (PreparedStatement imageInsertStatement = connection.prepareStatement(imageInsertQuery))
 					{
 						InputStream vampireWingsStream = core.getResource("types/vampire_wings.png");
@@ -87,107 +141,122 @@ public class MySQLHelper {
 						imageInsertStatement.executeBatch();
 					}
 				}
-				
-				// TODO: Push any local images to the database
 			});
 		});
 	}
 	
-	public String getShallowHatQuery (String menuName)
-	{
-		return "SELECT "
-				+ "slot,"
-				+ "id,"
-				+ "title,"
-				+ "icon_update_frequency,"
-				+ "display_mode,"
-				+ "permission_denied,"
-				+ "equip_message,"
-				+ "left_action,"
-				+ "right_action,"
-				+ "left_argument,"
-				+ "right_argument,"
-				+ "duration"
-				+ " FROM menu_" + menuName + "_items";
-	}
-	
 	public String getItemTableQuery (String menuName)
 	{
-		return "CREATE TABLE IF NOT EXISTS  menu_" + menuName + "_items ("
+		return "CREATE TABLE IF NOT EXISTS " + Table.ITEMS.format(menuName) + " ("
 				+ "slot TINYINT PRIMARY KEY,"
 				+ "ver SMALLINT NOT NULL DEFAULT " + menuTableVersion + ","
-				+ "id VARCHAR(64) NOT NULL DEFAULT 'SUNFLOWER',"
-				+ "title VARCHAR(128) NOT NULL DEFAULT '" + Message.EDITOR_MISC_NEW_PARTICLE.getRawValue() + "',"
-				+ "permission VARCHAR(64) NOT NULL DEFAULT 'all',"
+				+ "id VARCHAR(64),"
+				+ "durability INT,"
+				+ "title VARCHAR(128),"
+				+ "permission VARCHAR(64),"
 				+ "permission_denied VARCHAR(128),"
-				+ "type TINYINT NOT NULL DEFAULT 0,"
+				+ "type TINYINT,"
 				+ "custom_type VARCHAR(64),"
-				+ "location TINYINT NOT NULL DEFAULT 0,"
-				+ "mode TINYINT NOT NULL DEFAULT 0,"
-				+ "animation TINYINT NOT NULL DEFAULT 0,"
-				+ "tracking TINYINT NOT NULL DEFAULT 0,"
+				+ "location TINYINT,"
+				+ "mode TINYINT,"
+				+ "animation TINYINT,"
+				+ "tracking TINYINT,"
 				+ "label VARCHAR(128),"
 				+ "equip_message VARCHAR(128),"
-				+ "offset_x DOUBLE NOT NULL DEFAULT 0,"
-				+ "offset_y DOUBLE NOT NULL DEFAULT 0,"
-				+ "offset_z DOUBLE NOT NULL DEFAULT 0,"
-				+ "angle_x DOUBLE NOT NULL DEFAULT 0,"
-				+ "angle_y DOUBLE NOT NULL DEFAULT 0,"
-				+ "angle_z DOUBLE NOT NULL DEFAULT 0,"
-				+ "update_frequency TINYINT NOT NULL DEFAULT 2,"
-				+ "icon_update_frequency TINYINT NOT NULL DEFAULT 1,"
-				+ "speed TINYINT NOT NULL DEFAULT 0,"
-				+ "count TINYINT NOT NULL DEFAULT 1,"
-				+ "price INT NOT NULL DEFAULT 0,"
+				+ "offset_x DECIMAL(3,1),"
+				+ "offset_y DECIMAL(3,1),"
+				+ "offset_z DECIMAL(3,1),"
+				+ "random_offset_x DECIMAL(3,1),"
+				+ "random_offset_y DECIMAL(3,1),"
+				+ "random_offset_z DECIMAL(3,1),"
+				+ "angle_x DECIMAL(4,1),"
+				+ "angle_y DECIMAL(4,1),"
+				+ "angle_z DECIMAL(4,1),"
+				+ "update_frequency TINYINT DEFAULT 2,"
+				+ "icon_update_frequency TINYINT DEFAULT 2,"
+				+ "speed TINYINT,"
+				+ "count TINYINT,"
+				+ "price INT,"
 				+ "sound VARCHAR(64),"
-				+ "volume DOUBLE NOT NULL DEFAULT 1,"
-				+ "pitch DOUBLE NOT NULL DEFAULT 1,"
-				+ "left_action TINYINT NOT NULL DEFAULT 0,"
-				+ "right_action TINYINT NOT NULL DEFAULT 12,"
+				+ "volume DECIMAL(2,1) DEFAULT 1.0,"
+				+ "pitch DECIMAL(2,1) DEFAULT 1.0,"
+				+ "left_action TINYINT,"
+				+ "right_action TINYINT DEFAULT 12," // Mimic Left Click
 				+ "left_argument VARCHAR(128),"
 				+ "right_argument VARCHAR(128),"
-				+ "duration MEDIUMINT NOT NULL DEFAULT 200,"
-				+ "display_mode TINYINT NOT NULL DEFAULT 0,"
-				+ "particle_scale DOUBLE NOT NULL DEFAULT 0.2"
+				+ "duration MEDIUMINT DEFAULT 200,"
+				+ "display_mode TINYINT,"
+				+ "scale DECIMAL(3,1) DEFAULT 1.0,"
+				+ "potion VARCHAR(64),"
+				+ "potion_strength TINYINT"
+				+ ")";
+	}
+	
+	public String getNodeTableQuery (String menuName)
+	{
+		return "CREATE TABLE IF NOT EXISTS " + Table.NODES.format(menuName) + " ("
+				+ "slot TINYINT,"
+				+ "node_index INT,"
+				+ "ver SMALLINT,"
+				+ "type TINYINT,"
+				+ "custom_type VARCHAR(64),"
+				+ "location TINYINT,"
+				+ "mode TINYINT,"
+				+ "animation TINYINT,"
+				+ "tracking TINYINT,"
+				+ "offset_x DECIMAL(3,1),"
+				+ "offset_y DECIMAL(2,1),"
+				+ "offset_z DECIMAL(3,1),"
+				+ "angle_x DECIMAL(4,1),"
+				+ "angle_y DECIMAL(4,1),"
+				+ "angle_z DECIMAL(4,1),"
+				+ "update_frequency TINYINT,"
+				+ "speed TINYINT,"
+				+ "count TINYINT,"
+				+ "scale DECIMAL(3,1),"
+				+ "PRIMARY KEY(slot, node_index),"
+				+ "FOREIGN KEY(slot) REFERENCES " + Table.ITEMS.format(menuName) + "(slot) ON DELETE CASCADE ON UPDATE CASCADE"
 				+ ")";
 	}
 	
 	public String getMetaTableQuery (String menuName)
 	{
-		return "CREATE TABLE IF NOT EXISTS menu_" + menuName + "_meta ("
+		return "CREATE TABLE IF NOT EXISTS " + Table.META.format(menuName) + " ("
 				+ "slot TINYINT,"
 				+ "type TINYINT,"
 				+ "line TINYINT,"
 				+ "line_ex TINYINT,"
+				+ "node_index INT,"
 				+ "value VARCHAR(64),"
-				+ "PRIMARY KEY(slot, type, line, line_ex),"
-				+ "FOREIGN KEY(slot) REFERENCES menu_" + menuName + "_items(slot) ON DELETE CASCADE ON UPDATE CASCADE"
+				+ "PRIMARY KEY(slot, type, line, line_ex, node_index),"
+				+ "FOREIGN KEY(slot) REFERENCES " + Table.ITEMS.format(menuName) + "(slot) ON DELETE CASCADE ON UPDATE CASCADE"
 				+ ")";
 	}
 	
 	public String getParticleTableQuery (String menuName)
 	{
-		return "CREATE TABLE IF NOT EXISTS menu_" + menuName + "_particles ("
+		return "CREATE TABLE IF NOT EXISTS " + Table.PARTICLES.format(menuName) + " ("
 				+ "slot TINYINT,"
 				+ "particle_index TINYINT,"
-				+ "particle_id TINYINT NOT NULL DEFAULT 0,"
-				+ "color INT,"
-				+ "random BOOLEAN NOT NULL DEFAULT TRUE,"
-				+ "scale DECIMAL(3,2) NOT NULL DEFAULT 1.0,"
+				+ "node_index INT,"
+				+ "particle_id TINYINT,"
+				+ "color INT NOT NULL DEFAULT 16711680," // Red
+				+ "random BOOLEAN,"
+				+ "scale DECIMAL(3,1),"
 				+ "item_data VARCHAR(64),"
 				+ "block_data VARCHAR(64),"
-				+ "duration SMALLINT NOT NULL DEFAULT 20,"
-				+ "gravity BOOLEAN NOT NULL DEFAULT TRUE,"
-				+ "velocity_x DOUBLE NOT NULL DEFAULT 0,"
-				+ "velocity_y DOUBLE NOT NULL DEFAULT 0,"
-				+ "velocity_z DOUBLE NOT NULL DEFAULT 0,"
-				+ "PRIMARY KEY(slot, particle_index),"
-				+ "FOREIGN KEY(slot) REFERENCES menu_" + menuName + "_items(slot) ON DELETE CASCADE ON UPDATE CASCADE"
+				+ "duration SMALLINT,"
+				+ "gravity BOOLEAN,"
+				+ "velocity_x DECIMAL(3,1),"
+				+ "velocity_y DECIMAL(3,1),"
+				+ "velocity_z DECIMAL(3,1),"
+				+ "PRIMARY KEY(slot, particle_index, node_index),"
+				+ "FOREIGN KEY(slot) REFERENCES " + Table.ITEMS.format(menuName) + "(slot) ON DELETE CASCADE ON UPDATE CASCADE"
 				+ ")";
 	}
 	
 	/**
-	 * Creates a valid insert sql statement based on the hats modified properties
+	 * Creates a valid insert SQL statement based on the hats modified properties
 	 * @param menuName
 	 * @param hat
 	 * @param particleIndex
@@ -199,10 +268,10 @@ public class MySQLHelper {
 		StringBuilder valueBuilder = new StringBuilder();
 		StringBuilder updateBuilder = new StringBuilder();
 		
-		propertyBuilder.append("slot").append(",").append("particle_index");
-		valueBuilder.append(Integer.toString(hat.getSlot())).append(",").append(Integer.toString(particleIndex));
+		propertyBuilder.append("slot,particle_index,node_index");
+		valueBuilder.append(hat.getSlot()).append(",").append(particleIndex).append(",").append(hat.getIndex());
 		
-		String insertQuery = "INSERT INTO menu_" + menuName + "_particles ({1}) VALUES ({2}) ON DUPLICATE KEY UPDATE {3}";
+		String insertQuery = "INSERT INTO " + Table.PARTICLES.format(menuName) + " ({1}) VALUES ({2}) ON DUPLICATE KEY UPDATE {3}";
 		
 		Map<String, String> editedProperties = hat.getParticleData(particleIndex).getPropertyChanges();
 		for (Entry<String, String> value : editedProperties.entrySet())
@@ -217,6 +286,40 @@ public class MySQLHelper {
 		String updates = updateBuilder.deleteCharAt(0).toString();
 		
 		return insertQuery.replace("{1}", properties).replace("{2}", values).replace("{3}", updates);
+	}
+	
+	/**
+	 * Creates a valid insert SQL statement based on the hats modified properties
+	 * @param menuName
+	 * @param hat
+	 * @param slot
+	 * @param index
+	 * @return
+	 */
+	public String getNodeInsertQuery (String menuName, Hat hat, int slot, int index)
+	{
+		StringBuilder propertyBuilder = new StringBuilder();
+		StringBuilder valueBuilder = new StringBuilder();
+		StringBuilder updateBuilder = new StringBuilder();
+		
+		propertyBuilder.append("slot,node_index");
+		valueBuilder.append(slot).append(",").append(index);
+		updateBuilder.append("node_index=").append(index);
+		
+		String query = "INSERT INTO " + Table.NODES.format(menuName) + " ({1}) VALUES ({2}) ON DUPLICATE KEY UPDATE {3}";
+		
+		Map<String, String> editedProperties = hat.getPropertyChanges();
+		for (Entry<String, String> value : editedProperties.entrySet())
+		{
+			propertyBuilder.append(",").append(value.getKey());
+			valueBuilder.append(",").append(value.getValue());
+			updateBuilder.append(",").append(value.getKey()).append("=").append(value.getValue());
+		}
+		
+		return query
+				.replace("{1}", propertyBuilder.toString())
+				.replace("{2}", valueBuilder.toString())
+				.replace("{3}", updateBuilder.toString());
 	}
 	
 	/**
