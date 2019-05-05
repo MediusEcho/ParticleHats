@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
@@ -19,13 +17,21 @@ public interface Database {
 	 */
 	public void onDisable ();
 	
+	public boolean isEnabled ();
+	
 	/**
 	 * Loads this menu and all its hats
 	 * @param menuName
 	 * @return
 	 */
-	@Nullable
 	public MenuInventory loadInventory (String menuName, PlayerState playerState);
+	
+	/**
+	 * Loads and returns a MenuInventory linked to this alias
+	 * @param alias
+	 * @return
+	 */
+	public MenuInventory getInventoryFromAlias (String alias, PlayerState playerState);
 	
 	/**
 	 * Creates and inserts an empty menu into our database
@@ -168,35 +174,42 @@ public interface Database {
 	public void saveMetaData (String menuName, Hat hat, DataType type, int index);
 	
 	/**
-	 * Saves a menus title
+	 * Saves a menu's title
 	 * @param menuName
 	 * @param title
 	 */
 	public void saveMenuTitle (String menuName, String title);
 	
 	/**
-	 * Saves a menus size
+	 * Save a menu's alias
+	 * @param menuName
+	 * @param alias
+	 */
+	public void saveMenuAlias (String menuName, String alias);
+	
+	/**
+	 * Saves a menu's size
 	 * @param menuName
 	 * @param rows
 	 */
 	public void saveMenuSize (String menuName, int rows);
 	
 	/**
-	 * Saves the players equipped hats
+	 * Saves the player's equipped hats
 	 * @param id
 	 * @param hats
 	 */
 	public void savePlayerEquippedHats (UUID id, List<Hat> hats);
 	
 	/**
-	 * Loads the players equipped hats
+	 * Loads the player's equipped hats
 	 * @param id
 	 * @param callback
 	 */
 	public void loadPlayerEquippedHats (UUID id, DatabaseCallback callback);
 	
 	/**
-	 * Saves the players purchased hat
+	 * Saves the player's purchased hat
 	 * @param id
 	 * @param hat
 	 */
