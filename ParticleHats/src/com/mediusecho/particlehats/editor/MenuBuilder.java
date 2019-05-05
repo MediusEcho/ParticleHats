@@ -8,14 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.mediusecho.particlehats.Core;
-import com.mediusecho.particlehats.database.type.DatabaseType;
-import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase;
+import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.EditorMenu.EditorClickType;
 import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.ui.MenuInventory;
-import com.mediusecho.particlehats.ui.MenuState;
 
 public class MenuBuilder {
 
@@ -42,7 +41,7 @@ public class MenuBuilder {
 	}
 	
 	public void onClick(InventoryClickEvent event, final boolean inMenu)
-	{
+	{		
 		EditorMenu em = activeMenus.peekLast();
 		if (em != null)
 		{
@@ -63,28 +62,25 @@ public class MenuBuilder {
 		
 	public void onClose ()
 	{
-		DatabaseType databaseType = core.getDatabaseType();
-		if (databaseType == DatabaseType.MYSQL)
+		Database database = core.getDatabase();
+		
+		for (Entry<Integer, Hat> hats : editorMenu.getHats().entrySet())
 		{
-			MySQLDatabase mysqlDatabase = (MySQLDatabase)core.getDatabase();
+			Hat hat = hats.getValue();
+			if (hat.isModified())
+			{
+				database.saveHat(getMenuName(), hats.getKey(), hat);
+				hat.clearPropertyChanges();
+			}
 			
-			for (Entry<Integer, Hat> hats : editorMenu.getHats().entrySet())
-			{				
-				Hat hat = hats.getValue();
-				if (hat.isModified())
-				{
-					String sqlQuery = hat.getSQLUpdateQuery();
-					Core.debug("saving hat with query: " + sqlQuery);
-					
-					mysqlDatabase.saveIncremental(getEditingMenu().getName(), hats.getKey(), sqlQuery);
-					hat.clearPropertyChanges();
-				}
-				
-				//List<Hat> nodes = hat.getNodes();
+			if (hat.getNodeCount() > 0)
+			{
 				for (Hat node : hat.getNodes())
 				{
-					if (node.isModified() || !node.isLoaded()) {
-						mysqlDatabase.saveNodeIncremental(getEditingMenu().getName(), hat, node, node.getIndex());
+					if (node.isModified())
+					{
+						database.saveNode(getMenuName(), node.getIndex(), node);
+						node.clearPropertyChanges();
 					}
 				}
 			}
@@ -98,7 +94,7 @@ public class MenuBuilder {
 	
 	public void startEditing ()
 	{
-		ownerState.setMenuState(MenuState.BUILDING);
+		ownerState.setGuiState(GuiState.SWITCHING_EDITOR);
 		
 		setTargetSlot(-1);
 		setTargetHat(null);
@@ -107,19 +103,19 @@ public class MenuBuilder {
 	}
 	
 	/**
-	 * Sets the owners <b>MenuState</b>
-	 * @param state
-	 */
-	public void setOwnerState (MenuState state) {
-		ownerState.setMenuState(state);
-	}
-	
-	/**
 	 * Set the owners <b>MetaState</b>
 	 * @param state
 	 */
 	public void setOwnerState (MetaState state) {
 		ownerState.setMetaState(state);
+	}
+	
+	/**
+	 * Set the owners <b>GuiState</b>
+	 * @param state
+	 */
+	public void setOwnerState (GuiState state) {
+		ownerState.setGuiState(state);
 	}
 	
 	/**
