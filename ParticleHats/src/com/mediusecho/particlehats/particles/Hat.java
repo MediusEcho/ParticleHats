@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,9 +15,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
@@ -90,7 +92,8 @@ public class Hat {
 	private double volume = 1D;
 	private double pitch  = 1D;
 	
-	private Material material = Material.SUNFLOWER;
+	private ItemStack item = ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, 1);
+	private Material material = CompatibleMaterial.SUNFLOWER.getMaterial();
 	private IconData iconData;
 	
 	private Vector offset;
@@ -1057,7 +1060,7 @@ public class Hat {
 	 * @param amplifier
 	 */
 	public void setPotion (PotionEffectType type, int amplifier) {
-		setPotion(new PotionEffect(type, updateFrequency + 4, amplifier, false, false));
+		setPotion(new PotionEffect(type, updateFrequency, amplifier, false, false));
 	}
 	
 	/**
@@ -1205,25 +1208,11 @@ public class Hat {
 	 * @param index
 	 * @param block
 	 */
-	public void setParticleBlock (int index, BlockData block) {
+	public void setParticleBlock (int index, ItemStack block) {
 		getParticleData(index).setBlock(block);
 	}
 	
-	/**
-	 * Set this hats particle block data
-	 * @param index
-	 * @param block
-	 */
-	public void setParticleBlock (int index, Material block) {
-		getParticleData(index).setBlock(block);
-	}
-	
-	/**
-	 * Get this hats particle block data
-	 * @param index
-	 * @return
-	 */
-	public BlockData getParticleBlock (int index) {
+	public ItemStack getParticleBlock (int index) {
 		return getParticleData(index).getBlock();
 	}
 	
@@ -1319,11 +1308,20 @@ public class Hat {
 	 * Set the Material that will appear in menus
 	 * @param material
 	 */
-	public void setMaterial (Material material)
+	@SuppressWarnings("deprecation")
+	public void setItem (ItemStack item)
 	{
-		this.material = material;
-		iconData.setMainMaterial(material);
-		setProperty("id", "'" + material.toString() + "'");
+		this.item = item.clone();
+		iconData.setMainItem(item);
+		
+		setProperty("id", "'" + item.getType().toString() + "'");
+		if (Core.serverVersion < 13) {
+			setProperty("durability", Short.toString(item.getDurability()));
+		}
+	}
+	
+	public ItemStack getItem () {
+		return item;
 	}
 	
 	/**
@@ -1652,10 +1650,12 @@ public class Hat {
 	{
 		Hat hat = new Hat();
 		
-		hat.setMaterial(material);
+		//hat.setMaterial(material);
+		hat.setItem(item);
 		hat.setIconUpdateFrequency(iconData.getUpdateFrequency());
 		hat.setDisplayMode(iconData.getDisplayMode());
-		hat.getIconData().setMaterials(new ArrayList<Material>(getIconData().getMaterials()));
+		hat.getIconData().setItems(new ArrayList<ItemStackTemplate>(getIconData().getItems()));
+		//hat.getIconData().setMaterials(new ArrayList<Material>(getIconData().getMaterials()));
 		
 		hat.clearPropertyChanges();
 		return hat;
@@ -1734,7 +1734,8 @@ public class Hat {
 		if (!hat.getMode().equals(mode)) return false;
 		if (!hat.getAnimation().equals(animation)) return false;
 		if (!hat.getTrackingMethod().equals(trackingMethod)) return false;
-		if (!hat.getOffset().equals(offset)) return false;	
+		if (!hat.getOffset().equals(offset)) return false;
+		if (!hat.getRandomOffset().equals(randomOffset)) return false;
 		if (!hat.getAngle().equals(angle)) return false; 
 		
 		if (hat.getCustomEffect() != null) {
