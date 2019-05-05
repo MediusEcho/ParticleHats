@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.Core;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
@@ -37,14 +38,17 @@ public class EditorTypeMenu extends EditorMenu {
 	private Map<Integer, Inventory> includedTypeMenus;
 	private Map<Integer, Inventory> customTypeMenus;
 	
-	private Map<Integer, String> includedTypeData;
-	private Map<Integer, String> customTypeData;
+	private Map<Integer, ParticleType> includedTypeData;
+	private Map<Integer, BufferedImage> customTypeData;
+	private Map<Integer, String> customTypeNames;
 	
 	private final int includedTypePages;
 	private final int customTypePages;
 	
 	private int includedTypeCurrentPage;
 	private int customTypeCurrentPage;
+	
+	private boolean selectingFromIncludedTypes = true;
 	
 	public EditorTypeMenu(Core core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
 	{
@@ -56,8 +60,9 @@ public class EditorTypeMenu extends EditorMenu {
 		includedTypeMenus = new HashMap<Integer, Inventory>();
 		customTypeMenus = new HashMap<Integer, Inventory>();
 		
-		includedTypeData = new HashMap<Integer, String>();
-		customTypeData = new HashMap<Integer, String>();
+		includedTypeData = new HashMap<Integer, ParticleType>();
+		customTypeData = new HashMap<Integer, BufferedImage>();
+		customTypeNames = new HashMap<Integer, String>();
 		
 		customTypes = core.getDatabase().getImages(false);
 		
@@ -67,33 +72,31 @@ public class EditorTypeMenu extends EditorMenu {
 		includedTypeCurrentPage = 0;
 		customTypeCurrentPage = 0;
 		
-		key = new NamespacedKey(core, "types");
 		setTypeAction = (event, slot) ->
 		{
-			ItemMeta meta = event.getEvent().getCurrentItem().getItemMeta();
-			if (meta != null)
+			int index = getClampedIndex(slot, 10, 2);
+			if (selectingFromIncludedTypes)
 			{
-				CustomItemTagContainer container = meta.getCustomTagContainer();
-				
-				// Built-in types
-				if (container.hasCustomTag(key, ItemTagType.INTEGER)) 
+				int typeIndex = index + (includedTypeCurrentPage * 28);
+				if (includedTypeData.containsKey(typeIndex))
 				{
-					int id = container.getCustomTag(key, ItemTagType.INTEGER);
-					ParticleType type = ParticleType.fromID(id);
+					ParticleType type = includedTypeData.get(typeIndex);
 					targetHat.setType(type);
 					
 					menuBuilder.goBack();
 				}
-				
-				// User generated types
-				else if (container.hasCustomTag(key, ItemTagType.STRING))
+			}
+			
+			else
+			{
+				int imageIndex = index + (customTypeCurrentPage * 28);
+				if (customTypeData.containsKey(imageIndex))
 				{
-					String name = container.getCustomTag(key, ItemTagType.STRING);
-					BufferedImage image = customTypes.get(name);
+					String name = customTypeNames.get(imageIndex);
+					BufferedImage image = customTypeData.get(imageIndex);
 					
 					targetHat.setType(ParticleType.CUSTOM);
 					targetHat.setCustomType(new PixelEffect(image, name));
-					
 					menuBuilder.goBack();
 				}
 			}
@@ -121,7 +124,6 @@ public class EditorTypeMenu extends EditorMenu {
 	private void openMenu (Map<Integer, Inventory> menus, int page)
 	{
 		menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-		//menuBuilder.setOwnerState(MenuState.SWITCHING);
 		owner.openInventory(menus.get(page));
 	}
 
@@ -135,12 +137,14 @@ public class EditorTypeMenu extends EditorMenu {
 		
 		setAction(46, (event, slot) ->
 		{
+			selectingFromIncludedTypes = true;
 			openMenu(includedTypeMenus, includedTypeCurrentPage);
 			return EditorClickType.NEUTRAL;
 		});
 		
 		setAction(47, (event, slot) ->
 		{
+			selectingFromIncludedTypes = false;
 			openMenu(customTypeMenus, customTypeCurrentPage);
 			return EditorClickType.NEUTRAL;
 		});
@@ -177,17 +181,17 @@ public class EditorTypeMenu extends EditorMenu {
 			boolean selected = currentType.equals(type);
 			
 			String title = typePrefix.replace("{1}", type.getDisplayName());
-			ItemStack item = ItemUtil.createItem(Material.FIREWORK_STAR, StringUtil.colorize(title));
+			ItemStack item = ItemUtil.createItem(CompatibleMaterial.FIREWORK_STAR, StringUtil.colorize(title));
 			EditorLore.updateTypeItemDescription(item, type, selected);
 			
 			if (selected) 
 			{
-				item.setType(Material.CYAN_DYE);
+				ItemUtil.setItemType(item, CompatibleMaterial.CYAN_DYE);
 				ItemUtil.highlightItem(item);
 			}
 			
 			includedTypeMenus.get(page).setItem(getNormalIndex(index++, 10, 2), item);
-			includedTypeData.put(dataIndex++, type.getName());
+			includedTypeData.put(dataIndex++, type);
 			
 			if (index % 28 == 0) 
 			{
@@ -206,7 +210,7 @@ public class EditorTypeMenu extends EditorMenu {
 		String[] selectedInfo = StringUtil.parseValue(description, "2");
 		
 		if (customTypes.size() == 0) {
-			customTypeMenus.get(0).setItem(22, ItemUtil.createItem(Material.BARRIER, Message.EDITOR_TYPE_MENU_NO_CUSTOM_TYPES));
+			customTypeMenus.get(0).setItem(22, ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_TYPE_MENU_NO_CUSTOM_TYPES));
 		}
 		
 		else
@@ -229,7 +233,7 @@ public class EditorTypeMenu extends EditorMenu {
 				boolean isSelected = name.equals(currentEffectName);
 				
 				String title = typePrefix.replace("{1}", StringUtil.capitalizeFirstLetter(name.toLowerCase()));
-				ItemStack item = ItemUtil.createItem(Material.FIRE_CHARGE, StringUtil.colorize(title));
+				ItemStack item = ItemUtil.createItem(CompatibleMaterial.FIRE_CHARGE, StringUtil.colorize(title));
 					
 				String select = isSelected ? "" : selectInfo[1];
 				String selected = isSelected ? selectedInfo[1] : "";
@@ -238,14 +242,15 @@ public class EditorTypeMenu extends EditorMenu {
 						.replace(selectedInfo[0], selected);
 				ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 				
-				if (isSelected) 
-				{
-					item.setType(Material.CYAN_DYE);
+				if (isSelected) {
 					ItemUtil.highlightItem(item);
 				}
 				
 				customTypeMenus.get(page).setItem(getNormalIndex(index++, 10, 2), item);
-				customTypeData.put(dataIndex++, name);
+				
+				customTypeData.put(dataIndex, types.getValue());
+				customTypeNames.put(dataIndex, name);
+				dataIndex++;
 				
 				if (index % 28 == 0) 
 				{
@@ -267,23 +272,26 @@ public class EditorTypeMenu extends EditorMenu {
 			
 			// Next Page
 			if ((i + 1) < pages) {
-				menu.setItem(50, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
 			}
 			
 			// Previous Page
 			if ((i + 1) > 1) {
-				menu.setItem(48, ItemUtil.createItem(Material.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
-			menu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_TYPE_MENU_INCLUDED_FILTER));
-			menu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_TYPE_MENU_CUSTOM_FILTER));
-			
-			switch (category)
+			if (category == 0)
 			{
-			case 0: menu.getItem(46).setType(Material.MUSHROOM_STEW); break;
-			case 1: menu.getItem(47).setType(Material.MUSHROOM_STEW); break;
+				menu.setItem(46, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_TYPE_MENU_INCLUDED_FILTER));
+				menu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_TYPE_MENU_CUSTOM_FILTER));
 			}
 			
+			else
+			{
+				menu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_TYPE_MENU_INCLUDED_FILTER));
+				menu.setItem(47, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_TYPE_MENU_CUSTOM_FILTER));
+			}
+
 			menus.put(i, menu);
 		}
 	}
