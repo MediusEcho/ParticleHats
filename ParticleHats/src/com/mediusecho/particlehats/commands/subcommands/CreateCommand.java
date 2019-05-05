@@ -38,7 +38,7 @@ public class CreateCommand extends Command {
 			
 			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 			MenuBuilder menuBuilder = playerState.getMenuBuilder();
-			MenuInventory inventory = new MenuInventory(menuName, menuName, 6);
+			MenuInventory inventory = new MenuInventory(menuName, menuName, 6, null);
 			
 			if (menuBuilder == null) 
 			{
