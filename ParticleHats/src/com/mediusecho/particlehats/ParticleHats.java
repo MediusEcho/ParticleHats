@@ -43,8 +43,6 @@ public class ParticleHats extends JavaPlugin {
 	// Store fixed particles in a menu that is separate from player menus
 	// Players can sort by nearest and teleport to the particle
 	
-	// TODO: Test the API
-	
 	// TODO: Implement action-bar alternative
 	
 	public static ParticleHats instance;
