@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
-
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -36,6 +34,7 @@ import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.ColorData;
+import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ItemStackData;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -54,7 +53,6 @@ import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-// TODO: Implement yml database
 public class YamlDatabase implements Database {
 
 	private final Core core;
@@ -66,6 +64,7 @@ public class YamlDatabase implements Database {
 	private final Map<String, CustomConfig> menus;
 	private final Map<String, String> menuInfo;
 	private final Map<String, ParticleLabel> labels;
+	private final Map<String, String> aliases;
 	private final Map<UUID, CustomConfig> playerConfigs;
 	private final List<Group> groups;
 	
@@ -78,6 +77,7 @@ public class YamlDatabase implements Database {
 		menus = new HashMap<String, CustomConfig>();
 		menuInfo = new HashMap<String, String>();
 		labels = new HashMap<String, ParticleLabel>();
+		aliases = new HashMap<String, String>();
 		playerConfigs = new HashMap<UUID, CustomConfig>();
 		groups = new ArrayList<Group>();
 		
@@ -88,6 +88,11 @@ public class YamlDatabase implements Database {
 	public void onDisable() 
 	{
 		
+	}
+	
+	@Override
+	public boolean isEnabled () {
+		return true;
 	}
 	
 	@Override
@@ -102,7 +107,8 @@ public class YamlDatabase implements Database {
 		
 		final String menuTitle = config.getString("settings.title", "New Menu");
 		final int menuSize = config.getInt("settings.size", 6);
-		final MenuInventory inventory = new MenuInventory(menuName, menuTitle, menuSize);
+		final String alias = config.getString("settings.alias");
+		final MenuInventory inventory = new MenuInventory(menuName, menuTitle, menuSize, alias);
 		
 		if (config.contains("items"))
 		{
@@ -133,7 +139,7 @@ public class YamlDatabase implements Database {
 									!player.hasPermission(Permission.PARTICLE_ALL.getPermission()));
 						}
 						
-						ItemStack item = ItemUtil.createItem(hat.getMaterial(), 1);
+						ItemStack item = hat.getItem();//ItemUtil.createItem(hat.getMaterial(), 1);
 						ItemUtil.setItemName(item, hat.getDisplayName());
 						
 						loadMetaData(config, hat, path, item);
@@ -146,6 +152,16 @@ public class YamlDatabase implements Database {
 		}
 		
 		return inventory;
+	}
+	
+	@Override
+	public MenuInventory getInventoryFromAlias (String alias, PlayerState playerState)
+	{
+		if (!aliases.containsKey(alias)) {
+			return null;
+		}
+		
+		return loadInventory(aliases.get(alias), playerState);
 	}
 	
 	@Override
@@ -460,8 +476,14 @@ public class YamlDatabase implements Database {
 				
 				case ICON:
 				{
-					if (!hat.getIconData().getMaterials().isEmpty()) {
-						config.set(path + "icons", hat.getIconData().getMaterialNames());
+					if (!hat.getIconData().getItems().isEmpty()) 
+					{
+						List<String> items = hat.getIconData().getItemNames();
+						
+						// Remove the first entry since that is saved as 'id'
+						items.remove(0);
+						
+						config.set(path + "icons", items);
 					}
 					break;
 				}
@@ -477,6 +499,8 @@ public class YamlDatabase implements Database {
 				{
 					if (!hat.getTags().isEmpty()) {
 						config.set(path + "tags", hat.getTagNames());
+					} else {
+						config.set(path + "tags", null);
 					}
 					break;
 				}
@@ -497,6 +521,21 @@ public class YamlDatabase implements Database {
 		if (config != null)
 		{
 			config.set("settings.title", title);
+			config.save();
+		}
+	}
+	
+	@Override
+	public void saveMenuAlias (String menuName, String alias)
+	{
+		if (!menus.containsKey(menuName)) {
+			return;
+		}
+		
+		CustomConfig config = menus.get(menuName);
+		if (config != null)
+		{
+			config.set("settings.alias", alias);
 			config.save();
 		}
 	}
@@ -650,6 +689,7 @@ public class YamlDatabase implements Database {
 		menuInfo.clear();
 		groups.clear();
 		labels.clear();
+		aliases.clear();
 		
 		File menusFolder = new File(core.getDataFolder() + File.separator + "menus");
 		if (!menusFolder.isDirectory())
@@ -672,6 +712,11 @@ public class YamlDatabase implements Database {
 						String menuName = ResourceUtil.removeExtension(menu.getName());
 						menus.put(menuName, menuConfig);
 						menuInfo.put(menuName, menuConfig.getConfig().getString("settings.title", ""));
+						
+						String alias = menuConfig.getConfig().getString("settings.alias");
+						if (alias != null) {
+							aliases.put(alias, menuName);
+						}
 						
 						FileConfiguration config = menuConfig.getConfig();
 						
@@ -719,6 +764,7 @@ public class YamlDatabase implements Database {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void setParticleData (CustomConfig config, String path, Hat hat, int index)
 	{
 		ParticleEffect particle = hat.getParticle(index);
@@ -861,10 +907,14 @@ public class YamlDatabase implements Database {
 						
 						case BLOCK_DATA:
 						{
-							if (config.contains(path + "block-data")) 
+							if (config.isString(path + "block-data")) {
+								hat.getParticleData(index).setBlock(new ItemStack(ItemUtil.getMaterial(config.getString(path + "block-data"), Material.STONE)));
+							}
+							
+							else
 							{
-								Material material = ItemUtil.getMaterial(config.getString(path + "block-data.id"), Material.STONE);
-								ItemStack block = new ItemStack(material, 1, (short) config.getInt(path + "block-data.damage-value"));
+								Material material = ItemUtil.getMaterial(config.getString(path + "block-data.id", "STONE"), Material.STONE);
+								ItemStack block = ItemUtil.createItem(material, (short) config.getInt(path + "block-data.damage-value"));
 								hat.getParticleData(index).setBlock(block);
 							}
 							break;
@@ -872,8 +922,15 @@ public class YamlDatabase implements Database {
 						
 						case ITEM_DATA:
 						{
-							if (config.contains(path + "item-data")) {
+							if (config.isString(path + "item-data")) {
 								hat.getParticleData(index).setItem(new ItemStack(ItemUtil.getMaterial(config.getString(path + "item-data"), Material.APPLE), 1));
+							}
+							
+							else
+							{
+								Material material = ItemUtil.getMaterial(config.getString(path + "item-data.id", "STONE"), Material.STONE);
+								ItemStack item = ItemUtil.createItem(material, (short) config.getInt(path + "item-data.damage-value"));
+								hat.getParticleData(index).setItem(item);
 							}
 							break;
 						}
@@ -911,69 +968,26 @@ public class YamlDatabase implements Database {
 			}
 		}
 	}
-
-	private void loadLegacyParticleData (FileConfiguration config, String path, Hat hat)
-	{
-		ParticleEffect particle = ParticleEffect.fromLegacyName(config.getString(path + "particle", "NONE"));
-		hat.setParticle(0, particle);
-		
-		switch (particle.getProperty())
-		{
-			case NO_DATA:				
-			case ITEMSTACK_DATA:
-				break;
-				
-			case COLOR:
-			{
-				if (!config.isString(path + "color"))
-				{
-					int r = config.getInt(path + "color.r", 255);
-					int g = config.getInt(path + "color.g", 255);
-					int b = config.getInt(path + "color.b", 255);
-					hat.getParticleData(0).getColorData().setColor(Color.fromRGB(r, g, b));
-				}
-				
-				else {
-					hat.getParticleData(0).getColorData().setRandom(config.getBoolean(path + "color"));
-				}
-				break;
-			}
-			
-			case BLOCK_DATA:
-			{
-				// TODO: Update save format when loading menu
-//				if (config.contains(path + "block-data")) {
-//					hat.getParticleData(0).setBlock(ItemUtil.getMaterial(config.getString(path + "block-data"), Material.STONE));
-//				}
-				break;
-			}
-			
-			case ITEM_DATA:
-			{
-				if (config.contains(path + "item-data")) {
-					hat.getParticleData(0).setItem(new ItemStack(ItemUtil.getMaterial(config.getString(path + "item-data"), Material.STONE), 1));
-				}
-				break;
-			}
-		}
-		
-		hat.getParticleData(0).clearPropertyChanges();
-	}
-	
-	private void loadLegacyNodeData (FileConfiguration config, String path, Hat hat, Hat parent)
-	{
-		// TODO: Load legacy node data
-	}
 	
 	private void loadMetaData (FileConfiguration config, Hat hat, String path, ItemStack item)
 	{
 		if (config.contains(path + "icons"))
 		{
-			List<Material> icons = new ArrayList<Material>();
-			for (String material : config.getStringList(path + "icons")) {
-				icons.add(ItemUtil.getMaterial(material, Material.STONE));
+			IconData iconData = hat.getIconData();
+			boolean legacy = Core.serverVersion < 13;
+			
+			for (String material : config.getStringList(path + "icons")) 
+			{
+				if (legacy && material.contains(":")) 
+				{
+					String[] materialInfo = material.split(":");
+					iconData.addItem(ItemUtil.createItem(materialInfo[0], Short.valueOf(materialInfo[1])));
+				} 
+				
+				else {
+					iconData.addItem(new ItemStack(ItemUtil.getMaterial(material, Material.STONE)));
+				}
 			}
-			hat.getIconData().setMaterials(icons);
 		}
 		
 		if (config.contains(path + "tags"))
@@ -1014,6 +1028,7 @@ public class YamlDatabase implements Database {
 	 * @param path
 	 * @param hat
 	 */
+	@SuppressWarnings("deprecation")
 	private void setBaseHatData (CustomConfig config, String path, Hat hat)
 	{
 		config.set(path + "name", hat.getName());
@@ -1030,7 +1045,10 @@ public class YamlDatabase implements Database {
 			config.set(path + "tags", hat.getTagNames());
 		}
 		
-		config.set(path + "id", hat.getMaterial().toString());
+		config.set(path + "id", hat.getItem().getType().toString());
+		if (Core.serverVersion < 13)  {
+			config.set(path + "damage-value", hat.getItem().getDurability());
+		}
 		
 		if (!hat.getDescription().isEmpty()) {
 			config.set(path + "description", hat.getDescription());
@@ -1185,7 +1203,13 @@ public class YamlDatabase implements Database {
 	 */
 	private void loadBaseHatData (FileConfiguration config, Hat hat, String path)
 	{
-		hat.setMaterial(ItemUtil.getMaterial(config.getString(path + "id"), CompatibleMaterial.SUNFLOWER.getMaterial()));
+		Material material = ItemUtil.getMaterial(config.getString(path + "id"), CompatibleMaterial.SUNFLOWER.getMaterial());
+		if (Core.serverVersion < 13) {
+			hat.setItem(ItemUtil.createItem(material, (short) config.getInt(path + "damage-value")));
+		} else {
+			hat.setItem(ItemUtil.createItem(material, 1));
+		}
+		
 		hat.setName(config.getString(path + "name", Message.EDITOR_MISC_NEW_PARTICLE.getValue()));
 		hat.setPermission(config.getString(path + "permission", "all"));	
 		hat.setLabel(config.getString(path + "label", ""));
@@ -1259,6 +1283,10 @@ public class YamlDatabase implements Database {
 			hat.setTrackingMethod(hat.getType().getEffect().getDefaultTrackingMethod());
 		}
 		
+		if (config.contains(path + "particles")) {
+			loadParticleData(config, path + "particles", hat);
+		}
+		
 		if (config.contains(path + "nodes")) 
 		{
 			Set<String> keys = config.getConfigurationSection(path + "nodes").getKeys(false);
@@ -1277,24 +1305,6 @@ public class YamlDatabase implements Database {
 				
 				hat.addNode(node);
 			}
-		}
-		
-		// Legacy node save format
-		else if (config.contains(path + "node"))
-		{
-			
-		}
-//		// TODO: Test legacy format
-//		if (config.contains(path + "nodes")) {
-//			loadNodeData(config, path + "nodes", slot, hat);
-//		} else {
-//			loadLegacyNodeData(config, path, hat);
-//		}
-		
-		if (config.contains(path + "particles")) {
-			loadParticleData(config, path + "particles", hat);
-		} else {
-			loadLegacyParticleData(config, path, hat);
 		}
 		
 		hat.setLoaded(true);
@@ -1382,33 +1392,148 @@ public class YamlDatabase implements Database {
 				
 				String path = "items." + key + ".";
 				
-				if (config.contains(path + "particle"))
-				{
-					String particleName = config.getString(path + "particle");
-					config.set(path + "particle", null);
-					config.set(path + "particles.1.particle", particleName);
-				}
+				updateEssentialFormat(config, path);
+				updateLegacyParticleFormat(config, path, path);
 				
-				if (config.contains(path + "color"))
+				if (config.contains(path + "node")) 
 				{
-					int r = config.getInt(path + "color.r");
-					int g = config.getInt(path + "color.g");
-					int b = config.getInt(path + "color.b");
-					
-					config.set(path + "color", null);
-					config.set(path + "particles.1.color.r", r);
-					config.set(path + "particles.1.color.g", g);
-					config.set(path + "particles.1.color.b", b);
-				}
-				
-				if (config.contains("block-data")) 
-				{
-					String blockMaterial = config.getString(path + "block-data.id");
-					
-					config.set(path + "block-data", null);
-					config.set(path + "particles.1.block-data.id", blockMaterial);
+					updateLegacyNodeFormat(config, path + "node.", path, 1);
+					config.set(path + "node", null);
 				}
 			}
+			
+			menuConfig.save();
+			menuConfig.reload();
+		}
+	}
+	
+	private void updateEssentialFormat (FileConfiguration config, String path)
+	{
+		if (config.contains(path + "no-permission")) 
+		{
+			String noPermission = config.getString(path + "no-permission");
+			
+			config.set(path + "no-permission", null);
+			config.set(path + "permission-denied", noPermission);
+		}
+		
+		if (config.contains(path + "no-permission-lore"))
+		{
+			List<String> noPermissionLore = config.getStringList(path + "no-permission-lore");
+			
+			config.set(path + "no-permission-lore", null);
+			config.set(path + "permission-description", noPermissionLore);
+		}
+		
+		if (config.contains(path + "action"))
+		{
+			String action = config.getString(path + "action");
+			config.set(path + "action.left-click.id", action);
+		}
+		
+		if (config.contains(path + "command"))
+		{
+			String command = config.getString(path + "command");
+			
+			config.set(path + "command", null);
+			config.set(path + "action.left-click.argument", command);
+		}
+	}
+	
+	/**
+	 * Updates this hat's particle data save format
+	 * @param config
+	 * @param path
+	 */
+	private void updateLegacyParticleFormat (FileConfiguration config, String legacyPath, String newPath)
+	{
+		if (config.contains(legacyPath + "particle"))
+		{
+			String particleName = config.getString(legacyPath + "particle");
+			config.set(legacyPath + "particle", null);
+			config.set(newPath + "particles.1.particle", particleName);
+		}
+		
+		if (config.contains(legacyPath + "color"))
+		{
+			int r = config.getInt(legacyPath + "color.r");
+			int g = config.getInt(legacyPath + "color.g");
+			int b = config.getInt(legacyPath + "color.b");
+			
+			config.set(legacyPath + "color", null);
+			config.set(newPath + "particles.1.color.r", r);
+			config.set(newPath + "particles.1.color.g", g);
+			config.set(newPath + "particles.1.color.b", b);
+		}
+		
+		else {
+			config.set(newPath + "particles.1.color", "random");
+		}
+		
+		if (config.contains(legacyPath + "block-data")) 
+		{
+			String blockMaterial = config.getString(legacyPath + "block-data.id");
+			int durability = config.getInt(legacyPath + "block-data.damage-value");
+			
+			config.set(legacyPath + "block-data", null);
+			config.set(newPath + "particles.1.block-data.id", blockMaterial);
+			config.set(newPath + "particles.1.block-data.damage-value", durability);
+		}
+	}
+	
+	/**
+	 * Updates this hat's node save format
+	 * @param config
+	 * @param path
+	 */
+	// TODO: Verify all node data is loaded
+	private void updateLegacyNodeFormat (FileConfiguration config, String legacyPath, String newPath, int index)
+	{	
+		String type = config.getString(legacyPath + "type");
+		String location = config.getString(legacyPath + "location");
+		String mode = config.getString(legacyPath + "mode");
+		String tracking = config.getString(legacyPath + "trcking");
+		String animated = config.getString(legacyPath + "animated");
+		
+		int count = config.getInt(legacyPath + "count");
+		int speed = config.getInt(legacyPath + "speed");
+		
+		double offsetX = config.getDouble(legacyPath + "offset.x");
+		double offsetY = config.getDouble(legacyPath + "offset.y");
+		double offsetZ = config.getDouble(legacyPath + "offset.z");
+		
+		String nodePath = newPath + "nodes." + index + ".";
+		
+		if (type != null) {
+			config.set(nodePath + "type", type);
+		}
+		
+		if (location != null) {
+			config.set(nodePath + "location", location);
+		}
+		
+		if (mode != null) {
+			config.set(nodePath + "mode", mode);
+		}
+		
+		if (tracking != null) {
+			config.set(nodePath + "tracking", tracking);
+		}
+		
+		if (animated != null) {
+			config.set(nodePath + "animated", animated);
+		}
+		
+		config.set(nodePath + "count", count);
+		config.set(nodePath + "speed", speed);
+		config.set(nodePath + "offset.x", offsetX);
+		config.set(nodePath + "offset.y", offsetY);
+		config.set(nodePath + "offset.z", offsetZ);
+		
+		updateLegacyParticleFormat(config, legacyPath, nodePath);
+		
+		if (config.contains(legacyPath + "node")) {
+			updateLegacyNodeFormat(config, legacyPath + "node.", newPath, index + 1);
 		}
 	}
 	
@@ -1417,7 +1542,7 @@ public class YamlDatabase implements Database {
 		private final CustomConfig config;
 		private final int slot;
 		
-		public ParticleLabel (@Nonnull CustomConfig config, @Nonnull int slot)
+		public ParticleLabel (CustomConfig config, int slot)
 		{
 			this.config = config;
 			this.slot = slot;
