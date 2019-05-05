@@ -17,6 +17,7 @@ import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -66,10 +67,10 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 					String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
 					ItemStack i = getItem(slot);
 				
-					ItemUtil.setItemType(i, material, item.getDurability());
+					ItemUtil.setItemType(i, item);
 					ItemUtil.setItemName(i, displayName);
 					
-					targetHat.getIconData().updateMaterial(editingIndex, material);
+					targetHat.getIconData().updateItem(editingIndex, item);
 					isModified = true;
 				});
 				menuBuilder.addMenu(editorIconMenu);
@@ -94,10 +95,8 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		IconData data = targetHat.getIconData();
 		if (data != null)
 		{
-			Material material = data.getNextMaterial(ticks);
-			if (material != null) {
-				getItem(48).setType(material);
-			}
+			ItemStackTemplate itemTemplate = data.getNextItem(ticks);
+			ItemUtil.setItemType(getItem(48), itemTemplate.getMaterial(), itemTemplate.getDurability());
 		}
 	}
 	
@@ -134,20 +133,22 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		});
 		
 		// Set Main Icon
-		ItemStack mainItem = ItemUtil.createItem(targetHat.getMaterial(), Message.EDITOR_ICON_MENU_SET_MAIN_ICON);
+		ItemStack mainItem = targetHat.getItem();
+		ItemUtil.setItemName(mainItem, Message.EDITOR_ICON_MENU_SET_MAIN_ICON);
 		setButton(10, mainItem, (event, slot) ->
 		{
 			editingIndex = 0;
 			EditorIconMenu editorIconMenu = new EditorIconMenu(core, owner, menuBuilder, iconTitle, iconName, iconDescription, (item) ->
 			{
-				Material material = item.getType();
-				targetHat.setMaterial(material);
-				menuBuilder.getEditingMenu().setItemMaterial(menuBuilder.getTargetSlot(), material);
+				ItemStack i = item.clone();
+				i.setAmount(1);
 				
-				ItemUtil.setItemType(getItem(10), material, item.getDurability());
+				menuBuilder.getEditingMenu().setItemType(menuBuilder.getTargetSlot(), item);
 				
-				callback.onSelect(item);
-				targetHat.setMaterial(material);
+				ItemUtil.setItemType(getItem(10), i);
+				
+				callback.onSelect(i);
+				targetHat.setItem(i);
 			});
 			menuBuilder.addMenu(editorIconMenu);
 			editorIconMenu.open();
@@ -185,15 +186,17 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		});
 		
 		// Add Item
-		List<Material> materials = targetHat.getIconData().getMaterials();
-		for (int i = 1; i < materials.size(); i++) 
+		List<ItemStackTemplate> items = targetHat.getIconData().getItems();
+		for (int i = 1; i < items.size(); i++) 
 		{
-			Material material = materials.get(i);			
-			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.capitalizeFirstLetter(material.toString().toLowerCase());
+			ItemStackTemplate itemTemplate = items.get(i);
+			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.capitalizeFirstLetter(itemTemplate.getMaterial().toString().toLowerCase());
 			
 			int index = getNormalIndex(i, 10, 2);
-			setItem(index, ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue())));
-			//setAction(index, editAction);
+			ItemStack item = ItemUtil.createItem(itemTemplate.getMaterial(), itemTemplate.getDurability());
+			ItemUtil.setNameAndDescription(item, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue()));
+			
+			setItem(index, item);
 		}
 	}
 	
@@ -204,14 +207,18 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 	 */
 	private void onAdd (int slot, ItemStack item)
 	{		
-		int size = targetHat.getIconData().getMaterials().size();
+		int size = targetHat.getIconData().getItems().size();
 		if (size <= 27)
 		{
-			Material material = item.getType();
-			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(material);
-			ItemStack i = ItemUtil.createItem(material, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue()));
+			ItemStack i = item.clone();
+			i.setAmount(1);
+			
+			ItemUtil.setNameAndDescription(i,
+					Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(i.getType()),
+					StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue()));
 		
-			targetHat.getIconData().addMaterial(material);
+			ItemUtil.setItemType(i, item);
+			targetHat.getIconData().addItem(item);
 			setItem(getNormalIndex(size, 10, 2), i);
 			
 			isModified = true;
@@ -228,7 +235,7 @@ public class EditorIconOverviewMenu extends EditorListMenu {
 		super.onDelete(slot);
 		
 		// Remove the material in this slot
-		targetHat.getIconData().removeMaterial(getClampedIndex(slot, 10, 2));
+		targetHat.getIconData().removeItem(getClampedIndex(slot, 10, 2));
 		isModified = true;
 	}
 }
