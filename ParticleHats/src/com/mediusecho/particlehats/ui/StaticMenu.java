@@ -15,6 +15,7 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
@@ -43,8 +44,10 @@ public class StaticMenu extends Menu {
 			if (hat != null && !hat.isLocked())
 			{
 				IconData iconData = hat.getIconData();
-				if (iconData.isLive()) {
-					inventory.getItem(slot).setType(iconData.getNextMaterial(ticks));
+				if (iconData.isLive()) 
+				{
+					ItemStackTemplate itemTemplate = iconData.getNextItem(ticks);
+					ItemUtil.setItemType(inventory.getItem(slot), itemTemplate.getMaterial(), itemTemplate.getDurability());
 				}
 			}
 		}
