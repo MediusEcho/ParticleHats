@@ -1334,7 +1334,7 @@ public class MySQLDatabase implements Database {
 				node.setUpdateFrequency(getInt(set, "update_frequency", 2));		
 				node.setSpeed(set.getInt("speed"));
 				node.setCount(set.getInt("count"));
-				node.setScale(set.getDouble("scale"));
+				node.setScale(getDouble(set, "scale", 1.0));
 				
 				String customTypeName = set.getString("custom_type");
 				if (!set.wasNull())
