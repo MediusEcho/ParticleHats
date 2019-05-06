@@ -58,6 +58,7 @@ import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
+import com.mediusecho.particlehats.util.YamlUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -967,6 +968,11 @@ public class MySQLDatabase implements Database {
 			connect ((connection) ->
 			{
 				FileConfiguration config = menuConfig.getConfig();
+				
+				// Update this menu first
+				if (!YamlUtil.isUpdated(menuConfig)) {
+					YamlUtil.updateMenuSaveFormat(menuConfig);
+				}
 				
 				// Create the initial menu
 				String name = menuConfig.getName();
