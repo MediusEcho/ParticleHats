@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 
 public class StringUtil {
@@ -245,10 +246,12 @@ public class StringUtil {
 	public static String parseString (String string, Hat hat)
 	{
 		return string
-				.replace("{type}", hat.getType().getDisplayName())
-				.replace("{location}", hat.getLocation().getDisplayName())
-				.replace("{mode}", hat.getMode().getDisplayName())
-				
+				.replace("{TYPE}", hat.getType().getStrippedName())
+				.replace("{LOCATION}", hat.getLocation().getStrippedName())
+				.replace("{MODE}", hat.getMode().getStrippedName())
+				.replace("{PRICE}", Integer.toString(hat.getPrice()))
+				.replace("{CURRENCY}", SettingsManager.CURRENCY.getString())
+						
 				.replace("<locked>", "").replace("</locked>", "");
 	}
 	
