@@ -118,4 +118,13 @@ public enum ParticleAnimation {
 		}
 		return STATIC;
 	}
+	
+	/**
+	 * Get the PartcleAnimation matching the boolean value
+	 * @param animated
+	 * @return
+	 */
+	public static ParticleAnimation fromBoolean (boolean animated) {
+		return animated ? ANIMATED : STATIC;
+	}
 }
