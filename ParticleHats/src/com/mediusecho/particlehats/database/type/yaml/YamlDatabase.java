@@ -85,10 +85,7 @@ public class YamlDatabase implements Database {
 	}
 	
 	@Override
-	public void onDisable() 
-	{
-		
-	}
+	public void onDisable() { }
 	
 	@Override
 	public boolean isEnabled () {
