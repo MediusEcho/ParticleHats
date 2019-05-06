@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
