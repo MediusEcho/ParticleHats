@@ -296,14 +296,14 @@ public enum ParticleEffect {
 			return NONE;
 		}
 		
-		String particle = name.toLowerCase();
+		//String particle = name.toLowerCase();
 		
-		if (particleNames.containsKey(particle)) {
-			return particleNames.get(particle);
+		if (particleNames.containsKey(name)) {
+			return particleNames.get(name);
 		}
 		
-		if (particleLegacyNames.containsKey(particle)) {
-			return particleLegacyNames.get(particle);
+		if (particleLegacyNames.containsKey(name)) {
+			return particleLegacyNames.get(name);
 		}
 		
 		return NONE;
