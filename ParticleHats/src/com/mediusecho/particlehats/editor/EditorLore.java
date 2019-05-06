@@ -80,8 +80,6 @@ public class EditorLore {
 				.replace("{2}", animationDescription)
 				.replace(toggleInfo[0], toggle);
 		
-		ParticleHats.debug(description);
-		
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
 	
