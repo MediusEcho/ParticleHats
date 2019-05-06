@@ -399,7 +399,6 @@ public class MySQLDatabase implements Database {
 	@Override
 	public void loadHat (String menuName, int slot, Hat hat)
 	{		
-		ParticleHats.debug("loading hat");
 		connect((connection) ->
 		{
 			String hatQuery = "SELECT * FROM " + Table.ITEMS.format(menuName) + " WHERE slot = ?";
@@ -441,7 +440,6 @@ public class MySQLDatabase implements Database {
 		{
 			connect((connection) ->
 			{
-				ParticleHats.debug(insertQuery);
 				try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
 					statement.executeUpdate();
 				}
@@ -536,7 +534,6 @@ public class MySQLDatabase implements Database {
 			connect((connection) ->
 			{
 				String insertQuery = helper.getParticleInsertQuery(menuName, hat, index);
-				ParticleHats.debug(insertQuery);
 				try (PreparedStatement statement = connection.prepareStatement(insertQuery)) 
 				{
 					statement.executeUpdate();
@@ -1152,25 +1149,33 @@ public class MySQLDatabase implements Database {
 					}
 				}
 				
-				String itemInsertQuery = helper.getImportQuery(name).replace("{1}", propertyBuilder.deleteCharAt(0).toString());
-				try (PreparedStatement itemStatement = connection.prepareStatement(itemInsertQuery)) {
-					itemStatement.executeUpdate();
+				if (propertyBuilder.length() > 0)
+				{
+					String itemInsertQuery = helper.getImportQuery(name).replace("{1}", propertyBuilder.deleteCharAt(0).toString());
+					try (PreparedStatement itemStatement = connection.prepareStatement(itemInsertQuery)) {
+						itemStatement.executeUpdate();
+					}
 				}
 				
-				String nodeInsertQuery = helper.getNodeImportQuery(name).replace("{1}", nodeBuilder.deleteCharAt(0).toString());
-				try (PreparedStatement nodeStatement = connection.prepareStatement(nodeInsertQuery)) {
-					nodeStatement.executeUpdate();
+				if (nodeBuilder.length() > 0)
+				{
+					String nodeInsertQuery = helper.getNodeImportQuery(name).replace("{1}", nodeBuilder.deleteCharAt(0).toString());
+					try (PreparedStatement nodeStatement = connection.prepareStatement(nodeInsertQuery)) {
+						nodeStatement.executeUpdate();
+					}
 				}
 				
-				String particleInsertQuery = helper.getParticleImportQuery(name).replace("{1}", particleBuilder.deleteCharAt(0).toString());
-				try (PreparedStatement particleStatement = connection.prepareStatement(particleInsertQuery)) {
-					particleStatement.executeUpdate();
+				if (particleBuilder.length() > 0)
+				{
+					String particleInsertQuery = helper.getParticleImportQuery(name).replace("{1}", particleBuilder.deleteCharAt(0).toString());
+					try (PreparedStatement particleStatement = connection.prepareStatement(particleInsertQuery)) {
+						particleStatement.executeUpdate();
+					}
 				}
 				
 				if (metaBuilder.length() > 0)
 				{
 					String metaInsertQuery = helper.getMetaImportQuery(name).replace("{1}", metaBuilder.deleteCharAt(0).toString());
-					ParticleHats.debug(metaInsertQuery);
 					try (PreparedStatement metaStatement = connection.prepareStatement(metaInsertQuery)) {
 						metaStatement.executeUpdate();
 					}
@@ -1189,7 +1194,7 @@ public class MySQLDatabase implements Database {
 			properties.append(",").append(line++);
 			properties.append(",").append(particleIndex);
 			properties.append(",").append(nodeIndex);
-			properties.append(",'").append(s).append("'");
+			properties.append(",'").append(s.replace("'", "''")).append("'");
 			properties.append(")");
 			
 			metaBuilder.append(",").append(properties.toString());
