@@ -372,6 +372,66 @@ public class MySQLHelper {
 				+ ") VALUES {1}";
 	}
 	
+	public String getParticleImportQuery (String menuName)
+	{
+		return "INSERT INTO " + Table.PARTICLES.format(menuName) + " ("
+				+ "slot,"
+				+ "particle_index,"
+				+ "node_index,"
+				+ "particle_id,"
+				+ "color,"
+				+ "random,"
+				+ "scale,"
+				+ "item_data,"
+				+ "block_data,"
+				+ "duration,"
+				+ "gravity,"
+				+ "velocity_x,"
+				+ "velocity_y,"
+				+ "velocity_z"
+				+ ") VALUES {1}";
+	}
+	
+	public String getMetaImportQuery (String menuName)
+	{
+		return "INSERT INTO " + Table.META.format(menuName) + " ("
+				+ "slot,"
+				+ "type,"
+				+ "line,"
+				+ "line_ex,"
+				+ "node_index,"
+				+ "value"
+				+ ") VALUES {1}";
+	}
+	
+	public String getNodeImportQuery (String menuName)
+	{
+		return "INSERT INTO " + Table.NODES.format(menuName) + " ("
+				+ "slot,"
+				+ "node_index,"
+				+ "ver,"
+				+ "type,"
+				+ "custom_type,"
+				+ "location,"
+				+ "mode,"
+				+ "animation,"
+				+ "tracking,"
+				+ "offset_x,"
+				+ "offset_y,"
+				+ "offset_z,"
+				+ "random_offset_x,"
+				+ "random_offset_y,"
+				+ "random_offset_z,"
+				+ "angle_x,"
+				+ "angle_y,"
+				+ "angle_z,"
+				+ "update_frequency,"
+				+ "speed,"
+				+ "count,"
+				+ "scale"
+				+ ") VALUES {1}";
+	}
+	
 	/**
 	 * Creates a new InputStream from an existing InputStream removing comments
 	 * @param stream
