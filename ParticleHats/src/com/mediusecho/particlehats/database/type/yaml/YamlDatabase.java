@@ -67,6 +67,7 @@ public class YamlDatabase implements Database {
 	private final Map<UUID, CustomConfig> playerConfigs;
 	private final List<Group> groups;
 	
+	// TODO: Descriptions not getting deleted
 	public YamlDatabase (ParticleHats core)
 	{
 		this.core = core;
@@ -1085,6 +1086,20 @@ public class YamlDatabase implements Database {
 			config.set(path + "display-mode", hat.getDisplayMode().getName());
 		}
 		
+		if (hat.getIconUpdateFrequency() != 1) {
+			config.set(path + "icon-update-frequency", hat.getIconUpdateFrequency());
+		}
+		
+		if (!hat.getIconData().getItems().isEmpty()) 
+		{
+			List<String> items = hat.getIconData().getItemNames();
+			
+			// Remove the first entry since that is saved as 'id'
+			items.remove(0);
+			
+			config.set(path + "icons", items);
+		}
+		
 		Sound sound = hat.getSound();
 		if (sound != null)
 		{
@@ -1221,6 +1236,7 @@ public class YamlDatabase implements Database {
 		hat.setRightClickArgument(config.getString(path + "action.right-click.argument", ""));
 		hat.setDemoDuration(config.getInt(path + "duration", 200));
 		hat.setDisplayMode(IconDisplayMode.fromName(config.getString(path + "display-mode")));
+		hat.setIconUpdateFrequency(config.getInt(path + "icon-update-frequeycn", 1));
 		
 		String potionName = config.getString(path + "potion.id", "");
 		if (!potionName.equals(""))
