@@ -31,10 +31,8 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 			if (event.isLeftClick())
 			{
 				int index = getClampedIndex(slot, 10, 2);
-				ParticleHats.debug("looking for node at index: " + index);
-				ParticleHats.debug("node size: " + targetHat.getNodes().size());
-				
 				Hat node = targetHat.getNode(index);
+				
 				if (node != null)
 				{
 					menuBuilder.setTargetNodeHat(node);
