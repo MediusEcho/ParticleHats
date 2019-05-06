@@ -67,7 +67,7 @@ public class EditorLore {
 		{
 			PixelEffect customEffect = hat.getCustomEffect();
 			if (customEffect != null) {
-				custom = typeInfo[1] + Message.EDITOR_TYPE_MENU_TYPE_PREFIX.getValue() + StringUtil.capitalizeFirstLetter(customEffect.getImageName().toLowerCase());
+				custom = typeInfo[1] + Message.EDITOR_TYPE_MENU_TYPE_PREFIX.getValue().replace("{1}", StringUtil.capitalizeFirstLetter(customEffect.getImageName().toLowerCase()));
 			}
 			
 			else {
@@ -79,6 +79,8 @@ public class EditorLore {
 				.replace(typeInfo[0], type.getStrippedName() + custom)
 				.replace("{2}", animationDescription)
 				.replace(toggleInfo[0], toggle);
+		
+		ParticleHats.debug(description);
 		
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
