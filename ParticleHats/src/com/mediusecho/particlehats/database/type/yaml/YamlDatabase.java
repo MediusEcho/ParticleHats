@@ -83,8 +83,6 @@ public class YamlDatabase implements Database {
 		onReload();
 	}
 	
-	// TODO: display-mode not being set, maybe sound also
-	
 	@Override
 	public void onDisable() { }
 	
@@ -167,6 +165,7 @@ public class YamlDatabase implements Database {
 	{
 		CustomConfig menuConfig = new CustomConfig(core, "menus", menuName + ".yml", true);
 		
+		menuConfig.set("version", 4.0);
 		menuConfig.set("settings.title", menuName);
 		menuConfig.set("settings.size", 6);
 		menuConfig.save();
