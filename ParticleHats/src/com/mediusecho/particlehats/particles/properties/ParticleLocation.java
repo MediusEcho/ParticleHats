@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.mediusecho.particlehats.locale.Message;
 
+import net.md_5.bungee.api.ChatColor;
+
 /**
  * Represents each location a particle can be displayed at
  * 
@@ -64,7 +66,7 @@ public enum ParticleLocation
 	}
 	
 	/**
-	 * Get the name of this ParticleMode
+	 * Get the name of this ParticleLocation
 	 * @return The name of this mode as defined in the current messages.yml file
 	 */
 	public String getDisplayName () 
@@ -75,6 +77,14 @@ public enum ParticleLocation
 		} catch (IllegalArgumentException e) {
 			return "";
 		}
+	}
+	
+	/**
+	 * Get the name of this ParticleLocation without color codes
+	 * @return
+	 */
+	public String getStrippedName () {
+		return ChatColor.stripColor(getDisplayName());
 	}
 	
 	/**
