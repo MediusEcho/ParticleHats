@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.mediusecho.particlehats.locale.Message;
 
+import net.md_5.bungee.api.ChatColor;
+
 public enum ParticleMode {
 
 	ACTIVE         (0),
@@ -63,6 +65,14 @@ public enum ParticleMode {
 		} catch (IllegalArgumentException e) {
 			return "";
 		}
+	}
+	
+	/**
+	 * Get the name of this ParticleMode without color codes
+	 * @return
+	 */
+	public String getStrippedName () {
+		return ChatColor.stripColor(getDisplayName());
 	}
 	
 	/**
