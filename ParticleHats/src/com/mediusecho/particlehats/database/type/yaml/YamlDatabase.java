@@ -52,14 +52,13 @@ import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.StringUtil;
+import com.mediusecho.particlehats.util.YamlUtil;
 
 public class YamlDatabase implements Database {
 
 	private final ParticleHats core;
 	
 	private final CustomConfig groupConfig;
-	
-	private final double MENU_VERSION = 4.0;
 	
 	private final Map<String, CustomConfig> menus;
 	private final Map<String, String> menuInfo;
@@ -83,6 +82,8 @@ public class YamlDatabase implements Database {
 		
 		onReload();
 	}
+	
+	// TODO: display-mode not being set, maybe sound also
 	
 	@Override
 	public void onDisable() { }
@@ -718,8 +719,8 @@ public class YamlDatabase implements Database {
 						FileConfiguration config = menuConfig.getConfig();
 						
 						// Update our menus save format if this was created in an older version
-						if (!config.contains("version")) {
-							updateMenuFormat(menuConfig);
+						if (!YamlUtil.isUpdated(menuConfig)) {
+							YamlUtil.updateMenuSaveFormat(menuConfig);
 						}
 						
 						// Find any labels in this menu
@@ -867,7 +868,13 @@ public class YamlDatabase implements Database {
 				if (config.contains(path + "particle"))
 				{
 					int index = MathUtil.clamp(StringUtil.toInt(key, 1) - 1, 0, 100);
+					
+					ParticleHats.debug("looking for particle, path: " + path);
+					ParticleHats.debug("found paticle: " + config.getString(path + "particle") + " for index: " + index);
+					
 					ParticleEffect particle = ParticleEffect.fromName(config.getString(path + "particle", "NONE"));
+					
+					ParticleHats.debug("we actually found " + particle.getName());
 					
 					hat.setParticle(index, particle);
 					
@@ -1138,7 +1145,7 @@ public class YamlDatabase implements Database {
 		}
 		
 		if (hat.getAnimation() == ParticleAnimation.ANIMATED) {
-			config.set(path + "animated", true);
+			config.set(path + "animated", hat.getAnimation().getName());
 		}
 		
 		if (hat.getDemoDuration() != 200) {
@@ -1370,168 +1377,6 @@ public class YamlDatabase implements Database {
 			}
 		}
 		return null;
-	}
-	
-	private void updateMenuFormat (CustomConfig menuConfig)
-	{
-		ParticleHats.log("Updating " + menuConfig.getFileName() + " to new save format");
-		FileConfiguration config = menuConfig.getConfig();
-		
-		config.set("version", MENU_VERSION);
-		if (config.contains("items"))
-		{
-			Set<String> keys = config.getConfigurationSection("items").getKeys(false);
-			for (String key : keys)
-			{
-				if (key == null) {
-					continue;
-				}
-				
-				String path = "items." + key + ".";
-				
-				updateEssentialFormat(config, path);
-				updateLegacyParticleFormat(config, path, path);
-				
-				if (config.contains(path + "node")) 
-				{
-					updateLegacyNodeFormat(config, path + "node.", path, 1);
-					config.set(path + "node", null);
-				}
-			}
-			
-			menuConfig.save();
-			menuConfig.reload();
-		}
-	}
-	
-	private void updateEssentialFormat (FileConfiguration config, String path)
-	{
-		if (config.contains(path + "no-permission")) 
-		{
-			String noPermission = config.getString(path + "no-permission");
-			
-			config.set(path + "no-permission", null);
-			config.set(path + "permission-denied", noPermission);
-		}
-		
-		if (config.contains(path + "no-permission-lore"))
-		{
-			List<String> noPermissionLore = config.getStringList(path + "no-permission-lore");
-			
-			config.set(path + "no-permission-lore", null);
-			config.set(path + "permission-description", noPermissionLore);
-		}
-		
-		if (config.contains(path + "action"))
-		{
-			String action = config.getString(path + "action");
-			config.set(path + "action.left-click.id", action);
-		}
-		
-		if (config.contains(path + "command"))
-		{
-			String command = config.getString(path + "command");
-			
-			config.set(path + "command", null);
-			config.set(path + "action.left-click.argument", command);
-		}
-	}
-	
-	/**
-	 * Updates this hat's particle data save format
-	 * @param config
-	 * @param path
-	 */
-	private void updateLegacyParticleFormat (FileConfiguration config, String legacyPath, String newPath)
-	{
-		if (config.contains(legacyPath + "particle"))
-		{
-			String particleName = config.getString(legacyPath + "particle");
-			config.set(legacyPath + "particle", null);
-			config.set(newPath + "particles.1.particle", particleName);
-		}
-		
-		if (config.contains(legacyPath + "color"))
-		{
-			int r = config.getInt(legacyPath + "color.r");
-			int g = config.getInt(legacyPath + "color.g");
-			int b = config.getInt(legacyPath + "color.b");
-			
-			config.set(legacyPath + "color", null);
-			config.set(newPath + "particles.1.color.r", r);
-			config.set(newPath + "particles.1.color.g", g);
-			config.set(newPath + "particles.1.color.b", b);
-		}
-		
-		else {
-			config.set(newPath + "particles.1.color", "random");
-		}
-		
-		if (config.contains(legacyPath + "block-data")) 
-		{
-			String blockMaterial = config.getString(legacyPath + "block-data.id");
-			int durability = config.getInt(legacyPath + "block-data.damage-value");
-			
-			config.set(legacyPath + "block-data", null);
-			config.set(newPath + "particles.1.block-data.id", blockMaterial);
-			config.set(newPath + "particles.1.block-data.damage-value", durability);
-		}
-	}
-	
-	/**
-	 * Updates this hat's node save format
-	 * @param config
-	 * @param path
-	 */
-	// TODO: Verify all node data is loaded
-	private void updateLegacyNodeFormat (FileConfiguration config, String legacyPath, String newPath, int index)
-	{	
-		String type = config.getString(legacyPath + "type");
-		String location = config.getString(legacyPath + "location");
-		String mode = config.getString(legacyPath + "mode");
-		String tracking = config.getString(legacyPath + "trcking");
-		String animated = config.getString(legacyPath + "animated");
-		
-		int count = config.getInt(legacyPath + "count");
-		int speed = config.getInt(legacyPath + "speed");
-		
-		double offsetX = config.getDouble(legacyPath + "offset.x");
-		double offsetY = config.getDouble(legacyPath + "offset.y");
-		double offsetZ = config.getDouble(legacyPath + "offset.z");
-		
-		String nodePath = newPath + "nodes." + index + ".";
-		
-		if (type != null) {
-			config.set(nodePath + "type", type);
-		}
-		
-		if (location != null) {
-			config.set(nodePath + "location", location);
-		}
-		
-		if (mode != null) {
-			config.set(nodePath + "mode", mode);
-		}
-		
-		if (tracking != null) {
-			config.set(nodePath + "tracking", tracking);
-		}
-		
-		if (animated != null) {
-			config.set(nodePath + "animated", animated);
-		}
-		
-		config.set(nodePath + "count", count);
-		config.set(nodePath + "speed", speed);
-		config.set(nodePath + "offset.x", offsetX);
-		config.set(nodePath + "offset.y", offsetY);
-		config.set(nodePath + "offset.z", offsetZ);
-		
-		updateLegacyParticleFormat(config, legacyPath, nodePath);
-		
-		if (config.contains(legacyPath + "node")) {
-			updateLegacyNodeFormat(config, legacyPath + "node.", newPath, index + 1);
-		}
 	}
 	
 	private class ParticleLabel {
