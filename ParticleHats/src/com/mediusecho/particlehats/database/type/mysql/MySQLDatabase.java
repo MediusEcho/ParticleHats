@@ -959,6 +959,7 @@ public class MySQLDatabase implements Database {
 	 * @return
 	 * @throws SQLException 
 	 */
+	// TODO: Add callback if import fails
 	public void importMenu (CustomConfig menuConfig) throws SQLException
 	{
 		async (() ->
@@ -974,17 +975,270 @@ public class MySQLDatabase implements Database {
 				
 				createMenu(connection, name, title, size, null);
 				
+				StringBuilder propertyBuilder = new StringBuilder();
+				StringBuilder nodeBuilder = new StringBuilder();
+				StringBuilder particleBuilder = new StringBuilder();
+				StringBuilder metaBuilder = new StringBuilder();
+				
+				StringBuilder properties = new StringBuilder();
+				
 				// Loop through each slot
 				if (config.contains("items"))
 				{
 					Set<String> keys = config.getConfigurationSection("items").getKeys(false);
 					for (String key : keys)
 					{
+						if (key == null) {
+							continue;
+						}
 						
+						String path = "items." + key + ".";
+						int slot = StringUtil.toInt(key, -1);
+						
+						// TODO: Add 4.0 saved data
+						properties.append("(").append(slot);
+						properties.append(",").append(1); // version
+						properties.append(",").append(getImportString(config.getString(path + "id"), "'STONE'"));
+						properties.append(",").append(config.getInt(path + "damage-value"));
+						properties.append(",").append(getImportString(config.getString(path + "name"), "NULL"));
+						properties.append(",").append(getImportString(config.getString(path + "permission"), "NULL"));
+						properties.append(",").append(getImportString(config.getString(path + "permission-denied"), "NULL"));
+						properties.append(",").append(ParticleType.fromName(config.getString(path + "type")).getID());
+						properties.append(",").append("NULL"); // Custom Type
+						properties.append(",").append(ParticleLocation.fromName(config.getString(path + "location")).getID());
+						properties.append(",").append(ParticleMode.fromName(config.getString(path + "mode")).getID());
+						properties.append(",").append(ParticleAnimation.fromName(config.getString(path + "animated")).getID());
+						properties.append(",").append(ParticleTracking.fromName(config.getString(path + "tracking")).getID());
+						properties.append(",").append(getImportString(config.getString(path + "label"), "NULL"));
+						properties.append(",").append(getImportString(config.getString(path + "equip-message"), "NULL"));
+						properties.append(",").append(config.getDouble(path + "offset.x"));
+						properties.append(",").append(config.getDouble(path + "offset.y"));
+						properties.append(",").append(config.getDouble(path + "offset.z"));
+						properties.append(",").append(config.getDouble(path + "random-offset.x"));
+						properties.append(",").append(config.getDouble(path + "random-offset.y"));
+						properties.append(",").append(config.getDouble(path + "random-offset.z"));
+						properties.append(",").append(config.getDouble(path + "angle.x"));
+						properties.append(",").append(config.getDouble(path + "angle.y"));
+						properties.append(",").append(config.getDouble(path + "angle.z"));
+						properties.append(",").append(config.getInt(path + "update-frequency"));
+						properties.append(",").append(config.getInt(path + "icon-update-frequency"));
+						properties.append(",").append(config.getInt(path + "speed"));
+						properties.append(",").append(config.getInt(path + "count"));
+						properties.append(",").append(config.getInt(path + "price"));
+						properties.append(",").append(getImportString(config.getString(path + "sound.id"), "NULL"));
+						properties.append(",").append(config.getDouble(path + "sound.volume"));
+						properties.append(",").append(config.getDouble(path + "sound.pitch"));
+						properties.append(",").append(ParticleAction.fromName(config.getString(path + "action.left-click.id"), ParticleAction.EQUIP).getID());
+						properties.append(",").append(ParticleAction.fromName(config.getString(path + "action.right-click.id"), ParticleAction.MIMIC).getID());
+						properties.append(",").append(getImportString(config.getString(path + "action.left-click.argument"), "NULL"));
+						properties.append(",").append(getImportString(config.getString(path + "action.right-click.argument"), "NULL"));
+						properties.append(",").append(config.getInt(path + "duration"));
+						properties.append(",").append(IconDisplayMode.fromName(config.getString(path + "display-mode")).getID());
+						properties.append(",").append(config.getDouble(path + "scale"));
+						properties.append(",").append(getImportString(config.getString(path + "potion.id"), "NULL"));
+						properties.append(",").append(config.getInt(path + "potion.strength"));
+						properties.append(")");
+						
+						propertyBuilder.append(",").append(properties.toString());
+						properties.setLength(0);
+						
+						// Particles
+						if (config.contains(path + "particles"))
+						{
+							Set<String> particleKeys = config.getConfigurationSection(path + "particles").getKeys(false);
+							for (String particleKey : particleKeys)
+							{
+								if (particleKey == null) {
+									continue;
+								}
+								
+								String particlePath = path + "particles." + particleKey + ".";
+								int index = StringUtil.toInt(particleKey, 1) - 1;
+								
+								importParticleData(config, slot, index, -1, particlePath, properties);
+								
+								particleBuilder.append(",").append(properties.toString());
+								properties.setLength(0);							
+							}
+						}
+						
+						// Meta
+						List<String> description = config.getStringList(path + "description");
+						if (!description.isEmpty()) {
+							importMetaData(description, slot, DataType.DESCRIPTION.getID(), 0, -1, properties, metaBuilder);
+						}
+						
+						List<String> permissionDescription = config.getStringList(path + "permission-description");
+						if (!permissionDescription.isEmpty()) {
+							importMetaData(permissionDescription, slot, DataType.PERMISSION_DESCRIPTION.getID(), 0, -1, properties, metaBuilder);
+						}
+						
+						List<String> icons = config.getStringList(path + "icons");
+						if (!icons.isEmpty()) {
+							importMetaData(icons, slot, DataType.ICON.getID(), 0, -1, properties, metaBuilder);
+						}
+						
+						List<String> tags = config.getStringList(path + "tags");
+						if (!tags.isEmpty()) {
+							importMetaData(tags, slot, DataType.TAGS.getID(), 0, -1, properties, metaBuilder);
+						}
+						
+						// Grab all nodes
+						if (config.contains(path + "nodes"))
+						{
+							Set<String> nodeKeys = config.getConfigurationSection(path + "nodes").getKeys(false);
+							for (String nodeKey : nodeKeys)
+							{
+								if (nodeKey == null) {
+									continue;
+								}
+								
+								String nodePath = path + "nodes." + nodeKey + ".";
+								int nodeIndex = StringUtil.toInt(nodeKey, 1) - 1;
+								
+								properties.append("(").append(slot);
+								properties.append(",").append(nodeIndex);
+								properties.append(",").append(1);
+								properties.append(",").append(ParticleType.fromName(config.getString(nodePath + "type")).getID());
+								properties.append(",").append("NULL"); // Custom Type
+								properties.append(",").append(ParticleLocation.fromName(config.getString(nodePath + "location")).getID());
+								properties.append(",").append(ParticleMode.fromName(config.getString(nodePath + "mode")).getID());
+								properties.append(",").append(ParticleAnimation.fromName(config.getString(nodePath + "animated")).getID());
+								properties.append(",").append(ParticleTracking.fromName(config.getString(nodePath + "tracking")).getID());
+								properties.append(",").append(config.getDouble(nodePath + "offset.x"));
+								properties.append(",").append(config.getDouble(nodePath + "offset.y"));
+								properties.append(",").append(config.getDouble(nodePath + "offset.z"));
+								properties.append(",").append(config.getDouble(nodePath + "random-offset.x"));
+								properties.append(",").append(config.getDouble(nodePath + "random-offset.y"));
+								properties.append(",").append(config.getDouble(nodePath + "random-offset.z"));
+								properties.append(",").append(config.getDouble(nodePath + "angle.x"));
+								properties.append(",").append(config.getDouble(nodePath + "angle.y"));
+								properties.append(",").append(config.getDouble(nodePath + "angle.z"));
+								properties.append(",").append(config.getInt(nodePath + "update-frequency"));
+								properties.append(",").append(config.getInt(nodePath + "speed"));
+								properties.append(",").append(config.getInt(nodePath + "count"));
+								properties.append(",").append(config.getDouble(nodePath + "scale"));
+								properties.append(")");
+								
+								nodeBuilder.append(",").append(properties.toString());
+								properties.setLength(0);
+								
+								if (config.contains(nodePath + "particles"))
+								{
+									Set<String> particleKeys = config.getConfigurationSection(nodePath + "particles").getKeys(false);
+									for (String particleKey : particleKeys)
+									{
+										if (particleKey == null) {
+											continue;
+										}
+										
+										String particlePath = path + "nodes." + nodeKey + ".particles." + particleKey + ".";
+										int index = StringUtil.toInt(particleKey, 1) - 1;
+										
+										importParticleData(config, slot, index, nodeIndex, particlePath, properties);
+										
+										particleBuilder.append(",").append(properties.toString());
+										properties.setLength(0);	
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				String itemInsertQuery = helper.getImportQuery(name).replace("{1}", propertyBuilder.deleteCharAt(0).toString());
+				try (PreparedStatement itemStatement = connection.prepareStatement(itemInsertQuery)) {
+					itemStatement.executeUpdate();
+				}
+				
+				String nodeInsertQuery = helper.getNodeImportQuery(name).replace("{1}", nodeBuilder.deleteCharAt(0).toString());
+				try (PreparedStatement nodeStatement = connection.prepareStatement(nodeInsertQuery)) {
+					nodeStatement.executeUpdate();
+				}
+				
+				String particleInsertQuery = helper.getParticleImportQuery(name).replace("{1}", particleBuilder.deleteCharAt(0).toString());
+				try (PreparedStatement particleStatement = connection.prepareStatement(particleInsertQuery)) {
+					particleStatement.executeUpdate();
+				}
+				
+				if (metaBuilder.length() > 0)
+				{
+					String metaInsertQuery = helper.getMetaImportQuery(name).replace("{1}", metaBuilder.deleteCharAt(0).toString());
+					ParticleHats.debug(metaInsertQuery);
+					try (PreparedStatement metaStatement = connection.prepareStatement(metaInsertQuery)) {
+						metaStatement.executeUpdate();
 					}
 				}
 			});
 		});
+	}
+	
+	private void importMetaData (List<String> data, int slot, int dataType, int particleIndex, int nodeIndex, StringBuilder properties, StringBuilder metaBuilder)
+	{
+		int line = 0;
+		for (String s : data)
+		{
+			properties.append("(").append(slot);
+			properties.append(",").append(dataType);
+			properties.append(",").append(line++);
+			properties.append(",").append(particleIndex);
+			properties.append(",").append(nodeIndex);
+			properties.append(",'").append(s).append("'");
+			properties.append(")");
+			
+			metaBuilder.append(",").append(properties.toString());
+			properties.setLength(0);
+		}
+	}
+	
+	private void importParticleData (FileConfiguration config, int slot, int index, int nodeIndex, String particlePath, StringBuilder properties)
+	{			
+		properties.append("(").append(slot);
+		properties.append(",").append(index);
+		properties.append(",").append(nodeIndex);
+		properties.append(",").append(ParticleEffect.fromName(config.getString(particlePath + "particle")).getID());
+		
+		if (config.isInt(particlePath + "color")) {
+			properties.append(",").append(config.getInt(particlePath + "color"));
+		}
+		
+		else
+		{
+			int r = config.getInt(particlePath + "color.r");
+			int g = config.getInt(particlePath + "color.g");
+			int b = config.getInt(particlePath + "color.b");
+			properties.append(",").append(Color.fromRGB(r, g, b).asRGB());
+		}
+		
+		properties.append(",").append(!config.contains(particlePath + "color")); // Random
+		properties.append(",").append(config.getDouble(particlePath + "scale"));
+		
+		if (config.isString(particlePath + "item-data")) {
+			properties.append(",").append(getImportString(config.getString(particlePath + "item-data"), "NULL")); 
+		}
+		
+		else 
+		{
+			String itemData = config.getString(particlePath + "item-data.id", "APPLE") + ":" + config.getInt(particlePath + "item-data.damage-value");
+			properties.append(",").append("'" + itemData + "'");
+		}
+		
+		if (config.isString(particlePath + "block-data")) {
+			properties.append(",").append(getImportString(config.getString(particlePath + "block-data"), "NULL"));
+		}
+		
+		else
+		{
+			String blockData = config.getString(particlePath + "block-data.id", "STONE") + ":" + config.getInt(particlePath + "block-data.damage-value");
+			properties.append(",").append("'" + blockData + "'");
+		}
+		
+		properties.append(",").append(config.getInt(particlePath + "item-duration"));
+		properties.append(",").append(config.getBoolean(particlePath + "item-gravity"));
+		properties.append(",").append(config.getDouble(particlePath + "item-velocity.x"));
+		properties.append(",").append(config.getDouble(particlePath + "item-velocity.y"));
+		properties.append(",").append(config.getDouble(particlePath + "item-velocity.z"));
+		properties.append(")");
 	}
 	
 	/**
@@ -1177,10 +1431,13 @@ public class MySQLDatabase implements Database {
 		String soundName = set.getString("sound");
 		if (!set.wasNull())
 		{
-			Sound sound = Sound.valueOf(soundName);
-			if (sound != null) {
-				hat.setSound(sound);
-			}
+			try 
+			{
+				Sound sound = Sound.valueOf(soundName);
+				if (sound != null) {
+					hat.setSound(sound);
+				}
+			} catch (IllegalArgumentException e) {}	
 		}
 		
 		String customName = set.getString("custom_type");
@@ -1680,6 +1937,14 @@ public class MySQLDatabase implements Database {
 			return defaultValue;
 		}
 		return value;
+	}
+	
+	private String getImportString (String string, String fallback)
+	{
+		if (string == null) {
+			return fallback;
+		}
+		return "'" + string + "'";
 	}
 	
 	public enum Table
