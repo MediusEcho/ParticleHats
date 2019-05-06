@@ -541,6 +541,7 @@ public enum Message {
 	EDITOR_MAIN_MENU_NODE_DESCRIPTION                     ("&8Add a new hat,/n&8or edit an existing one"),
 	EDITOR_MAIN_MENU_POTION_DESCRIPTION                   ("/n&8Current:/n&8» &e{1=&cNot Set} {2}/n/n&3Click to Change/n&cShift Right Click to Clear"),
 	EDITOR_MAIN_MENU_NO_PARTICLES_DESCRIPTION             ("&8Select a Type that supports particles"),
+	EDITOR_MAIN_MENU_EQUIP_DESCRIPTION                    ("&8Temporarily equip this/n&8hat for 15 seconds"),
 	
 	// Type Menu
 	EDITOR_TYPE_MENU_TITLE                   ("Select a Type {1}/{2}"),
