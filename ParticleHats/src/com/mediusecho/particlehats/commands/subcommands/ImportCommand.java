@@ -1,6 +1,5 @@
 package com.mediusecho.particlehats.commands.subcommands;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,17 +47,9 @@ public class ImportCommand extends Command {
 			return false;
 		}
 		
-		try {
-			database.importMenu(config);
-		} 
+		database.importMenu(sender, config);
 		
-		catch (SQLException e) 
-		{
-			sender.sendMessage(Message.COMMAND_IMPORT_ERROR.replace("{1}", e.getClass().getSimpleName()));
-			return false;
-		}
-		
-		sender.sendMessage(Message.COMMAND_IMPORT_SUCCESS.replace("{1}", menuName));
+		//sender.sendMessage(Message.COMMAND_IMPORT_SUCCESS.replace("{1}", menuName));
 		return true;
 	}
 	
