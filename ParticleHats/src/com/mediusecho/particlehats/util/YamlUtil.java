@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.configuration.CustomConfig;
+import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 
 public class YamlUtil {
@@ -88,7 +89,7 @@ public class YamlUtil {
 		if (config.contains(path + "action"))
 		{
 			String action = config.getString(path + "action");
-			config.set(path + "action.left-click.id", action);
+			config.set(path + "action.left-click.id", ParticleAction.fromName(action, ParticleAction.DUMMY).getName());
 		}
 		
 		if (config.contains(path + "command"))
