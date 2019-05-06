@@ -1252,7 +1252,7 @@ public class YamlDatabase implements Database {
 		hat.setSlot(slot);
 		hat.setLocation(ParticleLocation.fromName(config.getString(path + "location")));
 		hat.setMode(ParticleMode.fromName(config.getString(path + "mode")));
-		hat.setAnimation(ParticleAnimation.fromName(config.getString(path + "animation")));	
+		hat.setAnimation(ParticleAnimation.fromName(config.getString(path + "animated")));	
 		hat.setOffset(config.getDouble(path + "offset.x", 0), config.getDouble(path + "offset.y", 0), config.getDouble(path + "offset.z", 0));
 		hat.setRandomOffset(config.getDouble(path + "random-offset.x", 0), config.getDouble(path + "random-offset.y", 0), config.getDouble(path + "random-offset.z", 0));
 		hat.setAngle(config.getDouble(path + "angle.x"), config.getDouble(path + "angle.y"), config.getDouble(path + "angle.z"));
