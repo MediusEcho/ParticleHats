@@ -869,13 +869,7 @@ public class YamlDatabase implements Database {
 				{
 					int index = MathUtil.clamp(StringUtil.toInt(key, 1) - 1, 0, 100);
 					
-					ParticleHats.debug("looking for particle, path: " + path);
-					ParticleHats.debug("found paticle: " + config.getString(path + "particle") + " for index: " + index);
-					
 					ParticleEffect particle = ParticleEffect.fromName(config.getString(path + "particle", "NONE"));
-					
-					ParticleHats.debug("we actually found " + particle.getName());
-					
 					hat.setParticle(index, particle);
 					
 					switch (particle.getProperty())
@@ -1086,6 +1080,10 @@ public class YamlDatabase implements Database {
 			if (rightAction.hasData()) {
 				config.set(path + "action.right-click.argument", hat.getRightClickArgument());
 			}
+		}
+		
+		if (hat.getDisplayMode() != IconDisplayMode.DISPLAY_IN_ORDER) {
+			config.set(path + "display-mode", hat.getDisplayMode().getName());
 		}
 		
 		Sound sound = hat.getSound();
