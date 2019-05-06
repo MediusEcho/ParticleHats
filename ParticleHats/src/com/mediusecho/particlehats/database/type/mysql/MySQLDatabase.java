@@ -32,6 +32,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
@@ -958,11 +959,11 @@ public class MySQLDatabase implements Database {
 	 * @throws SQLException 
 	 */
 	// TODO: Add callback if import fails
-	public void importMenu (CustomConfig menuConfig) throws SQLException
+	public void importMenu (Sender sender, CustomConfig menuConfig)
 	{
 		async (() ->
 		{
-			connect ((connection) ->
+			try (Connection connection = dataSource.getConnection())
 			{
 				FileConfiguration config = menuConfig.getConfig();
 				
@@ -1006,8 +1007,17 @@ public class MySQLDatabase implements Database {
 						properties.append(",").append(getImportString(config.getString(path + "name"), "NULL"));
 						properties.append(",").append(getImportString(config.getString(path + "permission"), "NULL"));
 						properties.append(",").append(getImportString(config.getString(path + "permission-denied"), "NULL"));
-						properties.append(",").append(ParticleType.fromName(config.getString(path + "type")).getID());
-						properties.append(",").append("NULL"); // Custom Type
+						
+						if (config.isString(path + "type")) {
+							properties.append(",").append(ParticleType.fromName(config.getString(path + "type")).getID());
+						}
+						
+						else
+						{
+							properties.append(",").append(ParticleType.fromName(config.getString(path + "type.id")).getID());
+							properties.append(",").append(getImportString(config.getString(path + "type.name"), "NULL")); // Custom Type
+						}
+						
 						properties.append(",").append(ParticleLocation.fromName(config.getString(path + "location")).getID());
 						properties.append(",").append(ParticleMode.fromName(config.getString(path + "mode")).getID());
 						properties.append(",").append(ParticleAnimation.fromName(config.getString(path + "animated")).getID());
@@ -1180,7 +1190,18 @@ public class MySQLDatabase implements Database {
 						metaStatement.executeUpdate();
 					}
 				}
-			});
+				
+				sync (() -> {
+					sender.sendMessage(Message.COMMAND_IMPORT_SUCCESS.replace("{1}", menuConfig.getName()));
+				});
+			}
+			
+			catch (SQLException e) 
+			{
+				sync(() -> {
+					sender.sendMessage(Message.COMMAND_IMPORT_ERROR.replace("{1}", e.getClass().getSimpleName()));
+				});
+			}
 		});
 	}
 	
@@ -1863,8 +1884,7 @@ public class MySQLDatabase implements Database {
 			callback.execute(connection);
 		}
 		
-		catch (SQLException e) 
-		{
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -2010,5 +2030,8 @@ public class MySQLDatabase implements Database {
 		}
 	}
 
-
+	@FunctionalInterface
+	public interface ImportCallback {
+		public void onImportFail(Exception e);
+	}
 }
