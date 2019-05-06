@@ -93,7 +93,7 @@ public enum ParticleEffect {
 	{
 		for (ParticleEffect pe : values())
 		{
-			particleNames.put(pe.toString().toLowerCase(), pe);
+			particleNames.put(pe.toString(), pe);
 			particleLegacyNames.put(pe.legacyName, pe);
 			particleIDs.put(pe.id, pe);
 		}
