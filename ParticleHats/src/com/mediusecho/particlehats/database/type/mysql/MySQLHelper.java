@@ -230,7 +230,7 @@ public class MySQLHelper {
 				+ "line TINYINT,"
 				+ "line_ex TINYINT,"
 				+ "node_index INT,"
-				+ "value VARCHAR(64),"
+				+ "value VARCHAR(256),"
 				+ "PRIMARY KEY(slot, type, line, line_ex, node_index),"
 				+ "FOREIGN KEY(slot) REFERENCES " + Table.ITEMS.format(menuName) + "(slot) ON DELETE CASCADE ON UPDATE CASCADE"
 				+ ")";
