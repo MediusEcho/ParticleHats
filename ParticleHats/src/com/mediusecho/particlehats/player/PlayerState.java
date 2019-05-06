@@ -454,7 +454,6 @@ public class PlayerState {
 	public boolean hasPurchased (Hat hat) 
 	{
 		HatReference reference = new HatReference(hat.getMenu(), hat.getSlot());
-		ParticleHats.debug("purchased hats contains " + reference.getMenuName() + ":" + reference.getSlot() + " ? " + purchasedHats.contains(reference));
 		return purchasedHats.contains(reference);
 	}
 	
