@@ -45,6 +45,9 @@ public class ParticleHats extends JavaPlugin {
 	
 	// TODO: Implement action-bar alternative
 	
+	// TODO: [4.1] Add a block menu with search functionality
+	// So players won't need to keep existing and finding the right item
+	
 	public static ParticleHats instance;
 	public static int serverVersion;
 	private static Logger logger;
