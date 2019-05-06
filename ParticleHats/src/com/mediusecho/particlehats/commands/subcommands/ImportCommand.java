@@ -35,7 +35,7 @@ public class ImportCommand extends Command {
 		String menuName = args.get(0);
 		if (core.getDatabase().getMenus(false).containsKey(menuName))
 		{
-			sender.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS.replace("1", menuName));
+			sender.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS.replace("{1}", menuName));
 			return false;
 		}
 		
@@ -44,7 +44,7 @@ public class ImportCommand extends Command {
 		
 		if (config == null)
 		{
-			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("1", menuName));
+			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
 			return false;
 		}
 		
@@ -54,11 +54,11 @@ public class ImportCommand extends Command {
 		
 		catch (SQLException e) 
 		{
-			sender.sendMessage(Message.COMMAND_IMPORT_ERROR.replace("1", e.getClass().getSimpleName()));
+			sender.sendMessage(Message.COMMAND_IMPORT_ERROR.replace("{1}", e.getClass().getSimpleName()));
 			return false;
 		}
 		
-		sender.sendMessage(Message.COMMAND_IMPORT_SUCCESS.replace("1", menuName));
+		sender.sendMessage(Message.COMMAND_IMPORT_SUCCESS.replace("{1}", menuName));
 		return true;
 	}
 	
