@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.events.EquipEvent;
+import com.mediusecho.particlehats.events.HatEquipEvent;
 import com.mediusecho.particlehats.hooks.CurrencyHook;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
@@ -151,7 +151,7 @@ public enum ParticleAction {
 		{
 			case EQUIP:
 			{
-				EquipEvent event = new EquipEvent(player, hat);
+				HatEquipEvent event = new HatEquipEvent(player, hat);
 				Bukkit.getPluginManager().callEvent(event);
 				
 				if (!event.isCancelled()) 
@@ -445,7 +445,7 @@ public enum ParticleAction {
 			
 			case DEMO:
 			{
-				EquipEvent event = new EquipEvent(player, hat);
+				HatEquipEvent event = new HatEquipEvent(player, hat);
 				Bukkit.getPluginManager().callEvent(event);
 				
 				if (!event.isCancelled()) 

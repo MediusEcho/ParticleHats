@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 
 import com.mediusecho.particlehats.particles.Hat;
 
-public class EquipEvent extends Event implements Cancellable {
+public class HatEquipEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	
@@ -16,7 +16,7 @@ public class EquipEvent extends Event implements Cancellable {
 	
 	private boolean cancelled = false;
 	
-	public EquipEvent (final Player player, final Hat hat)
+	public HatEquipEvent (final Player player, final Hat hat)
 	{
 		this.player = player;
 		this.hat = hat;
