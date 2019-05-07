@@ -465,7 +465,6 @@ public enum Message {
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
 	EDITOR_SLOT_DESCRIPTION        ("&3Left Click to Edit/n&3Right Click for Settings"),
 	EDITOR_HAT_FOOTER_DESCRIPTION ("&3Left Click to Edit/n&3Right Click for Settings/n&cShift Right Click to Delete"),
-	//EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}/n&7Particles: &f{7=None}/n&7Nodes: &f{8}/n/n&3Left Click to Edit/n&3Right Click for Settings/n&cShift Right Click to Delete"),
 	
 	EDITOR_HAT_SLOT_DESCRIPTION ("&7Slot: &f{1}"),
 	EDITOR_HAT_TYPE_DESCRIPTION ("&7Type: &f{1}"),
