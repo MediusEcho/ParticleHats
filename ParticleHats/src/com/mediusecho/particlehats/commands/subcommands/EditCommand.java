@@ -17,19 +17,14 @@ import com.mediusecho.particlehats.ui.MenuInventory;
 
 public class EditCommand extends Command {
 
-	//private final Database database;
-	
-	public EditCommand (final ParticleHats core)
-	{
-		//database = core.getDatabase();
-	}
-	
 	@Override
 	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		if (args.size() == 1) 
 		{
 			Set<String> menus = core.getDatabase().getMenus(false).keySet();
+			menus.add("purchase");
+			
 			List<String> result = new ArrayList<String>();
 			
 			if (sender.hasPermission(getPermission()))

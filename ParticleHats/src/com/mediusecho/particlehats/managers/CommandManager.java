@@ -43,7 +43,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand = new MainCommand();
 		mainCommand.register(new ReloadCommand());
 		mainCommand.register(new OpenCommand(core));
-		mainCommand.register(new EditCommand(core));
+		mainCommand.register(new EditCommand());
 		mainCommand.register(new CreateCommand());
 		mainCommand.register(new DebugDeleteMenu());
 		mainCommand.register(new DebugCommand());
