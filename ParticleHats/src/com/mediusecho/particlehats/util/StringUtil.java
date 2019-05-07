@@ -343,42 +343,6 @@ public class StringUtil {
 		return new String[]{"", ""};
 	}
 	
-	/**
-	 * Creates and returns a new list with the appropriate ChatColor and any {} or %%'s replaced
-	 * @param list
-	 * @param hat
-	 * @return
-	 */
-//	public static List<String> translateList (List<String> list, Hat hat)
-//	{
-//		List<String> translatedList = new ArrayList<String>();		
-//		for (String s : list)
-//		{			
-//			String soundName = "";
-//			if (hat.getSound() != null) {
-//				soundName = StringUtil.capitalizeFirstLetter(hat.getSound().toString().toLowerCase());
-//			}
-//			
-//			String translated = 
-//					s.replace(StringUtil.PRICE_REGEX_LEGACY,    "" + hat.getPrice())
-//					.replace(StringUtil.CURRENCY_REGEX_LEGACY,  SettingsManager.CURRENCY.getString())
-//					.replace(StringUtil.TYPE_REGEX_LEGACY,      hat.getType().getDisplayName())
-//					.replace(StringUtil.MODE_REGEX_LEGACY,      hat.getMode().getDisplayName())
-//					.replace(StringUtil.LOCATION_REGEX_LEGACY,  hat.getLocation().getDisplayName())
-//					
-//					.replace(StringUtil.PRICE_REGEX,    "" + hat.getPrice())
-//					.replace(StringUtil.CURRENCY_REGEX,  SettingsManager.CURRENCY.getString())
-//					.replace(StringUtil.TYPE_REGEX,      hat.getType().getDisplayName())
-//					.replace(StringUtil.MODE_REGEX,      hat.getMode().getDisplayName())
-//					.replace(StringUtil.LOCATION_REGEX,  hat.getLocation().getDisplayName())
-//					.replace(StringUtil.SOUND_REGEX,     soundName);
-//			
-//			translated = ChatColor.translateAlternateColorCodes('&', translated);
-//			translatedList.add(translated);
-//		}
-//		return translatedList;
-//	}
-	
 	public static List<String> translateFormatting (List<String> list, String regex)
 	{	
 		List<String> formattedList = new ArrayList<String>();
@@ -391,5 +355,21 @@ public class StringUtil {
 			formattedList.add(formatted);
 		}
 		return formattedList;
+	}
+	
+	/**
+	 * Get the time formatted as mm:ss from an int
+	 * @param time
+	 * @return
+	 */
+	public static String getTimeFormat (int time)
+	{
+		int remainder = time % 3600; // get the rest in seconds
+		int minutes = remainder / 60; // get the amount of minutes from the rest
+		int seconds = remainder % 60; // get the new rest
+		String disMinu = (minutes < 10 ? "0" : "") + minutes; // get minutes and add "0" before if lower than 10
+		String disSec = (seconds < 10 ? "0" : "") + seconds; // get seconds and add "0" before if lower than 10
+		
+		return disMinu + ":" + disSec; //get the whole time
 	}
 }
