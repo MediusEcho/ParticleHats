@@ -67,7 +67,6 @@ public class YamlDatabase implements Database {
 	private final Map<UUID, CustomConfig> playerConfigs;
 	private final List<Group> groups;
 	
-	// TODO: Descriptions not getting deleted
 	public YamlDatabase (ParticleHats core)
 	{
 		this.core = core;
@@ -460,6 +459,8 @@ public class YamlDatabase implements Database {
 				{
 					if (!hat.getDescription().isEmpty()) {
 						config.set(path + "description", hat.getDescription());
+					} else {
+						config.set(path + "description", null);
 					}
 					break;
 				}
@@ -468,6 +469,8 @@ public class YamlDatabase implements Database {
 				{
 					if (!hat.getPermissionDescription().isEmpty()) {
 						config.set(path + "permission-description", hat.getPermissionDescription());
+					} else {
+						config.set(path + "permission-description", null);
 					}
 					break;
 				}
@@ -482,6 +485,10 @@ public class YamlDatabase implements Database {
 						items.remove(0);
 						
 						config.set(path + "icons", items);
+					} 
+					
+					else {
+						config.set(path + "icons", null);
 					}
 					break;
 				}
@@ -1050,10 +1057,14 @@ public class YamlDatabase implements Database {
 		
 		if (!hat.getDescription().isEmpty()) {
 			config.set(path + "description", hat.getDescription());
+		} else {
+			config.set(path + "description", null);
 		}
 		
 		if (!hat.getPermissionDescription().isEmpty()) {
 			config.set(path + "permission-description", hat.getPermissionDescription());
+		} else {
+			config.set(path + "permission-description", null);
 		}
 		
 		if (!hat.getPermission().equals("all")) {
@@ -1098,6 +1109,10 @@ public class YamlDatabase implements Database {
 			items.remove(0);
 			
 			config.set(path + "icons", items);
+		}
+		
+		else {
+			config.set(path + "icons", null);
 		}
 		
 		Sound sound = hat.getSound();
@@ -1333,6 +1348,8 @@ public class YamlDatabase implements Database {
 		ItemStackData itemStackData = hat.getParticleData(index).getItemStackData();
 		if (!itemStackData.getItems().isEmpty()) {
 			config.set(path + "items", itemStackData.getItemNames());
+		} else {
+			config.set(path + "items", null);
 		}
 	}
 	
