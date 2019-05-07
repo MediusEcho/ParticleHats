@@ -408,12 +408,7 @@ public class EditorLore {
 			String description = Message.EDITOR_ACTION_MENU_DEMO_DESCRIPTION.getValue();
 			
 			int time = hat.getDemoDuration() / 20;
-			int remainder = time % 3600; // get the rest in seconds
-			int minutes = remainder / 60; // get the amount of minutes from the rest
-			int seconds = remainder % 60; // get the new rest
-			String disMinu = (minutes < 10 ? "0" : "") + minutes; // get minutes and add "0" before if lower than 10
-			String disSec = (seconds < 10 ? "0" : "") + seconds; // get seconds and add "0" before if lower than 10
-			String formattedTime = disMinu + ":" + disSec; //get the whole time
+			String formattedTime = StringUtil.getTimeFormat(time);
 			
 			String s = description
 					.replace("{1}", action.getStrippedName())
