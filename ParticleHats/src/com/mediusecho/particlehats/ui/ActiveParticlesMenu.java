@@ -180,7 +180,7 @@ public class ActiveParticlesMenu extends Menu {
 		int index = 0;
 		for (Hat hat : activeHats)
 		{
-			ItemStack item = ItemUtil.createItem(hat.getMaterial(), hat.getDisplayName());
+			ItemStack item = hat.getItem();//ItemUtil.createItem(hat.getMaterial(), hat.getDisplayName());
 			EditorLore.updateActiveHatDescription(item, hat);
 			
 			if (!hat.isHidden()) {
