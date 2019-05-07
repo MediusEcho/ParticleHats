@@ -67,9 +67,10 @@ public class CapeEffect extends Effect {
 		
 		List<Vector> points = new ArrayList<Vector>();
 		
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 5; j++) {
-				points.add(new Vector(xpoints[j] - (i * xoffset), 1.4 - (i * 0.18), -0.28 - (i * zoffset)));
+		for (int x = 0; x < 5; x++)
+		{
+			for (int y = 0; y < 6; y++) {
+				points.add(new Vector(xpoints[x] - (x * xoffset), 1.4 - (y * 0.18), -0.28 - (y * zoffset)));
 			}
 		}
 		
