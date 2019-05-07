@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -93,7 +92,6 @@ public class Hat {
 	private double pitch  = 1D;
 	
 	private ItemStack item = ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, 1);
-	private Material material = CompatibleMaterial.SUNFLOWER.getMaterial();
 	private IconData iconData;
 	
 	private Vector offset;
@@ -860,7 +858,7 @@ public class Hat {
 	}
 	
 	/**
-	 * Set how many ticks this hat has before being unequipped
+	 * Set how many ticks this hat has before being removed
 	 * @param demoDuration
 	 */
 	public void setDemoDuration (int demoDuration)
@@ -869,6 +867,10 @@ public class Hat {
 		setProperty("duration", Integer.toString(demoDuration));
 	}
 	
+	/**
+	 * Set how many seconds this hat has before being removed
+	 * @param seconds
+	 */
 	public void setDuration (int seconds) 
 	{
 		this.demoDuration = MathUtil.clamp(seconds, 1, 1800) * 20;
@@ -1212,6 +1214,11 @@ public class Hat {
 		getParticleData(index).setBlock(block);
 	}
 	
+	/**
+	 * Get this hats particle block data
+	 * @param index
+	 * @return
+	 */
 	public ItemStack getParticleBlock (int index) {
 		return getParticleData(index).getBlock();
 	}
@@ -1244,6 +1251,9 @@ public class Hat {
 		setProperty("sound", "'" + sound.toString() + "'");
 	}
 	
+	/**
+	 * Removes this hat's sound
+	 */
 	public void removeSound () 
 	{
 		this.sound = null;
@@ -1258,6 +1268,11 @@ public class Hat {
 		return sound;
 	}
 	
+	/**
+	 * Players this hat's sound for the player
+	 * @param player
+	 * @return
+	 */
 	public boolean playSound (Player player)
 	{
 		if (sound == null) {
@@ -1320,16 +1335,12 @@ public class Hat {
 		}
 	}
 	
+	/**
+	 * Get this hat's item
+	 * @return
+	 */
 	public ItemStack getItem () {
 		return item;
-	}
-	
-	/**
-	 * Get this hats material
-	 * @return The Material that appears in menus
-	 */
-	public Material getMaterial () {
-		return material;
 	}
 	
 	/**
@@ -1552,7 +1563,10 @@ public class Hat {
 			return menuItem;
 		}
 		
-		return ItemUtil.createItem(material, displayName, normalDescription);
+		menuItem = item.clone();
+		ItemUtil.setNameAndDescription(menuItem, name, normalDescription);
+		
+		return menuItem;
 	}
 	
 	/**
@@ -1655,7 +1669,6 @@ public class Hat {
 		hat.setIconUpdateFrequency(iconData.getUpdateFrequency());
 		hat.setDisplayMode(iconData.getDisplayMode());
 		hat.getIconData().setItems(new ArrayList<ItemStackTemplate>(getIconData().getItems()));
-		//hat.getIconData().setMaterials(new ArrayList<Material>(getIconData().getMaterials()));
 		
 		hat.clearPropertyChanges();
 		return hat;
@@ -1696,7 +1709,7 @@ public class Hat {
 		clone.sound = sound;
 		clone.volume = volume;
 		clone.pitch = pitch;
-		clone.material = material;
+		clone.item = item.clone();
 		clone.offset = offset.clone();
 		clone.randomOffset = randomOffset.clone();
 		clone.angle = angle.clone();
