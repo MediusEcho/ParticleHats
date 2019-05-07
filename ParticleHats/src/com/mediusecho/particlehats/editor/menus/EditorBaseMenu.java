@@ -339,7 +339,8 @@ public class EditorBaseMenu extends EditorMenu {
 		clonedHat.setSlot(newSlot);
 		
 		setHat(newSlot, clonedHat);
-		setButton(newSlot, new ItemStack(clonedHat.getMaterial()), existingParticleAction);
+		setButton(newSlot, clonedHat.getItem(), existingParticleAction);
+		//setButton(newSlot, new ItemStack(clonedHat.getMaterial()), existingParticleAction);
 		
 		onHatNameChange(clonedHat, newSlot);
 		addItemDescription(getItem(newSlot), clonedHat);

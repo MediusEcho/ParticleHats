@@ -80,7 +80,7 @@ public class EditorSlotMenu extends EditorMenu {
 			Hat hat = editorBaseMenu.getHat(i);
 			
 			if (hat != null) {
-				item = ItemUtil.createItem(hat.getMaterial(), 1);
+				item = hat.getItem().clone();
 			}
 			
 			else {
