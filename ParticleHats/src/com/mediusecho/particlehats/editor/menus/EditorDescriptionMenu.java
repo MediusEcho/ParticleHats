@@ -32,8 +32,6 @@ public class EditorDescriptionMenu extends EditorListMenu {
 	private int editingLine = -1;
 	private boolean isModified = false;
 	
-	// TODO: [Opt] Allow regex in description?
-	
 	public EditorDescriptionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean editingDescription) 
 	{
 		super(core, owner, menuBuilder);
