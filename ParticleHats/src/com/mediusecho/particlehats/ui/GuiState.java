@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -56,7 +55,6 @@ public enum GuiState {
 		{
 			case ACTIVE:
 			{
-				ParticleHats.debug("setting GuiState to INNACTIVE");
 				playerState.setGuiState(GuiState.INNACTIVE);
 				playerState.closeOpenMenu();
 				playerState.clearMenuCache();
@@ -69,7 +67,6 @@ public enum GuiState {
 				{
 					if (playerState.getMetaState() == MetaState.NONE)
 					{
-						ParticleHats.debug("settings GuiState to INNACTIVE from editor");
 						playerState.getMenuBuilder().onClose();
 						playerState.setMenuBuilder(null);
 						playerState.setGuiState(GuiState.INNACTIVE);
