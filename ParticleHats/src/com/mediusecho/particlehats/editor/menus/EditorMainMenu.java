@@ -263,11 +263,19 @@ public class EditorMainMenu extends EditorMenu {
 	protected void buildSection ()
 	{
 		// Equip
-		setButton(equipItemSlot, ItemUtil.createItem(Material.DIAMOND_HELMET, Message.EDITOR_MISC_EQUIP), (event, slot) ->
+		ItemStack equipItem = ItemUtil.createItem(Material.DIAMOND_HELMET, Message.EDITOR_MISC_EQUIP, Message.EDITOR_MAIN_MENU_EQUIP_DESCRIPTION);
+		setButton(equipItemSlot, equipItem, (event, slot) ->
 		{
-			Hat clone = targetHat.equippableClone();
+			Hat clone;
+			
+			if (event.isShiftClick()) {
+				clone = targetHat.equippableClone();
+			} else {
+				clone = menuBuilder.getBaseHat().equippableClone();
+			}
+			
 			clone.setPermanent(false);
-			clone.setDuration(10);
+			clone.setDuration(15);
 			clone.clearPropertyChanges();
 			
 			core.getParticleManager().equipHat(ownerID, clone);
