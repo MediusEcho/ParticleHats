@@ -157,8 +157,8 @@ public abstract class Effect {
 				
 				// Display as an animation
 				if (supportsAnimation() && hat.getAnimation() == ParticleAnimation.ANIMATED)
-				{
-					int size = frame.size() - 1;
+				{					
+					int size = frame.size();
 					int frameIndex = frames.indexOf(frame);
 					int index = MathUtil.clamp(hat.getAnimationIndex(frameIndex), 0, size);
 					
@@ -172,7 +172,7 @@ public abstract class Effect {
 					
 					clone.add(getTrackingPosition(hat, target, location, cos, sin));
 					displayParticle(clone, hat, particleIndex);
-					hat.setAnimationIndex(frameIndex, MathUtil.wrap(++index, size, 0));
+					hat.setAnimationIndex(frameIndex, MathUtil.wrap(index + 1, size, 0));
 				}
 				
 				// Display statically
@@ -184,7 +184,6 @@ public abstract class Effect {
 						v.multiply(hat.getScale());
 						v = getAngleVector(angleXRad, angleYRad, angleZRad, v);
 						
-						//Vector v = getAngleVector(angleXRad, angleYRad, angleZRad, target.clone());
 						Location clone = location.clone().add(offsetX, 0, offsetZ);		
 						
 						clone.add(getTrackingPosition(hat, v, location, cos, sin));
