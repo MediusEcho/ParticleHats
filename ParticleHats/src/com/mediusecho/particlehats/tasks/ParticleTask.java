@@ -243,7 +243,7 @@ public class ParticleTask extends BukkitRunnable {
 				if (e instanceof Arrow)
 				{
 					Arrow arrow = (Arrow)e;
-					if (!arrow.isInBlock())
+					if (!arrow.isOnGround())
 					{
 						if (arrow.getShooter() instanceof Player) {
 							hat.displayType(ticks, arrow);
