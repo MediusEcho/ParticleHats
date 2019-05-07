@@ -1,5 +1,6 @@
 package com.mediusecho.particlehats.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -738,34 +739,124 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
-	// TODO: Add extra hat descriptions
-	public static void updateHatGenericDescription (ItemStack item, Hat hat)
+	/**
+	 * Applies a description to this ItemStack using Hat properties
+	 * @param item
+	 * @param hat
+	 * @param isHat
+	 */
+	public static void updateHatDescription (ItemStack item, Hat hat, boolean isHat)
 	{
-		String description = Message.EDITOR_HAT_GENERIC_DESCRIPTION.getValue();
+		List<String> description = new ArrayList<String>();
 		
-		String[] tickInfo = StringUtil.parseValue(description, "6");
-		String[] particleInfo = StringUtil.parseValue(description, "7");
+		if (isHat)
+		{
+			String slotDesc = Message.EDITOR_HAT_SLOT_DESCRIPTION.getValue();
+			description.add(slotDesc.replace("{1}", Integer.toString(hat.getSlot())));
+		}
 		
-		String type = hat.getType().isCustom() ? hat.getCustomEffect().getImageDisplayName() : hat.getType().getStrippedName();
-		String ticks = hat.getUpdateFrequency() > 1 ? tickInfo[1] : "";
-		String particles = hat.hasParticles() ? Integer.toString(hat.getParticleCount()) : particleInfo[1];
+		if (hat.getLeftClickAction() == ParticleAction.EQUIP || hat.getRightClickAction() == ParticleAction.EQUIP)
+		{
+			String typeDesc = Message.EDITOR_HAT_TYPE_DESCRIPTION.getValue();
+			String type = hat.getType().isCustom() ? hat.getCustomEffect().getImageDisplayName() : hat.getType().getStrippedName();
+			description.add(typeDesc.replace("{1}", type));
+			
+			String locationDesc = Message.EDITOR_HAT_LOCATION_DESCRIPTION.getValue();
+			description.add(locationDesc.replace("{1}", hat.getLocation().getStrippedName()));
+			
+			String modeDesc = Message.EDITOR_HAT_MODE_DESCRIPTION.getValue();
+			description.add(modeDesc.replace("{1}", hat.getMode().getStrippedName()));
+			
+			String frequencyDesc = Message.EDITOR_HAT_FREQUENCY_DESCRIPTION.getValue();
+			String[] tickInfo = StringUtil.parseValue(frequencyDesc, "2");
+			String ticks = hat.getUpdateFrequency() > 1 ? tickInfo[1] : "";
+			description.add(frequencyDesc.replace("{1}", Integer.toString(hat.getUpdateFrequency())).replace(tickInfo[0], ticks));
+			
+			String particleDesc = Message.EDITOR_HAT_PARTICLES_DESCRIPTION.getValue();
+			String[] particleInfo = StringUtil.parseValue(particleDesc, "1");
+			String particles = hat.hasParticles() ? Integer.toString(hat.getParticleCount()) : particleInfo[1];
+			description.add(particleDesc.replace(particleInfo[0], particles));
+			
+			if (isHat)
+			{
+				String nodeDesc = Message.EDITOR_HAT_NODES_DESCRIPTION.getValue();
+				description.add(nodeDesc.replace("{1}", Integer.toString(hat.getNodeCount())));
+			}
+		}
 		
-		String s = description
-				.replace("{1}", Integer.toString(hat.getSlot()))
-				.replace("{2}", type)
-				.replace("{3}", hat.getLocation().getDisplayName())
-				.replace("{4}", hat.getMode().getDisplayName())
-				.replace("{5}", Integer.toString(hat.getUpdateFrequency()))
-				.replace(particleInfo[0], particles)
-				.replace("{8}", Integer.toString(hat.getNodeCount()))
-				.replace(tickInfo[0], ticks);
+		if (isHat)
+		{
+			ParticleAction leftAction = hat.getLeftClickAction();
+			String leftActionDesc = Message.EDITOR_HAT_LEFT_CLICK_DESCRIPTION.getValue();
+			
+			switch  (leftAction)
+			{
+				case COMMAND:
+				{
+					String command = Message.EDITOR_HAT_COMMAND_DESCRIPTION.getValue().replace("{1}", hat.getLeftClickArgument());
+					description.add(leftActionDesc.replace("{1}", command));
+				}
+					break;
+					
+				case OPEN_MENU_PERMISSION:
+				case OPEN_MENU:
+				{
+					String menu = Message.EDITOR_HAT_MENU_DESCRIPTION.getValue().replace("{1}", hat.getLeftClickArgument());
+					description.add(leftActionDesc.replace("{1}", menu));
+				}
+					break;
+					
+				case DEMO:
+				{
+					String formattedTime = StringUtil.getTimeFormat(hat.getDemoDuration() / 20);
+					String durationDesc = Message.EDITOR_HAT_DURATION_DESCRIPTION.getValue().replace("{1}", formattedTime);
+					
+					description.add(leftActionDesc.replace("{1}", durationDesc));
+				}
+					break;
+					
+				default:
+					description.add(leftActionDesc.replace("{1}", leftAction.getStrippedName()));
+			}
+			
+			ParticleAction rightAction = hat.getRightClickAction();
+			String rightActionDesc = Message.EDITOR_HAT_RIGHT_CLICK_DESCRIPTION.getValue();
+			
+			switch  (rightAction)
+			{
+				case COMMAND:
+				{
+					String command = Message.EDITOR_HAT_COMMAND_DESCRIPTION.getValue().replace("{1}", hat.getRightClickArgument());
+					description.add(rightActionDesc.replace("{1}", command));
+				}
+					break;
+					
+				case OPEN_MENU_PERMISSION:
+				case OPEN_MENU:
+				{
+					String menu = Message.EDITOR_HAT_MENU_DESCRIPTION.getValue().replace("{1}", hat.getRightClickArgument());
+					description.add(rightActionDesc.replace("{1}", menu));
+				}
+					break;
+					
+				case DEMO:
+				{
+					String formattedTime = StringUtil.getTimeFormat(hat.getDemoDuration() / 20);
+					String durationDesc = Message.EDITOR_HAT_DURATION_DESCRIPTION.getValue().replace("{1}", formattedTime);
+					
+					description.add(rightActionDesc.replace("{1}", durationDesc));
+				}
+					break;
+					
+				default:
+					description.add(rightActionDesc.replace("{1}", rightAction.getStrippedName()));
+			}
+		}
 		
-		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
-	}
-	
-	public static void updateHatActionDescription (ItemStack item, Hat hat)
-	{
+		description.add("");
+		description.addAll(StringUtil.parseDescription(Message.EDITOR_HAT_FOOTER_DESCRIPTION.getValue()));
 		
+		ItemUtil.setItemDescription(item, StringUtil.colorize(description));
 	}
 	
 	public static void updateActiveHatDescription (ItemStack item, Hat hat)
@@ -785,6 +876,11 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
+	/**
+	 * Applies a description to an ItemStack using potion data
+	 * @param item
+	 * @param pe
+	 */
 	public static void updatePotionDescription (ItemStack item, PotionEffect pe)
 	{
 		String description = Message.EDITOR_MAIN_MENU_POTION_DESCRIPTION.getValue();
@@ -800,6 +896,11 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
+	/**
+	 * Applies a description to an ItemStack using potion data
+	 * @param item
+	 * @param pe
+	 */
 	public static void updatePotionStrengthDescription (ItemStack item, PotionEffect pe)
 	{
 		String description = Message.EDITOR_POTION_MENU_STRENGTH_DESCRIPTION.getValue();
@@ -811,6 +912,12 @@ public class EditorLore {
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
+	/**
+	 * Returns a menu's title trimmed to find an inventories character limit
+	 * @param title
+	 * @param message
+	 * @return
+	 */
 	public static String getTrimmedMenuTitle (String title, Message message)
 	{
 		final int charLimit = 28;

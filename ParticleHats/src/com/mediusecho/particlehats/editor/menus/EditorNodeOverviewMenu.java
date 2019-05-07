@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorListMenu;
+import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
@@ -52,8 +53,6 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_NODE_OVERVIEW_MENU_TITLE.getValue());
 		build();
 	}
-	
-	// TODO: Add node description
 	
 	private void onAdd (int slot)
 	{
@@ -134,6 +133,8 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 			String title = nodeTitle.replace("{1}", Integer.toString(i + 1));
 			ItemStack item = ItemUtil.createItem(Material.LEATHER_HELMET, title, StringUtil.parseDescription(Message.EDITOR_NODE_OVERVIEW_MENU_NODE_DESCRIPTION.getValue()));
 		
+			EditorLore.updateHatDescription(item, hatNodes.get(i), false);
+			
 			setItem(getNormalIndex(i, 10, 2), item);
 		}
 		

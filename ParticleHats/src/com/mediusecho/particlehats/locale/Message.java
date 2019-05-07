@@ -464,9 +464,22 @@ public enum Message {
 	EDITOR_BASE_MENU_TITLE         ("Editing ({1=...}&r)"),
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
 	EDITOR_SLOT_DESCRIPTION        ("&3Left Click to Edit/n&3Right Click for Settings"),
-	EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}/n&7Particles: &f{7=None}/n&7Nodes: &f{8}/n/n&3Left Click to Edit/n&3Right Click for Settings/n&cShift Right Click to Delete"),
-	EDITOR_HAT_COMMAND_DESCRIPTION ("&7Slot: &f{1}/n&7Left Click: &f{2}/n&7Right Click: &f{3}"),
-	EDITOR_HAT_MENU_DESCRIPTION (""),
+	EDITOR_HAT_FOOTER_DESCRIPTION ("&3Left Click to Edit/n&3Right Click for Settings/n&cShift Right Click to Delete"),
+	//EDITOR_HAT_GENERIC_DESCRIPTION ("&7Slot &f{1}/n&7Type: &f{2}/n&7Location: &f{3}/n&7Mode: &f{4}/n&7Update: &f{5} &7tick{6=s}/n&7Particles: &f{7=None}/n&7Nodes: &f{8}/n/n&3Left Click to Edit/n&3Right Click for Settings/n&cShift Right Click to Delete"),
+	
+	EDITOR_HAT_SLOT_DESCRIPTION ("&7Slot: &f{1}"),
+	EDITOR_HAT_TYPE_DESCRIPTION ("&7Type: &f{1}"),
+	EDITOR_HAT_LOCATION_DESCRIPTION ("&7Location: &f{1}"),
+	EDITOR_HAT_MODE_DESCRIPTION ("&7Mode: &f{1}"),
+	EDITOR_HAT_FREQUENCY_DESCRIPTION ("&7Update: &f{1} &7tick{2=s}"),
+	EDITOR_HAT_PARTICLES_DESCRIPTION ("&7Particles: &f{1=None}"),
+	EDITOR_HAT_NODES_DESCRIPTION ("&7Nodes: &f{1}"),
+	EDITOR_HAT_LEFT_CLICK_DESCRIPTION ("&7Left Click: &f{1}"),
+	EDITOR_HAT_RIGHT_CLICK_DESCRIPTION ("&7Right Click: &f{1}"),
+	
+	EDITOR_HAT_COMMAND_DESCRIPTION ("Run Command (/{1})"),
+	EDITOR_HAT_MENU_DESCRIPTION    ("Open Menu ({1})"),
+	EDITOR_HAT_DURATION_DESCRIPTION ("Equip for {1}"),
 	
 	// Settings Menu
 	EDITOR_SETTINGS_MENU_TITLE             ("Menu Settings"),

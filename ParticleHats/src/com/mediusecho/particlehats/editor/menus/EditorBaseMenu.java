@@ -17,7 +17,6 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
-import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
 
@@ -405,11 +404,13 @@ public class EditorBaseMenu extends EditorMenu {
 		editorSettingsMenu.open();
 	}
 	
-	private void addItemDescription (ItemStack item, Hat hat)
-	{
-		if (hat.getLeftClickAction() == ParticleAction.EQUIP || hat.getRightClickAction() == ParticleAction.EQUIP) {
-			EditorLore.updateHatGenericDescription(item, hat);
-		}
+	/**
+	 * Adds a brief description of this hat's properties
+	 * @param item
+	 * @param hat
+	 */
+	private void addItemDescription (ItemStack item, Hat hat) {
+		EditorLore.updateHatDescription(item, hat, true);
 	}
 	
 	@Override
