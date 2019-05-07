@@ -208,7 +208,7 @@ public abstract class Effect {
 			index = 0;
 		}
 		
-		if (particleEffect != ParticleEffect.NONE)
+		if (particleEffect.canDisplay())
 		{
 			Vector randomOffset = hat.getRandomOffset();
 			double rxo = randomOffset.getX();

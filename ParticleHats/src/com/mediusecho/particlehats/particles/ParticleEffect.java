@@ -76,7 +76,8 @@ public enum ParticleEffect {
 	FALLING_LAVA           (58, -1, 14, Material.LAVA_BUCKET),
 	FALLING_WATER          (59, -1, 14, Material.WATER_BUCKET),
 	FLASH                  (60, -1, 14, CompatibleMaterial.LANTERN),
-	SNEEZE                 (61, -1, 14, CompatibleMaterial.GRAY_DYE);
+	SNEEZE                 (61, -1, 14, CompatibleMaterial.GRAY_DYE),
+	EMPTY_SPACE            (62, -1, -1, CompatibleMaterial.BARRIER);
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
@@ -250,7 +251,7 @@ public enum ParticleEffect {
 	 * @return
 	 */
 	public boolean canDisplay () {
-		return this != NONE && this != ITEMSTACK;
+		return this != NONE && this != EMPTY_SPACE;
 	}
 	
 	/**
