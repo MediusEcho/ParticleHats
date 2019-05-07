@@ -35,6 +35,7 @@ import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.ColorData;
 import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ItemStackData;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -256,7 +257,9 @@ public class YamlDatabase implements Database {
 	}
 
 	@Override
-	public void createHat(String menuName, int slot) {}
+	public void createHat(String menuName, Hat hat) {
+		saveHat(menuName, hat.getSlot(), hat);
+	}
 	
 	@Override
 	public void loadHat(String menuName, int slot, Hat hat) {
@@ -1101,7 +1104,8 @@ public class YamlDatabase implements Database {
 			config.set(path + "icon-update-frequency", hat.getIconUpdateFrequency());
 		}
 		
-		if (!hat.getIconData().getItems().isEmpty()) 
+		List<ItemStackTemplate> icons = hat.getIconData().getItems();
+		if (!icons.isEmpty() && icons.size() > 1)
 		{
 			List<String> items = hat.getIconData().getItemNames();
 			

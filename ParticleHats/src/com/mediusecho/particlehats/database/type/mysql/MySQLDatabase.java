@@ -65,7 +65,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class MySQLDatabase implements Database {
 
-	// TODO: [Opt] ability to update tables
+	// TODO: ability to update tables
 	
 	private HikariDataSource dataSource;
 	private MySQLHelper helper;
@@ -381,8 +381,10 @@ public class MySQLDatabase implements Database {
 	}
 	
 	@Override
-	public void createHat(String menuName, int slot) 
+	public void createHat(String menuName, Hat hat) 
 	{
+		final int slot = hat.getSlot();
+		
 		async(() ->
 		{
 			connect((connection) ->

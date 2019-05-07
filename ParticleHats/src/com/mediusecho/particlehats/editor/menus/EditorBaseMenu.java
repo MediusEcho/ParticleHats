@@ -378,7 +378,7 @@ public class EditorBaseMenu extends EditorMenu {
 		setHat(slot, hat);
 		setButton(slot, emptyItem, existingParticleAction);
 		
-		core.getDatabase().createHat(menuInventory.getName(), slot);
+		core.getDatabase().createHat(menuInventory.getName(), hat);
 		return hat;
 	}
 	

@@ -99,7 +99,7 @@ public interface Database {
 	 * @param menuName
 	 * @param slot
 	 */
-	public void createHat (String menuName, int slot);
+	public void createHat (String menuName, Hat hat);
 	
 	/**
 	 * Loads all data for this hat
