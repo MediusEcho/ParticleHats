@@ -958,7 +958,6 @@ public class MySQLDatabase implements Database {
 	 * @return
 	 * @throws SQLException 
 	 */
-	// TODO: Add callback if import fails
 	public void importMenu (Sender sender, CustomConfig menuConfig)
 	{
 		async (() ->
@@ -999,7 +998,6 @@ public class MySQLDatabase implements Database {
 						String path = "items." + key + ".";
 						int slot = StringUtil.toInt(key, -1);
 						
-						// TODO: Add 4.0 saved data
 						properties.append("(").append(slot);
 						properties.append(",").append(1); // version
 						properties.append(",").append(getImportString(config.getString(path + "id"), "'STONE'"));
