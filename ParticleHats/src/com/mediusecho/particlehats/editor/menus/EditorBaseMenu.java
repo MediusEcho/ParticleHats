@@ -331,6 +331,11 @@ public class EditorBaseMenu extends EditorMenu {
 		core.getDatabase().moveHat(currentHat, swappingHat, getName(), null, currentSlot, newSlot, swapping);
 	}
 	
+	/**
+	 * Clones a hat and adds it to the new slot
+	 * @param currentSlot
+	 * @param newSlot
+	 */
 	public void cloneHat (int currentSlot, int newSlot)
 	{
 		Hat currentHat = getHat(currentSlot);
@@ -348,6 +353,11 @@ public class EditorBaseMenu extends EditorMenu {
 		core.getDatabase().cloneHat(getName(), currentHat, newSlot);
 	}
 	
+	/**
+	 * Updates the item's display name that belongs in this slot
+	 * @param hat
+	 * @param slot
+	 */
 	public void onHatNameChange (Hat hat, int slot) {
 		ItemUtil.setItemName(getItem(slot), hat.getDisplayName());
 	}
@@ -385,6 +395,9 @@ public class EditorBaseMenu extends EditorMenu {
 		core.getDatabase().deleteHat(menuInventory.getName(), slot);
 	}
 	
+	/**
+	 * Opens menu settings
+	 */
 	private void openSettings ()
 	{
 		EditorSettingsMenu editorSettingsMenu = new EditorSettingsMenu(core, owner, menuBuilder);
