@@ -78,6 +78,10 @@ public class YamlUtil {
 			config.set(path + "permission-denied", noPermission);
 		}
 		
+		if (config.isDouble(path + "offset") || config.isInt(path + "offset")) {
+			config.set(path + "offset.y", config.getDouble(path + "offset"));
+		}
+		
 		if (config.contains(path + "no-permission-lore"))
 		{
 			List<String> noPermissionLore = config.getStringList(path + "no-permission-lore");
@@ -108,40 +112,76 @@ public class YamlUtil {
 	 * @param config
 	 * @param path
 	 */
-	// TODO: Verify all node data is loaded
 	private static void updateNodeFormat (FileConfiguration config, String legacyPath, String newPath, int index)
 	{
 		String nodePath = newPath + "nodes." + index + ".";
 		
-		config.set(nodePath + "type", config.getString(legacyPath + "type"));
-		config.set(legacyPath + "type", null);
+		if (config.contains(legacyPath + "type"))
+		{
+			config.set(nodePath + "type", config.getString(legacyPath + "type"));
+			config.set(legacyPath + "type", null);
+		}
 		
-		config.set(nodePath + "location", config.getString(legacyPath + "location"));
-		config.set(legacyPath + "location", null);
+		if (config.contains(legacyPath + "location"))
+		{
+			config.set(nodePath + "location", config.getString(legacyPath + "location"));
+			config.set(legacyPath + "location", null);
+		}
 		
-		config.set(nodePath + "mode", config.getString(legacyPath + "mode"));
-		config.set(legacyPath + "mode", null);
+		if (config.contains(legacyPath + "mode"))
+		{
+			config.set(nodePath + "mode", config.getString(legacyPath + "mode"));
+			config.set(legacyPath + "mode", null);
+		}
 		
-		config.set(nodePath + "tracking", config.getString(legacyPath + "tracking"));
-		config.set(legacyPath + "tracking", null);
+		if (config.contains(legacyPath + "tracking"))
+		{
+			config.set(nodePath + "tracking", config.getString(legacyPath + "tracking"));
+			config.set(legacyPath + "tracking", null);
+		}
 		
-		config.set(nodePath + "animated", ParticleAnimation.fromBoolean(config.getBoolean(legacyPath + "animated")).getName());
-		config.set(legacyPath + "animated", null);
+		if (config.contains(legacyPath + "animated"))
+		{
+			config.set(nodePath + "animated", ParticleAnimation.fromBoolean(config.getBoolean(legacyPath + "animated")).getName());
+			config.set(legacyPath + "animated", null);
+		}
 		
-		config.set(nodePath + "count", config.getString(legacyPath + "count"));
-		config.set(legacyPath + "count", null);
+		if (config.contains(legacyPath + "count"))
+		{
+			config.set(nodePath + "count", config.getInt(legacyPath + "count"));
+			config.set(legacyPath + "count", null);
+		}
 		
-		config.set(nodePath + "speed", config.getString(legacyPath + "speed"));
-		config.set(legacyPath + "speed", null);
+		if (config.contains(legacyPath + "speed"))
+		{
+			config.set(nodePath + "speed", config.getInt(legacyPath + "speed"));
+			config.set(legacyPath + "speed", null);
+		}
 		
-		config.set(nodePath + "offset.x", config.getString(legacyPath + "offset.x"));
-		config.set(legacyPath + "offset.x", null);
+		if (config.isDouble(legacyPath + "offset") || config.isInt(legacyPath + "offset")) {
+			config.set(nodePath + "offset.y", config.getDouble(legacyPath + "offset"));
+		}
 		
-		config.set(nodePath + "offset.y", config.getString(legacyPath + "offset.y"));
-		config.set(legacyPath + "offset.y", null);
-		
-		config.set(nodePath + "offset.z", config.getString(legacyPath + "offset.z"));
-		config.set(legacyPath + "offset.z", null);
+		else
+		{
+			if (config.contains(legacyPath + "offset.x"))
+			{
+				config.set(nodePath + "offset.x", config.getDouble(legacyPath + "offset.x"));
+				config.set(legacyPath + "offset.x", null);
+			}
+			
+			if (config.contains(legacyPath + "offset.y"))
+			{
+				config.set(nodePath + "offset.y", config.getDouble(legacyPath + "offset.y"));
+				config.set(legacyPath + "offset.y", null);
+			}
+			
+			if (config.contains(legacyPath + "offset.z"))
+			{
+				config.set(nodePath + "offset.z", config.getDouble(legacyPath + "offset.z"));
+				config.set(legacyPath + "offset.z", null);
+			}
+		}
 		
 		updateParticlesFormat(config, legacyPath, nodePath);
 		
@@ -164,32 +204,32 @@ public class YamlUtil {
 			
 			config.set(legacyPath + "particle", null);
 			config.set(newPath + "particles.1.particle", particle);
-		}
-		
-		if (config.contains(legacyPath + "color"))
-		{
-			int r = config.getInt(legacyPath + "color.r");
-			int g = config.getInt(legacyPath + "color.g");
-			int b = config.getInt(legacyPath + "color.b");
 			
-			config.set(legacyPath + "color", null);
-			config.set(newPath + "particles.1.color.r", r);
-			config.set(newPath + "particles.1.color.g", g);
-			config.set(newPath + "particles.1.color.b", b);
-		}
-		
-		else {
-			config.set(newPath + "particles.1.color", "random");
-		}
-		
-		if (config.contains(legacyPath + "block-data")) 
-		{
-			String blockMaterial = config.getString(legacyPath + "block-data.id");
-			int durability = config.getInt(legacyPath + "block-data.damage-value");
+			if (config.contains(legacyPath + "color"))
+			{
+				int r = config.getInt(legacyPath + "color.r");
+				int g = config.getInt(legacyPath + "color.g");
+				int b = config.getInt(legacyPath + "color.b");
+				
+				config.set(legacyPath + "color", null);
+				config.set(newPath + "particles.1.color.r", r);
+				config.set(newPath + "particles.1.color.g", g);
+				config.set(newPath + "particles.1.color.b", b);
+			}
 			
-			config.set(legacyPath + "block-data", null);
-			config.set(newPath + "particles.1.block-data.id", blockMaterial);
-			config.set(newPath + "particles.1.block-data.damage-value", durability);
+			else {
+				config.set(newPath + "particles.1.color", "random");
+			}
+			
+			if (config.contains(legacyPath + "block-data")) 
+			{
+				String blockMaterial = config.getString(legacyPath + "block-data.id");
+				int durability = config.getInt(legacyPath + "block-data.damage-value");
+				
+				config.set(legacyPath + "block-data", null);
+				config.set(newPath + "particles.1.block-data.id", blockMaterial);
+				config.set(newPath + "particles.1.block-data.damage-value", durability);
+			}
 		}
 	}
 }
