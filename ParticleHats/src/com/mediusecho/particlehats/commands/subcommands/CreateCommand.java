@@ -22,7 +22,7 @@ public class CreateCommand extends Command {
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
 			Database database = core.getDatabase();
 			
-			// "purchase" is a reserved menu name, used for the plugins purchase menu
+			// "purchase" is a reserved menu name, used for the plugin's purchase menu
 			if (database.menuExists(menuName) || menuName.equalsIgnoreCase("purchase"))
 			{
 				sender.sendMessage(Message.COMMAND_ERROR_MENU_EXISTS.getValue().replace("{1}", menuName));
