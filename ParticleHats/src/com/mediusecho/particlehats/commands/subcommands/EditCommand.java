@@ -10,6 +10,7 @@ import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.purchase.PurchaseMenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -23,9 +24,9 @@ public class EditCommand extends Command {
 		if (args.size() == 1) 
 		{
 			Set<String> menus = core.getDatabase().getMenus(false).keySet();
-			menus.add("purchase");
-			
 			List<String> result = new ArrayList<String>();
+			
+			result.add("purchase");
 			
 			if (sender.hasPermission(getPermission()))
 			{
@@ -59,19 +60,31 @@ public class EditCommand extends Command {
 			return false;
 		}
 		
+		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+		Database database = core.getDatabase();
+		
 		if (menuName.equalsIgnoreCase("purchase"))
 		{
-			// TODO: edit purchase menu
+			MenuInventory inventory = database.getPurchaseMenu(playerState);
+			
+			if (inventory != null)
+			{
+				PurchaseMenuBuilder purchaseBuilder = new PurchaseMenuBuilder(core, sender.getPlayer(), playerState, inventory);
+				playerState.setMenuBuilder(purchaseBuilder);
+				
+				purchaseBuilder.startEditing();
+				return true;
+			}
+			
+			return false;
 		}
 		
-		Database database = core.getDatabase();
 		if (!database.menuExists(menuName))
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
 			return false;
 		}
 		
-		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 		MenuBuilder menuBuilder = playerState.getMenuBuilder();
 		MenuInventory inventory = database.loadInventory(menuName, playerState);
 		
