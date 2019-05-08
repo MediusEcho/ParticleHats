@@ -1,0 +1,23 @@
+version: 4.0
+settings:
+  title: Do you want to unlock this Hat?
+  size: 5
+items:
+  '13':
+    name: 'Hat Template'
+    id: STONE
+    action:
+      left-click:
+        id: purchase_item
+  '30':
+    name: '&2Unlock this Hat'
+    id: DIAMOND
+    action:
+      left-click:
+        id: purchase_confirm
+  '32':
+    name: '&cCancel'
+    id: COAL
+    action:
+      left-click:
+        id: purchase_deny
