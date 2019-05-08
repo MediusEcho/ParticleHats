@@ -146,6 +146,7 @@ public enum ParticleAction {
 	public void onClick (Player player, Hat hat, int slot, MenuInventory inventory, String argument)
 	{
 		PlayerState playerState = core.getPlayerState(player.getUniqueId());
+		boolean canClose = SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean();	
 	
 		switch (this)
 		{
@@ -174,7 +175,6 @@ public enum ParticleAction {
 						return;
 					}
 					
-					boolean canClose = SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean();	
 					String worldName = player.getWorld().getName().toLowerCase();
 					
 					// Disabled worlds
@@ -346,6 +346,9 @@ public enum ParticleAction {
 			case OVERRIDE:
 			{
 				core.getParticleManager().equipHat(player.getUniqueId(), hat);
+				if (canClose) {
+					player.closeInventory();
+				}
 				break;
 			}
 			
