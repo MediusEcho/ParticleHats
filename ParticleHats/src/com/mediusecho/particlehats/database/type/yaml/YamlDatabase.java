@@ -1241,7 +1241,7 @@ public class YamlDatabase implements Database {
 		hat.setRightClickArgument(config.getString(path + "action.right-click.argument", ""));
 		hat.setDemoDuration(config.getInt(path + "duration", 200));
 		hat.setDisplayMode(IconDisplayMode.fromName(config.getString(path + "display-mode")));
-		hat.setIconUpdateFrequency(config.getInt(path + "icon-update-frequeycn", 1));
+		hat.setIconUpdateFrequency(config.getInt(path + "icon-update-frequency", 1));
 		
 		String potionName = config.getString(path + "potion.id", "");
 		if (!potionName.equals(""))
