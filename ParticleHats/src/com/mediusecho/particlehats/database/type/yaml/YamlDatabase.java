@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.database.type.yaml;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,6 +62,8 @@ public class YamlDatabase implements Database {
 	
 	private final CustomConfig groupConfig;
 	
+	private CustomConfig purchaseConfig;
+	
 	private final Map<String, CustomConfig> menus;
 	private final Map<String, String> menuInfo;
 	private final Map<String, ParticleLabel> labels;
@@ -100,55 +103,7 @@ public class YamlDatabase implements Database {
 		}
 		
 		CustomConfig menuConfig = menus.get(menuName);
-		FileConfiguration config = menuConfig.getConfig();
-		
-		final String menuTitle = config.getString("settings.title", "New Menu");
-		final int menuSize = config.getInt("settings.size", 6);
-		final String alias = config.getString("settings.alias");
-		final MenuInventory inventory = new MenuInventory(menuName, menuTitle, menuSize, alias);
-		
-		if (config.contains("items"))
-		{
-			Set<String> keys = config.getConfigurationSection("items").getKeys(false);
-			if (keys != null)
-			{
-				for (String key : keys)
-				{
-					if (key == null) {
-						continue;
-					}
-					
-					String path = "items." + key + ".";
-					int slot = StringUtil.toInt(key, -1);
-					
-					if (slot > -1 && slot < inventory.getSize())
-					{
-						Hat hat = new Hat();
-						
-						loadBaseHatData(config, hat, path);
-						loadEssentialHatData(config, hat, path, menuName, slot);
-						
-						if (!playerState.hasPurchased(hat))
-						{
-							Player player = playerState.getOwner();
-							hat.setLocked(
-									!player.hasPermission(hat.getFullPermission()) && 
-									!player.hasPermission(Permission.PARTICLE_ALL.getPermission()));
-						}
-						
-						ItemStack item = hat.getItem();//ItemUtil.createItem(hat.getMaterial(), 1);
-						ItemUtil.setItemName(item, hat.getDisplayName());
-						
-						loadMetaData(config, hat, path, item);
-						
-						inventory.setItem(slot, item);
-						inventory.setHat(slot, hat);
-					}
-				}
-			}
-		}
-		
-		return inventory;
+		return loadInventory(menuConfig, playerState);
 	}
 	
 	@Override
@@ -159,6 +114,29 @@ public class YamlDatabase implements Database {
 		}
 		
 		return loadInventory(aliases.get(alias), playerState);
+	}
+	
+	@Override
+	public MenuInventory getPurchaseMenu (PlayerState playerState)
+	{
+		if (purchaseConfig == null)
+		{
+			File purchaseFile = new File(core.getDataFolder() + File.separator + "menus" + File.separator + "purchase.yml");
+			if (!purchaseFile.exists())
+			{
+				try
+				{
+					ResourceUtil.copyFile(core.getResource("menus/" + "purchase_menu.yml"), purchaseFile);
+					purchaseConfig = new CustomConfig(core, "menus", "purchase.yml", false);
+					
+					return loadInventory(purchaseConfig, playerState);
+					
+				} catch (IOException e) {}
+				ParticleHats.debug("missing purchase.yml");
+			}
+		}
+		
+		return loadInventory(purchaseConfig, playerState);
 	}
 	
 	@Override
@@ -718,6 +696,12 @@ public class YamlDatabase implements Database {
 					if (menuConfig != null)
 					{
 						String menuName = ResourceUtil.removeExtension(menu.getName());
+						if (menuName.equalsIgnoreCase("purchase"))
+						{
+							purchaseConfig = menuConfig;
+							continue;
+						}
+						
 						menus.put(menuName, menuConfig);
 						menuInfo.put(menuName, menuConfig.getConfig().getString("settings.title", ""));
 						
@@ -770,6 +754,64 @@ public class YamlDatabase implements Database {
 			int weight = config.getInt(key + ".weight", 0);
 			groups.add(new Group(key, menuName, weight));
 		}
+	}
+	
+	private MenuInventory loadInventory (CustomConfig menuConfig, PlayerState playerState) 
+	{		
+		if (menuConfig == null) {
+			return null;
+		}
+		
+		FileConfiguration config = menuConfig.getConfig();
+		
+		final String menuName = menuConfig.getName();
+		final String menuTitle = config.getString("settings.title", "New Menu");
+		final int menuSize = config.getInt("settings.size", 6);
+		final String alias = config.getString("settings.alias");
+		final MenuInventory inventory = new MenuInventory(menuName, menuTitle, menuSize, alias);
+		
+		if (config.contains("items"))
+		{
+			Set<String> keys = config.getConfigurationSection("items").getKeys(false);
+			if (keys != null)
+			{
+				for (String key : keys)
+				{
+					if (key == null) {
+						continue;
+					}
+					
+					String path = "items." + key + ".";
+					int slot = StringUtil.toInt(key, -1);
+					
+					if (slot > -1 && slot < inventory.getSize())
+					{
+						Hat hat = new Hat();
+						
+						loadBaseHatData(config, hat, path);
+						loadEssentialHatData(config, hat, path, menuName, slot);
+						
+						if (!playerState.hasPurchased(hat))
+						{
+							Player player = playerState.getOwner();
+							hat.setLocked(
+									!player.hasPermission(hat.getFullPermission()) && 
+									!player.hasPermission(Permission.PARTICLE_ALL.getPermission()));
+						}
+						
+						ItemStack item = hat.getItem();//ItemUtil.createItem(hat.getMaterial(), 1);
+						ItemUtil.setItemName(item, hat.getDisplayName());
+						
+						loadMetaData(config, hat, path, item);
+						
+						inventory.setItem(slot, item);
+						inventory.setHat(slot, hat);
+					}
+				}
+			}
+		}
+		
+		return inventory;
 	}
 	
 	@SuppressWarnings("deprecation")
