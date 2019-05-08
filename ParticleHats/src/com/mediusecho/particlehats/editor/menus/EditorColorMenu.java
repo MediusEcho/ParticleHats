@@ -155,22 +155,26 @@ public class EditorColorMenu extends EditorMenu {
 			return updateRGB(event, targetHat, RGB.B);
 		});
 		
-		ItemStack sizeItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_COLOUR_MENU_SET_SIZE);
-		EditorLore.updateDoubleDescription(sizeItem, targetHat.getParticleData(particleIndex).getScale(), Message.EDITOR_COLOUR_MENU_SIZE_DESCRIPTION);
-		setButton(50, sizeItem, (event, slot) ->
+		// Only enable particle scaling in 1.13+, 1.12- does not support the feature
+		if (ParticleHats.serverVersion >= 13)
 		{
-			double normal = event.isLeftClick() ? 0.1 : -0.1;
-			double shift = event.isShiftClick() ? 10 : 1;
-			double modifier = normal * shift;
-			
-			ParticleData data = targetHat.getParticleData(particleIndex);
-			double size = data.getScale() + modifier;
-			
-			data.setScale(size);
-			EditorLore.updateDoubleDescription(getItem(50), data.getScale(), Message.EDITOR_COLOUR_MENU_SIZE_DESCRIPTION);
-			
-			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
-		});
+			ItemStack sizeItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_COLOUR_MENU_SET_SIZE);
+			EditorLore.updateDoubleDescription(sizeItem, targetHat.getParticleData(particleIndex).getScale(), Message.EDITOR_COLOUR_MENU_SIZE_DESCRIPTION);
+			setButton(50, sizeItem, (event, slot) ->
+			{
+				double normal = event.isLeftClick() ? 0.1 : -0.1;
+				double shift = event.isShiftClick() ? 10 : 1;
+				double modifier = normal * shift;
+				
+				ParticleData data = targetHat.getParticleData(particleIndex);
+				double size = data.getScale() + modifier;
+				
+				data.setScale(size);
+				EditorLore.updateDoubleDescription(getItem(50), data.getScale(), Message.EDITOR_COLOUR_MENU_SIZE_DESCRIPTION);
+				
+				return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
+			});
+		}
 		
 		ItemStack randomItem = ItemUtil.createItem(CompatibleMaterial.EXPERIENCE_BOTTLE, Message.EDITOR_COLOUR_MENU_SET_RANDOM, Message.EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION);
 		setButton(51, randomItem, (event, slot) ->
