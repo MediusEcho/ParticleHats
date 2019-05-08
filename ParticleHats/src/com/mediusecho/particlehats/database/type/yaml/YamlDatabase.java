@@ -129,9 +129,7 @@ public class YamlDatabase implements Database {
 					purchaseConfig = new CustomConfig(core, "menus", "purchase.yml", false);
 					
 					return loadInventory(purchaseConfig, playerState);
-					
 				} catch (IOException e) {}
-				ParticleHats.debug("missing purchase.yml");
 			}
 		}
 		

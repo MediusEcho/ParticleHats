@@ -1564,7 +1564,7 @@ public class Hat {
 		}
 		
 		menuItem = item.clone();
-		ItemUtil.setNameAndDescription(menuItem, name, normalDescription);
+		ItemUtil.setNameAndDescription(menuItem, name, StringUtil.colorize(normalDescription));
 		
 		return menuItem;
 	}
