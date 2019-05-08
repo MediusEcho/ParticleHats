@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
@@ -28,7 +27,7 @@ public class PurchaseMenu extends StaticMenu {
 		cancel.setLeftClickAction(ParticleAction.PURCHASE_DENY);
 		cancel.setLoaded(true);
 		inventory.setHat(32, cancel);
-		inventory.setItem(32, ItemUtil.createItem(CompatibleMaterial.ROSE_RED, Message.PURCHASE_MENU_CANCEL));
+		inventory.setItem(32, ItemUtil.createItem(Material.COAL, Message.PURCHASE_MENU_CANCEL));
 		
 		Hat pending = core.getPlayerState(ownerID).getPendingPurchase().clone();
 		pending.setLeftClickAction(ParticleAction.PURCHASE_ITEM);
