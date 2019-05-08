@@ -284,19 +284,24 @@ public enum ParticleAction {
 							
 							return;
 						}
-						
-						// TODO: Add Purchase Menu
+
 						else
 						{	
-							ParticleHats.debug("creating purchase menu");
-							
 							playerState.setPendingPurchase(hat);
-							Menu purchaseMenu = new PurchaseMenu(core, player);
+							
+							MenuInventory purchaseInventory = core.getDatabase().getPurchaseMenu(playerState);
+							Menu purchaseMenu;
+							
+							if (purchaseInventory != null) {
+								purchaseMenu = new StaticMenu(core, player, purchaseInventory);
+							} else {
+								purchaseMenu = new PurchaseMenu(core, player);
+							}
 							
 							playerState.setPurchaseMenu(purchaseMenu);
 							playerState.setGuiState(GuiState.SWITCHING_MENU);
-							
 							playerState.setOpenMenu(purchaseMenu);
+							
 							purchaseMenu.open();
 						}
 					}
@@ -425,7 +430,7 @@ public enum ParticleAction {
 					playerState.addPurchasedHat(pendingHat);
 					
 					core.getDatabase().savePlayerPurchase(player.getUniqueId(), pendingHat);
-					core.getParticleManager().equipHat(player.getUniqueId(), hat);
+					core.getParticleManager().equipHat(player.getUniqueId(), pendingHat);
 					
 					if (SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean()) {
 						player.closeInventory();
