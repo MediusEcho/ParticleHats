@@ -17,12 +17,6 @@ public class PurchaseMenuBuilder extends MenuBuilder {
 	}
 	
 	@Override
-	public void onClose ()
-	{
-		
-	}
-	
-	@Override
 	public void openMainMenu (Player owner)
 	{
 		EditorPurchaseMainMenu editorPurchaseMainMenu = new EditorPurchaseMainMenu(core, owner, this);
