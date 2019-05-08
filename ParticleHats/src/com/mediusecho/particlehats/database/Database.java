@@ -34,6 +34,13 @@ public interface Database {
 	public MenuInventory getInventoryFromAlias (String alias, PlayerState playerState);
 	
 	/**
+	 * Gets the purchase menu
+	 * @param playerState
+	 * @return
+	 */
+	public MenuInventory getPurchaseMenu (PlayerState playerState);
+	
+	/**
 	 * Creates and inserts an empty menu into our database
 	 * @param menuName
 	 */
