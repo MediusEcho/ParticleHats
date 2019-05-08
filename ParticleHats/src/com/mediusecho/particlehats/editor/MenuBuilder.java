@@ -11,6 +11,8 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.EditorMenu.EditorClickType;
 import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
+import com.mediusecho.particlehats.editor.menus.EditorMainMenu;
+import com.mediusecho.particlehats.editor.menus.EditorSettingsMenu;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.GuiState;
@@ -18,16 +20,16 @@ import com.mediusecho.particlehats.ui.MenuInventory;
 
 public class MenuBuilder {
 
-	private final ParticleHats core;
-	private PlayerState ownerState;
+	protected final ParticleHats core;
+	protected PlayerState ownerState;
 	
 	private Deque<EditorMenu> activeMenus;
-	private EditorBaseMenu editorMenu;
+	protected EditorBaseMenu editorMenu;
 	
 	// Keep track of the current hat and slot we are editing
-	private Hat targetHat;
-	private Hat targetNodeHat;
-	private int targetSlot;
+	protected Hat targetHat;
+	protected Hat targetNodeHat;
+	protected int targetSlot;
 	
 	public MenuBuilder (final ParticleHats core,  final Player owner, final PlayerState ownerState, MenuInventory inventory)
 	{
