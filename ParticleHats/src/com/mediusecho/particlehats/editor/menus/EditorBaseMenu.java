@@ -60,7 +60,7 @@ public class EditorBaseMenu extends EditorMenu {
 			}
 			
 			else if (event.isRightClick()) {
-				openSettings();
+				menuBuilder.openSettingsMenu(owner);
 			}
 			return EditorClickType.NEUTRAL;
 		};
@@ -78,10 +78,7 @@ public class EditorBaseMenu extends EditorMenu {
 					
 					menuBuilder.setTargetHat(clickedHat);
 					menuBuilder.setTargetSlot(slot);
-					
-					EditorMainMenu editorMainMenu = new EditorMainMenu(core, owner, menuBuilder);
-					menuBuilder.addMenu(editorMainMenu);
-					editorMainMenu.open();
+					menuBuilder.openMainMenu(owner);
 				}
 			}
 			
@@ -92,7 +89,7 @@ public class EditorBaseMenu extends EditorMenu {
 			}
 			
 			else if (event.isRightClick()) {
-				openSettings();
+				menuBuilder.openSettingsMenu(owner);
 			}
 			return EditorClickType.NEUTRAL;
 		};
@@ -344,7 +341,6 @@ public class EditorBaseMenu extends EditorMenu {
 		
 		setHat(newSlot, clonedHat);
 		setButton(newSlot, clonedHat.getItem(), existingParticleAction);
-		//setButton(newSlot, new ItemStack(clonedHat.getMaterial()), existingParticleAction);
 		
 		onHatNameChange(clonedHat, newSlot);
 		addItemDescription(getItem(newSlot), clonedHat);
@@ -392,16 +388,6 @@ public class EditorBaseMenu extends EditorMenu {
 		menuInventory.removeHat(slot);
 
 		core.getDatabase().deleteHat(menuInventory.getName(), slot);
-	}
-	
-	/**
-	 * Opens menu settings
-	 */
-	private void openSettings ()
-	{
-		EditorSettingsMenu editorSettingsMenu = new EditorSettingsMenu(core, owner, menuBuilder);
-		menuBuilder.addMenu(editorSettingsMenu);
-		editorSettingsMenu.open();
 	}
 	
 	/**

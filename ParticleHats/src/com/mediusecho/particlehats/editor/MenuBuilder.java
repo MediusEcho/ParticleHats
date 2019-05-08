@@ -229,6 +229,27 @@ public class MenuBuilder {
 		activeMenus.getLast().open();
 	}
 	
+	/**
+	 * Opens this MenuBuilder's main menu
+	 * @param owner
+	 */
+	public void openMainMenu (Player owner)
+	{
+		EditorMainMenu editorMainMenu = new EditorMainMenu(core, owner, this);
+		addMenu(editorMainMenu);
+		editorMainMenu.open();
+	}
+	
+	/**
+	 * Opens this MenuBuilder's settings menu
+	 */
+	public void openSettingsMenu (Player owner)
+	{
+		EditorSettingsMenu editorSettingsMenu = new EditorSettingsMenu(core, owner, this);
+		addMenu(editorSettingsMenu);
+		editorSettingsMenu.open();
+	}
+	
 	public String getMenuName () {
 		return editorMenu.getName();
 	}
