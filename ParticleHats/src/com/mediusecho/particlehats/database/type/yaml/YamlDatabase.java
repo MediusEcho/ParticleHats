@@ -98,12 +98,11 @@ public class YamlDatabase implements Database {
 	@Override
 	public MenuInventory loadInventory (String menuName, PlayerState playerState) 
 	{		
-		if (!menus.containsKey(menuName)) {
-			return null;
+		CustomConfig menuConfig = getMenu(menuName);
+		if (menuConfig != null) {
+			return loadInventory(menuConfig, playerState);
 		}
-		
-		CustomConfig menuConfig = menus.get(menuName);
-		return loadInventory(menuConfig, playerState);
+		return null;
 	}
 	
 	@Override
@@ -156,15 +155,14 @@ public class YamlDatabase implements Database {
 	@Override
 	public void deleteMenu(String menuName) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
-		if (config.delete()) 
+		CustomConfig menuConfig = getMenu(menuName);
+		if (menuConfig != null)
 		{
-			menus.remove(menuName);
-			menuInfo.remove(menuName);
+			if (menuConfig.delete())
+			{
+				menus.remove(menuName);
+				menuInfo.remove(menuName);
+			}
 		}
 	}
 	
@@ -246,12 +244,8 @@ public class YamlDatabase implements Database {
 	
 	@Override
 	public void saveHat (String menuName, int slot, Hat hat)
-	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+	{		
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			String path = "items." + slot + ".";
@@ -269,11 +263,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void cloneHat(String menuName, Hat hat, int newSlot) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			String path = "items." + newSlot + ".";
@@ -287,11 +277,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void moveHat(Hat fromHat, Hat toHat, String fromMenu, String toMenu, int fromSlot, int toSlot, boolean swapping) 
 	{
-		if (!menus.containsKey(fromMenu)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(fromMenu);
+		CustomConfig config = getMenu(fromMenu);
 		if (config != null)
 		{
 			// Working inside the fromMenu only
@@ -325,12 +311,8 @@ public class YamlDatabase implements Database {
 			}
 			
 			else
-			{
-				if (!menus.containsKey(toMenu)) {
-					return;
-				}
-				
-				CustomConfig toConfig = menus.get(toMenu);
+			{	
+				CustomConfig toConfig = getMenu(toMenu);
 				if (toConfig != null)
 				{
 					String path = "items." + toSlot + ".";
@@ -349,11 +331,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void deleteHat(String menuName, int slot) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			config.set("items." + slot, null);
@@ -363,12 +341,8 @@ public class YamlDatabase implements Database {
 	
 	@Override
 	public void saveNode (String menuName, int nodeIndex, Hat hat)
-	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+	{	
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			String path = "items." + hat.getSlot() + ".nodes." + (nodeIndex + 1);
@@ -383,11 +357,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void deleteNode(String menuName, int slot, int nodeIndex) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			String path = "items." + slot + ".nodes." + (nodeIndex + 1);
@@ -402,11 +372,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void saveParticleData(String menuName, Hat hat, int index) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			String path = "items." + hat.getSlot() + "." + getNodePath(hat) + "particles." + (index + 1);
@@ -423,11 +389,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void saveMetaData(String menuName, Hat hat, DataType type, int index) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			String path = "items." + hat.getSlot() + ".";
@@ -499,11 +461,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void saveMenuTitle(String menuName, String title) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			config.set("settings.title", title);
@@ -513,12 +471,8 @@ public class YamlDatabase implements Database {
 	
 	@Override
 	public void saveMenuAlias (String menuName, String alias)
-	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+	{	
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			config.set("settings.alias", alias);
@@ -529,11 +483,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void saveMenuSize(String menuName, int rows) 
 	{
-		if (!menus.containsKey(menuName)) {
-			return;
-		}
-		
-		CustomConfig config = menus.get(menuName);
+		CustomConfig config = getMenu(menuName);
 		if (config != null)
 		{
 			config.set("settings.size", rows);
@@ -568,11 +518,7 @@ public class YamlDatabase implements Database {
 			String[] info = hatReference.split(":");
 			String menuName = info[0];
 			
-			if (!menus.containsKey(menuName)) {
-				continue;
-			}
-			
-			CustomConfig menuConfig = menus.get(menuName);
+			CustomConfig menuConfig = getMenu(menuName);
 			if (menuConfig != null)
 			{
 				String path = "items." + info[1] + ".";
@@ -1437,6 +1383,19 @@ public class YamlDatabase implements Database {
 		playerConfigs.put(id, playerConfig);
 		
 		return playerConfig;
+	}
+	
+	/**
+	 * Gets a CustomConfig matching this menu name
+	 * @param menuName
+	 * @return
+	 */
+	private CustomConfig getMenu (String menuName)
+	{
+		if (menuName.equalsIgnoreCase("purchase")) {
+			return purchaseConfig;
+		}
+		return menus.get(menuName);
 	}
 	
 	/**
