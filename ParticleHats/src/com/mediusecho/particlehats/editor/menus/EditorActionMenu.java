@@ -29,11 +29,12 @@ public class EditorActionMenu extends EditorMenu {
 	private final Hat targetHat;
 	
 	private int currentPage = 0;
-	private boolean isLeftClick = false;
+	private final boolean isLeftClick;
+	private final boolean showHiddenActions;
 	
 	private final EditorAction selectAction;
 	
-	public EditorActionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean isLeftClick, EditorActionCallback actionCallback) 
+	public EditorActionMenu (ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean isLeftClick, boolean showHiddenActions, EditorActionCallback actionCallback)
 	{
 		super(core, owner, menuBuilder);
 		
@@ -42,6 +43,7 @@ public class EditorActionMenu extends EditorMenu {
 		actions = new ArrayList<ParticleAction>();
 		pages = (int) Math.ceil(ParticleAction.values().length / 28D);
 		this.isLeftClick = isLeftClick;
+		this.showHiddenActions = showHiddenActions;
 		
 		selectAction = (event, slot) ->
 		{
@@ -56,6 +58,11 @@ public class EditorActionMenu extends EditorMenu {
 		};
 		
 		build();
+	}
+	
+	public EditorActionMenu (ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean isLeftClick, EditorActionCallback actionCallback) 
+	{
+		this(core, owner, menuBuilder, isLeftClick, false, actionCallback);
 	}
 	
 	@Override
@@ -102,8 +109,18 @@ public class EditorActionMenu extends EditorMenu {
 				continue;
 			}
 			
-			if (action.isHidden()) {
-				continue;
+			if (showHiddenActions) 
+			{
+				if (!action.isHidden() && action != ParticleAction.DUMMY) {
+					continue;
+				}
+			}
+			
+			else
+			{
+				if (action.isHidden()) {
+					continue;
+				}
 			}
 			
 			ItemStack item = ItemUtil.createItem(CompatibleMaterial.FIREWORK_STAR, action.getDisplayName());
