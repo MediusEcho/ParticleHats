@@ -17,6 +17,7 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
+import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -90,8 +91,10 @@ public class StaticMenu extends Menu {
 	 */
 	private void build ()
 	{
+		PlayerState playerState = core.getPlayerState(ownerID);
+		
 		// Get all equipped hats that belong to this menu
-		List<Hat> equippedHats = core.getPlayerState(ownerID).getActiveHats();
+		List<Hat> equippedHats = playerState.getActiveHats();
 		
 		Material lockedMaterial = SettingsManager.MENU_LOCKED_ITEM.getMaterial();
 		String lockedTitle = StringUtil.colorize(SettingsManager.MENU_LOCKED_ITEM_TITLE.getString());
@@ -102,6 +105,15 @@ public class StaticMenu extends Menu {
 			Hat hat = inventory.getHat(i);
 			
 			if (item == null || hat == null) {
+				continue;
+			}
+			
+			if (hat.getLeftClickAction() == ParticleAction.PURCHASE_ITEM)
+			{
+				Hat pendingHat = playerState.getPendingPurchase();
+				if (pendingHat != null) {
+					inventory.setItem(i, pendingHat.getMenuItem());
+				}
 				continue;
 			}
 			
