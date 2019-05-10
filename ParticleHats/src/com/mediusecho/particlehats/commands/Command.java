@@ -39,6 +39,32 @@ public abstract class Command {
 	public abstract boolean execute (ParticleHats core, Sender sender, String label, ArrayList<String> args);
 	
 	/**
+	 * Handles this commands onCommand
+	 * Checks permission before passing command along
+	 * @param core
+	 * @param sender
+	 * @param label
+	 * @param args
+	 * @return
+	 */
+	public boolean onCommand (ParticleHats core, Sender sender, String label, ArrayList<String> args)
+	{
+		if (!sender.isPlayer() && isPlayerOnly())
+		{
+			sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
+			return false;
+		}
+		
+		if (!hasPermission(sender))
+		{
+			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
+			return false;
+		}
+		
+		return execute(core, sender, label, args);
+	}
+	
+	/**
 	 * Generic tab complete method
 	 * @param plugin
 	 * @param sender
@@ -53,7 +79,7 @@ public abstract class Command {
 			List<String> arguments = new ArrayList<String>();
 			for (Entry<String, Command> entry : subCommands.entrySet())
 			{
-				if (sender.hasPermission(entry.getValue().getPermission())) {
+				if (entry.getValue().hasPermission(sender)) {
 					arguments.add(entry.getKey());
 				}
 			}
@@ -172,5 +198,48 @@ public abstract class Command {
 			
 			cmd.getSubCommands(commands);
 		}
+	}
+	
+	/**
+	 * Checks to see if the player has permission to execute this command
+	 * @param sender
+	 * @return
+	 */
+	public boolean hasPermission (Sender sender)
+	{
+		if (!sender.isPlayer()) {
+			return true;
+		}
+		
+		// If this command doesn't have a permission of its own, then
+		// we'll check the sub commands
+		if (!hasPermission())
+		{
+			for (Command command : subCommands.values()) {
+				if (command.hasPermission(sender)) {
+					return true;
+				}
+			}
+		}
+		
+		// /h wild card check
+		if (Permission.COMMAND_ALL.hasPermission(sender)) {
+			return true;
+		}
+		
+		// Specific command wild card check
+		if (hasWildcardPermission())
+		{
+			if (getWildcardPermission().hasPermission(sender)) {
+				return true;
+			}
+		}
+		
+		// Regular permission check
+		if (getPermission().hasPermission(sender)) {
+			return true;
+		}
+		
+		return false;
 	}
 }
