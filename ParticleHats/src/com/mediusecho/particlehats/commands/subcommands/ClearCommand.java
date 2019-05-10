@@ -41,14 +41,8 @@ public class ClearCommand extends Command {
 			return true;
 		}
 		
-		else 
-		{
-			if (!sender.hasPermission(clearPlayerCommand.getPermission()))
-			{
-				sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-				return false;
-			}
-			return clearPlayerCommand.execute(core, sender, label, args);
+		else {
+			return clearPlayerCommand.onCommand(core, sender, label, args);
 		}
 	}
 	
@@ -57,7 +51,7 @@ public class ClearCommand extends Command {
 	{
 		if (args.size() == 1) 
 		{
-			if (sender.hasPermission(clearPlayerCommand.getPermission()))
+			if (clearPlayerCommand.hasPermission(sender))
 			{
 				List<String> players = new ArrayList<String>();
 				for (Player p : Bukkit.getOnlinePlayers()) {

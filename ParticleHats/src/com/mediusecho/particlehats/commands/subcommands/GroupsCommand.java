@@ -27,16 +27,9 @@ public class GroupsCommand extends Command {
 		{	
 			String argument = args.get(0);
 			if (subCommands.containsKey(argument))
-			{
-				Command subCommand = subCommands.get(argument);
-				if (!sender.hasPermission(subCommand.getPermission()))
-				{
-					sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-					return false;
-				}
-				
+			{				
 				args.remove(0);
-				return subCommand.execute(core, sender, label, args);
+				return subCommands.get(argument).onCommand(core, sender, label, args);
 			}
 		}
 		return false;
@@ -50,7 +43,7 @@ public class GroupsCommand extends Command {
 			List<String> commands = new ArrayList<String>();
 			for (Entry<String, Command> entry : subCommands.entrySet()) 
 			{
-				if (sender.hasPermission(entry.getValue().getPermission())) {
+				if (entry.getValue().hasPermission(sender)) {
 					commands.add(entry.getKey());
 				}
 			}
@@ -64,7 +57,7 @@ public class GroupsCommand extends Command {
 			if (subCommands.containsKey(argument))
 			{
 				Command subCommand = subCommands.get(argument);
-				if (sender.hasPermission(subCommand.getPermission()))
+				if (subCommand.hasPermission(sender))
 				{
 					args.remove(0);
 					return subCommand.tabCompelete(core, sender, label, args);

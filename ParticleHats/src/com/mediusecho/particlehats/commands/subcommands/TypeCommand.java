@@ -26,16 +26,9 @@ public class TypeCommand extends Command {
 		{	
 			String argument = args.get(0);
 			if (subCommands.containsKey(argument))
-			{
-				Command subCommand = subCommands.get(argument);
-				if (!sender.hasPermission(subCommand.getPermission()))
-				{
-					sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-					return false;
-				}
-				
+			{				
 				args.remove(0);
-				return subCommand.execute(core, sender, label, args);
+				return subCommands.get(argument).onCommand(core, sender, label, args);
 			}
 		}
 		return false;
