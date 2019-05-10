@@ -71,6 +71,16 @@ public class RemoveTypeCommand extends Command {
 	public Permission getPermission() {
 		return Permission.COMMAND_TYPE_REMOVE;
 	}
+	
+	@Override
+	public boolean hasWildcardPermission () {
+		return true;
+	}
+	
+	@Override
+	public Permission getWildcardPermission () {
+		return Permission.COMMAND_TYPE_ALL;
+	}
 
 	@Override
 	public boolean showInHelp() {

@@ -98,6 +98,21 @@ public class GroupsCommand extends Command {
 	public Permission getPermission() {
 		return Permission.COMMAND_GROUP;
 	}
+	
+	@Override
+	public boolean hasPermission () {
+		return false;
+	}
+	
+	@Override
+	public boolean hasWildcardPermission () {
+		return true;
+	}
+	
+	@Override
+	public Permission getWildcardPermission () {
+		return Permission.COMMAND_GROUP_ALL;
+	}
 
 	@Override
 	public boolean showInHelp() {

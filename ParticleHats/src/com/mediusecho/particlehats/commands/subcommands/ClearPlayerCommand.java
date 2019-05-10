@@ -60,6 +60,16 @@ public class ClearPlayerCommand extends Command {
 	}
 
 	@Override
+	public boolean hasWildcardPermission () {
+		return true;
+	}
+	
+	@Override
+	public Permission getWildcardPermission () {
+		return Permission.COMMAND_CLEAR_ALL;
+	}
+	
+	@Override
 	public boolean showInHelp() {
 		return true;
 	}

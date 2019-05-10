@@ -115,6 +115,30 @@ public abstract class Command {
 	public abstract boolean isPlayerOnly();
 	
 	/**
+	 * Checks to see if this command has a permission value
+	 * @return
+	 */
+	public boolean hasPermission () {
+		return true;
+	}
+	
+	/**
+	 * Checks to see if this command has a wild card permission
+	 * @return
+	 */
+	public boolean hasWildcardPermission () {
+		return false;
+	}
+	
+	/**
+	 * Returns this command's wild card permission
+	 * @return
+	 */
+	public Permission getWildcardPermission () {
+		return Permission.NONE;
+	}
+	
+	/**
 	 * Registers a sub-command under this command
 	 * @param command
 	 */

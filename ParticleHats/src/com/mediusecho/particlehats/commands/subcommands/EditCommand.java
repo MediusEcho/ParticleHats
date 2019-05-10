@@ -128,6 +128,16 @@ public class EditCommand extends Command {
 	}
 	
 	@Override
+	public boolean hasWildcardPermission () {
+		return true;
+	}
+	
+	@Override
+	public Permission getWildcardPermission () {
+		return Permission.COMMAND_EDIT_ALL;
+	}
+	
+	@Override
 	public boolean showInHelp() {
 		return true;
 	}

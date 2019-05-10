@@ -84,6 +84,16 @@ public class AddGroupCommand extends Command {
 	public Permission getPermission() {
 		return Permission.COMMAND_GROUP_ADD;
 	}
+	
+	@Override
+	public boolean hasWildcardPermission () {
+		return true;
+	}
+	
+	@Override
+	public Permission getWildcardPermission () {
+		return Permission.COMMAND_GROUP_ALL;
+	}
 
 	@Override
 	public boolean showInHelp() {
