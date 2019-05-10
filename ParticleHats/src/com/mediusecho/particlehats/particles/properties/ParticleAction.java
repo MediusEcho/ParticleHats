@@ -223,7 +223,6 @@ public enum ParticleAction {
 					
 					if (canUsePermission)
 					{
-						//player.hasPermission(Permission.PARTICLE_ALL.getPermission()) && 
 						if (hat.isLocked())
 						{
 							// Only show the permission denied message if vault and exp are also disabled
