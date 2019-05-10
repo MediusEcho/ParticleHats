@@ -3,7 +3,6 @@ package com.mediusecho.particlehats.commands.subcommands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
@@ -18,21 +17,28 @@ import com.mediusecho.particlehats.ui.MenuInventory;
 
 public class EditCommand extends Command {
 
+	private final ParticleHats core;
+	
+	public EditCommand (final ParticleHats core)
+	{
+		this.core = core;
+	}
+	
 	@Override
 	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		if (args.size() == 1) 
 		{
-			Set<String> menus = core.getDatabase().getMenus(false).keySet();
+			List<String> menus = new ArrayList<String>(core.getDatabase().getMenus(false).keySet());
 			List<String> result = new ArrayList<String>();
 			
-			result.add("purchase");
+			menus.add("purchase");
 			
-			if (sender.hasPermission(getPermission()))
+			if (hasPermission(sender))
 			{
 				for (String menu : menus)
 				{
-					if (sender.hasPermission(getPermission().append(menu)) || sender.hasPermission(getPermission().append("all"))) {
+					if (getWildcardPermission().hasPermission(sender) || sender.hasPermission(getPermission().append(menu))) {
 						result.add(menu);
 					}
 				}
@@ -54,7 +60,7 @@ public class EditCommand extends Command {
 		}
 		
 		String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
-		if (!sender.hasPermission(getPermission().append(menuName)) && !sender.hasPermission(Permission.COMMAND_EDIT_ALL))
+		if (!sender.hasPermission(Permission.COMMAND_EDIT_ALL) && !sender.hasPermission(getPermission().append(menuName)))
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
 			return false;
@@ -145,5 +151,40 @@ public class EditCommand extends Command {
 	@Override
 	public boolean isPlayerOnly() {
 		return true;
+	}
+	
+	@Override
+	public boolean hasPermission (Sender sender)
+	{
+		if (!sender.isPlayer()) {
+			return true;
+		}
+		
+		// /h wild card check
+		if (Permission.COMMAND_ALL.hasPermission(sender)) {
+			return true;
+		}
+		
+		// Specific command wild card check
+		if (hasWildcardPermission())
+		{
+			if (getWildcardPermission().hasPermission(sender)) {
+				return true;
+			}
+		}
+		
+		// Regular permission check
+		if (getPermission().hasPermission(sender)) {
+			return true;
+		}
+		
+		for (String menu : core.getDatabase().getMenus(false).keySet())
+		{
+			if (sender.hasPermission(getPermission().append(menu))) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
