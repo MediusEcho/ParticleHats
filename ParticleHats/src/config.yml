@@ -77,7 +77,7 @@ afk:
   cooldown: 1
 #
 combat:
-  # Set how many seconds the plugin will wait before making a player as peaceful
+  # Set how many seconds the plugin will wait before marking a player as peaceful
   cooldown: 1
   #
   # These combat flags allow you to specify which types of entities to check for when a player is attacking
@@ -108,7 +108,7 @@ menu:
     id: LAPIS_LAZULI
     damage-value: 0
     #
-    # This title will replace the hats normal display name
+    # This title will replace the hat's display name
     title: &8Locked
   #
   # Open a menu when the player right clicks while holding an item
@@ -117,10 +117,10 @@ menu:
     enabled: false
     #
     # The default menu the player will open
-    default-menu: particles
+    default-menu: particles.yml
     #
     # Opens the players group menu instead of the default_menu
-    use-player-group: true
+    use-player-group: false
     #
     # Which item the player needs to interact with
     id: NETHER_STAR
