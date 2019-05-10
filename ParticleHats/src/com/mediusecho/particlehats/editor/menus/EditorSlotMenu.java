@@ -90,7 +90,8 @@ public class EditorSlotMenu extends EditorMenu {
 			String displayName = Message.EDITOR_SLOT_MENU_SELECT.getValue();
 			if (i  == targetSlot) 
 			{
-				item.setType(Material.NETHER_STAR);
+				ItemUtil.setItemType(item, Material.NETHER_STAR, 0);
+				
 				displayName = Message.EDITOR_SLOT_MENU_CANCEL.getValue();
 				setAction(i, cancelAction);
 			}
