@@ -43,7 +43,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand = new MainCommand();
 		mainCommand.register(new ReloadCommand());
 		mainCommand.register(new OpenCommand(core));
-		mainCommand.register(new EditCommand());
+		mainCommand.register(new EditCommand(core));
 		mainCommand.register(new CreateCommand());
 		mainCommand.register(new DebugDeleteMenu());
 		mainCommand.register(new DebugCommand());
@@ -77,10 +77,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command cmd, String label, String[] args) 
-	{
-		Sender sender = new Sender(commandSender);
-		return mainCommand.execute(core, sender, label, new ArrayList<String>(Arrays.asList(args)));
+	public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command cmd, String label, String[] args) {
+		return mainCommand.onCommand(core, new Sender(commandSender), label, new ArrayList<String>(Arrays.asList(args)));
 	}
 	
 	/**
