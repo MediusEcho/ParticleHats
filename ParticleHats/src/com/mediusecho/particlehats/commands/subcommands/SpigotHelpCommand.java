@@ -52,7 +52,7 @@ public class SpigotHelpCommand extends BukkitHelpCommand {
 		sender.sendMessage("&f> &6ParticleHats v" + core.getDescription().getVersion());
 		for (Entry<Command, BaseComponent[]> entry : commands.entrySet())
 		{
-			if (sender.hasPermission(entry.getKey().getPermission()))
+			if (entry.getKey().hasPermission(sender))
 			{
 				BaseComponent[] component = entry.getValue();
 				sender.getPlayer().spigot().sendMessage(component);
