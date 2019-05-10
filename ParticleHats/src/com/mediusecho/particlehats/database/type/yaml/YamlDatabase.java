@@ -743,7 +743,7 @@ public class YamlDatabase implements Database {
 									!player.hasPermission(Permission.PARTICLE_ALL.getPermission()));
 						}
 						
-						ItemStack item = hat.getItem();//ItemUtil.createItem(hat.getMaterial(), 1);
+						ItemStack item = hat.getItem();
 						ItemUtil.setItemName(item, hat.getDisplayName());
 						
 						loadMetaData(config, hat, path, item);
