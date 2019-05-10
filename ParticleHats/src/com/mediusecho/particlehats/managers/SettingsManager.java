@@ -40,7 +40,7 @@ public enum SettingsManager {
 	DATABASE_HOSTNAME ("database.hostname", Type.STRING, "hostname"),
 	DATABASE_PORT ("database.port", Type.STRING, "3306"),
 	DATABASE_DATABASE ("database.database", Type.STRING, "ParticleHats"),
-	DATABASE_USESSL ("database.use-ssl", Type.STRING, "true"),
+	DATABASE_USESSL ("database.use-ssl", Type.STRING, "false"),
 	
 	/**
 	 * Flags

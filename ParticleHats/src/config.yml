@@ -52,7 +52,7 @@ database:
   hostname: host
   port: 3306
   database: ParticleHats
-  use-ssl: true
+  use-ssl: false
 #
 flags:
   #
