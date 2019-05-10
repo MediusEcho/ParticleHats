@@ -373,7 +373,7 @@ public enum ParticleAction {
 			case OPEN_MENU_PERMISSION:
 			case OPEN_MENU:
 			{				
-				if (this == OPEN_MENU_PERMISSION && !player.hasPermission(hat.getPermission())) {
+				if (this == OPEN_MENU_PERMISSION && !player.hasPermission(hat.getFullPermission())) {
 					break;
 				}
 				
