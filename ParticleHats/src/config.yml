@@ -106,6 +106,7 @@ menu:
     #
     # This item will replace the hats normal icon
     id: LAPIS_LAZULI
+    damage-value: 0
     #
     # This title will replace the hats normal display name
     title: &8Locked
