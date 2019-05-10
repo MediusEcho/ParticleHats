@@ -4,7 +4,7 @@ settings:
   size: 5
 items:
   '13':
-    name: 'Hat Template'
+    name: '&fTemporary Hat'
     id: STONE
     action:
       left-click:
