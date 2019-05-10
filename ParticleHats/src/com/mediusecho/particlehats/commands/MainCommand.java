@@ -30,17 +30,13 @@ public class MainCommand extends Command {
 			}
 			
 			Map<String, String> groups = core.getDatabase().getGroups(true);
-			String defaultMenu = null;
+			String defaultMenu =  SettingsManager.DEFAULT_MENU.getString();
 			
 			for (Entry<String, String> entry : groups.entrySet())
 			{
 				if (sender.hasPermission(Permission.GROUP.append(entry.getKey()))) {
 					defaultMenu = entry.getValue();
 				}
-			}
-			
-			if (defaultMenu != null && defaultMenu.equals("")) {
-				defaultMenu = SettingsManager.DEFAULT_MENU.getString();
 			}
 			
 			String menuName = defaultMenu.contains(".") ? defaultMenu.split("\\.")[0] : defaultMenu;
@@ -67,34 +63,15 @@ public class MainCommand extends Command {
 		else 
 		{
 			String cmd = args.get(0);
-			if (subCommands.containsKey(cmd))
-			{
-				args.remove(0);
-				Command subCommand = subCommands.get(cmd);
-				
-				if (!sender.hasPermission(subCommand.getPermission()))
-				{
-					sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-					return false;
-				}
-				
-				if (!sender.isPlayer() && subCommand.isPlayerOnly())
-				{
-					sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
-					return false;
-				}
-				
-				subCommand.execute(core, sender, label, args);
-			}
-			
-			else
+			if (!subCommands.containsKey(cmd))
 			{
 				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN);
 				return false;
 			}
+			
+			args.remove(0);
+			return subCommands.get(cmd).onCommand(core, sender, label, args);
 		}
-		
-		return false;
 	}
 
 	@Override
