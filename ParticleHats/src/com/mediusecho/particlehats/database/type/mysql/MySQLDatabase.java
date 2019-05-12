@@ -67,8 +67,6 @@ public class MySQLDatabase implements Database {
 
 	// TODO: ability to update tables
 	
-	private final ParticleHats core;
-	
 	private HikariDataSource dataSource;
 	private MySQLHelper helper;
 	
@@ -97,9 +95,7 @@ public class MySQLDatabase implements Database {
 	private final long UPDATE_INTERVAL = 30000L;
 	
 	public MySQLDatabase (ParticleHats core)
-	{		
-		this.core = core;
-		
+	{				
 		menuCache = new HashMap<String, String>();
 		imageCache = new HashMap<String, BufferedImage>();
 		groupCache = new LinkedHashMap<String, String>();
