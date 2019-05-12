@@ -170,7 +170,6 @@ public class MySQLDatabase implements Database {
 		return null;
 	}
 	
-	// TODO: Purchase menu not being populated
 	@Override
 	public MenuInventory getPurchaseMenu (PlayerState playerState)
 	{
