@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
+import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.CommandManager;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -18,7 +19,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 public class SpigotHelpCommand extends BukkitHelpCommand {
 
 	private Map<Command, BaseComponent[]> commands;
-	
+
 	public SpigotHelpCommand(ParticleHats core, CommandManager commandManager) 
 	{
 		super(core, commandManager);
@@ -50,6 +51,7 @@ public class SpigotHelpCommand extends BukkitHelpCommand {
 	protected void readPage (Sender sender, int page)
 	{
 		sender.sendMessage("&f> &6ParticleHats v" + core.getDescription().getVersion());
+		sender.sendMessage("&7> " + Message.COMMAND_HELP_TIP.getValue());
 		for (Entry<Command, BaseComponent[]> entry : commands.entrySet())
 		{
 			if (entry.getKey().hasPermission(sender))

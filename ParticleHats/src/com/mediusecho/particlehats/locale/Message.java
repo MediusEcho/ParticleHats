@@ -53,6 +53,7 @@ public enum Message {
 	// Help
 	COMMAND_HELP_DESCRIPTION ("Displays all commands and their usage"),
 	COMMAND_HELP_USAGE       ("/h help"),
+	COMMAND_HELP_TIP         ("&7&oOnly showing commands you have permission for"),
 	
 	// Reload
 	COMMAND_RELOAD_DESCRIPTION ("Reloads the plugin"),
