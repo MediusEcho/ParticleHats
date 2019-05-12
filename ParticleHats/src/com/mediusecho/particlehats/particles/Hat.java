@@ -1569,6 +1569,20 @@ public class Hat {
 		return menuItem;
 	}
 	
+	// TODO: Add legacy purchase path
+	public String getLegacyPurchaseID () 
+	{
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("3:").append(this.getParticleData(0).getParticle().getLegacyName());
+		builder.append(":").append(type.getID());
+		builder.append(":").append(location.getID());
+		builder.append(":").append(mode.getID());
+		builder.append(":").append(animation == ParticleAnimation.ANIMATED);
+		
+		return builder.toString();
+	}
+	
 	/**
 	 * Returns an SQL statement to update this hat
 	 * @return
@@ -1588,15 +1602,6 @@ public class Hat {
 		queryBuilder.deleteCharAt(queryBuilder.length() - 1);
 		
 		return queryBuilder.toString();
-	}
-	
-	/**
-	 * Returns an SQL statement to insert this hat into the database
-	 * @return
-	 */
-	public String getSQLInsertQuery ()
-	{
-		return "";
 	}
 	
 	/**
