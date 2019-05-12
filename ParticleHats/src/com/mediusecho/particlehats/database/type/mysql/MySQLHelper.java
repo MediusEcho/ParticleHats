@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
@@ -12,16 +13,23 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.Table;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.TableType;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.properties.ParticleAction;
 
 public class MySQLHelper {
 
 	private final MySQLDatabase database;
 	private int menuTableVersion = 1;
+	
+	private double equippedTableVersion = 1.0;
+	private double imagesTableVersion = 1.0;
 	
 	public MySQLHelper (final MySQLDatabase database)
 	{
@@ -430,6 +438,39 @@ public class MySQLHelper {
 				+ "count,"
 				+ "scale"
 				+ ") VALUES {1}";
+	}
+	
+	public void populatePurchaseMenu (Connection connection) throws SQLException
+	{
+		String insertQuery = "INSERT INTO " + Table.ITEMS.format("purchase") + " (slot,id,durability,title,left_action) VALUES (?,?,?,?,?)";
+		try (PreparedStatement populateStatement = connection.prepareStatement(insertQuery))
+		{
+			// Purchase Item
+			populateStatement.setInt(1, 13);
+			populateStatement.setString(2, Material.STONE.toString());
+			populateStatement.setInt(3, 0);
+			populateStatement.setString(4, "&fTemporary Hat");
+			populateStatement.setInt(5, ParticleAction.PURCHASE_ITEM.getID());
+			populateStatement.addBatch();
+			
+			// Purchase Confirm
+			populateStatement.setInt(1, 30);
+			populateStatement.setString(2, Material.DIAMOND.toString());
+			populateStatement.setInt(3, 0);
+			populateStatement.setString(4, "&2Unlock this Hat");
+			populateStatement.setInt(5, ParticleAction.PURCHASE_CONFIRM.getID());
+			populateStatement.addBatch();
+			
+			// Purchase Deny
+			populateStatement.setInt(1, 32);
+			populateStatement.setString(2, Material.COAL.toString());
+			populateStatement.setInt(3, 0);
+			populateStatement.setString(4, "&cCancel");
+			populateStatement.setInt(5, ParticleAction.PURCHASE_DENY.getID());
+			populateStatement.addBatch();
+			
+			populateStatement.executeBatch();
+		}
 	}
 	
 	/**
