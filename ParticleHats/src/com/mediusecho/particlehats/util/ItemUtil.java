@@ -29,15 +29,6 @@ public class ItemUtil {
 			return originalMaterial;
 		}
 		return fallback;
-//		if (material == null) {
-//			return fallback;
-//		}
-//		
-//		try {
-//			return Material.valueOf(material);
-//		} catch (IllegalArgumentException e) {
-//			return fallback;
-//		}
 	}
 	
 	public static Material getMaterial (String material, String fallback)
@@ -53,33 +44,6 @@ public class ItemUtil {
 		}
 		
 		return Material.STONE;
-		
-//		// Try to find the original material
-//		try {
-//			return Material.valueOf(material);
-//		}
-//		
-//		catch (IllegalArgumentException e)
-//		{
-//			// Try to find the fallback material
-//			try {
-//				return Material.valueOf(fallback);
-//			}
-//			
-//			// Try to find the closest match
-//			catch (IllegalArgumentException ex)
-//			{
-//				for (Material mat : Material.values())
-//				{
-//					if (mat.toString().toLowerCase().contains(fallback.toLowerCase())) {
-//						return mat;
-//					}
-//				}
-//			}
-//		}
-//		
-//		// Accept defeat
-//		return Material.STONE;
 	}
 	
 	/**
