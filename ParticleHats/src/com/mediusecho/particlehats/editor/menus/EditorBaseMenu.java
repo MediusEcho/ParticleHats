@@ -52,11 +52,8 @@ public class EditorBaseMenu extends EditorMenu {
 			{				
 				menuBuilder.setTargetHat(createHat(slot));
 				menuBuilder.setTargetSlot(slot);
+				menuBuilder.openMainMenu(owner);
 				setModified();
-				
-				EditorMainMenu editorMainMenu = new EditorMainMenu(core, owner, menuBuilder);
-				menuBuilder.addMenu(editorMainMenu);
-				editorMainMenu.open();
 			}
 			
 			else if (event.isRightClick()) {
