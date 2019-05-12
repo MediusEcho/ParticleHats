@@ -207,6 +207,14 @@ public enum ParticleEffect {
 	}
 	
 	/**
+	 * Get this ParticleEffect's legacy name
+	 * @return
+	 */
+	public String getLegacyName () {
+		return legacyName;
+	}
+	
+	/**
 	 * Get this ParticleEffect's name
 	 * @return The name of this effect as defined in the current messages.yml file
 	 */
