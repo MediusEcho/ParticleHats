@@ -67,6 +67,8 @@ public class MySQLDatabase implements Database {
 
 	// TODO: ability to update tables
 	
+	private final ParticleHats core;
+	
 	private HikariDataSource dataSource;
 	private MySQLHelper helper;
 	
@@ -96,6 +98,8 @@ public class MySQLDatabase implements Database {
 	
 	public MySQLDatabase (ParticleHats core)
 	{		
+		this.core = core;
+		
 		menuCache = new HashMap<String, String>();
 		imageCache = new HashMap<String, BufferedImage>();
 		groupCache = new LinkedHashMap<String, String>();
@@ -170,6 +174,33 @@ public class MySQLDatabase implements Database {
 		return null;
 	}
 	
+	// TODO: Purchase menu for MySQL
+	@Override
+	public MenuInventory getPurchaseMenu (PlayerState playerState)
+	{
+		try (Connection connection = dataSource.getConnection())
+		{
+			String tableQuery = "SELECT COUNT(*) AS count FROM " + Table.MENUS.getFormat() + " WHERE name = 'purchase'";
+			try (PreparedStatement statement = connection.prepareStatement(tableQuery))
+			{
+				ResultSet set = statement.executeQuery();
+				while (set.next())
+				{
+					if (set.getInt("count") == 0)
+					{
+						createMenu(connection, "purchase", "Do you want to unlock this Hat?", 5, null, false);
+						helper.populatePurchaseMenu(connection);
+					}
+				}
+			}
+		} 
+		
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return loadInventory("purchase", playerState);
+	}
+	
 	@Override
 	public void createMenu(String menuName) 
 	{
@@ -177,7 +208,7 @@ public class MySQLDatabase implements Database {
 		{
 			connect ((connection) ->
 			{
-				createMenu(connection, menuName, menuName, 6, null);
+				createMenu(connection, menuName, menuName, 6, null, true);
 			});
 		});
 	}
@@ -229,8 +260,11 @@ public class MySQLDatabase implements Database {
 				try (PreparedStatement statement = connection.prepareStatement("SELECT name, title FROM " + Table.MENUS.getFormat()))
 				{
 					ResultSet set = statement.executeQuery();
-					while (set.next()) {
-						menuCache.put(set.getString("name"), set.getString("title"));
+					while (set.next()) 
+					{
+						if (!set.getString("name").equalsIgnoreCase("purchase")) {
+							menuCache.put(set.getString("name"), set.getString("title"));
+						}
 					}
 				}
 			});
@@ -978,7 +1012,7 @@ public class MySQLDatabase implements Database {
 				String title = config.getString("settings.title");
 				int size = config.getInt("settings.size");
 				
-				createMenu(connection, name, title, size, null);
+				createMenu(connection, name, title, size, null, true);
 				
 				StringBuilder propertyBuilder = new StringBuilder();
 				StringBuilder nodeBuilder = new StringBuilder();
@@ -1318,7 +1352,7 @@ public class MySQLDatabase implements Database {
 	 * @param alias
 	 * @throws SQLException 
 	 */
-	private void createMenu (Connection connection, String menuName, String title, int rows, String alias) throws SQLException
+	private void createMenu (Connection connection, String menuName, String title, int rows, String alias, boolean addToCache) throws SQLException
 	{
 			// Menu Entry
 			String createMenuStatement= "INSERT INTO " + Table.MENUS.getFormat() + " VALUES(?, ?, ?, ?)";
@@ -1356,7 +1390,9 @@ public class MySQLDatabase implements Database {
 					}
 					
 					// Add this menu to the cache
-					menuCache.put(menuName, menuName);
+					if (addToCache) {
+						menuCache.put(menuName, menuName);
+					}
 				}
 			}
 	}
