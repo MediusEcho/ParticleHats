@@ -331,7 +331,6 @@ public enum Message {
 	/**
 	 * Types
 	 */
-	// TODO: Finish type descriptions
 	TYPE_NONE_NAME                  ("&cNone"),
 	TYPE_NONE_DESCRIPTION           ("&8Does absolutely nothing"),
 	TYPE_HALO_NAME                  ("&bHalo"),
@@ -347,9 +346,9 @@ public enum Message {
 	TYPE_ARCH_NAME                  ("&bArch"),
 	TYPE_ARCH_DESCRIPTION           ("&8A half circle that sits/n&8above the players head"),
 	TYPE_ATOM_NAME                  ("&bAtom"),
-	TYPE_ATOM_DESCRIPTION           (""),
+	TYPE_ATOM_DESCRIPTION           ("&83 rings that create an atom shape"),
 	TYPE_SPHERE_NAME                ("&bSphere"),
-	TYPE_SPHERE_DESCRIPTION         (""),
+	TYPE_SPHERE_DESCRIPTION         ("&8A sphere consisting of 10 rings"),
 	TYPE_CRYSTAL_NAME               ("&bCrystal"),
 	TYPE_CRYSTAL_DESCRIPTION        ("&8A Plumbob, from the Sims"),
 	TYPE_HELIX_NAME                 ("&bHelix"),
@@ -365,7 +364,7 @@ public enum Message {
 	TYPE_CREEPER_HAT_NAME           ("&bCreeper Hat"),
 	TYPE_CREEPER_HAT_DESCRIPTION    ("&8A Creepers lovely face"),
 	TYPE_CLEAN_TRAIL_NAME           ("&bSingle Particle"),
-	TYPE_CLEAN_TRAIL_DESCRIPTION    ("&8A lonely particle, can be used/n&8to create complex designs"),
+	TYPE_CLEAN_TRAIL_DESCRIPTION    ("&8A single particle, use it however you want"),//("&8A lonely particle, can be used/n&8to create complex designs"),
 	TYPE_TORNADO_NAME               ("&bTornado"),
 	TYPE_TORNADO_DESCRIPTION        (""),
 	TYPE_CUSTOM_NAME                ("&bCustom"),
