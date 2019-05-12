@@ -19,6 +19,7 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 
 public class EditorMenuSelectionMenu extends EditorMenu {
 
@@ -68,17 +69,13 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 			}
 			
 			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(menus.get(currentPage));
 		}
 	}
 	
 	private void rebuild ()
-	{
-		loadedMenus = core.getDatabase().getMenus(false);
-		
+	{		
 		int pages = (int) Math.max(Math.ceil((double) (loadedMenus.size() - 1) / 28D), 1);
-		ParticleHats.debug(pages);
 		if (pages > this.pages)
 		{
 			this.pages = pages;
@@ -90,8 +87,9 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 			}
 		}
 		
+		loadMenus();
+		
 		addedMenu = false;
-		// TODO: Rebuild menu selection menu
 	}
 	
 	private Inventory createMenu (int index)
@@ -118,6 +116,47 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 		}
 		
 		return menu;
+	}
+	
+	private void loadMenus ()
+	{
+		loadedMenus = core.getDatabase().getMenus(false);
+		if (loadedMenus.size() > 0)
+		{
+			int startingIndex = storedMenus.size();
+			int globalIndex = startingIndex;
+			int page = (startingIndex / 28);
+			int index = MathUtil.wrap(startingIndex, 28, 0);
+			String currentMenu = menuBuilder.getEditingMenu().getName();
+
+			for (Entry<String, String> menu : loadedMenus.entrySet())
+			{
+				String key = menu.getKey();
+				String value = menu.getValue();
+				
+				if (key.equals(currentMenu)) {			
+					continue;
+				}
+				
+				if (storedMenus.containsValue(key)) {
+					continue;
+				}
+				
+				String name = Message.EDITOR_MENU_SELECTION_MENU_PREFIX.getValue() + key;
+				
+				ItemStack item = ItemUtil.createItem(Material.BOOK, name);
+				ItemUtil.setItemDescription(item, Message.EDITOR_MENU_SELECTION_MENU_DESCRIPTION.getValue().replace("{1}", value));
+				
+				menus.get(page).setItem(getNormalIndex(index++, 10, 2), item);
+				storedMenus.put(globalIndex++, key);
+				
+				if (index % 28 == 0)
+				{
+					index = 0;
+					page++;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -157,35 +196,7 @@ public class EditorMenuSelectionMenu extends EditorMenu {
 			menus.put(i, createMenu(i));
 		}
 		
-		int index = 0;
-		int globalIndex = 0;
-		int page = 0;
-		String currentMenu = menuBuilder.getEditingMenu().getName();
-		
-		if (loadedMenus.size() > 0)
-		{
-			for (Entry<String, String> menu : loadedMenus.entrySet())
-			{
-				if (menu.getKey().equals(currentMenu)) {			
-					continue;
-				}
-				
-				String name = Message.EDITOR_MENU_SELECTION_MENU_PREFIX.getValue() + menu.getKey();
-				String title = menu.getValue();
-				
-				ItemStack item = ItemUtil.createItem(Material.BOOK, name);
-				ItemUtil.setItemDescription(item, Message.EDITOR_MENU_SELECTION_MENU_DESCRIPTION.getValue().replace("{1}", title));
-				
-				menus.get(page).setItem(getNormalIndex(index++, 10, 2), item);
-				storedMenus.put(globalIndex++, menu.getKey());
-				
-				if (index % 28 == 0)
-				{
-					index = 0;
-					page++;
-				}
-			}
-		}
+		loadMenus();
 	}
 
 }
