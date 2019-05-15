@@ -995,15 +995,17 @@ public class YamlDatabase implements Database {
 		if (config.contains(path + "description")) 
 		{
 			List<String> desc = config.getStringList(path + "description");
-			description.addAll(StringUtil.colorize(desc));
+			if (!hat.isLocked() || SettingsManager.MENU_SHOW_DESCRIPTION_WHEN_LOCKKED.getBoolean()) {
+				description.addAll(StringUtil.parseDescription(hat, desc));
+			}
 			hat.setDescription(desc);
 		}
 		
 		if (config.contains(path + "permission-description"))
 		{
-			List<String> permissionDescription = StringUtil.colorize(config.getStringList(path + "permission-description"));
+			List<String> permissionDescription = config.getStringList(path + "permission-description");
 			if (SettingsManager.FLAG_PERMISSION.getBoolean() && hat.isLocked()) {
-				description.addAll(permissionDescription);
+				description.addAll(StringUtil.parseDescription(hat, permissionDescription));
 			}
 			hat.setPermissionDescription(permissionDescription);
 		}
