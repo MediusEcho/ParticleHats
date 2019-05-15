@@ -45,8 +45,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand.register(new OpenCommand(core));
 		mainCommand.register(new EditCommand(core));
 		mainCommand.register(new CreateCommand());
-		mainCommand.register(new DebugDeleteMenu());
-		mainCommand.register(new DebugCommand());
 		mainCommand.register(new ClearCommand());
 		mainCommand.register(new SetCommand());
 		mainCommand.register(new ParticlesCommand());
@@ -54,6 +52,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand.register(new TypeCommand());
 		mainCommand.register(new ImportCommand());
 		mainCommand.register(new MetaCommand());
+		
+		if (ParticleHats.debugging)
+		{
+			mainCommand.register(new DebugDeleteMenu());
+			mainCommand.register(new DebugCommand());
+		}
 		
 		if (core.canUseBungee()) {
 			mainCommand.register(new SpigotHelpCommand(core, this));
