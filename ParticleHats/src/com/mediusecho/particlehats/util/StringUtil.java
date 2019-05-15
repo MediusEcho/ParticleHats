@@ -243,6 +243,15 @@ public class StringUtil {
 		return desc;
 	}
 	
+	public static List<String> parseDescription (Hat hat, List<String> description)
+	{
+		List<String> desc = new ArrayList<String>();
+		for (String line : description) {
+			desc.add(ChatColor.translateAlternateColorCodes('&', parseString(line, hat)));
+		}
+		return desc;
+	}
+	
 	public static String parseString (String string, Hat hat)
 	{
 		return string
