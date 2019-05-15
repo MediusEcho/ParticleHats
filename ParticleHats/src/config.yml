@@ -1,13 +1,22 @@
-#
+###########################################################
+#                                                         #
+#                      ParticleHats                       #
+#                     by Medius_Echo                      #
+#                                                         #
+# Source Code: https://github.com/MediusEcho/ParticleHats #
+# Wiki: https://github.com/MediusEcho/ParticleHats/Wiki   #
+#                                                         #
+###########################################################
 #
 # Don't Change This!
 # This value gets updated automatically
 version: 1.0
 #
-# Set the default menu that will only anytime a player executes /h
+# Set the default menu that will open any time a player executes /h
 default-menu: particles.yml
 #
 # Set the default messages file.
+# You must create your own .yml message file if you want to edit messages
 default-messages: default_messages.yml
 #
 # Loads the included menus:
@@ -28,7 +37,7 @@ check-world-permission: false
 # Closes the players menu any time they equip a hat
 close-menu-on-equip: true
 #
-# Use %currency% in your item descriptions to utilize this value
+# Use {CURRENCY} in your item descriptions to utilize this value
 currency: $
 #
 # Let menus dynamically update their content (Cosmetic only)
@@ -39,6 +48,16 @@ live-menu-update-frequency: 5
 #
 # Set the maximum amount of hats a player can be wearing at once. Range is (1 - 28)
 max-hats: 7
+#
+# Checks the players purchased history from older versions
+# 
+# Older purchase history is not as accurate, players may be able to equip newer particles they
+# have not purchased because of this. 
+#
+# It is advised to leave this disabled, and require players to purchase their hats again
+# This value is ignored if you are using a MySQL database
+#
+check-against-legacy-purchases: false
 #
 database:
   #
@@ -68,7 +87,7 @@ flags:
   # Allow players to equip hats based on permissions
   permission: true
   #
-  # Use a supported vanish plugin, and hide particles anytime a player vanishes
+  # Use a supported vanish plugin, and hide particles any time a player vanishes
   # Supported plugins are: SuperVanish, PremiumVanish, & VanishNoPacket
   vanish: false
 #
@@ -104,7 +123,7 @@ menu:
   #
   locked-item:
     #
-    # This item will replace the hats normal icon
+    # This item will replace the hat's normal icon
     id: LAPIS_LAZULI
     damage-value: 0
     #
@@ -129,7 +148,7 @@ menu:
   sound:
     #
     # Enable sound
-    # A sound effect players any time the player uses a menu
+    # Default sound effect that will play when interacting with a menu
     # If a hat has a custom sound, this sound will not be played
     enabled: true
     #
