@@ -1569,7 +1569,11 @@ public class Hat {
 		return menuItem;
 	}
 	
-	// TODO: Add legacy purchase path
+	/**
+	 * Get this Hat's legacy purchase path<br>
+	 * Used to check against a list of purchases the player has made
+	 * @return
+	 */
 	public String getLegacyPurchaseID () 
 	{
 		StringBuilder builder = new StringBuilder();
