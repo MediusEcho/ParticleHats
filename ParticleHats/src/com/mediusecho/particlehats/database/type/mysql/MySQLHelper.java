@@ -14,7 +14,6 @@ import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.Table;
