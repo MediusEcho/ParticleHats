@@ -97,6 +97,9 @@ public class StaticMenu extends Menu {
 		List<Hat> equippedHats = playerState.getActiveHats();
 		
 		Material lockedMaterial = SettingsManager.MENU_LOCKED_ITEM.getMaterial();
+		int lockedDurability = SettingsManager.MENU_LOCKED_ITEM_DAMAGE.getInt();
+		 // TODO: Test locked item durability on 1.12.2- versions
+		
 		String lockedTitle = StringUtil.colorize(SettingsManager.MENU_LOCKED_ITEM_TITLE.getString());
 		
 		for (int i = 0; i < inventory.getSize(); i++)
@@ -145,13 +148,8 @@ public class StaticMenu extends Menu {
 				{
 					if (SettingsManager.MENU_LOCK_HATS_WITHOUT_PERMISSION.getBoolean())
 					{		
-						item.setType(lockedMaterial);
-						
-						if (SettingsManager.MENU_SHOW_DESCRIPTION_WHEN_LOCKKED.getBoolean()) {
-							ItemUtil.setItemName(item, lockedTitle);
-						} else {
-							ItemUtil.setNameAndDescription(item, lockedTitle);
-						}
+						ItemUtil.setItemType(item, lockedMaterial, lockedDurability);
+						ItemUtil.setItemName(item, lockedTitle);
 					}
 				}
 			}
