@@ -1611,7 +1611,9 @@ public class MySQLDatabase implements Database {
 			
 			if (description.size() > 0) 
 			{
-				lore.addAll(StringUtil.colorize(description));
+				if (!hat.isLocked() || SettingsManager.MENU_SHOW_DESCRIPTION_WHEN_LOCKKED.getBoolean()) {
+					lore.addAll(StringUtil.parseDescription(hat, description));
+				}
 				hat.setDescription(description);
 			}
 			
@@ -1619,7 +1621,7 @@ public class MySQLDatabase implements Database {
 			{
 				// Add our permission description if the player doesn't have permission for this hat
 				if (SettingsManager.FLAG_PERMISSION.getBoolean() && hat.isLocked()) {
-					lore.addAll(StringUtil.colorize(permissionDescription));
+					lore.addAll(StringUtil.parseDescription(hat, permissionDescription));
 				}
 				
 				hat.setPermissionDescription(permissionDescription);
