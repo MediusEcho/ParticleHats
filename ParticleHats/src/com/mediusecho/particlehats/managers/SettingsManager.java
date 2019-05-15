@@ -68,7 +68,7 @@ public enum SettingsManager {
 	MENU_LOCK_HATS_WITHOUT_PERMISSION ("menu.lock-hats-without-permission", Type.BOOLEAN, false),
 	MENU_SHOW_DESCRIPTION_WHEN_LOCKKED ("menu.show-description-when-locked", Type.BOOLEAN, false),
 	MENU_LOCKED_ITEM ("menu.locked-item.id", Type.MATERIAL, CompatibleMaterial.LAPIS_LAZULI.getMaterial()),
-	MENU_LOCKED_ITEM_DAMAGE ("menu.locked-item.damage-value", Type.INT, 0), // TODO: Use locked item damage value
+	MENU_LOCKED_ITEM_DAMAGE ("menu.locked-item.damage-value", Type.INT, 0),
 	MENU_LOCKED_ITEM_TITLE ("menu.locked-item.title", Type.STRING, "&cLocked"),
 	
 	MENU_OPEN_WITH_ITEM ("menu.open-menu-with-item.enabled", Type.BOOLEAN, false),
@@ -94,7 +94,6 @@ public enum SettingsManager {
 	EDITOR_SOUND_MODIFIER ("editor.sound.modifier", Type.DOUBLE, 0.25),
 	EDITOR_SHOW_BLACKLISTED_SOUNDS ("editor.show-blacklisted-sounds", Type.BOOLEAN, false),
 	EDITOR_SHOW_BLACKLISTED_POTIONS ("editor.show-blacklisted-potions", Type.BOOLEAN, false);
-	
 	
 	private final String key;
 	private final Type dataType;

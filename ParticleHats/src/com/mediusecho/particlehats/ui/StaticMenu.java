@@ -98,7 +98,6 @@ public class StaticMenu extends Menu {
 		
 		Material lockedMaterial = SettingsManager.MENU_LOCKED_ITEM.getMaterial();
 		int lockedDurability = SettingsManager.MENU_LOCKED_ITEM_DAMAGE.getInt();
-		 // TODO: Test locked item durability on 1.12.2- versions
 		
 		String lockedTitle = StringUtil.colorize(SettingsManager.MENU_LOCKED_ITEM_TITLE.getString());
 		
