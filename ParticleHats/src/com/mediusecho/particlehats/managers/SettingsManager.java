@@ -30,6 +30,7 @@ public enum SettingsManager {
 	LIVE_MENUS ("live-menus", Type.BOOLEAN, true),
 	LIVE_MENU_UPDATE_FREQUENCY ("live-menu-update-frequency", Type.INT, 5),
 	MAXIMUM_HAT_LIMIT ("max-hats", Type.INT_CLAMPED, 7, 28),
+	CHECK_AGAINST_LEGACY_PURCHASES ("check-against-legacy-purchases", Type.BOOLEAN, false),
 	
 	/**
 	 * Database properties

@@ -52,6 +52,7 @@ public class PlayerState {
 	
 	private List<Hat> activeHats;
 	private List<HatReference> purchasedHats;
+	private List<String> legacyPurchasedHats;
 	
 	public PlayerState (final Player owner)
 	{
@@ -60,6 +61,7 @@ public class PlayerState {
 		
 		activeHats = new ArrayList<Hat>();
 		purchasedHats = new ArrayList<HatReference>();
+		legacyPurchasedHats = new ArrayList<String>();
 		
 		openMenuCache = new HashMap<String, Menu>();
 	}
@@ -446,6 +448,17 @@ public class PlayerState {
 	}
 	
 	/**
+	 * Adds a legacy purchased hat
+	 * @param legacyPath
+	 */
+	public void addLegacyPurchasedHat (String legacyPath) 
+	{
+		if (!legacyPurchasedHats.contains(legacyPath)) {
+			legacyPurchasedHats.add(legacyPath);
+		}
+	}
+	
+	/**
 	 * Checks to see if the player has purchased this hat
 	 * @param hat
 	 * @return
@@ -453,7 +466,18 @@ public class PlayerState {
 	public boolean hasPurchased (Hat hat) 
 	{
 		HatReference reference = new HatReference(hat.getMenu(), hat.getSlot());
-		return purchasedHats.contains(reference);
+		if (purchasedHats.contains(reference)) {
+			return true;
+		}
+		
+		if (SettingsManager.CHECK_AGAINST_LEGACY_PURCHASES.getBoolean())
+		{
+			if (legacyPurchasedHats.contains(hat.getLegacyPurchaseID())) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**

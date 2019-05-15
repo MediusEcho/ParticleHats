@@ -563,6 +563,14 @@ public class YamlDatabase implements Database {
 		
 		callback.execute(purchasedHats);
 	}
+	
+	public void loadPlayerLegacyPurchasedHats (UUID id, DatabaseCallback callback)
+	{
+		CustomConfig playerConfig = getPlayerConfig(id);
+		
+		List<String> legacyPurchasedHats = playerConfig.getConfig().getStringList("purchases");
+		callback.execute(legacyPurchasedHats);
+	}
 
 	@Override
 	public void addGroup(String groupName, String defaultMenu, int weight) 
