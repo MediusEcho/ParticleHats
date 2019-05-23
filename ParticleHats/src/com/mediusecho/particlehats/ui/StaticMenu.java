@@ -130,11 +130,14 @@ public class StaticMenu extends Menu {
 					lore = new ArrayList<String>();
 				}
 				
+				String equippedDescription = Message.HAT_EQUIPPED_DESCRIPTION.getValue();
+				String[] lineInfo = StringUtil.parseValue(equippedDescription, "1");
+				
 				if (lore.size() > 0) {
-					lore.add("");
+					equippedDescription = equippedDescription.replace(lineInfo[0], lineInfo[1]);
 				}
 				
-				lore.addAll(StringUtil.parseDescription(Message.HAT_EQUIPPED_DESCRIPTION.getValue()));
+				lore.addAll(StringUtil.parseDescription(equippedDescription));
 				itemMeta.setLore(lore);
 				
 				item.setItemMeta(itemMeta);
