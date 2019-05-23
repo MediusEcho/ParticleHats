@@ -3,9 +3,11 @@
 #                    Default plugin message descriptions                    #
 #                                                                           #
 # Notes:                                                                    #
-# - {#}'s are used in messages that use extra data                          #
-# - {#=#} is used to provide optional data for messages                     #
 # - /n Will create a new line in the description                            #
+# - {#}'s are used in messages that use extra data                          #
+#                                                                           #
+# - {#=""} is used in messages that may contain null values, in that case   #
+#     the message in "" will be used instead                                #
 #                                                                           #
 # Notice:                                                                   #
 # This file is overridden after each update, create a custom .yml file      #
@@ -13,6 +15,8 @@
 # in config.yml to the file you created.                                    #
 #                                                                           #
 #############################################################################
+
+version: 1.0
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -118,7 +122,7 @@ command_reload_success: "&2ParticleHats reloaded"
 # Clear Command
 command_clear_description: "Removes all of the players active particles"
 command_clear_usage: "/h clear"
-command_clar_success: "&2All particles cleared"
+command_clear_success: "&2All particles cleared"
 
 # Clear Player Command
 command_clear_player_description: "Removes all particles for the target player"
@@ -189,10 +193,10 @@ command_edit_group_success: "&aUpdated group '&3{1}&a'"
 # This command will only work if you're using a MySQL database
 command_add_type_description: "Adds a custom type to the MySQL database"
 command_add_type_usage: "/h type add <type>"
+command_add_type_error: "&cThis command only works with a MySQL database"
 
 # {1}: The name of the custom type added
 command_add_type_success: "&aAdded '&3{1}&a' to the database"
-command_add_type_error: "&cThis command only works with a MySQL database"
 
 # Remove Type Command
 command_remove_type_description: "Removes a custom type from the MySQL database"
@@ -209,6 +213,19 @@ command_import_usage: "/h import <menu>"
 
 # {1}: The name of the menu imported into the MySQL database
 command_import_success: "&aAdded '&3{1}&a' to the MySQL database"
+
+# {1}: The name of the menu
+command_import_error: "&cThere was an error importing this menu error: {1}"
+
+##########################
+#     Purchase Menu      #
+##########################
+
+# Generic purchase menu properties
+# These are only used if you have not created a custom purchase menu yet
+purchase_menu_title: "Confirm Purchase"
+purchase_menu_confirm: "&3Accept Purchase"
+purchase_menu_cancel: "&cCancel Purchase"
 
 ##########################
 #        Particles       #
@@ -324,6 +341,22 @@ particle_water_wake_name: "&bWater Wake"
 particle_water_wake_description: "Fishing particles"
 particle_itemstack_name: "&bItem Stack"
 particle_itemstack_description: "&8Drops items instead of particles/n/n&cWarning: Too many items spawning/n&cmay cause lag"
+particle_campfire_cosy_smoke_name: "&bCosy Smoke"
+particle_campfire_cosy_smoke_description: "Smoke from a campfire"
+particle_campfire_signal_smoke_name: "&bSignal Smoke"
+particle_campfire_signal_smoke_description ("Smoke from a campfire, lasts longer"),
+particle_composter_name: "&bComposter"
+particle_composter_description: "Composter particles"
+particle_falling_lava_name: "&bFalling Lava"
+particle_falling_lava_description: "Same as dripping lava, without the delay"
+particle_falling_water_name: "&bFalling Water"
+particle_falling_water_description: "Same as dripping water, without the delay"
+particle_flash_name: "&eFlash"
+particle_flash_description: ""
+particle_sneeze_name: "&bSneeze"
+particle_sneeze_description: ""
+particle_empty_space_name: "&bEmpty Space"
+particle_empty_space_description: "&8By default the particle &cNONE/n&8gets replaced by the first particle/n&8a hat has, this one does not/n/n&8Use it when you don't want/n&8a particle to display"
 
 ##########################
 #       Locations        #
@@ -336,6 +369,45 @@ location_feet_name: "Feet"
 ##########################
 #         Types          #
 ##########################
+
+type_none_name: "&cNone"
+type_none_description: "&8Does absolutely nothing"
+type_halo_name: "&bHalo"
+type_halo_description: "&8A ring of particles for the/n&8players head"
+type_trail_name: "&bTrail"
+type_trail_description: "&8Displays a small cloud of particles/n&8with random offsets"
+type_cape_name: "&bCape"
+type_cape_description: "&8A Cape worn on the players back"
+type_wings_name: "&bWings"
+type_wings_description: "&8Default Wings"
+type_vortex_name: "&bVortex"
+type_vortex_description: "&8A Swirling cone that gets/n&8larger at the bottom"
+type_arch_name: "&bArch"
+type_arch_description: "&8A half circle that sits/n&8above the players head"
+type_atom_name: "&bAtom"
+type_atom_description: "&83 rings that create an atom shape"
+type_sphere_name: "&bSphere"
+type_sphere_description: "&8A sphere consisting of 10 rings"
+type_crystal_name: "&bCrystal"
+type_crystal_description: "&8A Plumbob, from the Sims"
+type_helix_name: "&bHelix"
+type_helix_description: ""
+type_inverse_vortex_name: "&bInverse Vortex"
+type_inverse_vortex_description: "&8Inverted version of the Vortex"
+type_hoop_name: "&bHoop"
+type_hoop_description: "&82 Particles that spin around/n&8the player in a circle"
+type_susanoo_name: "&bSusanoo"
+type_susanoo_description: ""
+type_angel_wings_name: "&bAngel Wings"
+type_angel_wings_description: ""
+type_creeper_hat_name: "&bCreeper Hat"
+type_creeper_hat_description: "&8A Creepers lovely face"
+type_clean_trail_name: "&bSingle Particle"
+type_clean_trail_description: "&8A single particle, use it however you want"),//("&8A lonely particle, can be used/n&8to create complex designs"
+type_tornado_name: "&bTornado"
+type_tornado_description: ""
+type_custom_name: "&bCustom"
+type_custom_description: ""
 
 ##########################
 #         Actions        #
@@ -360,11 +432,11 @@ action_open_menu_description: "&8Opens a menu"
 action_open_menu_permission_name: "&bOpen Menu with Permission"
 action_open_menu_permission_description: "&8Opens a menu only if/n&8the player has permission"
 action_purchase_confirm_name: "&bAccept Purchase"
-action_purchase_confirm__description: "&8Accepts a purchase/n/n&cShould only be used in a purchase menu"
+action_purchase_confirm_description: "&8Purchases and equips this hat"
 action_purchase_deny_name: "&bCancel Purchase"
-action_purchase_deny_description: "&8Cancels a purchase/n/n&cShould only be used in a purchase menu"
+action_purchase_deny_description: "&8Cancels a purchase"
 action_purchase_item_name: "&bPurchase Item"
-action_purchase_item_description: "&8Replaces this item with whichever hat/n&8the player is trying to purchase/n/n&cShould only be used in a purchase menu"
+action_purchase_item_description: "&8Replaces this item with whichever hat/n&8the player is trying to purchase"
 action_mimic_name: "&bMimic Left Click"
 action_mimic_description: "&8Copies the left click action"
 action_demo_name: "&bDemo"
@@ -373,5 +445,627 @@ action_active_particles_name: "&bActive Particles"
 action_active_particles_description: "&8Opens a special menu where the/n&8player can manage their/n&8active particles"
 
 ##########################
+#    Tracking Methods    #
+##########################
+
+track_nothing_name: "Don't Follow Movement"
+track_head_movement_name: "Follow Head Movement"
+track_body_rotation_name: "Follow Body Rotation"
+
+##########################
+#       Animation        #
+##########################
+
+animation_static_name: "&bStatic"
+animation_static_description: "&8Displays all particles at once"
+animation_animated_name: "&bAnimated"
+animation_animated_description: "&8Iterates over a types particles/n&8displaying them as an animation"
+
+##########################
+#      Display Mode      #
+##########################
+
+display_mode_display_in_order_name: "Pick icons in order"
+display_mode_display_randomly_name: "Pick icons randomly"
+
+##########################
 #         Editor         #
 ##########################
+
+# General
+editor_misc_main_menu: "&6Main Menu"
+editor_misc_go_back: "&6Back"
+editor_misc_close: "&6Close"
+editor_misc_equip: "&bTry it on"
+editor_misc_new_particle: "&bNew Particle"
+editor_misc_next_page: "&3Next Page"
+editor_misc_previous_page: "&3Previous Page"
+editor_misc_empty_menu: "&cEmpty"
+
+# Particles
+# {1}: The name of the particle
+editor_particle_misc_description: "/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle"
+
+# {1}: The name of the particle
+# {2}, {3}, {4}: RGB colour value
+editor_particle_rgb_colour_description: "/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
+
+# {1}: The name of the particle
+editor_particle_random_colour_description "/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
+
+# {1}: The name of the particle
+editor_particle_misc_colour_description   "/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
+
+# {1}: The name of the particle
+# {2}: Name of the block
+editor_particle_block_description: "/n&8Current:/n&8» &e{1}/n/n&8Block:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"
+
+# {1}: The name of the particle
+# {2}: Name of the item
+editor_particle_item_description: "/n&8Current:/n&8» &e{1}/n/n&8Item:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"
+
+# {1}: The name of the particle
+# {2}: How many items are loaded
+editor_particle_itemstack_description: "/n&8Current:/n&8» &e{1}/n/n&8Items:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"
+
+# Base Menu
+# {1=}: Name of menu being edited + '...' if title goes past character limit
+editor_base_menu_title: "Editing ({1=...}&r)"
+
+editor_empty_slot_title: "&bEmpty Slot"
+editor_slot_description: "&3Left Click to Edit/n&3Right Click for Settings"
+editor_hat_footer_description: "&3Left Click to Edit/n&3Right Click for Settings/n&cShift Right Click to Delete"
+
+# {1}: The slot this hat is in
+editor_hat_slot_description: "&7Slot: &f{1}"
+
+# {1}: The name of this hat's type
+editor_hat_type_description: "&7Type: &f{1}"
+
+# {1}: The name of this hat's location
+editor_hat_location_description: "&7Location: &f{1}"
+
+# {1}: The name of this hat's mode
+editor_hat_mode_description: "&7Mode: &f{1}"
+
+# {1}: The hat's update frequency
+# {2=}: Tick suffix
+editor_hat_frequency_description: "&7Update: &f{1} &7tick{2=s}"
+
+# {1=}: How many particles are loaded, or 'None' if none are
+editor_hat_particles_description: "&7Particles: &f{1=None}"
+
+# {1}: How many nodes are loaded
+editor_hat_nodes_description: "&7Nodes: &f{1}"
+
+# {1}: The hat's left click action
+editor_hat_left_click_description: "&7Left Click: &f{1}"
+
+# {1}: The hat's right click action
+editor_hat_right_click_description: "&7Right Click: &f{1}"
+
+# {1}: What command the player will execute
+editor_hat_command_description: "Run Command (/{1})"
+
+# {1}: Which menu the player will open
+editor_hat_menu_description: "Open Menu ({1})"
+
+# {1}: How long this hat will stay equipped for
+editor_hat_duration_description: "Equip for {1}"
+
+# Settings Menu
+editor_settings_menu_title: "Menu Settings"
+editor_settings_menu_set_title: "&bSet Menu Title"
+editor_settings_menu_set_alias: "&bSet Menu Alias"
+editor_settings_menu_set_size: "&bSet Menu Size"
+editor_settings_menu_delete: "&cDelete"
+editor_settings_menu_set_purchase_menu: "&bPurchase Menu"
+editor_settings_menu_toggle_live_menu: "&bToggle Live Updates"
+editor_settings_menu_sync_icons: "&bSync Icons"
+
+# {1}: The title of the menu being edited
+editor_settings_menu_title_description: "/n&8Current Title:/n&8» &r{1}"
+
+# {1=}: The alias of the menu being edited, or 'Not Set' if nothing is set
+editor_settings_menu_alias_description: "/n&8Current Alias:/n&8» &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu"
+
+# {1=}: Enabled description
+# {2=}: Disabled description
+editor_settings_menu_animation_description: "/n&8Live Updates:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&8Hats will cycle through their/n&8icons and display them/n/n&3Click to Toggle"
+
+editor_settings_sync_description: "&8Resets each hat's animation index to 0/n&8so each hat is synced"
+
+# Delete Menu
+editor_delete_menu_title: "Delete this Menu?"
+editor_delete_menu_yes: "&2Yes"
+editor_delete_menu_no: "&cI've changed my mind"
+
+# Resize Menu
+editor_resize_menu_title: "Resize this menu"
+
+# {1}: The size of the menu (1,2,3,4, ect)
+# {2=}: Suffix if size is greater than 1 (1 Row, 2 Row(s))
+editor_resize_menu_set_row_size: "&b{1} Row{2=s}"
+
+editor_resize_menu_set_row_description: "&cResizing this menu may result/n&cin lost particle data"
+
+# Main Menu
+editor_main_menu_title: "Main Menu"
+editor_main_menu_set_type: "&bSet Type"
+editor_main_menu_set_location: "&bSet Location"
+editor_main_menu_set_meta: "&bSet Meta Properties"
+editor_main_menu_set_price: "&bSet Purchase Price"
+editor_main_menu_set_speed: "&bSet Speed"
+editor_main_menu_set_mode: "&bSet Mode"
+editor_main_menu_set_action: "&bSet Action"
+editor_main_menu_set_update_frequency: "&bSet Update Frequency"
+editor_main_menu_set_count: "&bSet Particle Count"
+editor_main_menu_set_angle: "&bSet Angle"
+editor_main_menu_set_offset: "&bSet Offset"
+editor_main_menu_set_tracking_method: "&bSet Tracking Method"
+editor_main_menu_set_sound: "&bSet Sound"
+editor_main_menu_set_potion: "&bSet Potion"
+editor_main_menu_set_particle: "&bSelect a new Particle"
+editor_main_menu_set_icon: "&bSet Item"
+editor_main_menu_set_slot: "&bSet Slot"
+editor_main_menu_set_scale: "&bSet Scale"
+editor_main_menu_clone: "&bCreate a Copy"
+editor_main_menu_move: "&bMove"
+editor_main_menu_edit_particles: "&bEdit Particles"
+editor_main_menu_edit_nodes: "&bEdit Nodes"
+editor_main_menu_no_particles: "&bNo Particles"
+editor_main_menu_custom_type_error: "&cUnable to find image"
+
+# {1}: Particle count
+editor_main_menu_count_description: "/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"
+
+# {1}: Particle Speed
+editor_main_menu_speed_description: "/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"
+
+# {1=}: Particle Price
+editor_main_menu_price_description: "/n&8» &e{1=Free} &8{2}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"
+
+# {1}, {2}, {3}: Vector x, y, & z
+editor_main_menu_vector_description: "/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"
+
+# {1}, {2}, {3}: Offset x, y, & z
+# {4}, {5}, {6}: Random Offset x, y, & z
+editor_main_menu_offset_description: "/n&8Offset:/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&8Random Offset:/n&8» X: &e{4}/n&8» Y: &e{5}/n&8» Z: &e{6}/n/n&3Left Click to Change"
+
+# {1}: Previous Location
+# {2}: Current Location
+# {3}: Next Location
+editor_main_menu_location_description: "/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"
+
+# {1}: Previous Mode
+# {2}: Current Mode
+# {3}: Next Mode
+# {4}: Mode description
+editor_main_menu_mode_description: "/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n{4}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"
+
+# {1}: Update frequency
+# {2=}: Update frequency suffix (Tick, Tick(s))
+editor_main_menu_update_frequency_description: "/n&8Updates Every:/n&8» &e{1} &8tick{2=s}/n/n&8Set how often this particle/n&8is updated, 1 = fastest/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cMiddle Click to Reset"
+
+editor_main_menu_icon_description: "&8Change the item that will we displayed/n&8inside this menu"
+
+# {1=}: Sound name
+# {2}: Sound volume
+# {3}: Sound pitch
+# {4=}: Value used if we can reset this hat's sound
+editor_main_menu_sound_description: "/n&8Sound: &7{1=&cNot Set}/n&8Volume: &7{2}/n&8Pitch: &7{3}/n/n&3Left Click to Change{4=/n&cShift Right Click to Clear}"
+
+editor_main_menu_slot_description: "&8Change where this hat will be/n&8inside this menu"
+
+# {1} Scale
+editor_main_menu_scale_description: "/n&8Scale:/n&8» &e{1}/n/n&8Adjusts the spacing of each/n&8particle in the current type/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"
+
+editor_main_menu_clone_description: "&8Create a copy of this hat/n&8and place it in a new slot"
+editor_main_menu_move_description: "&8Move this hat to a different menu"
+
+# {1}: Left click action
+# {2}: Right click action
+editor_main_menu_action_description: "/n&8Left Click Action:/n{1}/n/n&8Right Click Action:/n{2}/n/n&3Click to Change Actions"
+
+editor_main_menu_meta_description: "&8Edit various meta properties/n/n&3Left Click to Open/n&3Right Click for Description Shortcut"
+
+# {1=}: Particle Type + extra line for custom type description
+# {2}: Custom type name
+# {3=}: Extra footer description to toggle type animation if possible
+editor_main_menu_type_description: "/n&8Current:/n&8» &e{1=/n&8» }{2}/n/n&3Left Click to Change Type/n{3=&cShift Click to Change Animation}"
+
+# {1}: Animation name
+# {2}: Animation description
+editor_main_menu_animation_description: "/n/n&8Animation:/n&8» &e{1}/n{2}"
+
+# {1}: Tracking method
+editor_main_menu_tracking_method_description_single: "&8» &e{1}"
+
+# {1}: Previous tracking method
+# {2}: Current tracking method
+# {3}: Next tracking method
+editor_main_menu_tracking_method_description_multiple: "/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"
+
+editor_main_menu_node_description: "&8Add a new hat,/n&8or edit an existing one"
+
+# {1=}: Potion name, or 'Not Set' if nothing is set
+# {2}: Potion Strength
+editor_main_menu_potion_description: "/n&8Current:/n&8» &e{1=&cNot Set} {2}/n/n&3Click to Change/n&cShift Right Click to Clear"
+
+editor_main_menu_no_particles_description: "&8Select a Type that supports particles"
+editor_main_menu_equip_description: "&8Temporarily equip this/n&8hat for 15 seconds"
+
+# Type Menu
+# {1}: Current Page
+# {2}: Total pages
+editor_type_menu_title: "Select a Type {1}/{2}"
+
+# {1}: Name of the current type as defined above
+editor_type_menu_type_prefix: "&e{1}"
+
+# {1=}: Name of the current type
+# {2}: How many particles this type supports
+# {3=}: Particle count suffix
+# {4=}: Value used if this type is not selected
+# {5=}: Value used if this type is selected
+editor_type_menu_type_description: "{1=/n/n}&8Supports &3{2} &8Particle{3=s}/n/n{4=&3Click to Select}{5=&3Selected}"
+
+# {1=}: Value used if custom type is not selected
+# {2=}: Value to use if custom type is selected
+editor_type_menu_custom_type_description: "{1=&3Click to Select}{2=&3Selected}"
+
+editor_type_menu_included_filter: "&bIncluded Types"
+editor_type_menu_custom_filter: "&bCustom Types"
+editor_type_menu_no_custom_types: "&cNo Custom Types Found"
+
+# Potion Menu
+# {1}: Current Page
+# {2}: Total Pages
+editor_potion_menu_title: "Select a Potion {1}/{2}"
+
+# {1}: Name of potion
+editor_potion_menu_potion_title: "&b{1}"
+
+# {1=}: Value used if potion is not selected
+# {2=}: Value used if potion is selected
+editor_potion_menu_potion_description: "{1=&3Click to Select}{2=&3Selected}"
+
+editor_potion_menu_set_strength: "&bSet Strength"
+
+# {1=}: Potion strength
+editor_potion_menu_strength_description: "/n&8Strength: &e{1=&cNo Potion Set}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"
+
+# Move Menu
+# {1=}: Title of the menu. '...' is added if the menu title is too long
+editor_move_menu_title: "Move to ({1=...})"
+
+editor_move_menu_move: "&bMove Here"
+editor_move_menu_occupied: "&cOccupied"
+editor_move_menu_move_description: "&3Left Click to Move/n&cRight Click to Cancel"
+editor_move_menu_occupied_description: "&cRight Click to Cancel"
+
+# Node Overview Menu
+editor_node_overview_menu_title: "Edit or Add a Node"
+
+# {1}: Current node index
+editor_node_overview_node_title: "&bNode #{1}"
+
+editor_node_overview_menu_node_description: "&3Left Click to Edit/n&cShift Right Click to Delete"
+editor_node_overview_menu_add_node: "&bCreate a new Node"
+
+# Icon Menu
+editor_icon_overview_menu_title: "Add or Remove Items"
+editor_icon_menu_set_main_icon: "&bSet Main Item"
+editor_icon_menu_add_icon: "&bAdd an Item"
+editor_icon_menu_preview: "&bPreview"
+editor_icon_menu_set_display_mode: "&bSet Display Mode"
+editor_icon_menu_set_update_frequency: "&bSet Update Frequency"
+editor_icon_menu_item_prefix: "&b"
+
+editor_icon_menu_item_title: "Select an Item"
+editor_icon_menu_item_info: "&bSelect an Item"
+editor_icon_menu_item_description: "&8Select an Item from your inventory"
+editor_icon_menu_block_title: "Select a Block"
+editor_icon_menu_block_info: "&bSelect a Block"
+editor_icon_menu_block_description: "&8Select a Block from your inventory"
+
+# {1}: Update frequency
+# {2=}: Tick suffix
+editor_icon_menu_update_frequency_description: "/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"
+
+# {1}: Previous display mode
+# {2}: Current display mode
+editor_icon_menu_display_mode_description: "/n&8• {1}/n&7» &e{2}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"
+
+editor_icon_menu_icon_description: "&3Left Click to Change/n&cShift Right Click to Delete"
+
+# Offset Menu
+editor_offset_menu_title: "Set Offset"
+editor_offset_menu_set_offset_x: "&bSet X Offset"
+editor_offset_menu_set_offset_y: "&bSet Y Offset"
+editor_offset_menu_set_offset_z: "&bSet Z Offset"
+editor_offset_menu_set_random_offset_x: "&bSet Random X Offset"
+editor_offset_menu_set_random_offset_y: "&bSet Random Y Offset"
+editor_offset_menu_set_random_offset_z: "&bSet Random Z Offset"
+
+# Editing x offset
+# {1}, {2}, {3}: Offset x, y, z
+editor_offset_menu_offset_x_description: "/n&e» X: {1}/n&8• Y: &7{2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"
+
+# Editing y offset
+# {1}, {2}, {3}: Offset x, y, z
+editor_offset_menu_offset_y_description: "/n&8• X: &7{1}/n&e» Y: {2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"
+
+# Editing z offset
+# {1}, {2}, {3}: Offset x, y, z
+editor_offset_menu_offset_z_description: "/n&8• X: &7{1}/n&8• Y: &7{2}/n&e» Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"
+
+# Angle Menu
+editor_angle_menu_title: "Set Angle"
+editor_angle_menu_set_angle_x: "&bSet X Angle"
+editor_angle_menu_set_angle_y: "&bSet Y Angle"
+editor_angle_menu_set_angle_z: "&bSet Z Angle"
+
+# Editing x angle
+# {1}, {2}, {3}, Angle x, y, z
+editor_angle_menu_angle_x_description: "/n&e» X: {1}/n&8• Y: &7{2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"
+
+# Editing y angle
+# {1}, {2}, {3}, Angle x, y, z
+editor_angle_menu_angle_y_description: "/n&8• X: &7{1}/n&e» Y: {2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"
+
+# Editing z angle
+# {1}, {2}, {3}, Angle x, y, z
+editor_angle_menu_angle_z_description: "/n&8• X: &7{1}/n&8• Y: &7{2}/n&e» Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"
+
+# Particle Selection Menu
+# {1}: Current page
+# {2}: Total pages
+editor_particle_menu_title: "Supported Particles {1}/{2}"
+
+editor_particle_menu_colour_filter_title: "Filter: Colour"
+editor_particle_menu_data_filter_title: "Filter: Data"
+editor_particle_menu_recent_filter_title: "Recent Particles"
+editor_particle_menu_colour_filter: "&3Colour Filter"
+editor_particle_menu_data_filter: "&3Data Filter"
+editor_particle_menu_normal_filter: "&3Show All Particles"
+editor_particle_menu_recent_filter: "&3Recently Used"
+
+# {1=}: Particle description + two extra lines
+# {2=}: Value used if particle is not selected
+# {3=}: Value used if particle is selected
+editor_particle_menu_particle_description: "&8{1=/n/n}{2=&3Click to Select}{3=&3Selected}"
+
+# Particle Overview Menu
+editor_particle_overview_menu_title: "Edit Particles"
+
+# {1}: Particle index being edited
+editor_particle_overview_particle_name: "&bParticle #{1}"
+
+# Sound Menu
+# {1}: Current page
+# {2]: Total pages
+editor_sound_menu_misc_title: "Misc Sounds {1}/{2}"
+
+# {1}: Current page
+# {2]: Total pages
+editor_sound_menu_block_title: "Block Sounds {1}/{2}"
+
+# {1}: Current page
+# {2]: Total pages
+editor_sound_menu_entity_title: "Entity Sounds {1}/{2}"
+
+editor_sound_menu_set_pitch: "&bSet Pitch"
+editor_sound_menu_set_volume: "&bSet Volume"
+editor_sound_menu_block_filter: "&bBlock Sound Filter"
+editor_sound_menu_entity_filter: "&bEntity Sound Filter"
+editor_sound_menu_misc_filter: "&bMisc Filter"
+
+# {1}: Sound name
+editor_sound_menu_sound_prefix: "&b{1}"
+
+# {1=}: Value used if sound is selected
+editor_sound_menu_sound_description: "&3Left Click to Select/n&3Right Click to Hear{1=/n/n&8Selected}"
+
+# {1}: Volume
+editor_sound_menu_volume_description: "/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"
+
+# {1}: Pitch
+editor_sound_menu_pitch_description: "/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"
+
+# Action Menu
+editor_action_overview_menu_title: "Set Left/Right Click Actions"
+editor_action_overview_menu_set_left_click: "&bSet Left Click Action"
+editor_action_overview_menu_set_right_click: "&bSet Right Click Action"
+
+# {1}: Action name
+# {2=}: Value used if action allows additional arguments
+editor_action_overview_menu_action_description: "/n&8Current:/n{1}/n/n&3Left Click to Change Action{2=/n&cRight Click to Change Argument}"
+
+# {1=}: Value used if selecting a left click action
+# {2=}: Value used if selecting a right click action
+# {3}: Current page
+# {4}: Total pages
+editor_action_menu_title: "Select a {1=Left Click}{2=Right Click} Action {3}/{4}"
+
+# {1}: Action description
+editor_action_menu_misc_description: "&8» &e{1}"
+
+# {1}: Action description
+# {2=}: Command description
+editor_action_menu_menu_description: "&8» &e{1}/n&8» &7{2=&cNot Set}"
+
+# {1}: Action description
+# {2=}: menu that will be opened
+editor_action_menu_command_description: "&8» &e{1}/n&8» &7{2=&cNot Set}"
+
+# {1}: Action description
+# {2}: How long hat will stay equipped
+editor_action_menu_demo_description: "&8» &e{1}/n&8» &7{2}"
+
+# {1}: Action description
+# {2=}: Value used if action is selected
+# {3=}: Value used if action is not selected
+editor_action_menu_action_description: "{1}{2=/n/n&3Selected}{3=/n/n&3Click to Select}"
+
+# Slot Menu
+editor_slot_menu_title: "Choose a new Slot"
+editor_slot_menu_occupied: "&cOccupied"
+editor_slot_menu_swap: "&bSwap Places"
+editor_slot_menu_cancel: "&6Cancel"
+editor_slot_menu_select: "&bSelect Slot"
+
+# Duration Menu
+editor_duration_menu_title: "Set Duration"
+editor_duration_menu_set_duration: "&3Set Duration"
+
+# {1}: Hat's demo duration
+editor_duration_menu_description: "/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 30"
+
+# Meta Menu
+editor_meta_menu_title: "Meta Properties"
+editor_meta_menu_set_name: "&bChange Display Name"
+editor_meta_menu_set_label: "&bChange Label"
+editor_meta_menu_set_permission: "&bChange Permission"
+editor_meta_menu_set_description: "&bChange Description"
+editor_meta_menu_set_permission_message: "&bChange Permission Message"
+editor_meta_menu_set_permission_description: "&bChange Permission Description"
+editor_meta_menu_set_equip_message: "&bChange Equip Message"
+editor_meta_menu_set_tag: "&bChange Tags"
+
+# {1}: Hat's display name
+# {2=}: Value used if we can reset the hat's display name
+editor_meta_menu_name_description: "/n&8Current:/n&8» {1}/n/n&3Left Click to Change{2=/n&cShift Right Click to Reset}"
+
+# {1=}: Hat's label
+# {2=}: Value used if we can reset this hat's label
+editor_meta_menu_label_description: "/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <label>/n/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
+
+# {1}: Hat's description
+# {2=}: Value used if we can clear this hat's description
+editor_meta_menu_description_description: "/n&8Current:/n{1}/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
+
+editor_meta_menu_empty_description: "/n&8Current:/n&8» &cNot Set/n/n&3Left Click to Change"
+
+# {1}: Permission value
+# {2}: Full permission usage
+editor_meta_menu_permission_description: "/n&8Current:/n&8» &7{1}/n/n&8Usage:/n&8» &7{2}/n/n&3Click to Change"
+
+# {1=}: Hat's equip message
+# {2=}: Value used if we can reset this hat's equip message
+editor_meta_menu_equip_description: "/n&8Show the player this message when/n&8they equip this hat instead of the/n&8global equip message/n/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
+
+# {1=}: Hat's permission denied description
+# {2=}: Value used if we can reset this hat's permission
+editor_meta_menu_permission_denied_description: "/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
+
+# Description Menu
+editor_description_menu_title: "Edit Description"
+editor_description_menu_add_line: "&bAdd a Line"
+
+# {1}: Description line #
+editor_desciprion_line_title: "&bLine #{1}"
+
+editor_description_menu_preview: "&bPreview"
+editor_description_menu_empty: "&cNo Description Set"
+
+# {1=}: Current description line value
+editor_description_menu_line_description: "/n&8» &r{1=&cEmpty}/n/n&3Left Click to Edit/n&3Shift Left Click to Insert Line/n&cShift Right Click to Delete"
+
+# {1=}: Hat's preview description
+# {2=}: Value used if description can be cleared
+editor_description_menu_preview_description: "{1=&cEmpty}{2=/n&cShift Right Click to Clear}"
+
+# Tag Overview Menu
+editor_tag_overview_menu_title: "Edit Tags"
+editor_tag_overview_menu_add_tag: "&bAdd a Tag"
+
+# {1}: Tag's name
+editor_tag_overview_menu_tag_title: "&b{1}"
+
+editor_tag_overview_menu_tag_description: "&cShift Right Click to Delete"
+editor_tag_overview_menu_info_title: "&bWhat are Tags?"
+editor_tag_overview_menu_info: "&8Tags are experimental features/n&8that may, or may not stay/n&8depending on their popularity"
+
+# Tag Menu
+editor_tag_menu_title: "Select a Tag"
+
+# {1}: Tag's name
+editor_tag_menu_tag_title: "&b{1}"
+
+# ItemStack menu
+editor_itemstack_menu_title: "Add or Remove Items"
+editor_itemstack_menu_add_item: "&bAdd an Item"
+editor_itemstack_menu_set_duration: "&bSet Duration"
+editor_itemstack_menu_toggle_gravity: "&bToggle Gravity"
+editor_itemstack_menu_set_velocity: "&bSet Velocity"
+
+# {1}: Itemstack particle duration
+editor_itemstack_menu_duration_description: "/n&8Duration:/n&8» &e{1}/n/n&8Set how long items stay/n&8spawned in the world/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"
+
+# {1=}: Value used if itemstack gravity is enabled
+# {2=}: Value used if itemstack gravity is disabled
+editor_itemstack_menu_gravity_description: "/n&8Gravity:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"
+
+# {1}, {2}, {3}: Itemstack particle velocity x, y, z
+editor_itemstack_menu_velocity_description: "/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"
+
+# Velocity menu
+editor_velocity_menu_title: "Set Velocity"
+editor_velocity_menu_set_velocity_x: "&bSet X Velocity"
+editor_velocity_menu_set_velocity_y: "&bSet Y Velocity"
+editor_velocity_menu_set_velocity_z: "&bSet Z Velocity"
+
+# Menu Selection
+# {1}: Current page
+# {2}: Total pages
+editor_menu_selection_title: "Select a Menu {1}/{2}"
+
+editor_menu_selection_create: "&bCreate a Menu"
+editor_menu_selection_refresh: "&bRefresh"
+editor_menu_selection_menu_prefix: "&bMenu: &e"
+
+# {1}: Menu's title
+editor_menu_selection_menu_description: "&8Title: {1}"
+
+# Colour Menu
+editor_colour_menu_title: "Select or Create a Colour"
+editor_colour_menu_set_white: "&bWhite"
+editor_colour_menu_set_red: "&bRed"
+editor_colour_menu_set_lime: "&bLime"
+editor_colour_menu_set_light_blue: "&bLight Blue"
+editor_colour_menu_set_pink: "&bPink"
+editor_colour_menu_set_gray: "&bGrey"
+editor_colour_menu_set_orange: "&bOrange"
+editor_colour_menu_set_green: "&bGreen"
+editor_colour_menu_set_blue: "&bBlue"
+editor_colour_menu_set_magenta: "&bMagenta"
+editor_colour_menu_set_black: "&bBlack"
+editor_colour_menu_set_yellow: "&bYellow"
+editor_colour_menu_set_brown: "&bBrown"
+editor_colour_menu_set_purple: "&bPurple"
+editor_colour_menu_set_cyan: "&bCyan"
+editor_colour_menu_set_red_value: "&bSet Red Value"
+editor_colour_menu_set_green_value: "&bSet Green Value"
+editor_colour_menu_set_blue_value: "&bSet Blue Value"
+editor_colour_menu_set_random: "&bRandom Colours"
+editor_colour_menu_set_size: "&bSet Size"
+
+# {1}: Name of colour
+# {2}, {3}, {4}: Colour's r, g, b
+editor_colour_menu_preset_description: "&8Set this particles/n&8colour to {1}/n/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}"
+
+# {1}, {2}, {3}: Colour's r, g, b
+editor_colour_menu_r_description: "/n&e» R: {1}/n&8• G: &7{2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"
+
+# {1}, {2}, {3}: Colour's r, g, b
+editor_colour_menu_g_description: "/n&8• R: &7{1}/n&e» G: {2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"
+
+# {1}, {2}, {3}: Colour's r, g, b
+editor_colour_menu_b_description: "/n&8• R: &7{1}/n&8• G: &7{2}/n&e» B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"
+
+editor_colour_menu_random_suffix: "Random"
+editor_colour_menu_random_description: "&8Give this particle random colours"
+
+# {1}: Particle size
+editor_colour_menu_size_description: "/n&8Set the size of these particles/n/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"
