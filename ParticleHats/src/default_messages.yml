@@ -27,7 +27,8 @@ unknown: "&cUnknown Message"
 
 # Adds this description to any hats the player has equipped.
 # Only visible in menus
-hat_equipped_description: "&3Equipped"
+# {1=}: Extra spacing added if the item has a description
+hat_equipped_description: "{1=/n}&3Equipped"
 
 # Sent when players equip a hat, if the hat has a custom equip message, then that one will be sent
 # {1}: The hat's display name
@@ -117,19 +118,19 @@ command_help_usage: "/h help"
 # Reload Command
 command_reload_description: "Reloads the plugin's configuration files"
 command_reload_usage: "/h reload"
-command_reload_success: "&2ParticleHats reloaded"
+command_reload_success: "&aParticleHats reloaded"
 
 # Clear Command
 command_clear_description: "Removes all of the players active particles"
 command_clear_usage: "/h clear"
-command_clear_success: "&2All particles cleared"
+command_clear_success: "&aAll particles cleared"
 
 # Clear Player Command
 command_clear_player_description: "Removes all particles for the target player"
 command_clear_player_usage: "/h clear <player>"
 
 # {1}: The name of the player
-command_clear_player_success: "&2All particles cleared for {1}"
+command_clear_player_success: "&aAll particles cleared for {1}"
 
 # Create command
 command_create_description: "Creates a new menu with the given name"
@@ -166,7 +167,7 @@ command_set_label_error: "&cUnable to find label '&7{1}&c'"
 command_set_already_set: "&c{1} is already wearing this hat"
 
 # {1}: The hat's display name
-command_set_success: "&2You were given the {1} &2hat"
+command_set_success: "&aYou were given the {1} &ahat"
 
 # Add Group Command
 command_add_group_description: "Add a new group, use weight to determine a groups priority"
@@ -344,7 +345,7 @@ particle_itemstack_description: "&8Drops items instead of particles/n/n&cWarning
 particle_campfire_cosy_smoke_name: "&bCosy Smoke"
 particle_campfire_cosy_smoke_description: "Smoke from a campfire"
 particle_campfire_signal_smoke_name: "&bSignal Smoke"
-particle_campfire_signal_smoke_description ("Smoke from a campfire, lasts longer"),
+particle_campfire_signal_smoke_description: "Smoke from a campfire, lasts longer"
 particle_composter_name: "&bComposter"
 particle_composter_description: "Composter particles"
 particle_falling_lava_name: "&bFalling Lava"
@@ -403,7 +404,7 @@ type_angel_wings_description: ""
 type_creeper_hat_name: "&bCreeper Hat"
 type_creeper_hat_description: "&8A Creepers lovely face"
 type_clean_trail_name: "&bSingle Particle"
-type_clean_trail_description: "&8A single particle, use it however you want"),//("&8A lonely particle, can be used/n&8to create complex designs"
+type_clean_trail_description: "&8A single particle, use it however you want"
 type_tornado_name: "&bTornado"
 type_tornado_description: ""
 type_custom_name: "&bCustom"
@@ -491,10 +492,10 @@ editor_particle_misc_description: "/n&8Current:/n&8» &e{1}/n/n&3Left Click to Ch
 editor_particle_rgb_colour_description: "/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
 
 # {1}: The name of the particle
-editor_particle_random_colour_description "/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
+editor_particle_random_colour_description: "/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
 
 # {1}: The name of the particle
-editor_particle_misc_colour_description   "/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
+editor_particle_misc_colour_description: "/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"
 
 # {1}: The name of the particle
 # {2}: Name of the block
@@ -577,7 +578,7 @@ editor_settings_sync_description: "&8Resets each hat's animation index to 0/n&8s
 
 # Delete Menu
 editor_delete_menu_title: "Delete this Menu?"
-editor_delete_menu_yes: "&2Yes"
+editor_delete_menu_yes: "&aYes"
 editor_delete_menu_no: "&cI've changed my mind"
 
 # Resize Menu

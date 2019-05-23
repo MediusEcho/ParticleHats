@@ -11,12 +11,10 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public enum Message {
 	
-	// TODO: Finish adding messages to default_messages.yml
-	
 	UNKNOWN            ("&cUnknown Message"),
 	INSUFFICIENT_FUNDS ("&cYou don't have enough {1} to purchase this hat"),
 	
-	HAT_EQUIPPED_DESCRIPTION ("&3Equipped"),
+	HAT_EQUIPPED_DESCRIPTION ("{1=/n}&3Equipped"),
 	HAT_EQUIPPED             ("{1} &7equipped"),
 	HAT_EQUIPPED_VANISHED    ("{1} &7equipped while vanished"),
 	HAT_EQUIPPED_OVERFLOW    ("&cYou can only equip {1} hats at a time"),
@@ -94,7 +92,7 @@ public enum Message {
 	COMMAND_SET_USAGE       ("/h set <player> <label> <tellPlayer true|false>"),
 	COMMAND_SET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
 	COMMAND_SET_ALREADY_SET ("&c{1} is already wearing this hat"),
-	COMMAND_SET_SUCCESS     ("&aYou were given the {1} &2hat"),
+	COMMAND_SET_SUCCESS     ("&aYou were given the {1} &ahat"),
 	
 	// Add Group Command
 	COMMAND_ADD_GROUP_DESCRIPTION ("Add a new group, use weight to determine a groups priority"),
@@ -434,7 +432,7 @@ public enum Message {
 	 * Active Particles Menu
 	 */
 	ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
-	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8» &e{1=&2Active}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
+	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8» &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
 	
 	
 	/**
@@ -497,7 +495,7 @@ public enum Message {
 	
 	// Delete Menu
 	EDITOR_DELETE_MENU_TITLE ("Delete this Menu?"),
-	EDITOR_DELETE_MENU_YES   ("&2Yes"),
+	EDITOR_DELETE_MENU_YES   ("&aYes"),
 	EDITOR_DELETE_MENU_NO    ("&cI've changed my mind"),
 	
 	// Resize Menu
