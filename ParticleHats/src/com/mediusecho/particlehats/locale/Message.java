@@ -373,7 +373,7 @@ public enum Message {
 	 * Meta State
 	 */
 	META_ERROR                                  ("&cYou are not editing a menu"),
-	META_HAT_NAME_COMMAND_USAGE                 ("&6Use &f/h meta <name> &6to rename"),
+	META_HAT_NAME_USAGE                         ("&6Use &f/h meta <name> &6to rename"),
 	META_HAT_NAME_DESCRIPTION                   ("Type the &eName &finto chat, or '&ccancel&f' to return"),
 	META_HAT_NAME_SUGGESTION                    ("<hat name>"),
 	META_HAT_LABEL_USAGE                        ("&6Use &f/h meta <label> &6to rename"),
