@@ -446,6 +446,66 @@ action_active_particles_name: "&bActive Particles"
 action_active_particles_description: "&8Opens a special menu where the/n&8player can manage their/n&8active particles"
 
 ##########################
+#          Modes         #
+##########################
+
+mode_active_name: "Active"
+mode_active_description: "&8Always displays particles"
+mode_when_moving_name: "When Moving"
+mode_when_moving_description: "&8Only displays particles when/n&8the player is moving"
+mode_when_afk_name: "When AFK"
+mode_when_afk_description: "&8Only displays particles when/n&8the player is marked as AFK"
+mode_when_peaceful_name: "When Peaceful"
+mode_when_peaceful_description: "&8Only displays particles when/n&8the player is not attacking"
+mode_when_gliding_name: "When Gliding"
+mode_when_gliding_description: "&8Only displays particles when/n&8the player is using an Elytra"
+mode_when_sprinting_name: "When Sprinting"
+mode_when_sprinting_description: "&8Only display particles while/n&8the player is running"
+mode_when_swimming_name: "When Swimming"
+mode_when_swimming_description: "&8Only display particles while/n&8the player is swimming"
+mode_when_flying_name: "When Flying"
+mode_when_flying_description: "&8Only display particles while/n&8the player has creative flight"
+
+##########################
+#          Meta          #
+##########################
+
+meta_error: "&cYou are not editing a menu"
+meta_hat_name_usage: "&6Use &f/h meta <name> &6to rename"
+meta_hat_name_description: "Type the &eName &finto chat, or '&ccancel&f' to return"
+meta_hat_name_suggestion: "<hat name>"
+meta_hat_label_usage: "&6Use &f/h meta <label> &6to rename"
+meta_hat_label_description: "Type the &eLabel &finto chat, or '&6cancel&f' to return"
+meta_hat_label_suggestion: "<label>"
+meta_hat_command_usage: "&6Use &f/h meta <command> &6to rename"
+meta_hat_command_description: "Type the &eCommand &7(without '/') &finto chat, or '&6cancel&f' to return"
+meta_hat_command_suggestion: "<command>"
+meta_hat_description_usage: "&6Use &f/h meta <description> &6to rename"
+meta_hat_description_description: "Type the &eDescription &finto chat, or '&6cancel&f' to return"
+meta_hat_description_suggestion: "<description>"
+meta_hat_pemission_usage: "&6Use &f/h meta <permission> &6to rename"
+meta_hat_pemission_description: "Type the &ePermission &finto chat, or '&6cancel&f' to return"
+meta_hat_permission_suggestion: "<permission>"
+meta_hat_permission_description_usage: "&6Use &f/h meta <description> &6to rename"
+meta_hat_permission_description_description: "Type the &eDescription &finto chat, or '&6cancel&f' to return"
+meta_hat_permission_description_suggestion : "<description>"
+meta_hat_permission_message_usage: "&6Use &f/h meta <permission message> &6to rename"
+meta_hat_permission_message_description: "Type the &eMessage &finto chat, or '&6cancel&f' to return"
+meta_hat_permission_message_suggestion: "<permission message>"
+meta_hat_equip_message_usage: "&6Use &f/h meta <equip message> &6to rename"
+meta_hat_equip_message_description: "Type the &eMessage &finto chat, or '&6cancel&f' to return"
+meta_hat_equip_message_suggestion: "<equip message>"
+meta_hat_tag_usage: "&6Use &f/h meta <tag> &6to set"
+meta_hat_tag_description: "Type the &eTag &finto chat, or '&6cancel&f' to return"
+meta_hat_tag_suggestion: "<tag>"
+meta_menu_title_usage: "&6Use &f/h meta <title> &6to rename"
+meta_menu_title_description: "Type the &eTitle &finto chat, or '&6cancel&f' to return"
+meta_menu_title_suggestion: "<menu title>"
+meta_new_menu_usage: "&6Use &f/h meta <menu name> &6to create a new menu"
+meta_new_menu_description: "Type the &eName &finto chat, or '&6cancel&f' to return"
+meta_new_menu_suggestion: "<menu name>"
+
+##########################
 #    Tracking Methods    #
 ##########################
 
@@ -468,6 +528,16 @@ animation_animated_description: "&8Iterates over a types particles/n&8displaying
 
 display_mode_display_in_order_name: "Pick icons in order"
 display_mode_display_randomly_name: "Pick icons randomly"
+
+##########################
+#    Active Particles    #
+##########################
+
+active_particles_menu_title: "Equipped Particles"
+
+# {1=}: Value used if the had is enabled
+# {2=}: Value used if the had is disabled
+active_particles_hat_description: "/n&8Status:/n&8» &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"
 
 ##########################
 #         Editor         #
