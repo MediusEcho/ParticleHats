@@ -165,6 +165,7 @@ public enum ParticleAction {
 						ItemStack item = inventory.getItem(slot);
 						
 						ItemUtil.stripHighlight(item);
+						ItemUtil.setItemDescription(item, hat.getCachedDescription());
 						return;
 					}
 					

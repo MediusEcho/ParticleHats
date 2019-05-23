@@ -78,6 +78,7 @@ public class Hat {
 	
 	private List<String> normalDescription;
 	private List<String> permissionDescription;
+	private List<String> cachedDescription;
 	
 	private List<ParticleTag> tags;
 	private List<Hat> nodes;
@@ -109,6 +110,7 @@ public class Hat {
 		iconData              = new IconData();
 		normalDescription     = new ArrayList<String>();
 		permissionDescription = new ArrayList<String>();
+		cachedDescription     = new ArrayList<String>();
 		tags                  = new ArrayList<ParticleTag>();
 		nodes                 = new ArrayList<Hat>();
 		particleData          = new HashMap<Integer, ParticleData>();
@@ -915,8 +917,10 @@ public class Hat {
 	 * Set this hats description
 	 * @param description
 	 */
-	public void setDescription (List<String> description) {
+	public void setDescription (List<String> description) 
+	{
 		this.normalDescription = description;
+		cachedDescription = StringUtil.parseDescription(this, description);
 	}
 	
 	/**
@@ -941,6 +945,14 @@ public class Hat {
 	 */
 	public List<String> getPermissionDescription () {
 		return permissionDescription;
+	}
+	
+	/**
+	 * Get this menus cached description.  
+	 * @return
+	 */
+	public List<String> getCachedDescription () {
+		return cachedDescription;
 	}
 	
 	/**
