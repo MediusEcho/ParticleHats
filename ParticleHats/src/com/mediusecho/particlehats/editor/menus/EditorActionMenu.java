@@ -82,13 +82,20 @@ public class EditorActionMenu extends EditorMenu {
 		// Setup actions
 		setAction(49, backAction);
 		
+		String menuTitle = Message.EDITOR_ACTION_MENU_TITLE.getValue();
+		String[] leftClickInfo = StringUtil.parseValue(menuTitle, "1");
+		String[] rightClickInfo = StringUtil.parseValue(menuTitle, "2");
+		String leftClick = isLeftClick ? leftClickInfo[1] : "";
+		String rightClick = !isLeftClick ? rightClickInfo[1] : "";
+		
 		// Create our pages
 		for (int i = 0; i < pages; i++)
 		{
-			String menuTitle = Message.EDITOR_ACTION_MENU_TITLE.getValue()
-					.replace("{1}", isLeftClick ? "Left Click" : "Right Click")
-					.replace("{2}", Integer.toString(i + 1)).replace("{3}", Integer.toString(pages));
-			Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
+			String title = menuTitle
+					.replace(leftClickInfo[0], leftClick)
+					.replace(rightClickInfo[0], rightClick)
+					.replace("{3}", Integer.toString(i + 1)).replace("{4}", Integer.toString(pages));
+			Inventory menu = Bukkit.createInventory(null, 54, title);
 			
 			menu.setItem(49, backButton);
 			menus.put(i, menu);

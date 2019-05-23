@@ -662,7 +662,7 @@ public enum Message {
 	EDITOR_ACTION_OVERVIEW_MENU_SET_LEFT_CLICK     ("&bSet Left Click Action"),
 	EDITOR_ACTION_OVERVIEW_MENU_SET_RIGHT_CLICK    ("&bSet Right Click Action"),
 	EDITOR_ACTION_OVERVIEW_MENU_ACTION_DESCRIPTION ("/n&8Current:/n{1}/n/n&3Left Click to Change Action{2=/n&cRight Click to Change Argument}"),
-	EDITOR_ACTION_MENU_TITLE                       ("Select a {1} Action {2}/{3}"),
+	EDITOR_ACTION_MENU_TITLE                       ("Select a {1=Left Click}{2=Right Click} Action {3}/{4}"),
 	EDITOR_ACTION_MENU_MISC_DESCRIPTION            ("&8» &e{1}"),
 	EDITOR_ACTION_MENU_MENU_DESCRIPTION            ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
 	EDITOR_ACTION_MENU_COMMAND_DESCRIPTION         ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
@@ -788,11 +788,9 @@ public enum Message {
 	
 	private final String defaultValue;
 	
-	private static Map<String, String> messages;
+	private static Map<String, String> messages = new HashMap<String, String>();
 	
-	static 
-	{
-		messages = new HashMap<String, String>();
+	static {
 		loadMessages();
 	}
 	
