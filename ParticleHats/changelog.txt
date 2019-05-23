@@ -1,0 +1,71 @@
+4.0.0:
+- Supports Versions
+  - 1.14
+  - 1.13
+  - 1.12
+  - 1.11
+  - 1.10
+  - 1.9
+  - 1.8
+- MySQL:
+  - Added MySQL support
+- Messages:
+  - Added support for changing every* message the plugin uses *(Some things such as Sound & Potion names cannot be changed)
+- Misc:
+  - Hats now support sound
+  - Added support for rotating particles
+  - Added support for custom types. (Create your own effects in Photoshop (or a similar program) and load them into the plugin)
+  - Added "equip_message" to hats
+  - Added tags, experimental features
+  - Types now support multiple particles
+- Menus:
+  - every menu in "/menus" is now loaded.
+  - removed menu_index.yml.
+  - removed "private" setting for menus.
+  - re-added locked items
+  - Support for animated menus
+  - Added menus aliases
+- Groups:
+  - added groups.yml, create different groups that will open different menus when a player uses /h
+- Config:
+  - Cleaned up config.yml. Old config.yml files will not load property. Recommended backing up your ParticleHats folder
+  - Added blacklist option for sounds & potions
+  - Added sound options for menu editor 
+- Actions:
+  - removed "next_page" & "previous_page" actions
+  - separated actions into left & right click
+  - added "open_menu" action
+  - added "open_menu_permission" actions
+  - added "purchase_item" action
+  - added "purchase_confirm" action
+  - added "purchase_deny" action
+- Modes:
+  - Added "when_sprinting"
+  - Added "when_gliding"
+  - Added "when_swimming"
+  - Added "when_flying"
+- Menu Editor:
+  - Can edit all properties in-game now
+  - Editor menu descriptions and names can be changed in messages.yml
+  - Added clone option
+  - Added move to separate menu option
+  - Added sound menu
+  - Added potion menu
+  - Moved types to their own menu
+  - Moved actions to their own menu
+  - Added node editor. Limit to 28 nodes
+  - Added filters to particle selection menu
+- Particles:
+  - Added "dolphin"
+  - Added "nautilus"
+  - Added "bubble_column_up"
+  - Added "current_down"
+  - Added "itemstack"
+  - Added "campfire_cosy_smoke"
+  - Added "campfire_signal_smoke"
+  - Added "composter"
+  - Added "falling_lava"
+  - Added "falling_water"
+  - Added "flash"
+  - Added "sneeze"
+  - Added "empty_space"
