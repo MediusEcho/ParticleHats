@@ -51,7 +51,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand.register(new GroupsCommand());
 		mainCommand.register(new TypeCommand());
 		mainCommand.register(new ImportCommand());
-		mainCommand.register(new MetaCommand());
+		mainCommand.register(new MetaCommand(core));
 		
 		if (ParticleHats.debugging)
 		{
