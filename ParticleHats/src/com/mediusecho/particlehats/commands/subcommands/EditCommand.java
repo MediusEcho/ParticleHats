@@ -58,14 +58,7 @@ public class EditCommand extends Command {
 			sender.sendMessage(Message.COMMAND_EDIT_USAGE);
 			return false;
 		}
-		
-		String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
-		if (!sender.hasPermission(Permission.COMMAND_EDIT_ALL) && !sender.hasPermission(getPermission().append(menuName)))
-		{
-			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-			return false;
-		}
-		
+			
 		PlayerState playerState = core.getPlayerState(sender.getPlayerID());	
 		Database database = core.getDatabase();
 		
@@ -75,6 +68,7 @@ public class EditCommand extends Command {
 			return false;
 		}
 		
+		String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));	
 		if (menuName.equalsIgnoreCase("purchase"))
 		{
 			MenuInventory inventory = database.getPurchaseMenu(playerState);
@@ -184,6 +178,7 @@ public class EditCommand extends Command {
 			return true;
 		}
 		
+		// Check for individual menu permissions
 		for (String menu : core.getDatabase().getMenus(false).keySet())
 		{
 			if (sender.hasPermission(getPermission().append(menu))) {
