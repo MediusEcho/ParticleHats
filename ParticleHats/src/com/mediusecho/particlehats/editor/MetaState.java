@@ -27,7 +27,8 @@ public enum MetaState {
 	HAT_TAG,
 	MENU_TITLE,
 	MENU_ALIAS,
-	NEW_MENU;
+	NEW_MENU,
+	BLOCK_SEARCH;
 	
 	private final ParticleHats core = ParticleHats.instance;
 	
@@ -192,6 +193,13 @@ public enum MetaState {
 				}
 				
 				targetHat.setArgument(command);
+				reopenEditor(menuBuilder);
+			}
+			break;
+			
+			case BLOCK_SEARCH:
+			{
+				menuBuilder.setMetaArgument(rawString);
 				reopenEditor(menuBuilder);
 			}
 			break;

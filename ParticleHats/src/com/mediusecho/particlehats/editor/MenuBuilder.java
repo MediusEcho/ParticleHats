@@ -31,6 +31,8 @@ public class MenuBuilder {
 	protected Hat targetNodeHat;
 	protected int targetSlot;
 	
+	private String metaArgument = "";
+	
 	public MenuBuilder (final ParticleHats core,  final Player owner, final PlayerState ownerState, MenuInventory inventory)
 	{
 		this.core = core;
@@ -180,6 +182,29 @@ public class MenuBuilder {
 	 */
 	public int getTargetSlot () {
 		return targetSlot;
+	}
+	
+	/**
+	 * Set this builder's meta argument
+	 * @param metaArgument
+	 */
+	public void setMetaArgument (String metaArgument) {
+		this.metaArgument = metaArgument;
+	}
+	
+	/**
+	 * Get this builder's meta argument
+	 * @return
+	 */
+	public String getMetaArgument () {
+		return metaArgument;
+	}
+	
+	/**
+	 * Reset this builder'ss meta argument
+	 */
+	public void resetMetaArgument () {
+		metaArgument = "";
 	}
 	
 	/**
