@@ -74,25 +74,28 @@ public abstract class Command {
 	 */
 	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
-		if (args.size() == 1)
+		if (hasPermission(sender))
 		{
-			List<String> arguments = new ArrayList<String>();
-			for (Entry<String, Command> entry : subCommands.entrySet())
+			if (args.size() == 1)
 			{
-				if (entry.getValue().hasPermission(sender)) {
-					arguments.add(entry.getKey());
+				List<String> arguments = new ArrayList<String>();
+				for (Entry<String, Command> entry : subCommands.entrySet())
+				{
+					if (entry.getValue().hasPermission(sender)) {
+						arguments.add(entry.getKey());
+					}
 				}
+				return arguments;
 			}
-			return arguments;
-		}
-		
-		else
-		{
-			String cmd = args.get(0);
-			if (subCommands.containsKey(cmd))
+			
+			else
 			{
-				args.remove(0);
-				return subCommands.get(cmd).tabCompelete(core, sender, label, args);
+				String cmd = args.get(0);
+				if (subCommands.containsKey(cmd))
+				{
+					args.remove(0);
+					return subCommands.get(cmd).tabCompelete(core, sender, label, args);
+				}
 			}
 		}
 		return Arrays.asList("");
