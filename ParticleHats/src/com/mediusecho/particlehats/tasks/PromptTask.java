@@ -10,6 +10,7 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.prompt.Prompt;
 import com.mediusecho.particlehats.util.StringUtil;
 
 import net.md_5.bungee.api.ChatMessageType;
@@ -19,6 +20,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class PromptTask extends BukkitRunnable {
 
 	private final ParticleHats core;
+	private int passes = 0;
 	
 	public PromptTask (final ParticleHats core)
 	{
@@ -31,6 +33,7 @@ public class PromptTask extends BukkitRunnable {
 		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
 		if (onlinePlayers.size() > 0)
 		{
+			passes++;
 			for (Player player : onlinePlayers)
 			{
 				PlayerState playerState = core.getPlayerState(player.getUniqueId());
@@ -40,30 +43,35 @@ public class PromptTask extends BukkitRunnable {
 					continue;
 				}
 				
-				if (core.canUseBungee() && SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean())
-				{
-					int time = playerState.getMetaStateTime();
-					if (time <= 0) 
-					{
-						metaState.reopenEditor(playerState.getMenuBuilder());
-						continue;
-					}
-					
-					String description = metaState.getDescription() + StringUtil.colorize(" &f(" + time + ")");
-					prompt(player, description);
+				Prompt prompt = core.getPrompt();
+				if (prompt.canPrompt(passes)) {
+					prompt.prompt(player, metaState);
 				}
+				
+//				if (core.canUseBungee() && SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean())
+//				{
+//					int time = playerState.getMetaStateTime();
+//					if (time <= 0) 
+//					{
+//						metaState.reopenEditor(playerState.getMenuBuilder());
+//						continue;
+//					}
+//					
+//					String description = metaState.getDescription() + StringUtil.colorize(" &f(" + time + ")");
+//					prompt(player, description);
+//				}
 			}
 		}
 	}
 
-	/**
-	 * Sends the player a message using their Action Bar
-	 * @param player
-	 * @param message
-	 */
-	public void prompt (Player player, String message)
-	{
-		BaseComponent[] bc = TextComponent.fromLegacyText(message);
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
-	}
+//	/**
+//	 * Sends the player a message using their Action Bar
+//	 * @param player
+//	 * @param message
+//	 */
+//	public void prompt (Player player, String message)
+//	{
+//		BaseComponent[] bc = TextComponent.fromLegacyText(message);
+//		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
+//	}
 }
