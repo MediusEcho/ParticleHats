@@ -47,10 +47,7 @@ public class ParticleHats extends JavaPlugin {
 	// Store fixed particles in a menu that is separate from player menus
 	// Players can sort by nearest and teleport to the particle
 	
-	// TODO: Implement action-bar alternative
-	
-	// TODO: [4.1] Add a block menu with search functionality
-	// So players won't need to keep existing and finding the right item
+	// TODO: Include particles.yml in MySQL database
 	
 	public static ParticleHats instance;
 	public static int serverVersion;
