@@ -14,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mediusecho.particlehats.api.HatAPI;
 import com.mediusecho.particlehats.api.ParticleHatsAPI;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
@@ -93,7 +94,7 @@ public class ParticleHats extends JavaPlugin {
 		instance = this;	
 		serverVersion = getServerVersion();
 		logger = getServer().getLogger();
-		hatAPI = new ParticleHatsAPI(this);
+		hatAPI = new HatAPI(this);
 		
 		// Make sure we're running on a supported version
 		if (serverVersion < 13)
