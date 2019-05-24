@@ -30,6 +30,9 @@ import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.particles.renderer.legacy.LegacyParticleRenderer;
 import com.mediusecho.particlehats.particles.renderer.spigot.SpigotParticleRenderer;
 import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.prompt.BukkitPrompt;
+import com.mediusecho.particlehats.prompt.Prompt;
+import com.mediusecho.particlehats.prompt.SpigotPrompt;
 import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
 import com.mediusecho.particlehats.tasks.ParticleTask;
@@ -66,13 +69,13 @@ public class ParticleHats extends JavaPlugin {
 	private HookManager hookManager;
 	
 	// Configuration files
-	CustomConfig locale;
+	private CustomConfig locale;
 	
-	// Player State
 	private Map<UUID, PlayerState> playerState;
 	
 	// Lets us know we can use the BaseComponent class from the bungee api
 	private boolean supportsBaseComponent = true;
+	private Prompt prompt;
 	
 	// Tasks
 	private MenuTask menuTask;
@@ -167,6 +170,12 @@ public class ParticleHats extends JavaPlugin {
 			Metrics metrics = new Metrics(this);
 			metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> databaseType.toString().toLowerCase()));
 			
+			if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean()) {
+				prompt = new SpigotPrompt();
+			} else {
+				prompt = new BukkitPrompt();
+			}
+			
 			// Handles menu updates
 			menuTask = new MenuTask(this);
 			menuTask.runTaskTimer(this, 0, SettingsManager.LIVE_MENU_UPDATE_FREQUENCY.getInt());
@@ -205,6 +214,12 @@ public class ParticleHats extends JavaPlugin {
 		
 		SettingsManager.onReload();
 		Message.onReload();
+		
+		if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean()) {
+			prompt = new SpigotPrompt();
+		} else {
+			prompt = new BukkitPrompt();
+		}
 		
 		database.onReload();
 		particleTask.onReload();
@@ -329,7 +344,12 @@ public class ParticleHats extends JavaPlugin {
 	 * @param message
 	 */
 	public void prompt (Player player, MetaState message) {
-		promptTask.prompt(player, message.getDescription());
+		prompt.prompt(player, message);
+		//promptTask.prompt(player, message.getDescription());
+	}
+	
+	public Prompt getPrompt () {
+		return prompt;
 	}
 	
 	/**
