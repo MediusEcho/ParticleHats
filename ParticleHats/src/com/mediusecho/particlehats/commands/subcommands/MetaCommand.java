@@ -5,25 +5,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 
-public class MetaCommand extends Command {
+public class MetaCommand extends EditCommand {
 
+	public MetaCommand (final ParticleHats core)
+	{
+		super(core);
+	}
+	
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
-	{
-		if (!sender.hasPermission(Permission.COMMAND_EDIT) && !sender.hasPermission(Permission.COMMAND_EDIT_ALL))
-		{
-			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
-			return false;
-		}
-		
+	{		
 		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 		MenuBuilder menuBuilder = playerState.getMenuBuilder();
 		
@@ -57,7 +54,12 @@ public class MetaCommand extends Command {
 		if (sender.isPlayer())
 		{
 			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
-			return Arrays.asList(playerState.getMetaState().getSuggestion());
+			
+			if (args.size() == 1) {
+				return Arrays.asList(playerState.getMetaState().getSuggestion(), "cancel");
+			} else {
+				return Arrays.asList(playerState.getMetaState().getSuggestion());
+			}
 		}
 		return Arrays.asList("");
 	}
@@ -81,22 +83,4 @@ public class MetaCommand extends Command {
 	public Message getDescription() {
 		return Message.COMMAND_META_DESCRIPTION;
 	}
-
-	@Override
-	public Permission getPermission() 
-	{
-		// We'll check permission on execute since we need multiple permissions
-		return Permission.COMMAND_ALL;
-	}
-
-	@Override
-	public boolean showInHelp() {
-		return true;
-	}
-
-	@Override
-	public boolean isPlayerOnly() {
-		return true;
-	}
-
 }
