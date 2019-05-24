@@ -43,6 +43,7 @@ public enum Message {
 	COMMAND_ERROR_UNKNOWN_GROUP  ("&cUnable to find group '&7{1}&c'"),
 	COMMAND_ERROR_TYPE_EXISTS    ("&7Type '&c{1}&7' already exists in the database"),
 	COMMAND_ERROR_UNKNOWN_TYPE   ("&cUnable to find type &7'{1}&c'"),
+	COMMAND_ERROR_ALREADY_EDITING ("&cYou cannot use this command while editing a menu"),
 	
 	// Main Command
 	COMMAND_MAIN_DESCRIPTION ("Main Command"),
@@ -406,6 +407,9 @@ public enum Message {
 	META_NEW_MENU_USAGE                         ("&6Use &f/h meta <menu name> &6to create a new menu"),
 	META_NEW_MENU_DESCRIPTION                   ("Type the &eName &finto chat, or '&6cancel&f' to return"),
 	META_NEW_MENU_SUGGESTION                    ("<menu name>"),
+	META_BLOCK_SEARCH_USAGE                            ("&6Use &f/h meta <block name> &6to search"),
+	META_BLOCK_SEARCH_DESCRIPTION                      ("Type the &eBlock Name &finto chat, or '&6cancel&f' to return"),
+	META_BLOCK_SEARCH_SUGGESTION                       ("<block name>"),
 	
 	/**
 	 * Tracking
@@ -432,7 +436,7 @@ public enum Message {
 	 * Active Particles Menu
 	 */
 	ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
-	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8» &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
+	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8ï¿½ &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
 	
 	
 	/**
@@ -448,15 +452,16 @@ public enum Message {
 	EDITOR_MISC_NEXT_PAGE     ("&3Next Page"),
 	EDITOR_MISC_PREVIOUS_PAGE ("&3Previous Page"),
 	EDITOR_MISC_EMPTY_MENU    ("&cEmpty"),
+	EDITOR_MISC_SEARCH        ("&3Search"),
 	
 	// Particles
-	EDITOR_PARTICLE_MISC_DESCRIPTION          ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle"),
-	EDITOR_PARTICLE_RGB_COLOUR_DESCRIPTION    ("/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
-	EDITOR_PARTICLE_RANDOM_COLOUR_DESCRIPTION ("/n&8Current:/n&8» &e{1}/n/n&8Colour:/n&8» &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
-	EDITOR_PARTICLE_MISC_COLOUR_DESCRIPTION   ("/n&8Current:/n&8» &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
-	EDITOR_PARTICLE_BLOCK_DESCRIPTION         ("/n&8Current:/n&8» &e{1}/n/n&8Block:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
-	EDITOR_PARTICLE_ITEM_DESCRIPTION          ("/n&8Current:/n&8» &e{1}/n/n&8Item:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
-	EDITOR_PARTICLE_ITEMSTACK_DESCRIPTION     ("/n&8Current:/n&8» &e{1}/n/n&8Items:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"),
+	EDITOR_PARTICLE_MISC_DESCRIPTION          ("/n&8Current:/n&8ï¿½ &e{1}/n/n&3Left Click to Change Particle"),
+	EDITOR_PARTICLE_RGB_COLOUR_DESCRIPTION    ("/n&8Current:/n&8ï¿½ &e{1}/n/n&8Colour:/n&8ï¿½ R: &e{2}/n&8ï¿½ G: &e{3}/n&8ï¿½ B: &e{4}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
+	EDITOR_PARTICLE_RANDOM_COLOUR_DESCRIPTION ("/n&8Current:/n&8ï¿½ &e{1}/n/n&8Colour:/n&8ï¿½ &eRandom/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
+	EDITOR_PARTICLE_MISC_COLOUR_DESCRIPTION   ("/n&8Current:/n&8ï¿½ &e{1}/n/n&3Left Click to Change Particle/n&cRight Click to Change Colour"),
+	EDITOR_PARTICLE_BLOCK_DESCRIPTION         ("/n&8Current:/n&8ï¿½ &e{1}/n/n&8Block:/n&8ï¿½ &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
+	EDITOR_PARTICLE_ITEM_DESCRIPTION          ("/n&8Current:/n&8ï¿½ &e{1}/n/n&8Item:/n&8ï¿½ &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
+	EDITOR_PARTICLE_ITEMSTACK_DESCRIPTION     ("/n&8Current:/n&8ï¿½ &e{1}/n/n&8Items:/n&8ï¿½ &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"),
 	
 	// Base Menu
 	EDITOR_BASE_MENU_TITLE         ("Editing ({1=...}&r)"),
@@ -488,9 +493,9 @@ public enum Message {
 	EDITOR_SETTINGS_MENU_TOGGLE_LIVE_MENU  ("&bToggle Live Updates"),
 	EDITOR_SETTINGS_MENU_SYNC_ICONS        ("&bSync Icons"),
 	
-	EDITOR_SETTINGS_MENU_TITLE_DESCRIPTION     ("/n&8Current Title:/n&8» &r{1}"),
-	EDITOR_SETTINGS_MENU_ALIAS_DESCRIPTION     ("/n&8Current Alias:/n&8» &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu"),
-	EDITOR_SETTINGS_MENU_ANIMATION_DESCRIPTION ("/n&8Live Updates:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&8Hats will cycle through their/n&8icons and display them/n/n&3Click to Toggle"),
+	EDITOR_SETTINGS_MENU_TITLE_DESCRIPTION     ("/n&8Current Title:/n&8ï¿½ &r{1}"),
+	EDITOR_SETTINGS_MENU_ALIAS_DESCRIPTION     ("/n&8Current Alias:/n&8ï¿½ &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu"),
+	EDITOR_SETTINGS_MENU_ANIMATION_DESCRIPTION ("/n&8Live Updates:/n&8ï¿½ {1=&aEnabled}{2=&cDisabled}/n/n&8Hats will cycle through their/n&8icons and display them/n/n&3Click to Toggle"),
 	EDITOR_SETTINGS_SYNC_DESCRIPTION           ("&8Resets each hat's animation index to 0/n&8so each hat is synced"), 
 	
 	// Delete Menu
@@ -530,28 +535,28 @@ public enum Message {
 	EDITOR_MAIN_MENU_NO_PARTICLES         ("&bNo Particles"),
 	EDITOR_MAIN_MENU_CUSTOM_TYPE_ERROR    ("&cUnable to find image"),
 	
-	EDITOR_MAIN_MENU_COUNT_DESCRIPTION                    ("/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
-	EDITOR_MAIN_MENU_SPEED_DESCRIPTION                    ("/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
-	EDITOR_MAIN_MENU_PRICE_DESCRIPTION                    ("/n&8» &e{1=Free} &8{2}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"),
-	EDITOR_MAIN_MENU_VECTOR_DESCRIPTION                   ("/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"),
-	EDITOR_MAIN_MENU_OFFSET_DESCRIPTION                   ("/n&8Offset:/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&8Random Offset:/n&8» X: &e{4}/n&8» Y: &e{5}/n&8» Z: &e{6}/n/n&3Left Click to Change"),
-	EDITOR_MAIN_MENU_LOCATION_DESCRIPTION                 ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
-	EDITOR_MAIN_MENU_MODE_DESCRIPTION                     ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n{4}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
-	EDITOR_MAIN_MENU_UPDATE_FREQUENCY_DESCRIPTION         ("/n&8Updates Every:/n&8» &e{1} &8tick{2=s}/n/n&8Set how often this particle/n&8is updated, 1 = fastest/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cMiddle Click to Reset"),//("/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
+	EDITOR_MAIN_MENU_COUNT_DESCRIPTION                    ("/n&8ï¿½ &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
+	EDITOR_MAIN_MENU_SPEED_DESCRIPTION                    ("/n&8ï¿½ &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
+	EDITOR_MAIN_MENU_PRICE_DESCRIPTION                    ("/n&8ï¿½ &e{1=Free} &8{2}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"),
+	EDITOR_MAIN_MENU_VECTOR_DESCRIPTION                   ("/n&8ï¿½ X: &e{1}/n&8ï¿½ Y: &e{2}/n&8ï¿½ Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"),
+	EDITOR_MAIN_MENU_OFFSET_DESCRIPTION                   ("/n&8Offset:/n&8ï¿½ X: &e{1}/n&8ï¿½ Y: &e{2}/n&8ï¿½ Z: &e{3}/n/n&8Random Offset:/n&8ï¿½ X: &e{4}/n&8ï¿½ Y: &e{5}/n&8ï¿½ Z: &e{6}/n/n&3Left Click to Change"),
+	EDITOR_MAIN_MENU_LOCATION_DESCRIPTION                 ("/n&8ï¿½ {1}/n&8ï¿½ &e{2}/n&8ï¿½ {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
+	EDITOR_MAIN_MENU_MODE_DESCRIPTION                     ("/n&8ï¿½ {1}/n&8ï¿½ &e{2}/n&8ï¿½ {3}/n/n{4}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
+	EDITOR_MAIN_MENU_UPDATE_FREQUENCY_DESCRIPTION         ("/n&8Updates Every:/n&8ï¿½ &e{1} &8tick{2=s}/n/n&8Set how often this particle/n&8is updated, 1 = fastest/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cMiddle Click to Reset"),//("/n&7ï¿½ &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
 	EDITOR_MAIN_MENU_ICON_DESCRIPTION                     ("&8Change the item that will we displayed/n&8inside this menu"),
 	EDITOR_MAIN_MENU_SOUND_DESCRIPTION                    ("/n&8Sound: &7{1=&cNot Set}/n&8Volume: &7{2}/n&8Pitch: &7{3}/n/n&3Left Click to Change{4=/n&cShift Right Click to Clear}"),
 	EDITOR_MAIN_MENU_SLOT_DESCRIPTION                     ("&8Change where this hat will be/n&8inside this menu"),
-	EDITOR_MAIN_MENU_SCALE_DESCRIPTION                    ("/n&8Scale:/n&8» &e{1}/n/n&8Adjusts the spacing of each/n&8particle in the current type/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_MAIN_MENU_SCALE_DESCRIPTION                    ("/n&8Scale:/n&8ï¿½ &e{1}/n/n&8Adjusts the spacing of each/n&8particle in the current type/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
 	EDITOR_MAIN_MENU_CLONE_DESCRIPTION                    ("&8Create a copy of this hat/n&8and place it in a new slot"),
 	EDITOR_MAIN_MENU_MOVE_DESCRIPTION                     ("&8Move this hat to a different menu"),
 	EDITOR_MAIN_MENU_ACTION_DESCRIPTION                   ("/n&8Left Click Action:/n{1}/n/n&8Right Click Action:/n{2}/n/n&3Click to Change Actions"),
 	EDITOR_MAIN_MENU_META_DESCRIPTION                     ("&8Edit various meta properties/n/n&3Left Click to Open/n&3Right Click for Description Shortcut"),
-	EDITOR_MAIN_MENU_TYPE_DESCRIPTION                     ("/n&8Current:/n&8» &e{1=/n&8» }{2}/n/n&3Left Click to Change Type/n{3=&cShift Click to Change Animation}"),
-	EDITOR_MAIN_MENU_ANIMATION_DESCRIPTION                ("/n/n&8Animation:/n&8» &e{1}/n{2}"),
-	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_SINGLE   ("&8» &e{1}"),
-	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_MULTIPLE ("/n&8• {1}/n&8» &e{2}/n&8• {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
+	EDITOR_MAIN_MENU_TYPE_DESCRIPTION                     ("/n&8Current:/n&8ï¿½ &e{1=/n&8ï¿½ }{2}/n/n&3Left Click to Change Type/n{3=&cShift Click to Change Animation}"),
+	EDITOR_MAIN_MENU_ANIMATION_DESCRIPTION                ("/n/n&8Animation:/n&8ï¿½ &e{1}/n{2}"),
+	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_SINGLE   ("&8ï¿½ &e{1}"),
+	EDITOR_MAIN_MENU_TRACKING_METHOD_DESCRIPTION_MULTIPLE ("/n&8ï¿½ {1}/n&8ï¿½ &e{2}/n&8ï¿½ {3}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	EDITOR_MAIN_MENU_NODE_DESCRIPTION                     ("&8Add a new hat,/n&8or edit an existing one"),
-	EDITOR_MAIN_MENU_POTION_DESCRIPTION                   ("/n&8Current:/n&8» &e{1=&cNot Set} {2}/n/n&3Click to Change/n&cShift Right Click to Clear"),
+	EDITOR_MAIN_MENU_POTION_DESCRIPTION                   ("/n&8Current:/n&8ï¿½ &e{1=&cNot Set} {2}/n/n&3Click to Change/n&cShift Right Click to Clear"),
 	EDITOR_MAIN_MENU_NO_PARTICLES_DESCRIPTION             ("&8Select a Type that supports particles"),
 	EDITOR_MAIN_MENU_EQUIP_DESCRIPTION                    ("&8Temporarily equip this/n&8hat for 15 seconds"),
 	
@@ -600,8 +605,8 @@ public enum Message {
 	EDITOR_ICON_MENU_BLOCK_INFO                   ("&bSelect a Block"),
 	EDITOR_ICON_MENU_BLOCK_DESCRIPTION            ("&8Select a Block from your inventory"),
 	
-	EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION ("/n&7» &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
-	EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION     ("/n&8• {1}/n&7» &e{2}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
+	EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION ("/n&7ï¿½ &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
+	EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION     ("/n&8ï¿½ {1}/n&7ï¿½ &e{2}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
 	EDITOR_ICON_MENU_ICON_DESCRIPTION             ("&3Left Click to Change/n&cShift Right Click to Delete"),
 	
 	// Offset Menu
@@ -612,18 +617,18 @@ public enum Message {
 	EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_X  ("&bSet Random X Offset"),
 	EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_Y  ("&bSet Random Y Offset"),
 	EDITOR_OFFSET_MENU_SET_RANDOM_OFFSET_Z  ("&bSet Random Z Offset"),
-	EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION ("/n&e» X: {1}/n&8• Y: &7{2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
-	EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION ("/n&8• X: &7{1}/n&e» Y: {2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
-	EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION ("/n&8• X: &7{1}/n&8• Y: &7{2}/n&e» Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION ("/n&eï¿½ X: {1}/n&8ï¿½ Y: &7{2}/n&8ï¿½ Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION ("/n&8ï¿½ X: &7{1}/n&eï¿½ Y: {2}/n&8ï¿½ Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION ("/n&8ï¿½ X: &7{1}/n&8ï¿½ Y: &7{2}/n&eï¿½ Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
 
 	// Angle Menu
 	EDITOR_ANGLE_MENU_TITLE               ("Set Angle"),
 	EDITOR_ANGLE_MENU_SET_ANGLE_X         ("&bSet X Angle"),
 	EDITOR_ANGLE_MENU_SET_ANGLE_Y         ("&bSet Y Angle"),
 	EDITOR_ANGLE_MENU_SET_ANGLE_Z         ("&bSet Z Angle"),
-	EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION ("/n&e» X: {1}/n&8• Y: &7{2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
-	EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION ("/n&8• X: &7{1}/n&e» Y: {2}/n&8• Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
-	EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION ("/n&8• X: &7{1}/n&8• Y: &7{2}/n&e» Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION ("/n&eï¿½ X: {1}/n&8ï¿½ Y: &7{2}/n&8ï¿½ Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION ("/n&8ï¿½ X: &7{1}/n&eï¿½ Y: {2}/n&8ï¿½ Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION ("/n&8ï¿½ X: &7{1}/n&8ï¿½ Y: &7{2}/n&eï¿½ Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
 
 	// Particle Selection Menu
 	EDITOR_PARTICLE_MENU_TITLE               ("Supported Particles {1}/{2}"),
@@ -652,8 +657,8 @@ public enum Message {
 	EDITOR_SOUND_MENU_MISC_FILTER        ("&bMisc Filter"),
 	EDITOR_SOUND_MENU_SOUND_PREFIX       ("&b{1}"),
 	EDITOR_SOUND_MENU_SOUND_DESCRIPTION  ("&3Left Click to Select/n&3Right Click to Hear{1=/n/n&8Selected}"),
-	EDITOR_SOUND_MENU_VOLUME_DESCRIPTION ("/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
-	EDITOR_SOUND_MENU_PITCH_DESCRIPTION  ("/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
+	EDITOR_SOUND_MENU_VOLUME_DESCRIPTION ("/n&8ï¿½ &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
+	EDITOR_SOUND_MENU_PITCH_DESCRIPTION  ("/n&8ï¿½ &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
 	
 	// Action Menu
 	EDITOR_ACTION_OVERVIEW_MENU_TITlE              ("Set Left/Right Click Actions"),
@@ -661,10 +666,10 @@ public enum Message {
 	EDITOR_ACTION_OVERVIEW_MENU_SET_RIGHT_CLICK    ("&bSet Right Click Action"),
 	EDITOR_ACTION_OVERVIEW_MENU_ACTION_DESCRIPTION ("/n&8Current:/n{1}/n/n&3Left Click to Change Action{2=/n&cRight Click to Change Argument}"),
 	EDITOR_ACTION_MENU_TITLE                       ("Select a {1=Left Click}{2=Right Click} Action {3}/{4}"),
-	EDITOR_ACTION_MENU_MISC_DESCRIPTION            ("&8» &e{1}"),
-	EDITOR_ACTION_MENU_MENU_DESCRIPTION            ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
-	EDITOR_ACTION_MENU_COMMAND_DESCRIPTION         ("&8» &e{1}/n&8» &7{2=&cNot Set}"),
-	EDITOR_ACTION_MENU_DEMO_DESCRIPTION            ("&8» &e{1}/n&8» &7{2}"),
+	EDITOR_ACTION_MENU_MISC_DESCRIPTION            ("&8ï¿½ &e{1}"),
+	EDITOR_ACTION_MENU_MENU_DESCRIPTION            ("&8ï¿½ &e{1}/n&8ï¿½ &7{2=&cNot Set}"),
+	EDITOR_ACTION_MENU_COMMAND_DESCRIPTION         ("&8ï¿½ &e{1}/n&8ï¿½ &7{2=&cNot Set}"),
+	EDITOR_ACTION_MENU_DEMO_DESCRIPTION            ("&8ï¿½ &e{1}/n&8ï¿½ &7{2}"),
 	EDITOR_ACTION_MENU_ACTION_DESCRIPTION          ("{1}{2=/n/n&3Selected}{3=/n/n&3Click to Select}"),
 	
 	// Slot Menu
@@ -677,7 +682,7 @@ public enum Message {
 	// Duration Menu
 	EDITOR_DURATION_MENU_TITLE        ("Set Duration"),
 	EDITOR_DURATION_MENU_SET_DURATION ("&3Set Duration"),
-	EDITOR_DURATION_MENU_DESCRIPTION  ("/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 30"),
+	EDITOR_DURATION_MENU_DESCRIPTION  ("/n&8ï¿½ &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 30"),
 	
 	// Meta Menu
 	EDITOR_META_MENU_TITLE                      ("Meta Properties"),
@@ -690,13 +695,13 @@ public enum Message {
 	EDITOR_META_MENU_SET_EQUIP_MESSAGE          ("&bChange Equip Message"),
 	EDITOR_META_MENU_SET_TAG                    ("&bChange Tags"),
 	
-	EDITOR_META_MENU_NAME_DESCRIPTION              ("/n&8Current:/n&8» {1}/n/n&3Left Click to Change{2=/n&cShift Right Click to Reset}"),
-	EDITOR_META_MENU_LABEL_DESCRIPTION             ("/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <label>/n/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
+	EDITOR_META_MENU_NAME_DESCRIPTION              ("/n&8Current:/n&8ï¿½ {1}/n/n&3Left Click to Change{2=/n&cShift Right Click to Reset}"),
+	EDITOR_META_MENU_LABEL_DESCRIPTION             ("/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <label>/n/n&8Current:/n&8ï¿½ &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
 	EDITOR_META_MENU_DESCRIPTION_DESCRIPTION       ("/n&8Current:/n{1}/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
-	EDITOR_META_MENU_EMPTY_DESCRIPTION             ("/n&8Current:/n&8» &cNot Set/n/n&3Left Click to Change"),
-	EDITOR_META_MENU_PERMISSION_DESCRIPTION        ("/n&8Current:/n&8» &7{1}/n/n&8Usage:/n&8» &7{2}/n/n&3Click to Change"),
-	EDITOR_META_MENU_EQUIP_DESCRIPTION             ("/n&8Show the player this message when/n&8they equip this hat instead of the/n&8global equip message/n/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
-	EDITOR_META_MENU_PERMISSION_DENIED_DESCRIPTION ("/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
+	EDITOR_META_MENU_EMPTY_DESCRIPTION             ("/n&8Current:/n&8ï¿½ &cNot Set/n/n&3Left Click to Change"),
+	EDITOR_META_MENU_PERMISSION_DESCRIPTION        ("/n&8Current:/n&8ï¿½ &7{1}/n/n&8Usage:/n&8ï¿½ &7{2}/n/n&3Click to Change"),
+	EDITOR_META_MENU_EQUIP_DESCRIPTION             ("/n&8Show the player this message when/n&8they equip this hat instead of the/n&8global equip message/n/n&8Current:/n&8ï¿½ &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
+	EDITOR_META_MENU_PERMISSION_DENIED_DESCRIPTION ("/n&8Current:/n&8ï¿½ &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
 	
 	// Description Menu
 	EDITOR_DESCRIPTION_MENU_TITLE    ("Edit Description"),
@@ -705,7 +710,7 @@ public enum Message {
 	EDITOR_DESCRIPTION_MENU_PREVIEW  ("&bPreview"),
 	EDITOR_DESCRIPTION_MENU_EMPTY    ("&cNo Description Set"),
 	
-	EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION    ("/n&8» &r{1=&cEmpty}/n/n&3Left Click to Edit/n&3Shift Left Click to Insert Line/n&cShift Right Click to Delete"),
+	EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION    ("/n&8ï¿½ &r{1=&cEmpty}/n/n&3Left Click to Edit/n&3Shift Left Click to Insert Line/n&cShift Right Click to Delete"),
 	EDITOR_DESCRIPTION_MENU_PREVIEW_DESCRIPTION ("{1=&cEmpty}{2=/n&cShift Right Click to Clear}"),
 	
 	// Tag Overview Menu
@@ -728,9 +733,9 @@ public enum Message {
 	EDITOR_ITEMSTACK_MENU_TOGGLE_GRAVITY ("&bToggle Gravity"),
 	EDITOR_ITEMSTACK_MENU_SET_VELOCITY   ("&bSet Velocity"),
 	
-	EDITOR_ITEMSTACK_MENU_DURATION_DESCRIPTION ("/n&8Duration:/n&8» &e{1}/n/n&8Set how long items stay/n&8spawned in the world/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"),
-	EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION  ("/n&8Gravity:/n&8» {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"),
-	EDITOR_ITEMSTACK_MENU_VELOCITY_DESCRIPTION ("/n&8» X: &e{1}/n&8» Y: &e{2}/n&8» Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"),
+	EDITOR_ITEMSTACK_MENU_DURATION_DESCRIPTION ("/n&8Duration:/n&8ï¿½ &e{1}/n/n&8Set how long items stay/n&8spawned in the world/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&cShift Click to Adjust by 10"),
+	EDITOR_ITEMSTACK_MENU_GRAVITY_DESCRIPTION  ("/n&8Gravity:/n&8ï¿½ {1=&aEnabled}{2=&cDisabled}/n/n&3Click to Toggle"),
+	EDITOR_ITEMSTACK_MENU_VELOCITY_DESCRIPTION ("/n&8ï¿½ X: &e{1}/n&8ï¿½ Y: &e{2}/n&8ï¿½ Z: &e{3}/n/n&3Left Click to Change/n&cShift Right Click to Clear"),
 	
 	// Velocity menu
 	EDITOR_VELOCITY_MENU_TITLE          ("Set Velocity"),
@@ -769,14 +774,16 @@ public enum Message {
 	EDITOR_COLOUR_MENU_SET_RANDOM      ("&bRandom Colours"),
 	EDITOR_COLOUR_MENU_SET_SIZE        ("&bSet Size"),
 	
-	EDITOR_COLOUR_MENU_PRESET_DESCRIPTION ("&8Set this particles/n&8colour to {1}/n/n&8» R: &e{2}/n&8» G: &e{3}/n&8» B: &e{4}"),
-	EDITOR_COLOUR_MENU_R_DESCRIPTION      ("/n&e» R: {1}/n&8• G: &7{2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOUR_MENU_G_DESCRIPTION      ("/n&8• R: &7{1}/n&e» G: {2}/n&8• B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
-	EDITOR_COLOUR_MENU_B_DESCRIPTION      ("/n&8• R: &7{1}/n&8• G: &7{2}/n&e» B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_PRESET_DESCRIPTION ("&8Set this particles/n&8colour to {1}/n/n&8ï¿½ R: &e{2}/n&8ï¿½ G: &e{3}/n&8ï¿½ B: &e{4}"),
+	EDITOR_COLOUR_MENU_R_DESCRIPTION      ("/n&eï¿½ R: {1}/n&8ï¿½ G: &7{2}/n&8ï¿½ B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_G_DESCRIPTION      ("/n&8ï¿½ R: &7{1}/n&eï¿½ G: {2}/n&8ï¿½ B: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
+	EDITOR_COLOUR_MENU_B_DESCRIPTION      ("/n&8ï¿½ R: &7{1}/n&8ï¿½ G: &7{2}/n&eï¿½ B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
 	EDITOR_COLOUR_MENU_RANDOM_SUFFIX      ("Random"),
 	EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION ("&8Give this particle random colours"),
-	EDITOR_COLOUR_MENU_SIZE_DESCRIPTION   ("/n&8Set the size of these particles/n/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
+	EDITOR_COLOUR_MENU_SIZE_DESCRIPTION   ("/n&8Set the size of these particles/n/n&8ï¿½ &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
 
+	// Search Menu
+	EDITOR_SEARCH_MENU_TITLE ("Results for ({1=...}&r)"),
 	
 	/**
 	 * Command Arguments
