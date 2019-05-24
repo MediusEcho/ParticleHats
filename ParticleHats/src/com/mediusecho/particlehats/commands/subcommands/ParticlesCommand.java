@@ -16,8 +16,15 @@ public class ParticlesCommand extends Command {
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
-		ActiveParticlesMenu activeParticlesMenu = new ActiveParticlesMenu(core, sender.getPlayer(), false);
 		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+		
+		if (playerState.isEditing()) 
+		{
+			sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
+			return false;
+		}
+		
+		ActiveParticlesMenu activeParticlesMenu = new ActiveParticlesMenu(core, sender.getPlayer(), false);
 		
 		playerState.setOpenMenu(activeParticlesMenu, false);
 		playerState.setGuiState(GuiState.SWITCHING_MENU);

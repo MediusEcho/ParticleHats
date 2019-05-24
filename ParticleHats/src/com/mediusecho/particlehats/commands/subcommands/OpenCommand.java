@@ -64,6 +64,12 @@ public class OpenCommand extends Command {
 		{
 			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 			
+			if (playerState.isEditing()) 
+			{
+				sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
+				return false;
+			}
+			
 			// Grab the name without any extensions
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
 			

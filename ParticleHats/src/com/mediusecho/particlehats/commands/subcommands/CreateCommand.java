@@ -19,6 +19,14 @@ public class CreateCommand extends Command {
 	{
 		if (args.size() == 1)
 		{
+			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+			
+			if (playerState.isEditing()) 
+			{
+				sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
+				return false;
+			}
+			
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
 			Database database = core.getDatabase();
 			
@@ -36,7 +44,6 @@ public class CreateCommand extends Command {
 				return true;
 			}
 			
-			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 			MenuBuilder menuBuilder = playerState.getMenuBuilder();
 			MenuInventory inventory = new MenuInventory(menuName, menuName, 6, null);
 			

@@ -66,8 +66,14 @@ public class EditCommand extends Command {
 			return false;
 		}
 		
-		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+		PlayerState playerState = core.getPlayerState(sender.getPlayerID());	
 		Database database = core.getDatabase();
+		
+		if (playerState.isEditing()) 
+		{
+			sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
+			return false;
+		}
 		
 		if (menuName.equalsIgnoreCase("purchase"))
 		{
