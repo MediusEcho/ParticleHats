@@ -475,6 +475,9 @@ public class YamlDatabase implements Database {
 		{
 			config.set("settings.alias", alias);
 			config.save();
+			
+			aliases.values().remove(menuName);
+			aliases.put(alias, menuName);
 		}
 	}
 
