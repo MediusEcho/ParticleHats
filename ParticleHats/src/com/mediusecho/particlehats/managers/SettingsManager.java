@@ -87,6 +87,7 @@ public enum SettingsManager {
 	 */
 	EDITOR_USE_ACTION_BAR ("editor.use-actionbar", Type.BOOLEAN, true),
 	EDITOR_META_TIME_LIMIT ("editor.meta-time-limit", Type.INT, 30),
+	EDITOR_RESTRICT_COMMANDS ("editor.restrict-commands-while-editing", Type.BOOLEAN, true),
 	EDITOR_SOUND_ENABLED ("editor.sound.enabled", Type.BOOLEAN, true),
 	EDITOR_SOUND_ID ("editor.sound.id", Type.SOUND, ResourceUtil.getSound("BLOCK_METAL_PLACE", "STEP_STONE")),
 	EDITOR_SOUND_VOLUME ("editor.sound.volume", Type.DOUBLE, 1.0),

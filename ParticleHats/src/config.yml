@@ -170,6 +170,11 @@ editor:
   # Set how long to wait before canceling a meta edit
   meta-time-limit: 30
   #
+  # Restrict players from using commands while editing.
+  # When a player is editing meta properties, they'll be asked to type in chat, or by using /h meta. This will prevent them from
+  # using other plugin commands until they're done.
+  restrict-commands-while-editing: true
+  #
   sound:
     #
     enabled: true
