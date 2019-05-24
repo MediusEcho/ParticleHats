@@ -1,11 +1,13 @@
 package com.mediusecho.particlehats.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -28,9 +30,13 @@ public class InventoryListener implements Listener {
 			return;
 		}
 		
-		Player player = (Player)event.getWhoClicked();
-		PlayerState playerState = core.getPlayerState(player.getUniqueId());
-		playerState.getGuiState().onClick(event, playerState);
+		ItemStack item = event.getCurrentItem();
+		if (item != null && item.getType() != Material.AIR)
+		{
+			Player player = (Player)event.getWhoClicked();
+			PlayerState playerState = core.getPlayerState(player.getUniqueId());
+			playerState.getGuiState().onClick(event, playerState);	
+		}
 	}
 	
 	@EventHandler
