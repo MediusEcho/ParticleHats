@@ -2,6 +2,10 @@ package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
@@ -14,6 +18,11 @@ public class DebugCommand extends Command {
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
 		//sender.sendMessage("\U+2588");
+		String type = args.get(0);
+		InventoryType invType = InventoryType.valueOf(type);
+		
+		Inventory inventory = Bukkit.createInventory(null, invType, "Test");
+		sender.getPlayer().openInventory(inventory);
 		
 		return false;
 	}
