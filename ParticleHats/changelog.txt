@@ -55,6 +55,7 @@
   - Moved actions to their own menu
   - Added node editor. Limit to 28 nodes
   - Added filters to particle selection menu
+  - Added block search menu
 - Particles:
   - Added "dolphin"
   - Added "nautilus"
