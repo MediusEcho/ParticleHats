@@ -73,6 +73,8 @@ public class YamlDatabase implements Database {
 	
 	public YamlDatabase (ParticleHats core)
 	{
+		ParticleHats.log("Using yml database");
+		
 		this.core = core;
 		
 		groupConfig = new CustomConfig(core, "", "groups.yml", true);
@@ -93,6 +95,11 @@ public class YamlDatabase implements Database {
 	@Override
 	public boolean isEnabled () {
 		return true;
+	}
+	
+	@Override
+	public Exception getException () {
+		return null;
 	}
 	
 	@Override
@@ -477,7 +484,10 @@ public class YamlDatabase implements Database {
 			config.save();
 			
 			aliases.values().remove(menuName);
-			aliases.put(alias, menuName);
+			
+			if (!alias.equals("NULL")) {
+				aliases.put(alias, menuName);
+			}
 		}
 	}
 

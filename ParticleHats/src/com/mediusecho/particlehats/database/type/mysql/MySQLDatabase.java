@@ -89,6 +89,8 @@ public class MySQLDatabase implements Database {
 	private long lastGroupUpdate = 0L;
 	private long lastLabelUpdate = 0L;
 	
+	private Exception lastException;
+	
 	private boolean connected = false;
 	
 	// Fetch MySQL changes every 30 seconds
@@ -115,11 +117,11 @@ public class MySQLDatabase implements Database {
 			helper.initDatabase(core);
 			connected = true;
 			
-			ParticleHats.log("Using database: MySQL");
+			ParticleHats.log("Successfully connected to MySQL database");
 		}
 		
 		catch (Exception e) {
-			e.printStackTrace();
+			lastException = e;
 		}
 	}
 	
@@ -134,6 +136,11 @@ public class MySQLDatabase implements Database {
 	@Override
 	public boolean isEnabled () {
 		return connected;
+	}
+	
+	@Override
+	public Exception getException () {
+		return lastException;
 	}
 
 	@Override

@@ -17,7 +17,17 @@ public interface Database {
 	 */
 	public void onDisable ();
 	
+	/**
+	 * Check to see if this database initialized successfully
+	 * @return
+	 */
 	public boolean isEnabled ();
+	
+	/**
+	 * Get this databases last exception
+	 * @return
+	 */
+	public Exception getException ();
 	
 	/**
 	 * Loads this menu and all its hats

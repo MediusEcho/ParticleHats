@@ -150,6 +150,11 @@ public class ParticleHats extends JavaPlugin {
 			{
 				log("---------------------------------------------------");
 				log("There was an error connecting to the MySQL database");
+				
+				if (database.getException() != null) {
+					log("Error: " + database.getException().getClass().getSimpleName());
+				}
+				
 				log("Switching to yaml");
 				log("---------------------------------------------------");
 				log("");
