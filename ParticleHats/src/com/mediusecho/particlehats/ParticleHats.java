@@ -68,6 +68,7 @@ public class ParticleHats extends JavaPlugin {
 	
 	// Configuration files
 	private CustomConfig locale;
+	private final double LOCALE_VERSION = 1.0;
 	
 	private Map<UUID, PlayerState> playerState;
 	
@@ -122,19 +123,25 @@ public class ParticleHats extends JavaPlugin {
 		// Save default config
 		saveDefaultConfig();
 		
-		// Override our default_message.yml config
-		InputStream localStream = getResource("default_messages.yml");
-		if (localStream != null) 
-		{
-			File defaultLocale = new File(this.getDataFolder() + File.separator + "default_messages.yml");
-			try {
-				ResourceUtil.copyFile(localStream, defaultLocale);
-			} catch (IOException e) {}
-		}
-		
 		log("Initializing");
 		log("");
 		{		
+			// Override our default_message.yml config
+			CustomConfig defaultLocale = new CustomConfig(this, "", "default_messages.yml", false);
+			if (defaultLocale != null && defaultLocale.getConfig().getDouble("version") < LOCALE_VERSION)
+			{
+				log("Updating default_messages.yml");
+				
+				InputStream localStream = getResource("default_messages.yml");
+				if (localStream != null) 
+				{
+					File localeFile = new File(this.getDataFolder() + File.separator + "default_messages.yml");
+					try {
+						ResourceUtil.copyFile(localStream, localeFile);
+					} catch (IOException e) {}
+				}
+			}
+			
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
 			database = databaseType.getDatabase(this);
