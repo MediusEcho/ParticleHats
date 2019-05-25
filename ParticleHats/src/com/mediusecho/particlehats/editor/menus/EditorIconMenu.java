@@ -87,7 +87,7 @@ public class EditorIconMenu extends EditorMenu {
 		{
 			searching = true;
 			menuBuilder.setOwnerState(MetaState.BLOCK_SEARCH);
-			core.prompt(owner, MetaState.HAT_NAME);
+			core.prompt(owner, MetaState.BLOCK_SEARCH);
 			owner.closeInventory();
 			
 			return EditorClickType.NEUTRAL;
