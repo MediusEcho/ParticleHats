@@ -1474,13 +1474,12 @@ public class MySQLDatabase implements Database {
 		hat.setSoundVolume(set.getDouble("volume"));
 		hat.setSoundPitch(set.getDouble("pitch"));
 		
-		Material material = ItemUtil.getMaterial(set.getString("id"), CompatibleMaterial.SUNFLOWER.getMaterial());
+		Material material = ItemUtil.getMaterial(set.getString("id"), CompatibleMaterial.SUNFLOWER.getMaterial());		
 		if (legacy) {
 			hat.setItem(ItemUtil.createItem(material, set.getShort("durability")));
 		} else {
 			hat.setItem(new ItemStack(material));
 		}
-		hat.setItem(ItemUtil.createItem(material, set.getShort("durability")));
 		
 		String potionName = set.getString("potion");
 		if (!set.wasNull())
