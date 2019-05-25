@@ -101,6 +101,13 @@ public class MenuInventory {
 	}
 	
 	/**
+	 * Resets this menus alias
+	 */
+	public void resetAlias () {
+		alias = null;
+	}
+	
+	/**
 	 * Returns the size of this inventory
 	 * @return
 	 */
