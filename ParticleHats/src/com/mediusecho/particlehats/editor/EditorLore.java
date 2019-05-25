@@ -563,10 +563,10 @@ public class EditorLore {
 					prefix = "&5&o";
 				}
 				
-				//line = StringUtil.parseRegex(line, "locked");
 				line = StringUtil.parseString(line, hat);
 				
-				sb.append("&7- ").append(prefix).append(line).append("/n");
+				//sb.append("&7- ").append(prefix).append(line).append("/n");
+				sb.append(prefix).append(line).append("/n");
 			}
 			s = desc.replace(emptyInfo[0], sb.toString());
 		}
@@ -729,13 +729,16 @@ public class EditorLore {
 	 * @param alias
 	 * @param message
 	 */
-	public static void updateAliasDescription (ItemStack item, String alias, Message message)
+	public static void updateAliasDescription (ItemStack item, String alias)
 	{
-		String description = message.getValue();
+		String description = Message.EDITOR_SETTINGS_MENU_ALIAS_DESCRIPTION.getValue();
 		String[] aliasInfo = StringUtil.parseValue(description, "1");
-		String a = alias != null ? alias : aliasInfo[1];
+		String[] resetInfo = StringUtil.parseValue(description, "2");
 		
-		String s = description.replace(aliasInfo[0], a);
+		String a = alias != null ? alias : aliasInfo[1];
+		String reset = alias != null ? resetInfo[1] : "";
+		
+		String s = description.replace(aliasInfo[0], a).replace(resetInfo[0], reset);
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
