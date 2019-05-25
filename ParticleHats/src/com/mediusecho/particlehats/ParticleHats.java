@@ -3,6 +3,8 @@ package com.mediusecho.particlehats;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -11,6 +13,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,9 +69,10 @@ public class ParticleHats extends JavaPlugin {
 	private ParticleManager particleManager;
 	private HookManager hookManager;
 	
-	// Configuration files
-	private CustomConfig locale;
-	private final double LOCALE_VERSION = 1.0;
+	// Lang
+	private File langFile;
+	private YamlConfiguration lang;
+	private final double LANG_VERSION = 1.0;
 	
 	private Map<UUID, PlayerState> playerState;
 	
@@ -125,23 +129,7 @@ public class ParticleHats extends JavaPlugin {
 		
 		log("Initializing");
 		log("");
-		{		
-			// Override our default_message.yml config
-			CustomConfig defaultLocale = new CustomConfig(this, "", "default_messages.yml", false);
-			if (defaultLocale != null && defaultLocale.getConfig().getDouble("version") < LOCALE_VERSION)
-			{
-				log("Updating default_messages.yml");
-				
-				InputStream localStream = getResource("default_messages.yml");
-				if (localStream != null) 
-				{
-					File localeFile = new File(this.getDataFolder() + File.separator + "default_messages.yml");
-					try {
-						ResourceUtil.copyFile(localStream, localeFile);
-					} catch (IOException e) {}
-				}
-			}
-			
+		{					
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
 			database = databaseType.getDatabase(this);
@@ -166,8 +154,9 @@ public class ParticleHats extends JavaPlugin {
 			// Initialize our player state map
 			playerState = new HashMap<UUID, PlayerState>();
 			
-			// Create our configuration files
-			locale = new CustomConfig(this, "", SettingsManager.DEFAULT_MESSAGES.getString(), true);
+			log("");
+			checkDefaultLang();
+			loadLang();
 			
 			// Create our managers
 			resourceManager = new ResourceManager(this);
@@ -180,7 +169,7 @@ public class ParticleHats extends JavaPlugin {
 			Metrics metrics = new Metrics(this);
 			metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> databaseType.toString().toLowerCase()));
 			
-			if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean()) {
+			if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean() && supportsBaseComponent) {
 				prompt = new SpigotPrompt();
 			} else {
 				prompt = new BukkitPrompt();
@@ -219,13 +208,19 @@ public class ParticleHats extends JavaPlugin {
 	
 	public void onReload ()
 	{
-		locale.reload();
+		//locale.reload();
 		reloadConfig();
 		
 		SettingsManager.onReload();
+		
+		if (langFile == null || !(langFile.getName().equals(SettingsManager.LANG.getString()))) {
+			loadLang();
+		}
+		lang = YamlConfiguration.loadConfiguration(langFile);
+		
 		Message.onReload();
 		
-		if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean()) {
+		if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean() && supportsBaseComponent) {
 			prompt = new SpigotPrompt();
 		} else {
 			prompt = new BukkitPrompt();
@@ -340,12 +335,8 @@ public class ParticleHats extends JavaPlugin {
 		return commandManager;
 	}
 	
-	/**
-	 * Gets the CustomConfig responsible for our plugins locale
-	 * @return
-	 */
-	public CustomConfig getLocaleConfig () {
-		return locale;
+	public YamlConfiguration getLocale () {
+		return lang;
 	}
 	
 	/**
@@ -355,7 +346,6 @@ public class ParticleHats extends JavaPlugin {
 	 */
 	public void prompt (Player player, MetaState message) {
 		prompt.prompt(player, message);
-		//promptTask.prompt(player, message.getDescription());
 	}
 	
 	public Prompt getPrompt () {
@@ -378,6 +368,64 @@ public class ParticleHats extends JavaPlugin {
 	{
 		if (debugging) {
 			logger.log(Level.INFO, "[ParticleHats] " + obj.toString());
+		}
+	}
+	
+	private void loadLang ()
+	{
+		String targetLang = SettingsManager.LANG.getString();
+		
+		File langFile = new File(getDataFolder() + File.separator + "lang" + File.separator + targetLang);
+		if (!langFile.exists()) 
+		{
+			if (targetLang.equals("en_US.lang")) {
+				log("Creating en_US.lang");
+			} else {
+				log("Could not find locale " + targetLang + ", switching to en_US.lang");
+			}
+		
+			// Create our default .lang file since the specified one doesn't exist
+			createDefaultLang();
+			targetLang = "en_US.lang";
+		}
+		
+		log("Using locale " + targetLang);
+		this.langFile = new File(getDataFolder() + File.separator + "lang" + File.separator + targetLang);
+		this.lang = YamlConfiguration.loadConfiguration(this.langFile);
+	}
+	
+	private void createDefaultLang ()
+	{
+		InputStream langStream = getResource("lang/en_US.lang");
+		if (langStream != null)
+		{
+			File langFile = new File(getDataFolder() + File.separator + "lang" + File.separator + "en_US.lang");
+			
+			if (langFile.exists()) {
+				langFile.delete();
+			}
+			
+			try {
+				Files.copy(langStream, Paths.get(langFile.getPath()));
+			} catch (IOException e) {}
+		}
+	}
+	
+	private void checkDefaultLang ()
+	{
+		File langFile = new File(getDataFolder() + File.separator + "lang" + File.separator + "en_US.lang");
+		if (!langFile.exists()) {
+			createDefaultLang();
+		}
+		
+		else
+		{
+			YamlConfiguration tempLangConfig = YamlConfiguration.loadConfiguration(langFile);
+			if (tempLangConfig.getDouble("version", 1.0) < LANG_VERSION) 
+			{
+				log("Updating en_US.lang");
+				createDefaultLang();
+			}
 		}
 	}
 }

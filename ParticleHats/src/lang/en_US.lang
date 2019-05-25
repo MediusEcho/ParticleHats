@@ -10,9 +10,9 @@
 #     the message in "" will be used instead                                #
 #                                                                           #
 # Notice:                                                                   #
-# This file is overridden after each update, create a custom .yml file      #
-# if you want to customize messages. Make sure to set 'default_messages'    #
-# in config.yml to the file you created.                                    #
+# This file is overridden after each update, create a custom .lang file     #
+# if you want to customize messages. Make sure to set 'lang' in config.yml  #
+# to the file you created.                                                  #
 #                                                                           #
 #############################################################################
 
@@ -647,7 +647,7 @@ editor_settings_menu_sync_icons: "&bSync Icons"
 editor_settings_menu_title_description: "/n&8Current Title:/n&8» &r{1}"
 
 # {1=}: The alias of the menu being edited, or 'Not Set' if nothing is set
-editor_settings_menu_alias_description: "/n&8Current Alias:/n&8» &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu"
+editor_settings_menu_alias_description: "/n&8Current Alias:/n&8» &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu{2=/n/n&cShift Right Click to Reset}"
 
 # {1=}: Enabled description
 # {2=}: Disabled description
@@ -1153,3 +1153,4 @@ editor_colour_menu_size_description: "/n&8Set the size of these particles/n/n&8�
 # Search Menu
 # {1=}: Search query
 editor_search_menu_title: "Results for ({1=...}&r)"
+editor_search_menu_no_results: "&cNo Search Results"
