@@ -41,7 +41,7 @@ public class EditorSettingsMenu extends EditorMenu {
 		
 		ItemStack aliasItem = getItem(13);
 		if (aliasItem != null) {
-			EditorLore.updateAliasDescription(aliasItem, menuBuilder.getEditingMenu().getAlias(), Message.EDITOR_SETTINGS_MENU_ALIAS_DESCRIPTION);
+			EditorLore.updateAliasDescription(aliasItem, menuBuilder.getEditingMenu().getAlias());
 		}
 		
 		super.open();
@@ -67,9 +67,19 @@ public class EditorSettingsMenu extends EditorMenu {
 		ItemStack aliasItem = ItemUtil.createItem(Material.NAME_TAG, Message.EDITOR_SETTINGS_MENU_SET_ALIAS);
 		setButton(13, aliasItem, (event, slot) ->
 		{
-			menuBuilder.setOwnerState(MetaState.MENU_ALIAS);
-			core.prompt(owner, MetaState.MENU_ALIAS);
-			owner.closeInventory();
+			if (event.isLeftClick())
+			{
+				menuBuilder.setOwnerState(MetaState.MENU_ALIAS);
+				core.prompt(owner, MetaState.MENU_ALIAS);
+				owner.closeInventory();
+			}
+			
+			else if (event.isShiftRightClick())
+			{
+				EditorBaseMenu editingMenu = menuBuilder.getEditingMenu();
+				editingMenu.resetAlias();
+				EditorLore.updateAliasDescription(getItem(13), editingMenu.getAlias());
+			}
 			return EditorClickType.NEUTRAL;
 		});
 		

@@ -187,7 +187,7 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
-	 * Get this menus inventory
+	 * Get this menu's inventory
 	 * @return
 	 */
 	public Inventory getInventory () {
@@ -195,7 +195,7 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
-	 * Set this menus title
+	 * Set this menu's title
 	 * @param title
 	 */
 	public void setTitle (String title)
@@ -210,6 +210,10 @@ public class EditorBaseMenu extends EditorMenu {
 		core.getDatabase().saveMenuTitle(getName(), title);
 	}
 	
+	/**
+	 * Set this menu's alias
+	 * @param alias
+	 */
 	public void setAlias (String alias)
 	{
 		menuInventory.setAlias(alias);
@@ -270,6 +274,15 @@ public class EditorBaseMenu extends EditorMenu {
 	 */
 	public String getAlias () {
 		return menuInventory.getAlias();
+	}
+	
+	/**
+	 * Reset this menu's alias
+	 */
+	public void resetAlias () 
+	{
+		menuInventory.resetAlias();
+		core.getDatabase().saveMenuAlias(getName(), "NULL");
 	}
 	
 	/**

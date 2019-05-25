@@ -3,10 +3,12 @@ package com.mediusecho.particlehats.locale;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.configuration.CustomConfig;
+import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public enum Message {
@@ -441,7 +443,6 @@ public enum Message {
 	ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
 	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8� &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
 	
-	
 	/**
 	 * Menu Editor Properties
 	 */
@@ -497,7 +498,7 @@ public enum Message {
 	EDITOR_SETTINGS_MENU_SYNC_ICONS        ("&bSync Icons"),
 	
 	EDITOR_SETTINGS_MENU_TITLE_DESCRIPTION     ("/n&8Current Title:/n&8� &r{1}"),
-	EDITOR_SETTINGS_MENU_ALIAS_DESCRIPTION     ("/n&8Current Alias:/n&8� &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu"),
+	EDITOR_SETTINGS_MENU_ALIAS_DESCRIPTION     ("/n&8Current Alias:/n&8� &f{1=&cNot Set}/n/n&8Aliases are a quicker way of/n&8opening menus, use &7/<alias>/n&8to open this menu{2=/n/n&cShift Right Click to Reset}"),
 	EDITOR_SETTINGS_MENU_ANIMATION_DESCRIPTION ("/n&8Live Updates:/n&8� {1=&aEnabled}{2=&cDisabled}/n/n&8Hats will cycle through their/n&8icons and display them/n/n&3Click to Toggle"),
 	EDITOR_SETTINGS_SYNC_DESCRIPTION           ("&8Resets each hat's animation index to 0/n&8so each hat is synced"), 
 	
@@ -787,6 +788,7 @@ public enum Message {
 
 	// Search Menu
 	EDITOR_SEARCH_MENU_TITLE ("Results for ({1=...}&r)"),
+	EDITOR_SEARCH_MENU_NO_RESULTS ("&cNo Search Results"),
 	
 	/**
 	 * Command Arguments
@@ -843,6 +845,30 @@ public enum Message {
 	}
 	
 	/**
+	 * Send this message to the Player
+	 * @param player
+	 */
+	public void sendTo (Player player) {
+		player.sendMessage(getValue());
+	}
+	
+	/**
+	 * Send this message to the CommandSender
+	 * @param sender
+	 */
+	public void sendTo (CommandSender sender) {
+		sender.sendMessage(getValue());
+	}
+	
+	/**
+	 * Send this message to the Sender
+	 * @param sender
+	 */
+	public void sendTo (Sender sender) {
+		sender.sendMessage(getValue());
+	}
+	
+	/**
 	 * Get the enum value as a key for the locale configuration file
 	 * @return
 	 */
@@ -879,12 +905,10 @@ public enum Message {
 	 */
 	private static void loadMessages ()
 	{
-		CustomConfig locale = ParticleHats.instance.getLocaleConfig();
-		FileConfiguration config = locale.getConfig();
-		
+		YamlConfiguration locale = ParticleHats.instance.getLocale();
 		for (Message message : values())
 		{
-			String value = config.getString(message.getKey());
+			String value = locale.getString(message.getKey());
 			if (value != null) {
 				messages.put(message.getKey(), value);
 			}
