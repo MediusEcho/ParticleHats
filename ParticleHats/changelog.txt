@@ -10,27 +10,26 @@
 - MySQL:
   - Added MySQL support
 - Messages:
-  - Added support for changing every* message the plugin uses *(Some things such as Sound & Potion names cannot be changed)
-- Misc:
-  - Hats now support sound
-  - Added support for rotating particles
-  - Added support for custom types. (Create your own effects in Photoshop (or a similar program) and load them into the plugin)
-  - Added "equip_message" to hats
-  - Added tags, experimental features
-  - Types now support multiple particles
+  - added support for changing every* message the plugin uses *(Some things such as Sound & Potion names cannot be changed)
 - Menus:
   - every menu in "/menus" is now loaded.
   - removed menu_index.yml.
   - removed "private" setting for menus.
   - re-added locked items
-  - Support for animated menus
-  - Added menus aliases
+  - support for animated menus
+  - added menus aliases
+- Commands:
+  - removed /h toggle, use /h particles to toggle individual particles
+  - removed /h list, use menu editor for list of supported particles
+  - added /h particles, menu for managing equipped particles
+  - added /h import, import .yml menus into your MySQL database
+  - added /h group, edit groups in-game
+  - added /h type, add / remove custom type images
 - Groups:
   - added groups.yml, create different groups that will open different menus when a player uses /h
 - Config:
-  - Cleaned up config.yml. Old config.yml files will not load property. Recommended backing up your ParticleHats folder
-  - Added blacklist option for sounds & potions
-  - Added sound options for menu editor 
+  - cleaned up config.yml. Old config.yml files will not load property. Recommended backing up your ParticleHats folder
+  - added menu editor config properties
 - Actions:
   - removed "next_page" & "previous_page" actions
   - separated actions into left & right click
@@ -40,33 +39,40 @@
   - added "purchase_confirm" action
   - added "purchase_deny" action
 - Modes:
-  - Added "when_sprinting"
-  - Added "when_gliding"
-  - Added "when_swimming"
-  - Added "when_flying"
+  - added "when_sprinting"
+  - added "when_gliding"
+  - added "when_swimming"
+  - added "when_flying"
 - Menu Editor:
-  - Can edit all properties in-game now
-  - Editor menu descriptions and names can be changed in messages.yml
-  - Added clone option
-  - Added move to separate menu option
-  - Added sound menu
-  - Added potion menu
-  - Moved types to their own menu
-  - Moved actions to their own menu
-  - Added node editor. Limit to 28 nodes
-  - Added filters to particle selection menu
-  - Added block search menu
+  - can edit all properties in-game now
+  - editor menu descriptions and names can be changed in messages.yml
+  - added clone option
+  - added move to separate menu option
+  - added sound menu
+  - added potion menu
+  - moved types to their own menu
+  - moved actions to their own menu
+  - added node editor. Limit to 28 nodes
+  - added filters to particle selection menu
+  - added block search menu
 - Particles:
-  - Added "dolphin"
-  - Added "nautilus"
-  - Added "bubble_column_up"
-  - Added "current_down"
-  - Added "itemstack"
-  - Added "campfire_cosy_smoke"
-  - Added "campfire_signal_smoke"
-  - Added "composter"
-  - Added "falling_lava"
-  - Added "falling_water"
-  - Added "flash"
-  - Added "sneeze"
-  - Added "empty_space"
+  - added "dolphin"
+  - added "nautilus"
+  - added "bubble_column_up"
+  - added "current_down"
+  - added "itemstack"
+  - added "campfire_cosy_smoke"
+  - added "campfire_signal_smoke"
+  - added "composter"
+  - added "falling_lava"
+  - added "falling_water"
+  - added "flash"
+  - added "sneeze"
+  - added "empty_space"
+- Misc:
+  - hats now support sound
+  - added support for rotating particles
+  - added support for custom types. (Create your own effects in Photoshop (or a similar program) and load them into the plugin)
+  - added "equip_message" to hats
+  - added tags, experimental features
+  - types now support multiple particles
