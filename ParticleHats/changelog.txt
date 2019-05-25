@@ -11,6 +11,7 @@
   - Added MySQL support
 - Messages:
   - added support for changing every* message the plugin uses *(Some things such as Sound & Potion names cannot be changed)
+  - switched messages.yml to en_US.lang
 - Menus:
   - every menu in "/menus" is now loaded.
   - removed menu_index.yml.
