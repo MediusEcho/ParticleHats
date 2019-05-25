@@ -199,7 +199,7 @@ public enum MetaState {
 			
 			case BLOCK_SEARCH:
 			{
-				menuBuilder.setMetaArgument(rawString);
+				menuBuilder.setMetaArgument(rawString.replace(" ", ","));
 				reopenEditor(menuBuilder);
 			}
 			break;

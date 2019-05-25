@@ -44,6 +44,8 @@ public class EditorSearchMenu extends EditorMenu {
 		String query = searchQuery.toLowerCase();
 		this.menuTitle = EditorLore.getTrimmedMenuTitle(query, Message.EDITOR_SEARCH_MENU_TITLE);
 		
+		String[] queries = query.split(",");
+		
 		for (Material material : Material.values())
 		{
 			if (blacklist.contains(material)) {
@@ -52,8 +54,11 @@ public class EditorSearchMenu extends EditorMenu {
 			
 			if (material.isItem())
 			{
-				if (material.toString().toLowerCase().contains(searchQuery)) {
-					matchingResults.add(material);
+				String materialName = material.toString().toLowerCase();
+				for (String q : queries) {
+					if (materialName.contains(q)) {
+						matchingResults.add(material);
+					}
 				}
 			}
 		}	
