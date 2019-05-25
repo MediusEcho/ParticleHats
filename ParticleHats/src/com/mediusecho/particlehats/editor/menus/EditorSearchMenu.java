@@ -52,11 +52,13 @@ public class EditorSearchMenu extends EditorMenu {
 				continue;
 			}
 			
-			if (material.isItem())
+			if (ItemUtil.isItem(material))
 			{
 				String materialName = material.toString().toLowerCase();
 				for (String q : queries) {
-					if (materialName.contains(q)) {
+					if (materialName.contains(q)) 
+					{
+						ParticleHats.debug("found matching material: " + material.toString());
 						matchingResults.add(material);
 					}
 				}
@@ -97,7 +99,7 @@ public class EditorSearchMenu extends EditorMenu {
 	protected void build() 
 	{
 		setButton(49, backButton, backAction);
-		setItem(22, ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_MISC_EMPTY_MENU));
+		setItem(22, ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_SEARCH_MENU_NO_RESULTS));
 		
 		for (int i = 0; i < 45; i++) {
 			setAction(i, selectAction);

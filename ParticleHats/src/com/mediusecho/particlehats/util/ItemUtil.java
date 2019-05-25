@@ -553,6 +553,16 @@ public class ItemUtil {
 		}
 	}
 	
+	// TODO: Find alternative to #isItem for 1.12 and lower
+	public static boolean isItem (Material material)
+	{
+		if (ParticleHats.serverVersion >= 13) {
+			return material.isItem();
+		} else {
+			return new ItemStack(material).getType() != Material.AIR;
+		}
+	}
+	
 	/**
 	 * Attempts to apply ItemFlag values to this ItemStack
 	 * @param itemMeta
