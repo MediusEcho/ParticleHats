@@ -3,9 +3,9 @@ package com.mediusecho.particlehats.particles.properties;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mediusecho.particlehats.locale.Message;
+import org.bukkit.ChatColor;
 
-import net.md_5.bungee.api.ChatColor;
+import com.mediusecho.particlehats.locale.Message;
 
 public enum ParticleMode {
 
