@@ -8,13 +8,24 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class SpigotPrompt implements Prompt {
+public class SpigotPrompt extends BukkitPrompt {
 
+	private boolean success = true;
+	
 	@Override
 	public void prompt(Player player, String message) 
 	{
-		BaseComponent[] bc = TextComponent.fromLegacyText(message);
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
+		try
+		{
+			BaseComponent[] bc = TextComponent.fromLegacyText(message);
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, bc);
+		}
+		
+		catch (NoSuchMethodError e) 
+		{
+			super.prompt(player, message);
+			success = false;
+		}
 	}
 
 	@Override
@@ -24,7 +35,7 @@ public class SpigotPrompt implements Prompt {
 
 	@Override
 	public boolean canPrompt(int passes) {
-		return passes % 1 == 0;
+		return success ? passes % 1 == 0 : super.canPrompt(passes);
 	}
 
 }
