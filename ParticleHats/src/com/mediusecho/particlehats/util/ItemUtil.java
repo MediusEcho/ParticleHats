@@ -25,7 +25,7 @@ public class ItemUtil {
 	public static Material getMaterial(String material, Material fallback)
 	{		
 		Material originalMaterial = Material.getMaterial(material);
-		if (material != null) {
+		if (originalMaterial != null) {
 			return originalMaterial;
 		}
 		return fallback;
