@@ -123,9 +123,7 @@ public class EditorSoundMenu extends EditorMenu {
 				
 				else if (event.isRightClick())
 				{
-					if (currentPlayingSound != null) {
-						owner.stopSound(currentPlayingSound);
-					}
+					stopSound();
 					
 					currentPlayingSound = sound;
 					owner.playSound(owner.getLocation(), sound, (float) targetHat.getSoundVolume(), (float) targetHat.getSoundPitch());
@@ -142,9 +140,7 @@ public class EditorSoundMenu extends EditorMenu {
 	@Override
 	public void onClose (boolean forced)
 	{
-		if (currentPlayingSound != null) {
-			owner.stopSound(currentPlayingSound);
-		}
+		stopSound();
 	}
 	
 	@Override
@@ -311,7 +307,7 @@ public class EditorSoundMenu extends EditorMenu {
 			
 			switch (categoryIndex)
 			{
-			case 0: ItemUtil.setItemType(menu.getItem(45), CompatibleMaterial.MUSHROOM_STEW); break;//menu.getItem(45).setType(CompatibleMaterial.MUSHROOM_STEW); break;
+			case 0: ItemUtil.setItemType(menu.getItem(45), CompatibleMaterial.MUSHROOM_STEW); break;
 			case 1: ItemUtil.setItemType(menu.getItem(46), CompatibleMaterial.MUSHROOM_STEW); break;
 			case 2: ItemUtil.setItemType(menu.getItem(47), CompatibleMaterial.MUSHROOM_STEW); break;
 			}
@@ -405,6 +401,16 @@ public class EditorSoundMenu extends EditorMenu {
 		case 0: currentMiscPage = page; break;
 		case 1: currentBlockPage = page; break;
 		case 2: currentEntityPage = page; break;
+		}
+	}
+	
+	private void stopSound ()
+	{
+		if (currentPlayingSound != null) 
+		{
+			try {
+				owner.stopSound(currentPlayingSound);
+			} catch (NoSuchMethodError e) {}
 		}
 	}
 }
