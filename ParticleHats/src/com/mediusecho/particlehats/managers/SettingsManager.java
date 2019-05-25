@@ -20,7 +20,7 @@ public enum SettingsManager {
 	 * General Properties
 	 */
 	DEFAULT_MENU ("default-menu", Type.STRING, "particles.yml"),
-	DEFAULT_MESSAGES ("default-messages", Type.STRING, "default_messages.yml"),
+	LANG ("lang", Type.STRING, "en_US.lang"),
 	LOAD_INCLUDED_MENUS ("load-included-menus", Type.BOOLEAN, true),
 	LOAD_INCLUDED_CUSTOM_TYPES ("load-included-custom-types", Type.BOOLEAN, true),
 	DISABLED_WORLDS ("disabled-worlds", Type.STRING_LIST, new ArrayList<String>()),

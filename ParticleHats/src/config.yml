@@ -15,9 +15,9 @@ version: 1.0
 # Set the default menu that will open any time a player executes /h
 default-menu: particles.yml
 #
-# Set the default messages file.
-# You must create your own .yml message file if you want to edit messages
-default-messages: default_messages.yml
+# Set the language file
+# You must create your own .lang file if you want to edit messages
+lang: en_US.lang
 #
 # Loads the included menus:
 # - particles.yml
