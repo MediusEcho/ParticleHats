@@ -135,6 +135,8 @@ public class StaticMenu extends Menu {
 				
 				if (lore.size() > 0) {
 					equippedDescription = equippedDescription.replace(lineInfo[0], lineInfo[1]);
+				} else {
+					equippedDescription = equippedDescription.replace(lineInfo[0], "");
 				}
 				
 				lore.addAll(StringUtil.parseDescription(equippedDescription));
