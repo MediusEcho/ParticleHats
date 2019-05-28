@@ -25,7 +25,7 @@ public class EditorAngleMenu extends EditorOffsetMenu {
 	
 	private EditorClickType updateAngle (EditorClickEvent event, Hat hat, VectorAxis axis)
 	{
-		final double normalClick    = event.isLeftClick() ? 0.1f : -0.1f;
+		final double normalClick    = event.isLeftClick() ? 1f : -1f;
 		final double shiftClick     = event.isShiftClick() ? 10 : 1;
 		final double modifier       = normalClick * shiftClick;
 		final boolean isMiddleClick = event.isMiddleClick();

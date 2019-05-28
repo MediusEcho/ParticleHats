@@ -56,6 +56,23 @@ public class MathUtil {
 		return v < length ? v : offset;
 	}
 	
+	public static double wrapAngle (double value)
+	{
+		double min = -180;
+		double max = 180;
+		double v = value;
+		
+		while (v <= min) {
+			v += 360D;
+		}
+		
+		while (v > max) {
+			v -= 360D;
+		}
+		
+		return v;
+	}
+	
 	/**
 	 * Returns the Integer value of this String, or 0 if an Integer cannot be found
 	 * @param s

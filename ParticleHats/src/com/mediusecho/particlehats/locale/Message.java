@@ -631,9 +631,9 @@ public enum Message {
 	EDITOR_ANGLE_MENU_SET_ANGLE_X         ("&bSet X Angle"),
 	EDITOR_ANGLE_MENU_SET_ANGLE_Y         ("&bSet Y Angle"),
 	EDITOR_ANGLE_MENU_SET_ANGLE_Z         ("&bSet Z Angle"),
-	EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION ("/n&e� X: {1}/n&8� Y: &7{2}/n&8� Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
-	EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION ("/n&8� X: &7{1}/n&e� Y: {2}/n&8� Z: &7{3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
-	EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION ("/n&8� X: &7{1}/n&8� Y: &7{2}/n&e� Z: {3}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&3Shift Click to Adjust by 1/n&cMiddle Click to Reset"),
+	EDITOR_ANGLE_MENU_ANGLE_X_DESCRIPTION ("/n&e� X: {1}/n&8� Y: &7{2}/n&8� Z: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10/n&cMiddle Click to Reset"),
+	EDITOR_ANGLE_MENU_ANGLE_Y_DESCRIPTION ("/n&8� X: &7{1}/n&e� Y: {2}/n&8� Z: &7{3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10/n&cMiddle Click to Reset"),
+	EDITOR_ANGLE_MENU_ANGLE_Z_DESCRIPTION ("/n&8� X: &7{1}/n&8� Y: &7{2}/n&e� Z: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10/n&cMiddle Click to Reset"),
 
 	// Particle Selection Menu
 	EDITOR_PARTICLE_MENU_TITLE               ("Supported Particles {1}/{2}"),
