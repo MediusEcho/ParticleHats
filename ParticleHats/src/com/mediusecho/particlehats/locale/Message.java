@@ -266,7 +266,8 @@ public enum Message {
 	PARTICLE_SNEEZE_DESCRIPTION            (""),
 	PARTICLE_EMPTY_SPACE_NAME              ("&bEmpty Space"),
 	PARTICLE_EMPTY_SPACE_DESCRIPTION       ("&8By default the particle &cNONE/n&8gets replaced by the first particle/n&8a hat has, this one does not/n/n&8Use it when you don't want/n&8a particle to display"),
-	
+	PARTICLE_LANDING_LAVA_NAME             ("&bLanding Lava"),
+	PARTICLE_LANDING_LAVA_DESCRIPTION      ("&8Dripping lava particle after it hits/n&8the ground"),
 	
 	/**
 	 * Location
