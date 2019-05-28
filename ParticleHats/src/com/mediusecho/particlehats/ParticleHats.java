@@ -396,6 +396,11 @@ public class ParticleHats extends JavaPlugin {
 	
 	private void createDefaultLang ()
 	{
+		File langFolder = new File(getDataFolder() + File.separator + "lang");
+		if (!langFolder.exists()) {
+			langFolder.mkdirs();
+		}
+		
 		InputStream langStream = getResource("lang/en_US.lang");
 		if (langStream != null)
 		{
