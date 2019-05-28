@@ -24,6 +24,7 @@ import com.mediusecho.particlehats.particles.effects.HaloEffect;
 import com.mediusecho.particlehats.particles.effects.HelixEffect;
 import com.mediusecho.particlehats.particles.effects.HoopEffect;
 import com.mediusecho.particlehats.particles.effects.InverseVortexEffect;
+import com.mediusecho.particlehats.particles.effects.ParticleHatsEffect;
 import com.mediusecho.particlehats.particles.effects.PlaceholderEffect;
 import com.mediusecho.particlehats.particles.effects.SphereEffect;
 import com.mediusecho.particlehats.particles.effects.SusanooEffect;
@@ -53,6 +54,7 @@ public enum ParticleType {
 	CLEAN_TRAIL    (16, new CleanTrailEffect()),
 	TORNADO        (17, new TornadoEffect()),
 	CUSTOM         (18, new PixelEffect()),
+	PARTICLEHATS   (19, new ParticleHatsEffect()),
 	ANIMATED       (19, new AnimatedEffect(), true),
 	DEBUG_5X5      (-1, new Debug5x5Effect(), true),
 	DEBUG_6X6      (-2, new Debug6x6Effect(), true);
