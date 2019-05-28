@@ -56,9 +56,7 @@ public class EditorSearchMenu extends EditorMenu {
 			{
 				String materialName = material.toString().toLowerCase();
 				for (String q : queries) {
-					if (materialName.contains(q)) 
-					{
-						ParticleHats.debug("found matching material: " + material.toString());
+					if (materialName.contains(q)) {
 						matchingResults.add(material);
 					}
 				}
