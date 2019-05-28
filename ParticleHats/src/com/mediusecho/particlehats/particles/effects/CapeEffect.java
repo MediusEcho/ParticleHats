@@ -70,7 +70,7 @@ public class CapeEffect extends Effect {
 		for (int x = 0; x < 5; x++)
 		{
 			for (int y = 0; y < 6; y++) {
-				points.add(new Vector(xpoints[x] - (x * xoffset), 1.4 - (y * 0.18), -0.28 - (y * zoffset)));
+				points.add(new Vector(xpoints[x] - (x * xoffset), (-y * 0.18), -0.28 - (y * zoffset)));
 			}
 		}
 		
