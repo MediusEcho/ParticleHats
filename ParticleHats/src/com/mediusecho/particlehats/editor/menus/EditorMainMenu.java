@@ -278,7 +278,7 @@ public class EditorMainMenu extends EditorMenu {
 			clone.setDuration(15);
 			clone.clearPropertyChanges();
 			
-			core.getParticleManager().equipHat(ownerID, clone);
+			core.getParticleManager().equipHat(ownerID, clone, false);
 			owner.closeInventory();
 			return EditorClickType.NEUTRAL;
 		});
