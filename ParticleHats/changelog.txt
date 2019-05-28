@@ -70,6 +70,7 @@
   - added "flash"
   - added "sneeze"
   - added "empty_space"
+  - added "landing_lava"
 - Misc:
   - hats now support sound
   - added support for rotating particles
@@ -77,3 +78,4 @@
   - added "equip_message" to hats
   - added tags, experimental features
   - types now support multiple particles
+  - changed 'waist' location to 'chest'
