@@ -28,7 +28,7 @@ public class PixelEffect extends Effect {
 	private final Color BLEND_THRESHOLD = Color.fromRGB(245, 245, 245);
 			
 	private final BufferedImage image;
-	private final String name;
+	protected final String name;
 	
 	private final List<PixelData> pixels;
 	
