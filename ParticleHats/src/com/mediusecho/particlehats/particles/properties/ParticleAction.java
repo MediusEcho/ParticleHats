@@ -158,14 +158,7 @@ public enum ParticleAction {
 				if (!event.isCancelled()) 
 				{					
 					// Remove an already equipped hat
-					List<Hat> equippedHats = playerState.getActiveHats();
-					if (equippedHats.contains(hat))
-					{
-						playerState.removeHat(hat);
-						ItemStack item = inventory.getItem(slot);
-						
-						ItemUtil.stripHighlight(item);
-						ItemUtil.setItemDescription(item, hat.getCachedDescription());
+					if (checkAgainstEquippedHats(hat, slot, playerState, inventory)) {
 						return;
 					}
 					
@@ -346,6 +339,11 @@ public enum ParticleAction {
 			
 			case OVERRIDE:
 			{
+				// Remove an already equipped hat
+				if (checkAgainstEquippedHats(hat, slot, playerState, inventory)) {
+					return;
+				}
+				
 				core.getParticleManager().equipHat(player.getUniqueId(), hat);
 				if (canClose) {
 					player.closeInventory();
@@ -518,5 +516,20 @@ public enum ParticleAction {
 		playerState.setPurchaseMenu(null);
 		
 		menu.open();
+	}
+	
+	private boolean checkAgainstEquippedHats (Hat hat, int slot, PlayerState playerState, MenuInventory inventory)
+	{
+		List<Hat> equippedHats = playerState.getActiveHats();
+		if (equippedHats.contains(hat))
+		{
+			playerState.removeHat(hat);
+			ItemStack item = inventory.getItem(slot);
+			
+			ItemUtil.stripHighlight(item);
+			ItemUtil.setItemDescription(item, hat.getCachedDescription());
+			return true;
+		}
+		return false;
 	}
 }
