@@ -3,6 +3,7 @@ package com.mediusecho.particlehats.database.type.yaml;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -86,6 +87,56 @@ public class YamlDatabase implements Database {
 		playerConfigs = new HashMap<UUID, CustomConfig>();
 		groups = new ArrayList<Group>();
 		
+		// Create types folder
+		File typeFolder = new File(core.getDataFolder() + File.separator + "types");
+		if (!typeFolder.exists()) {
+			typeFolder.mkdirs();
+		}
+		
+		// Create menus folder
+		File menuFolder = new File(core.getDataFolder() + File.separator + "menus");
+		if (!menuFolder.exists()) {
+			menuFolder.mkdirs();
+		}
+		
+		// TODO: Test custom type loading on yaml database
+		if (SettingsManager.LOAD_INCLUDED_CUSTOM_TYPES.getBoolean())
+		{			
+			String butterflyPath = core.getDataFolder() + File.separator + "types" + File.separator + "butterfly_wings_colorable.png";
+			String vampirePath = core.getDataFolder() + File.separator + "types" + File.separator + "vampire_wings.png";
+			
+			File butterflyFile = new File(butterflyPath);
+			if (!butterflyFile.exists()) {
+				ResourceUtil.copyImage(core.getResource("types/butterfly_wings_colorable.png"), butterflyPath);
+			}
+			
+			File vampireFile = new File(vampirePath);
+			if (!vampireFile.exists()) {
+				ResourceUtil.copyImage(core.getResource("types/vampire_wings.png"), vampirePath);
+			}
+		}
+		
+		// TODO: Include particles.yml
+		if (SettingsManager.LOAD_INCLUDED_MENUS.getBoolean())
+		{
+			// Try to load this server versions .yml file
+			File particlesFile = new File(core.getDataFolder() + File.separator + "menus" + File.separator + "particles.yml");
+			if (!particlesFile.exists())
+			{
+				String menuName = "menus/particles_" + ParticleHats.serverVersion + ".yml";
+				InputStream particleStream = core.getResource(menuName);
+				
+				// Default to the most compatible menu
+				if (particleStream == null) {
+					particleStream = core.getResource("menus/particles_8.yml");
+				}
+
+				try {
+					ResourceUtil.copyFile(particleStream, particlesFile);
+				} catch (IOException e) {}
+			}
+		}
+		
 		onReload();
 	}
 	
@@ -129,7 +180,7 @@ public class YamlDatabase implements Database {
 		{
 			File purchaseFile = new File(core.getDataFolder() + File.separator + "menus" + File.separator + "purchase.yml");
 			if (!purchaseFile.exists())
-			{
+			{				
 				try
 				{
 					ResourceUtil.copyFile(core.getResource("menus/" + "purchase_menu.yml"), purchaseFile);
@@ -366,8 +417,6 @@ public class YamlDatabase implements Database {
 		if (config != null)
 		{
 			String path = "items." + slot + ".nodes." + (nodeIndex + 1);
-			
-			ParticleHats.debug("deleting node " + (nodeIndex + 1));
 			
 			config.set(path, null);
 			config.save();
