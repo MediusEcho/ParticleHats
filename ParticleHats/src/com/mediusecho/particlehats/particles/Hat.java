@@ -1540,9 +1540,9 @@ public class Hat {
 	 */
 	public void setAngle (double x, double y, double z) 
 	{
-		angle.setX(MathUtil.wrap(x, 360, 0));
-		angle.setY(MathUtil.wrap(y, 360, 0));
-		angle.setZ(MathUtil.wrap(z, 360, 0));
+		angle.setX(MathUtil.wrapAngle(x));
+		angle.setY(MathUtil.wrapAngle(y));
+		angle.setZ(MathUtil.wrapAngle(z));
 		
 		setProperty("angle_x", Double.toString(angle.getX()));
 		setProperty("angle_y", Double.toString(angle.getY()));
