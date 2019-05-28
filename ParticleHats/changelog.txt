@@ -46,7 +46,7 @@
   - added "when_flying"
 - Menu Editor:
   - can edit all properties in-game now
-  - editor menu descriptions and names can be changed in messages.yml
+  - editor menu descriptions and names can be changed in en_US.lang
   - added clone option
   - added move to separate menu option
   - added sound menu
