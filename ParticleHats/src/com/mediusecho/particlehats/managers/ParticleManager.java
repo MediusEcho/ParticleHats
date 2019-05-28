@@ -68,7 +68,11 @@ public class ParticleManager
 		return emptyRecents;
 	}
 	
-	public void equipHat (UUID id, Hat hat)
+	public void equipHat (UUID id, Hat hat) {
+		equipHat(id, hat, true);
+	}
+	
+	public void equipHat (UUID id, Hat hat, boolean showEquipMessage)
 	{
 		Player player = Bukkit.getPlayer(id);
 		PlayerState playerState = core.getPlayerState(id);
@@ -88,7 +92,7 @@ public class ParticleManager
 			hat.setVanished(isVanished);
 			playerState.addHat(hat);
 			
-			if (!hat.isVanished())
+			if (!hat.isVanished() && showEquipMessage)
 			{
 				String message = hat.getEquipMessage();
 				if (!message.equals("")) {
