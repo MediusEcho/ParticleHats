@@ -1,6 +1,7 @@
 package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -54,8 +55,16 @@ public class EditorTransferMenu extends EditorMenu {
 		
 		final EditorAction cancelAction = (event, slot) ->
 		{
-			menuBuilder.goBack();
-			return EditorClickType.NEUTRAL;
+			if (event.isRightClick()) {
+				menuBuilder.goBack();
+				return EditorClickType.NEUTRAL;
+			} 
+			
+			else 
+			{
+				owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+				return EditorClickType.NONE;
+			}
 		};
 		
 		for (int i = 0; i < menuInventory.getSize(); i++)
