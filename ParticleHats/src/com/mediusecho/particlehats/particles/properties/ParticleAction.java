@@ -344,6 +344,13 @@ public enum ParticleAction {
 					return;
 				}
 				
+				// Stop if the player has more than the maximum allowed hats
+				if (!playerState.canEquip())
+				{
+					player.sendMessage(Message.HAT_EQUIPPED_OVERFLOW.replace("{1}", Integer.toString(SettingsManager.MAXIMUM_HAT_LIMIT.getInt())));
+					return;
+				}
+				
 				core.getParticleManager().equipHat(player.getUniqueId(), hat);
 				if (canClose) {
 					player.closeInventory();
