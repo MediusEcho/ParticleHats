@@ -40,7 +40,8 @@ items:
         color: 12582656
   '13':
     name: '&6Creeper Face'
-    id: CREEPER_HEAD
+    id: SKULL_ITEM
+    damage-value: 4
     action:
       left-click:
         id: override
@@ -70,7 +71,8 @@ items:
         color: 16777215
   '15':
     name: '&4r&6a&ei&2n&9b&1o&bw'
-    id: RED_WOOL
+    id: WOOL
+    damage-value: 9
     action:
       left-click:
         id: override
@@ -114,11 +116,11 @@ items:
         - EMERALD
         - DIAMOND
         - GOLD_NUGGET
-        - IRON_NUGGET
         - NETHER_STAR
   '19':
     name: '&fRocket Trail'
-    id: FIREWORK_ROCKET
+    id: FIREWORK
+    damage-value: 0
     action:
       left-click:
         id: override
@@ -186,13 +188,15 @@ items:
         particle: BARRIER
   '40':
     name: '&aShow Equipped Particles'
-    id: PLAYER_HEAD
+    id: SKULL_ITEM
+    damage-value: 3
     action:
       left-click:
         id: active_particles
   '23':
     name: '&5Witches Sphere'
     id: BLAZE_POWDER
+    damage-value: 0
     action:
       left-click:
         id: override
@@ -257,20 +261,21 @@ items:
             particle: SPELL_WITCH
   '43':
     name: '&3Animating Icons'
-    id: ORANGE_DYE
+    id: INK_SACK
+    damage-value: 14
     action:
       left-click:
         id: dummy
     icon-update-frequency: 2
     icons:
-    - PURPLE_DYE
-    - CYAN_DYE
-    - LIME_DYE
-    - GRAY_DYE
-    - LIGHT_GRAY_DYE
-    - ROSE_RED
-    - LAPIS_LAZULI
-    - CACTUS_GREEN
+    - INK_SACK:5
+    - INK_SACK:6
+    - INK_SACK:10
+    - INK_SACK:8
+    - INK_SACK:7
+    - INK_SACK:1
+    - INK_SACK:4
+    - INK_SACK:2
   '21':
     name: '&2Notes'
     id: NOTE_BLOCK
@@ -291,7 +296,8 @@ items:
         particle: NOTE
   '25':
     name: '&aWalking Billboard'
-    id: ROSE_RED
+    id: INK_SACK
+    damage-value: 1
     action:
       left-click:
         id: override
@@ -306,12 +312,11 @@ items:
     tracking: track_head_movement
     particles:
       '1':
-        particle: REDSTONE
-        color: 16777215
-        size: 0.2
+        particle: SUSPENDED
   '24':
     name: '&bBubble Wings'
-    id: CYAN_DYE
+    id: ELYTRA
+    damage-value: 0
     action:
       left-click:
         id: override
@@ -323,10 +328,11 @@ items:
     tracking: track_body_rotation
     particles:
       '1':
-        particle: CURRENT_DOWN
+        particle: WATER_BUBBLE
   '42':
     name: '&fCustom Sounds'
-    id: MUSIC_DISC_MELLOHI
+    id: RECORD_7
+    damage-value: 0
     description:
     - '&7Click me'
     action:

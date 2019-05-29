@@ -203,6 +203,7 @@ items:
     offset:
       y: -0.5
     update-frequency: 1
+    tracking: track_body_rotation
     particles:
       '1':
         particle: SPELL_WITCH
@@ -268,6 +269,7 @@ items:
     - LIME_DYE
     - GRAY_DYE
     - LIGHT_GRAY_DYE
+    - CYAN_DYE
     - ROSE_RED
     - LAPIS_LAZULI
     - CACTUS_GREEN
@@ -291,7 +293,7 @@ items:
         particle: NOTE
   '25':
     name: '&aWalking Billboard'
-    id: ROSE_RED
+    id: RED_DYE
     action:
       left-click:
         id: override
