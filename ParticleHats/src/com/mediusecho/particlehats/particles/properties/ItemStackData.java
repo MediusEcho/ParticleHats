@@ -252,7 +252,10 @@ public class ItemStackData {
 			
 			Item item = world.dropItem(location.add(x, y, z), getRandomItem());
 			item.setPickupDelay(36000); // 30 Minutes
-			item.setGravity(hasGravity);
+			
+			if (ParticleHats.serverVersion >= 10) {
+				item.setGravity(hasGravity);
+			}
 			
 			// Give this item a unique metadata so we can cancel any pickup
 			item.setMetadata("PH_DroppedItem", new FixedMetadataValue(ParticleHats.instance, ""));
@@ -270,12 +273,8 @@ public class ItemStackData {
 			ageField.set(entityItem, getDurationLived());
 		}
 		
-		catch (NoSuchFieldException e) {
-			ParticleHats.debug("NoSuchFieldException");
-		}
-		
-		catch (IllegalAccessException e) {
-			ParticleHats.debug("IllegalAccessException");
+		catch (Exception e) {
+			ParticleHats.debug(e.getStackTrace());
 		}
 	}
 	
