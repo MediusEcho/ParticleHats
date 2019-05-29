@@ -55,7 +55,7 @@ public enum ParticleType {
 	TORNADO        (17, new TornadoEffect()),
 	CUSTOM         (18, new PixelEffect()),
 	PARTICLEHATS   (19, new ParticleHatsEffect()),
-	ANIMATED       (19, new AnimatedEffect(), true),
+	ANIMATED       (20, new AnimatedEffect(), true),
 	DEBUG_5X5      (-1, new Debug5x5Effect(), true),
 	DEBUG_6X6      (-2, new Debug6x6Effect(), true);
 	
