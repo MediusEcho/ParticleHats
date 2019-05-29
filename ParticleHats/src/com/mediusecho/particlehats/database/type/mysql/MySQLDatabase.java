@@ -1044,8 +1044,10 @@ public class MySQLDatabase implements Database {
 						properties.append(",").append(getImportString(config.getString(path + "permission"), "NULL"));
 						properties.append(",").append(getImportString(config.getString(path + "permission-denied"), "NULL"));
 						
-						if (config.isString(path + "type")) {
+						if (config.isString(path + "type")) 
+						{
 							properties.append(",").append(ParticleType.fromName(config.getString(path + "type")).getID());
+							properties.append(",").append("NULL");
 						}
 						
 						else
