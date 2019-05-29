@@ -803,49 +803,63 @@ public class MySQLDatabase implements Database {
 		async(() ->
 		{
 			connect((connection) ->
-			{
-				List<Hat> loadedHats = new ArrayList<Hat>();
+			{	
+				List<Hat> equippedHats = new ArrayList<Hat>();
+				String equippedQuery = "SELECT name, slot, hidden FROM " + Table.EQUIPPED.getFormat() + " WHERE id = ?";
 				
-				String hatQuery = "SELECT name, slot, hidden FROM " + Table.EQUIPPED.getFormat() + " WHERE id = ?";
-				try (PreparedStatement statement = connection.prepareStatement(hatQuery))
+				try (PreparedStatement equippedStatement = connection.prepareStatement(equippedQuery))
 				{
-					statement.setString(1, id.toString());
+					equippedStatement.setString(1, id.toString());
 					
-					ResultSet set = statement.executeQuery();
-					while (set.next())
+					ResultSet equippedSet = equippedStatement.executeQuery();
+					while (equippedSet.next())
 					{
-						Hat hat = new Hat();
-						loadHat(set.getString("name"), set.getInt("slot"), hat);
-						hat.setHidden(set.getBoolean("hidden"));
-						loadedHats.add(hat);
+						String name = equippedSet.getString("name");
+						int slot = equippedSet.getInt("slot");
+						boolean hidden = equippedSet.getBoolean("hidden");
+						
+						String menuQuery = "SELECT COUNT(*) as count FROM " + Table.MENUS.getFormat() + " WHERE name = ?";
+						try (PreparedStatement menuStatement = connection.prepareStatement(menuQuery))
+						{
+							menuStatement.setString(1, name);
+							ResultSet menuSet = menuStatement.executeQuery();
+							
+							while (menuSet.next())
+							{
+								if (menuSet.getInt("count") > 0)
+								{
+									Hat hat = new Hat();
+									hat.setHidden(hidden);
+									
+									String hatQuery = "SELECT * FROM " + Table.ITEMS.format(name) + " WHERE slot = ?";
+									try (PreparedStatement hatStatement = connection.prepareStatement(hatQuery))
+									{
+										hatStatement.setInt(1, slot);
+										
+										ResultSet hatSet = hatStatement.executeQuery();
+										while (hatSet.next())
+										{
+											loadHat(connection, hatSet, hat, name);
+											
+											ItemStack item = hat.getItem();
+											ItemUtil.setItemName(item, hat.getDisplayName());
+											loadMetaData(connection, name, hat, item);
+											
+											equippedHats.add(hat);
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 				
 				sync(() ->
 				{
-					callback.execute(loadedHats);
+					callback.execute(equippedHats);
 				});
 			});
 		});
-//		connect((connection) ->
-//		{
-//			String hatQuery = "SELECT name, slot FROM " + Table.EQUIPPED.getFormat() + " WHERE id = ?";
-//			try (PreparedStatement statement = connection.prepareStatement(hatQuery))
-//			{
-//				statement.setString(1, id.toString());
-//				
-//				ResultSet set = statement.executeQuery();
-//				PlayerState playerState = core.getPlayerState(id);
-//				
-//				while (set.next())
-//				{
-//					Hat hat = new Hat();
-//					loadHat(set.getString("name"), set.getInt("slot"), hat);
-//					
-//					playerState.addHat(hat);
-//				}
-//			}
-//		});
 	}
 	
 	@Override
