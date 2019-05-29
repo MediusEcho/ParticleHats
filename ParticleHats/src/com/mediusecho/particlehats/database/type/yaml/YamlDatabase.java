@@ -115,7 +115,6 @@ public class YamlDatabase implements Database {
 			}
 		}
 		
-		// TODO: Include particles.yml
 		if (SettingsManager.LOAD_INCLUDED_MENUS.getBoolean())
 		{
 			// Try to load this server versions .yml file
