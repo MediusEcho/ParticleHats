@@ -132,13 +132,14 @@ public class EditorLore {
 	 */
 	public static void updateModeDescription (ItemStack item, ParticleMode mode, Message description)
 	{
-		final int length = ParticleMode.values().length;
-		final int id = mode.getID();
+		List<ParticleMode> modes = ParticleMode.getSupportedModes();
+		int index = modes.indexOf(mode);
+		int size = modes.size();
 		
 		String s = description.getValue()
-				.replace("{1}", ParticleMode.fromId(MathUtil.wrap(id - 1, length, 0)).getDisplayName())
+				.replace("{1}", modes.get(MathUtil.wrap(index - 1, size, 0)).getDisplayName())
 				.replace("{2}", mode.getDisplayName())
-				.replace("{3}", ParticleMode.fromId(MathUtil.wrap(id + 1, length, 0)).getDisplayName())
+				.replace("{3}", modes.get(MathUtil.wrap(index + 1, size, 0)).getDisplayName())
 				.replace("{4}", mode.getDescription());
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));		
 	}
