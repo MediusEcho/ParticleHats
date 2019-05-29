@@ -1280,7 +1280,7 @@ public class MySQLDatabase implements Database {
 			properties.append(",").append(Color.fromRGB(r, g, b).asRGB());
 		}
 		
-		properties.append(",").append(!config.contains(particlePath + "color")); // Random
+		properties.append(",").append(config.getString(particlePath + "color", "").equals("random")); // Random
 		properties.append(",").append(config.getDouble(particlePath + "scale"));
 		
 		if (config.isString(particlePath + "item-data")) {
