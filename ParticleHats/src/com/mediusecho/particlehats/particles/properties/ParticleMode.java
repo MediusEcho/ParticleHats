@@ -5,20 +5,22 @@ import java.util.Map;
 
 import org.bukkit.ChatColor;
 
+import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
 
 public enum ParticleMode {
 
-	ACTIVE         (0),
-	WHEN_MOVING    (1),
-	WHEN_AFK       (2),
-	WHEN_PEACEFUL  (3),
-	WHEN_GLIDING   (4),
-	WHEN_SPRINTING (5),
-	WHEN_SWIMMING  (6),
-	WHEN_FLYING    (7);
+	ACTIVE         (0, -1),
+	WHEN_MOVING    (1, -1),
+	WHEN_AFK       (2, -1),
+	WHEN_PEACEFUL  (3, -1),
+	WHEN_GLIDING   (4, 9),
+	WHEN_SPRINTING (5, -1),
+	WHEN_SWIMMING  (6, 13),
+	WHEN_FLYING    (7, -1);
 	
 	private final int id;
+	private final int supportedVersion;
 	
 	private static final Map<Integer, ParticleMode> modeID = new HashMap<Integer, ParticleMode>();
 	private static final Map<String, ParticleMode> modeName = new HashMap<String, ParticleMode>();
@@ -32,9 +34,10 @@ public enum ParticleMode {
 		}
 	}
 	
-	private ParticleMode (final int id)
+	private ParticleMode (final int id, final int supportedVersion)
 	{
 		this.id = id;
+		this.supportedVersion = supportedVersion;
 	}
 	
 	/**
@@ -87,6 +90,18 @@ public enum ParticleMode {
 		} catch (IllegalArgumentException e) {
 			return "";
 		}
+	}
+	
+	/**
+	 * Checks to see if the current server version supports this mode
+	 * @return
+	 */
+	public boolean isSupported ()
+	{
+		if (supportedVersion == -1) {
+			return true;
+		}
+		return ParticleHats.serverVersion >= supportedVersion;
 	}
 	
 	/**
