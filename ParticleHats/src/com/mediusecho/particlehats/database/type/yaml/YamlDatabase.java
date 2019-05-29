@@ -1330,10 +1330,13 @@ public class YamlDatabase implements Database {
 		String soundName = config.getString(path + "sound.id", "");
 		if (!soundName.equals(""))
 		{
-			Sound sound = Sound.valueOf(soundName);
-			if (sound != null) {
-				hat.setSound(sound);
-			}
+			try
+			{
+				Sound sound = Sound.valueOf(soundName);
+				if (sound != null) {
+					hat.setSound(sound);
+				}
+			} catch (IllegalArgumentException e) {}
 		}
 		
 		hat.setLoaded(true);
