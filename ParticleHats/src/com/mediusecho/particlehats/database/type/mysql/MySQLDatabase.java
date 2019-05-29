@@ -1136,7 +1136,13 @@ public class MySQLDatabase implements Database {
 								importParticleData(config, slot, index, -1, particlePath, properties);
 								
 								particleBuilder.append(",").append(properties.toString());
-								properties.setLength(0);							
+								properties.setLength(0);
+								
+								// ItemStack items
+								List<String> items = config.getStringList(particlePath + "items");
+								if (items.size() > 0) {
+									this.importMetaData(items, slot, DataType.ITEMSTACK.getID(), index, -1, properties, metaBuilder);
+								}
 							}
 						}
 						
@@ -1216,7 +1222,13 @@ public class MySQLDatabase implements Database {
 										importParticleData(config, slot, index, nodeIndex, particlePath, properties);
 										
 										particleBuilder.append(",").append(properties.toString());
-										properties.setLength(0);	
+										properties.setLength(0);
+										
+										// ItemStack items
+										List<String> items = config.getStringList(particlePath + "items");
+										if (items.size() > 0) {
+											this.importMetaData(items, slot, DataType.ITEMSTACK.getID(), index, nodeIndex, properties, metaBuilder);
+										}
 									}
 								}
 							}
