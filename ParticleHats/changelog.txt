@@ -19,6 +19,7 @@
   - re-added locked items
   - support for animated menus
   - added menus aliases
+  - purchase.yml is now a reserved menu for confirming purchases, has a separate menu editor
 - Commands:
   - removed /h toggle, use /h particles to toggle individual particles
   - removed /h list, use menu editor for list of supported particles
