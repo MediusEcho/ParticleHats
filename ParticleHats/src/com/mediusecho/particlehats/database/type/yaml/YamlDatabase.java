@@ -99,7 +99,6 @@ public class YamlDatabase implements Database {
 			menuFolder.mkdirs();
 		}
 		
-		// TODO: Test custom type loading on yaml database
 		if (SettingsManager.LOAD_INCLUDED_CUSTOM_TYPES.getBoolean())
 		{			
 			String butterflyPath = core.getDataFolder() + File.separator + "types" + File.separator + "butterfly_wings_colorable.png";
