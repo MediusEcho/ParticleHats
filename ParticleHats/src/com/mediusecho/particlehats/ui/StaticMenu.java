@@ -25,11 +25,13 @@ import com.mediusecho.particlehats.util.StringUtil;
 public class StaticMenu extends Menu {
 
 	private final List<Hat> playerEquippedHats;
+	private final List<Hat> deleteQueue;
 	
 	public StaticMenu(ParticleHats core, Player owner) 
 	{
 		super(core, owner);
 		playerEquippedHats = new ArrayList<Hat>();
+		deleteQueue = new ArrayList<Hat>();
 	}
 	
 	public StaticMenu(ParticleHats core, Player owner, MenuInventory inventory)
@@ -37,6 +39,8 @@ public class StaticMenu extends Menu {
 		super(core, owner, inventory);
 		
 		playerEquippedHats = new ArrayList<Hat>();
+		deleteQueue = new ArrayList<Hat>();
+		
 		build();
 	}
 
@@ -66,24 +70,27 @@ public class StaticMenu extends Menu {
 		PlayerState playerState = core.getPlayerState(ownerID);
 		List<Hat> equippedHats = playerState.getActiveHats();
 		
-		if (equippedHats.size() > 0 && playerEquippedHats.size() > 0)
+		for (Hat hat : playerEquippedHats)
 		{
-			ListIterator<Hat> iterator = playerEquippedHats.listIterator();
-			while (iterator.hasNext())
-			{
-				Hat hat = iterator.next();
-				if (equippedHats.contains(hat)) {
-					continue;
-				}
-				
-				ItemStack item = inventory.getItem(hat.getSlot());
-				if (item != null)
-				{
-					iterator.remove();
-					ItemUtil.stripHighlight(item);
-					ItemUtil.setItemDescription(item, hat.getCachedDescription());
-				}
+			if (equippedHats.contains(hat)) {
+				continue;
 			}
+			
+			deleteQueue.add(hat);
+			
+			int slot = hat.getSlot();
+			ItemStack item = inventory.getItem(slot);
+			
+			ItemUtil.stripHighlight(item);
+			ItemUtil.setItemDescription(item, hat.getCachedDescription());
+			
+			inventory.setItem(slot, item);
+		}
+		
+		if (deleteQueue.size() > 0)
+		{
+			playerEquippedHats.removeAll(deleteQueue);
+			deleteQueue.clear();
 		}
 		
 		super.open();
