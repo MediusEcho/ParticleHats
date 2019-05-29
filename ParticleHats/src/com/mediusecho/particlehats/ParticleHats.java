@@ -46,6 +46,7 @@ import com.mediusecho.particlehats.util.ResourceUtil;
 @SuppressWarnings("unused")
 public class ParticleHats extends JavaPlugin {
 	
+	// TODO: [4.1] Test animated custom type support
 	// TODO: [4.1] Separate menu for block-fixed particles?
 	// Store fixed particles in a menu that is separate from player menus
 	// Players can sort by nearest and teleport to the particle
