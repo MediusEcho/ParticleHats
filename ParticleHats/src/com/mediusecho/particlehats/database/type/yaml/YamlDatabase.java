@@ -589,6 +589,10 @@ public class YamlDatabase implements Database {
 				loadBaseHatData(config, hat, path);
 				loadEssentialHatData(config, hat, path, info[0], slot);
 				
+				ItemStack item = hat.getItem();
+				ItemUtil.setItemName(item, hat.getDisplayName());
+				loadMetaData(config, hat, path, item);
+				
 				loadedHats.add(hat);
 			}
 		}
