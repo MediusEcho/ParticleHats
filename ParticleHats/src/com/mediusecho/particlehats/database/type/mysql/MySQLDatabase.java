@@ -1470,6 +1470,7 @@ public class MySQLDatabase implements Database {
 		hat.setRandomOffset(set.getDouble("random_offset_x"), set.getDouble("random_offset_y"), set.getDouble("random_offset_z"));
 		hat.setAngle(set.getDouble("angle_x"), set.getDouble("angle_y"), set.getDouble("angle_z"));
 		hat.setUpdateFrequency(getInt(set, "update_frequency", 2));
+		hat.setIconUpdateFrequency(getInt(set, "icon_update_frequency", 1));
 		hat.setSpeed(set.getInt("speed"));
 		hat.setCount(getInt(set, "count", 1));
 		hat.setPrice(set.getInt("price"));
