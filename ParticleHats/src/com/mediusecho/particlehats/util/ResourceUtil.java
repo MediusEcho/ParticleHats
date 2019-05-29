@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import javax.imageio.ImageIO;
 
@@ -27,7 +30,7 @@ public class ResourceUtil {
 			return image;
 		}
 		
-		catch (IOException e) {
+		catch (Exception e) {
 			return null;
 		}
 	}
@@ -81,6 +84,17 @@ public class ResourceUtil {
 		
 		out.close();
 		in.close();
+	}
+	
+	public static void copyImage (InputStream stream, String path)
+	{
+		if (stream == null) {
+			return;
+		}
+		
+		try {
+			Files.copy(stream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {}
 	}
 	
 	/**
