@@ -1343,7 +1343,7 @@ public class MySQLDatabase implements Database {
 		}
 		
 		properties.append(",").append(config.getInt(particlePath + "item-duration"));
-		properties.append(",").append(config.getBoolean(particlePath + "item-gravity"));
+		properties.append(",").append(config.getBoolean(particlePath + "item-gravity", true));
 		properties.append(",").append(config.getDouble(particlePath + "item-velocity.x"));
 		properties.append(",").append(config.getDouble(particlePath + "item-velocity.y"));
 		properties.append(",").append(config.getDouble(particlePath + "item-velocity.z"));
