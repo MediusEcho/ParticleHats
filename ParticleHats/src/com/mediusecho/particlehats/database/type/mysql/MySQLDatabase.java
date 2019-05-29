@@ -1308,7 +1308,7 @@ public class MySQLDatabase implements Database {
 		}
 		
 		properties.append(",").append(config.getString(particlePath + "color", "").equals("random")); // Random
-		properties.append(",").append(config.getDouble(particlePath + "scale"));
+		properties.append(",").append(config.getDouble(particlePath + "size"));
 		
 		if (config.isString(particlePath + "item-data")) {
 			properties.append(",").append(getImportString(config.getString(particlePath + "item-data"), "NULL")); 
