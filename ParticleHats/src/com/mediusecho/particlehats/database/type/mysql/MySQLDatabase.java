@@ -1275,8 +1275,10 @@ public class MySQLDatabase implements Database {
 			
 			catch (SQLException e) 
 			{
-				sync(() -> {
+				sync(() -> 
+				{
 					sender.sendMessage(Message.COMMAND_IMPORT_ERROR.replace("{1}", e.getClass().getSimpleName()));
+					ParticleHats.debug(e.getStackTrace());
 				});
 			}
 		});
