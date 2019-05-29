@@ -49,34 +49,45 @@ public class HookManager {
 		PluginManager pluginManager = core.getServer().getPluginManager();
 		
 		// Vault Hook
-		if (currencyHook == null && SettingsManager.FLAG_VAULT.getBoolean())
+		if (SettingsManager.FLAG_VAULT.getBoolean())
 		{
+			if (currencyHook != null && currencyHook instanceof VaultHook) {
+				return;
+			}
+			
 			if (pluginManager.isPluginEnabled("Vault"))
 			{
 				currencyHook = new VaultHook(core);
 				ParticleHats.log("hooking into Vault");
 			}
+			
+			else 
+			{
+				ParticleHats.log("Could not find Vault, disabling economy support");
+				SettingsManager.FLAG_VAULT.addOverride(false);
+				currencyHook = null;
+			}
 		}
 		
 		// PlayerPoints Hook
-		else if (currencyHook == null && SettingsManager.FLAG_PLAYERPOINTS.getBoolean())
+		else if (SettingsManager.FLAG_PLAYERPOINTS.getBoolean())
 		{
+			if (currencyHook != null && currencyHook instanceof PlayerPointsHook) {
+				return;
+			}
+			
 			if (pluginManager.isPluginEnabled("PlayerPoints"))
 			{
 				currencyHook = new PlayerPointsHook();
 				ParticleHats.log("hooking into PlayerPoints");
 			}
-		}
-		
-		else 
-		{
-//			if (SettingsManager.FLAG_VAULT.getBoolean() || SettingsManager.FLAG_PLAYERPOINTS.getBoolean())
-//			{
-//				Core.debug("Unable to find a supported economy plugin, disabling economy support");
-//				SettingsManager.FLAG_VANISH.addOverride(false);
-//				SettingsManager.FLAG_PLAYERPOINTS.addOverride(false);
-//			}
-			currencyHook = null;
+			
+			else
+			{
+				ParticleHats.log("Could not find PlayerPoints, disabling economy support");
+				SettingsManager.FLAG_PLAYERPOINTS.addOverride(false);
+				currencyHook = null;
+			}
 		}
 		
 		// Vanish Hooks
