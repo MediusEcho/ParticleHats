@@ -40,7 +40,7 @@ public class SphereEffect extends Effect {
 
 	@Override
 	public List<ParticleTracking> getSupportedTrackingMethods() {
-		return Arrays.asList(ParticleTracking.TRACK_NOTHING, ParticleTracking.TRACK_BODY_ROTATION);
+		return Arrays.asList(ParticleTracking.values());
 	}
 
 	@Override
