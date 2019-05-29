@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.particles;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -326,12 +325,12 @@ public enum ParticleEffect {
 	 */
 	public static ParticleEffect fromDisplayName (String name)
 	{
-		for (Entry<String, ParticleEffect> entry : particleNames.entrySet())
+		if (particleNames.containsKey(name))
 		{
-			if (!entry.getValue().getDisplayName().equalsIgnoreCase(name)) {
-				continue;
+			ParticleEffect particle = particleNames.get(name);
+			if (particle.isSupported()) {
+				return particle;
 			}
-			return entry.getValue();
 		}
 		return NONE;
 	}
