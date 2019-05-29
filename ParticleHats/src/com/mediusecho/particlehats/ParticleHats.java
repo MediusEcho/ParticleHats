@@ -52,6 +52,9 @@ public class ParticleHats extends JavaPlugin {
 	// Players can sort by nearest and teleport to the particle
 	
 	// TODO: Include particles.yml in MySQL database
+	// TODO: ItemStack particle items don't completely despawn in 1.8
+	// TODO: Cant show overequipped message inside editor
+	// TODO: Test tag loading when the player joins the sever for MySQL
 	
 	public static ParticleHats instance;
 	public static int serverVersion;
@@ -427,7 +430,7 @@ public class ParticleHats extends JavaPlugin {
 		else
 		{
 			YamlConfiguration tempLangConfig = YamlConfiguration.loadConfiguration(langFile);
-			if (tempLangConfig.getDouble("version", 1.0) < LANG_VERSION) 
+			if (tempLangConfig.getDouble("version", 1.0) != LANG_VERSION) 
 			{
 				log("Updating en_US.lang");
 				createDefaultLang();
