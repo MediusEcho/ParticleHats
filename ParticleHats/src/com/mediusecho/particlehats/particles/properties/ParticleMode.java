@@ -1,6 +1,8 @@
 package com.mediusecho.particlehats.particles.properties;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
@@ -104,6 +106,18 @@ public enum ParticleMode {
 		return ParticleHats.serverVersion >= supportedVersion;
 	}
 	
+	public static List<ParticleMode> getSupportedModes ()
+	{
+		List<ParticleMode> supportedModes = new ArrayList<ParticleMode>();
+		for (ParticleMode mode : values())
+		{
+			if (mode.isSupported()) {
+				supportedModes.add(mode);
+			}
+		}
+		return supportedModes;
+	}
+	
 	/**
 	 * Returns the ParticleModes associated with this id
 	 * @param id
@@ -130,9 +144,14 @@ public enum ParticleMode {
 		
 		String mode = name.toUpperCase();
 		
-		if (modeName.containsKey(mode)) {
-			return modeName.get(mode);
+		if (modeName.containsKey(mode)) 
+		{
+			ParticleMode m = modeName.get(mode);
+			if (m.isSupported()) {
+				return m;
+			}
 		}
+		
 		return ACTIVE;
 	}
 }
