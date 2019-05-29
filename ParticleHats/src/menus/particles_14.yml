@@ -270,9 +270,9 @@ items:
     - GRAY_DYE
     - LIGHT_GRAY_DYE
     - CYAN_DYE
-    - ROSE_RED
+    - RED_DYE
     - LAPIS_LAZULI
-    - CACTUS_GREEN
+    - GREEN_DYE
   '21':
     name: '&2Notes'
     id: NOTE_BLOCK
