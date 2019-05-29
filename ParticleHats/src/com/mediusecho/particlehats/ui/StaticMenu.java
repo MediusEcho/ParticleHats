@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map.Entry;
 
 import org.bukkit.Material;
@@ -23,14 +24,19 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class StaticMenu extends Menu {
 
+	private final List<Hat> playerEquippedHats;
+	
 	public StaticMenu(ParticleHats core, Player owner) 
 	{
 		super(core, owner);
+		playerEquippedHats = new ArrayList<Hat>();
 	}
 	
 	public StaticMenu(ParticleHats core, Player owner, MenuInventory inventory)
 	{
 		super(core, owner, inventory);
+		
+		playerEquippedHats = new ArrayList<Hat>();
 		build();
 	}
 
@@ -52,6 +58,35 @@ public class StaticMenu extends Menu {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void open ()
+	{
+		PlayerState playerState = core.getPlayerState(ownerID);
+		List<Hat> equippedHats = playerState.getActiveHats();
+		
+		if (equippedHats.size() > 0 && playerEquippedHats.size() > 0)
+		{
+			ListIterator<Hat> iterator = playerEquippedHats.listIterator();
+			while (iterator.hasNext())
+			{
+				Hat hat = iterator.next();
+				if (equippedHats.contains(hat)) {
+					continue;
+				}
+				
+				ItemStack item = inventory.getItem(hat.getSlot());
+				if (item != null)
+				{
+					iterator.remove();
+					ItemUtil.stripHighlight(item);
+					ItemUtil.setItemDescription(item, hat.getCachedDescription());
+				}
+			}
+		}
+		
+		super.open();
 	}
 
 	@Override
@@ -121,6 +156,8 @@ public class StaticMenu extends Menu {
 			
 			if (equippedHats.contains(hat)) 
 			{
+				playerEquippedHats.add(hat);
+				
 				ItemUtil.highlightItem(item);
 				
 				ItemMeta itemMeta = item.getItemMeta();
