@@ -1044,14 +1044,17 @@ public class MySQLDatabase implements Database {
 						properties.append(",").append(getImportString(config.getString(path + "permission"), "NULL"));
 						properties.append(",").append(getImportString(config.getString(path + "permission-denied"), "NULL"));
 						
+						ParticleType type;
 						if (config.isString(path + "type")) 
 						{
+							type = ParticleType.fromName(config.getString(path + "type"));
 							properties.append(",").append(ParticleType.fromName(config.getString(path + "type")).getID());
 							properties.append(",").append("NULL");
 						}
 						
 						else
 						{
+							type = ParticleType.fromName(config.getString(path + "type.id"));
 							properties.append(",").append(ParticleType.fromName(config.getString(path + "type.id")).getID());
 							properties.append(",").append(getImportString(config.getString(path + "type.name"), "NULL")); // Custom Type
 						}
@@ -1059,7 +1062,17 @@ public class MySQLDatabase implements Database {
 						properties.append(",").append(ParticleLocation.fromName(config.getString(path + "location")).getID());
 						properties.append(",").append(ParticleMode.fromName(config.getString(path + "mode")).getID());
 						properties.append(",").append(ParticleAnimation.fromName(config.getString(path + "animated")).getID());
-						properties.append(",").append(ParticleTracking.fromName(config.getString(path + "tracking")).getID());
+						
+						// Tracking Method
+						String trackingMethod = config.getString(path + "tracking");
+						if (trackingMethod != null) {
+							properties.append(",").append(ParticleTracking.fromName(config.getString(path + "tracking")).getID());
+						}
+						
+						else {
+							properties.append(",").append(type.getEffect().getDefaultTrackingMethod().getID());
+						}
+						
 						properties.append(",").append(getImportString(config.getString(path + "label"), "NULL"));
 						properties.append(",").append(getImportString(config.getString(path + "equip-message"), "NULL"));
 						properties.append(",").append(config.getDouble(path + "offset.x"));
