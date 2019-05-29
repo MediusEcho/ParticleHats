@@ -17,7 +17,7 @@ public abstract class CommunityEffect extends PixelEffect {
 	{
 		super(image, name);
 		this.displayName = StringUtil.colorize(displayName);
-		this.credit = StringUtil.colorize("&8Credit: " + credit);
+		this.credit = StringUtil.colorize("&8by " + credit);
 	}
 	
 	@Override
