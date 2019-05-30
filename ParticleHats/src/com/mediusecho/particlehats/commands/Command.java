@@ -2,10 +2,18 @@ package com.mediusecho.particlehats.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
@@ -244,5 +252,60 @@ public abstract class Command {
 		}
 		
 		return false;
+	}
+	
+	public Player getPlayer (Sender sender, String arg)
+	{
+		CommandSender commandSender = sender.getCommandSender();
+		
+		switch (arg)
+		{
+			case "@p":
+			{
+				Location location = null;
+				if (commandSender instanceof BlockCommandSender)
+				{
+					BlockCommandSender blockSender = (BlockCommandSender)commandSender;
+					location = blockSender.getBlock().getLocation();
+				}
+				
+				else if (commandSender instanceof Player)
+				{
+					Player player = (Player)commandSender;
+					location = player.getLocation();
+				}
+				
+				if (location != null) {
+					return getNearestPlayer(location);
+				}
+			}
+			break;
+		}
+		
+		return Bukkit.getPlayer(arg);
+	}
+	
+	private Player getNearestPlayer (Location location)
+	{
+		double maxDistance = 100;
+		Player targetPlayer = null;
+		Collection<? extends Entity> nearbyEntities = location.getWorld().getNearbyEntities(location, 25, 25, 25);
+		
+		for (Entity e : nearbyEntities)
+		{
+			if (!(e instanceof Player)) {
+				continue;
+			}
+			
+			Player player = (Player)e;
+			double distance = player.getLocation().distanceSquared(location);
+			if (distance < maxDistance)
+			{
+				targetPlayer = player;
+				maxDistance = distance;
+			}
+		}
+		
+		return targetPlayer;
 	}
 }
