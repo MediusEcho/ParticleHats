@@ -68,8 +68,19 @@ public class MySQLHelper {
 						+ "menu VARCHAR(128) NOT NULL,"
 						+ "weight INT NOT NULL"
 						+ ")";
-				try (PreparedStatement groupStatement = connection.prepareStatement(groupTable)) {
+				try (PreparedStatement groupStatement = connection.prepareStatement(groupTable)) 
+				{
 					groupStatement.execute();
+					
+					String defaultGroupQuery = "INSERT IGNORE INTO " + Table.GROUPS.getFormat() + " VALUES (?,?,?)";
+					try (PreparedStatement defaultGroupStatement = connection.prepareStatement(defaultGroupQuery))
+					{
+						defaultGroupStatement.setString(1, "default");
+						defaultGroupStatement.setString(2, "particles");
+						defaultGroupStatement.setInt(3, 0);
+						
+						defaultGroupStatement.execute();
+					}
 				}
 				
 				String imageTable = "CREATE TABLE IF NOT EXISTS " + Table.IMAGES.getFormat() + "("
