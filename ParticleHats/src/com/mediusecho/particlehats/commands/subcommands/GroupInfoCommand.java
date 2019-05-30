@@ -16,10 +16,11 @@ public class GroupInfoCommand extends Command {
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
 		List<Group> groups = core.getDatabase().getGroups(true);
+		String infoTemplate = Message.COMMAND_GROUP_INFO.getValue();
 		
-		sender.sendMessage("&f> &3Groups:");
+		sender.sendMessage("&f> " + Message.COMMAND_GROUP_INFO_TIP.getValue());
 		for (Group g : groups) {
-			sender.sendMessage("&f> &3name &f" + g.getName() + " &3menu: &f" + g.getDefaultMenu() + " &3weight: &f" + g.getWeight());
+			sender.sendMessage("&f> " + infoTemplate.replace("{1}", g.getName()).replace("{2}", g.getDefaultMenu()).replace("{3}", Integer.toString(g.getWeight())));
 		}
 		
 		return false;

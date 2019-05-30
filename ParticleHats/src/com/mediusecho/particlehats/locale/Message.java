@@ -113,6 +113,12 @@ public enum Message {
 	COMMAND_EDIT_GROUP_USAGE       ("/h group edit <group> <menu> <weight>"),
 	COMMAND_EDIT_GROUP_SUCCESS     ("&aUpdated group '&3{1}&a'"),
 	
+	// Group Info Command
+	COMMAND_GROUP_INFO_DESCRIPTION ("Lists all available groups"),
+	COMMAND_GROUP_INFO_USAGE       ("/h group info"),  
+	COMMAND_GROUP_INFO_TIP         ("&3Groups:"),
+	COMMAND_GROUP_INFO             ("&3name: &f{1} &3menu: &f{1} &3weight: &f{3}"),
+	
 	// Add Type Command
 	COMMAND_ADD_TYPE_DESCRIPTION ("Adds a custom type to the MySQL database"),
 	COMMAND_ADD_TYPE_USAGE       ("/h type add <type>"),

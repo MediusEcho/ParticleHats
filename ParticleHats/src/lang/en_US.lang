@@ -195,6 +195,16 @@ command_edit_group_usage: "/h group edit <group> <menu> <weight>"
 # {1}: The name of the group
 command_edit_group_success: "&aUpdated group '&3{1}&a'"
 
+# Group Info Command
+command_group_info_description: "Lists all available groups"
+command_group_info_usage: "/h group info"  
+command_group_info_tip: "&3Groups:"
+
+# {1}: Group name
+# {2}: Group menu
+# {3}: Group weight
+command_group_info: "&3name: &f{1} &3menu: &f{1} &3weight: &f{3}"
+
 # Add Type Command
 # This command will only work if you're using a MySQL database
 command_add_type_description: "Adds a custom type to the MySQL database"
