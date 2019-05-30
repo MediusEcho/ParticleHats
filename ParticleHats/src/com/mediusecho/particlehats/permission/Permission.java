@@ -30,6 +30,7 @@ public enum Permission {
 	COMMAND_GROUP_ADD     ("command.group.add"),
 	COMMAND_GROUP_REMOVE  ("command.group.remove"),
 	COMMAND_GROUP_EDIT    ("command.group.edit"),
+	COMMAND_GROUP_INFO    ("command.group.info"),
 	COMMAND_GROUP_ALL     ("command.group.all", "command.group.*"),
 	COMMAND_TYPE          ("command.type"),
 	COMMAND_TYPE_ADD      ("command.type.add"),
