@@ -2,10 +2,6 @@ package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
