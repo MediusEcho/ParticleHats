@@ -154,6 +154,9 @@ command_meta_usage: "/h meta <value>"
 command_open_description: "Opens the selected menu"
 command_open_usage: "/h open <menu name>"
 
+# {1}: The name of the menu the player is trying to open
+command_open_error: "&cCan't open menu '&7{1}&c' from command"
+
 # Particles Command
 command_particle_description: "Lets players manage their equipped particles"
 command_particle_usage: "/h particles"

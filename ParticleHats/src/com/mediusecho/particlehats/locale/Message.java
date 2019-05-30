@@ -85,6 +85,7 @@ public enum Message {
 	// Open Command
 	COMMAND_OPEN_DESCRIPTION ("Opens the selected menu"),
 	COMMAND_OPEN_USAGE       ("/h open <menu name>"),
+	COMMAND_OPEN_ERROR       ("&cCan't open menu '&7{1}&c' from command"),
 	
 	// Particles Command
 	COMMAND_PARTICLE_DESCRIPTION ("Lets players manage their equipped particles"),
