@@ -19,10 +19,12 @@ import com.mediusecho.particlehats.ui.StaticMenu;
 
 public class OpenCommand extends Command {
 
+	private final ParticleHats core;
 	private final Database database;
 	
 	public OpenCommand (final ParticleHats core)
 	{			
+		this.core = core;
 		database = core.getDatabase();
 	}
 	
@@ -33,14 +35,11 @@ public class OpenCommand extends Command {
 		{
 			Set<String> menus = database.getMenus(false).keySet();
 			List<String> result = new ArrayList<String>();
-			
-			if (sender.hasPermission(getPermission()))
+
+			for (String menu : menus)
 			{
-				for (String menu : menus)
-				{
-					if (sender.hasPermission(getPermission().append(menu)) || sender.hasPermission(getPermission().append("all"))) {
-						result.add(menu);
-					}
+				if (hasPermission(sender, menu)) {
+					result.add(menu);
 				}
 			}
 			
@@ -72,6 +71,12 @@ public class OpenCommand extends Command {
 			
 			// Grab the name without any extensions
 			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
+			
+			if (menuName.equals("purchase")) 
+			{
+				sender.sendMessage(Message.COMMAND_OPEN_ERROR.replace("{1}", menuName));
+				return false;
+			}
 			
 			Menu menu = playerState.getOpenMenu(menuName);
 			if (menu == null)
@@ -124,6 +129,16 @@ public class OpenCommand extends Command {
 	}
 	
 	@Override
+	public boolean hasWildcardPermission () {
+		return true;
+	}
+	
+	@Override
+	public Permission getWildcardPermission () {
+		return Permission.COMMAND_OPEN_ALL;
+	}
+	
+	@Override
 	public boolean showInHelp() {
 		return true;
 	}
@@ -132,5 +147,66 @@ public class OpenCommand extends Command {
 	public boolean isPlayerOnly() {
 		return true;
 	}
+	
+	@Override
+	public boolean hasPermission (Sender sender)
+	{
+		if (!sender.isPlayer()) {
+			return true;
+		}
+		
+		// /h wild card check
+		if (Permission.COMMAND_ALL.hasPermission(sender)) {
+			return true;
+		}
+		
+		// Specific command wild card check
+		if (hasWildcardPermission())
+		{
+			if (getWildcardPermission().hasPermission(sender)) {
+				return true;
+			}
+		}
+		
+		// Check for individual menu permissions
+		for (String menu : core.getDatabase().getMenus(false).keySet())
+		{
+			if (sender.hasPermission(getPermission().append(menu))) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
+	@Override
+	public boolean hasPermission (Sender sender, String arg)
+	{
+		if (!sender.isPlayer()) {
+			return true;
+		}
+		
+		// /h wild card check
+		if (Permission.COMMAND_ALL.hasPermission(sender)) {
+			return true;
+		}
+				
+		// Specific command wild card check
+		if (hasWildcardPermission())
+		{
+			if (getWildcardPermission().hasPermission(sender)) {
+				return true;
+			}
+		}
+		
+		if (arg != null && !arg.equals(""))
+		{
+			if (sender.hasPermission(getPermission().append(arg))) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 }

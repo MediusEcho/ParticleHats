@@ -34,13 +34,10 @@ public class EditCommand extends Command {
 			
 			menus.add("purchase");
 			
-			if (hasPermission(sender))
+			for (String menu : menus)
 			{
-				for (String menu : menus)
-				{
-					if (getWildcardPermission().hasPermission(sender) || sender.hasPermission(getPermission().append(menu))) {
-						result.add(menu);
-					}
+				if (hasPermission(sender, menu)) {
+					result.add(menu);
 				}
 			}
 			
@@ -173,15 +170,43 @@ public class EditCommand extends Command {
 			}
 		}
 		
-		// Regular permission check
-		if (getPermission().hasPermission(sender)) {
+		// Check for individual menu permissions
+		List<String> menus = new ArrayList<String>(core.getDatabase().getMenus(false).keySet());
+		menus.add("purchase");
+		
+		for (String menu : menus)
+		{
+			if (sender.hasPermission(getPermission().append(menu))) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean hasPermission (Sender sender, String arg)
+	{		
+		if (!sender.isPlayer()) {
 			return true;
 		}
 		
-		// Check for individual menu permissions
-		for (String menu : core.getDatabase().getMenus(false).keySet())
+		// /h wild card check
+		if (Permission.COMMAND_ALL.hasPermission(sender)) {
+			return true;
+		}
+		
+		// Specific command wild card check
+		if (hasWildcardPermission())
 		{
-			if (sender.hasPermission(getPermission().append(menu))) {
+			if (getWildcardPermission().hasPermission(sender)) {
+				return true;
+			}
+		}
+		
+		if (arg != null && !arg.equals(""))
+		{
+			if (sender.hasPermission(getPermission().append(arg))) {
 				return true;
 			}
 		}

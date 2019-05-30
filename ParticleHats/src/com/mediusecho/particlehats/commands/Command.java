@@ -64,7 +64,12 @@ public abstract class Command {
 			return false;
 		}
 		
-		if (!hasPermission(sender))
+		String argument = "";
+		if (args.size() >= 1) {
+			argument = args.get(0);
+		}
+		
+		if (!hasPermission(sender, argument))
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_NO_PERMISSION);
 			return false;
@@ -82,7 +87,7 @@ public abstract class Command {
 	 * @return
 	 */
 	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
-	{
+	{	
 		if (hasPermission(sender))
 		{
 			if (args.size() == 1)
@@ -217,7 +222,17 @@ public abstract class Command {
 	 * @param sender
 	 * @return
 	 */
-	public boolean hasPermission (Sender sender)
+	public boolean hasPermission (Sender sender) {
+		return hasPermission(sender, "");
+	}
+	
+	/**
+	 * Checks to see if the player has permission to execute this command
+	 * @param sender
+	 * @param arg
+	 * @return
+	 */
+	public boolean hasPermission (Sender sender, String arg)
 	{
 		if (!sender.isPlayer()) {
 			return true;
