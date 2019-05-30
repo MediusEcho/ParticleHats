@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,6 +35,7 @@ import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.properties.Group;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -81,7 +81,7 @@ public class MySQLDatabase implements Database {
 	
 	private Map<String, String> menuCache;
 	private Map<String, BufferedImage> imageCache;
-	private Map<String, String> groupCache;
+	private List<Group> groupCache;
 	private List<String> labelCache;
 	
 	private long lastMenuUpdate = 0L;
@@ -100,7 +100,7 @@ public class MySQLDatabase implements Database {
 	{				
 		menuCache = new HashMap<String, String>();
 		imageCache = new HashMap<String, BufferedImage>();
-		groupCache = new LinkedHashMap<String, String>();
+		groupCache = new ArrayList<Group>();
 		labelCache = new ArrayList<String>();
 		
 		legacy = ParticleHats.serverVersion < 13;
@@ -337,7 +337,7 @@ public class MySQLDatabase implements Database {
 	}
 	
 	@Override
-	public Map<String, String> getGroups (boolean forceUpdate)
+	public List<Group> getGroups (boolean forceUpdate)
 	{
 		if (forceUpdate || (System.currentTimeMillis() - lastGroupUpdate) > UPDATE_INTERVAL)
 		{
@@ -350,7 +350,7 @@ public class MySQLDatabase implements Database {
 				{
 					ResultSet set = statement.executeQuery();
 					while (set.next()) {
-						groupCache.put(set.getString("name"), set.getString("menu"));
+						groupCache.add(new Group(set.getString("name"), set.getString("menu"), set.getInt("weight")));
 					}
 				}
 			});

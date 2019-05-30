@@ -7,6 +7,7 @@ import java.util.List;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
+import com.mediusecho.particlehats.database.properties.Group;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.util.StringUtil;
@@ -31,7 +32,19 @@ public class AddGroupCommand extends Command {
 			weight = StringUtil.toInt(args.get(2), 0);
 		}
 		
-		if (core.getDatabase().getGroups(false).containsKey(groupName))
+		boolean found = false;
+		List<Group> groups = core.getDatabase().getGroups(false);
+		
+		for (Group g : groups)
+		{
+			if (g.getName().equals(groupName)) 
+			{
+				found = true;
+				break;
+			}
+		}
+		
+		if (found)
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_GROUP_EXISTS.replace("{1}", groupName));
 			return false;
@@ -48,7 +61,7 @@ public class AddGroupCommand extends Command {
 		switch (args.size())
 		{
 		case 1:
-			return Arrays.asList("group name");
+			return Arrays.asList("name");
 			
 		case 2:
 			return new ArrayList<String>(core.getDatabase().getMenus(false).keySet());

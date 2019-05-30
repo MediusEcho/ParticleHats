@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +27,7 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.properties.Group;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -241,21 +240,13 @@ public class YamlDatabase implements Database {
 	}
 	
 	@Override
-	public Map<String, String> getGroups(boolean forceUpdate) 
+	public List<Group> getGroups(boolean forceUpdate) 
 	{	
-		Collections.sort(groups, new Comparator<Group>()
-		{
-			@Override
-			public int compare (Group g1, Group g2) {
-				return Integer.compare(g1.getWeight(), g2.getWeight());
-			}
+		Collections.sort(groups, (g1, g2) -> {
+			return Integer.compare(g1.getWeight(), g2.getWeight());
 		});
 
-		Map<String, String> groupMap = new LinkedHashMap<String, String>();
-		for (Group g : groups) {
-			groupMap.put(g.getName(), g.getMenuName());
-		}
-		return groupMap;
+		return groups;
 	}
 	
 	@Override
@@ -672,7 +663,7 @@ public class YamlDatabase implements Database {
 		Group group = getGroup(groupName);
 		if (group != null)
 		{
-			group.setMenuName(defaultMenu);
+			group.setDefaultMenu(defaultMenu);
 			groupConfig.set(groupName + ".default-menu", defaultMenu);
 			
 			if (weight >= 0) 
@@ -1513,40 +1504,6 @@ public class YamlDatabase implements Database {
 		
 		public int getSlot () {
 			return slot;
-		}
-	}
-	
-	private class Group {
-		
-		private final String name;
-		private String menuName;
-		private int weight;
-		
-		public Group (String name, String menuName, int weight)
-		{
-			this.name = name;
-			this.menuName = menuName;
-			this.weight = weight;
-		}
-		
-		public String getName () {
-			return name;
-		}
-		
-		public String getMenuName () {
-			return menuName;
-		}
-		
-		public void setMenuName (String menuName) {
-			this.menuName = menuName;
-		}
-		
-		public int getWeight () {
-			return weight;
-		}
-		
-		public void setWeight (int weight) {
-			this.weight = weight;
 		}
 	}
 }

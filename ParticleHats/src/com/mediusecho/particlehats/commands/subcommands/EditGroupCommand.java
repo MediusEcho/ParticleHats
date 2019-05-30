@@ -8,6 +8,7 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.properties.Group;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.util.StringUtil;
@@ -30,7 +31,19 @@ public class EditGroupCommand extends Command {
 		String groupName = args.get(0);
 		String menuName = args.get(1);
 		
-		if (!database.getGroups(false).containsKey(groupName))
+		boolean found = false;
+		List<Group> groups = core.getDatabase().getGroups(false);
+		
+		for (Group g : groups)
+		{
+			if (g.getName().equals(groupName)) 
+			{
+				found = true;
+				break;
+			}
+		}
+		
+		if (!found)
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_GROUP.replace("{1}", groupName));
 			return false;
@@ -58,7 +71,13 @@ public class EditGroupCommand extends Command {
 		switch (args.size())
 		{
 		case 1:
-			return new ArrayList<String>(core.getDatabase().getGroups(false).keySet());
+		{
+			List<String> groups = new ArrayList<String>();
+			for (Group g : core.getDatabase().getGroups(false)) {
+				groups.add(g.getName());
+			}
+			return groups;
+		}
 			
 		case 2:
 			return new ArrayList<String>(core.getDatabase().getMenus(false).keySet());

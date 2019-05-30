@@ -1,7 +1,6 @@
 package com.mediusecho.particlehats.listeners;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.properties.Group;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.permission.Permission;
@@ -55,12 +55,11 @@ public class InteractListener implements Listener {
 				
 				if (SettingsManager.MENU_OPEN_WITH_GROUP.getBoolean())
 				{
-					Map<String, String> groups = database.getGroups(true);
-					
-					for (Entry<String, String> entry : groups.entrySet())
+					List<Group> groups = database.getGroups(true);
+					for (Group g : groups)
 					{
-						if (player.hasPermission(Permission.GROUP.append(entry.getKey()))) {
-							menuName = entry.getValue();
+						if (player.hasPermission(Permission.GROUP.append(g.getName()))) {
+							menuName = g.getDefaultMenu();
 						}
 					}
 				}

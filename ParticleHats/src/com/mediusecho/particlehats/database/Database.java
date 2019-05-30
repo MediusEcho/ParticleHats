@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.mediusecho.particlehats.database.properties.Group;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
@@ -94,7 +95,7 @@ public interface Database {
 	 * @param forceUpdate
 	 * @return
 	 */
-	public Map<String, String> getGroups (boolean forceUpdate);
+	public List<Group> getGroups (boolean forceUpdate);
 	
 	/**
 	 * Checks to see if this label has already been used in the database

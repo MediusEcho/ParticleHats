@@ -1,11 +1,11 @@
 package com.mediusecho.particlehats.commands;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.properties.Group;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.permission.Permission;
@@ -29,13 +29,13 @@ public class MainCommand extends Command {
 				return false;
 			}
 			
-			Map<String, String> groups = core.getDatabase().getGroups(true);
-			String defaultMenu =  SettingsManager.DEFAULT_MENU.getString();
+			List<Group> groups = core.getDatabase().getGroups(true);
+			String defaultMenu = SettingsManager.DEFAULT_MENU.getString();
 			
-			for (Entry<String, String> entry : groups.entrySet())
+			for (Group g : groups)
 			{
-				if (sender.hasPermission(Permission.GROUP.append(entry.getKey()))) {
-					defaultMenu = entry.getValue();
+				if (sender.hasPermission(Permission.GROUP.append(g.getName()))) {
+					defaultMenu = g.getDefaultMenu();
 				}
 			}
 			
