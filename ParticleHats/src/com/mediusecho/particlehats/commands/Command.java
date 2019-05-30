@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -254,25 +255,18 @@ public abstract class Command {
 		return false;
 	}
 	
-	public Player getPlayer (Sender sender, String arg)
+	public Player getPlayer (Sender sender, String selector)
 	{
 		CommandSender commandSender = sender.getCommandSender();
-		
-		switch (arg)
+		switch (selector)
 		{
 			case "@p":
 			{
 				Location location = null;
-				if (commandSender instanceof BlockCommandSender)
-				{
-					BlockCommandSender blockSender = (BlockCommandSender)commandSender;
-					location = blockSender.getBlock().getLocation();
-				}
-				
-				else if (commandSender instanceof Player)
-				{
-					Player player = (Player)commandSender;
-					location = player.getLocation();
+				if (sender.isPlayer()) {
+					location = sender.getPlayer().getLocation();
+				} else if (commandSender instanceof BlockCommandSender) {
+					location = ((BlockCommandSender)commandSender).getBlock().getLocation();
 				}
 				
 				if (location != null) {
@@ -280,9 +274,20 @@ public abstract class Command {
 				}
 			}
 			break;
+			
+			case "@r":
+			{
+				Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+				Optional<? extends Player> player = players.stream().skip((int) (players.size() * Math.random())).findFirst();
+				
+				if (player.isPresent()) {
+					return player.get();
+				}
+			}
+			break;
 		}
 		
-		return Bukkit.getPlayer(arg);
+		return Bukkit.getPlayer(selector);
 	}
 	
 	private Player getNearestPlayer (Location location)
