@@ -56,6 +56,7 @@ public class ParticleHats extends JavaPlugin {
 	// TODO: ItemStack particle items don't completely despawn in 1.8
 	// TODO: Cant show overequipped message inside editor
 	// TODO: Check equipped particle saving for yaml
+	// TODO: Add default group for mysql
 	
 	public static ParticleHats instance;
 	public static int serverVersion;
