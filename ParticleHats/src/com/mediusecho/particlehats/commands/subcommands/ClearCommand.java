@@ -57,6 +57,13 @@ public class ClearCommand extends Command {
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					players.add(p.getName());
 				}
+				
+				if (Permission.COMMAND_SELECTORS.hasPermission(sender))
+				{
+					players.add("@p");
+					players.add("@r");
+				}
+				
 				return players;
 			}
 		}

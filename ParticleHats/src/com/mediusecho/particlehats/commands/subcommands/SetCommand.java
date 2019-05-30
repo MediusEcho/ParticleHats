@@ -102,8 +102,11 @@ public class SetCommand extends Command {
 					players.add(p.getName());
 				}
 				
-				players.add("@p");
-				players.add("@r");
+				if (Permission.COMMAND_SELECTORS.hasPermission(sender))
+				{
+					players.add("@p");
+					players.add("@r");
+				}
 				
 				return players;
 			}

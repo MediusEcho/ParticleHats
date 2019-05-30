@@ -258,33 +258,36 @@ public abstract class Command {
 	public Player getPlayer (Sender sender, String selector)
 	{
 		CommandSender commandSender = sender.getCommandSender();
-		switch (selector)
+		if (Permission.COMMAND_SELECTORS.hasPermission(sender))
 		{
-			case "@p":
+			switch (selector)
 			{
-				Location location = null;
-				if (sender.isPlayer()) {
-					location = sender.getPlayer().getLocation();
-				} else if (commandSender instanceof BlockCommandSender) {
-					location = ((BlockCommandSender)commandSender).getBlock().getLocation();
+				case "@p":
+				{
+					Location location = null;
+					if (sender.isPlayer()) {
+						location = sender.getPlayer().getLocation();
+					} else if (commandSender instanceof BlockCommandSender) {
+						location = ((BlockCommandSender)commandSender).getBlock().getLocation();
+					}
+					
+					if (location != null) {
+						return getNearestPlayer(location);
+					}
 				}
+				break;
 				
-				if (location != null) {
-					return getNearestPlayer(location);
+				case "@r":
+				{
+					Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+					Optional<? extends Player> player = players.stream().skip((int) (players.size() * Math.random())).findFirst();
+					
+					if (player.isPresent()) {
+						return player.get();
+					}
 				}
+				break;
 			}
-			break;
-			
-			case "@r":
-			{
-				Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-				Optional<? extends Player> player = players.stream().skip((int) (players.size() * Math.random())).findFirst();
-				
-				if (player.isPresent()) {
-					return player.get();
-				}
-			}
-			break;
 		}
 		
 		return Bukkit.getPlayer(selector);

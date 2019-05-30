@@ -35,6 +35,7 @@ public enum Permission {
 	COMMAND_TYPE_REMOVE   ("command.type.remove"),
 	COMMAND_TYPE_ALL      ("command.type.*"),
 	COMMAND_IMPORT        ("command.import"),
+	COMMAND_SELECTORS     ("command.selectors", "command.*"),
 	
 	WORLD     ("world"),
 	WORLD_ALL ("world.all"),
