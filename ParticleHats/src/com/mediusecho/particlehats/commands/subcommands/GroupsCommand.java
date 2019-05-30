@@ -18,12 +18,13 @@ public class GroupsCommand extends Command {
 		register(new AddGroupCommand());
 		register(new DeleteGroupCommand());
 		register(new EditGroupCommand());
+		register(new GroupInfoCommand());
 	}
 	
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
-		if (args.size() > 1)
+		if (args.size() > 0)
 		{	
 			String argument = args.get(0);
 			if (subCommands.containsKey(argument))
