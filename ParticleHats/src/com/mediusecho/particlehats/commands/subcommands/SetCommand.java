@@ -28,7 +28,7 @@ public class SetCommand extends Command {
 			return false;
 		}
 		
-		Player player = getPlayer(sender, args.get(0));//Bukkit.getPlayer(args.get(0));
+		Player player = getPlayer(sender, args.get(0));
 		if (player == null)
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_PLAYER.getValue().replace("{1}", args.get(0)));
