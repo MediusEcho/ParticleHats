@@ -1421,7 +1421,7 @@ public class MySQLDatabase implements Database {
 		{
 			statement.setString(1, menuName); // Name
 			statement.setString(2, title);
-			statement.setInt(3, 6);
+			statement.setInt(3, rows);
 			statement.setString(4, null);
 			
 			if (statement.executeUpdate() > 0)
