@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.ui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map.Entry;
 
 import org.bukkit.Material;
