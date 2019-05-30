@@ -789,22 +789,25 @@ public class MySQLDatabase implements Database {
 					deleteStatement.executeUpdate();
 				}
 				
-				String insertQuery = "INSERT INTO " + Table.EQUIPPED.getFormat() + " VALUES(?,?,?,?)";
-				try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery))
+				if (hats.size() > 0)
 				{
-					for (Hat hat : hats)
+					String insertQuery = "INSERT INTO " + Table.EQUIPPED.getFormat() + " VALUES(?,?,?,?)";
+					try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery))
 					{
-						if (hat.isPermanent() && !hat.getMenu().equals(""))
+						for (Hat hat : hats)
 						{
-							insertStatement.setString(1, uid);
-							insertStatement.setString(2, hat.getMenu());
-							insertStatement.setInt(3, hat.getSlot());
-							insertStatement.setBoolean(4, hat.isHidden());
-							insertStatement.addBatch();
+							if (hat.isPermanent() && !hat.getMenu().equals(""))
+							{
+								insertStatement.setString(1, uid);
+								insertStatement.setString(2, hat.getMenu());
+								insertStatement.setInt(3, hat.getSlot());
+								insertStatement.setBoolean(4, hat.isHidden());
+								insertStatement.addBatch();
+							}
 						}
+						
+						insertStatement.executeBatch();
 					}
-					
-					insertStatement.executeBatch();
 				}
 			});
 		});

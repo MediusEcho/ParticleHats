@@ -84,11 +84,8 @@ public class ConnectionListener implements Listener {
 		PlayerState playerState = core.getPlayerState(id);
 		List<Hat> activeHats = playerState.getActiveHats();
 		
-		if (!activeHats.isEmpty()) 
-		{
-			core.getDatabase().savePlayerEquippedHats(id, new ArrayList<Hat>(activeHats));
-			playerState.clearActiveHats();
-		}
+		core.getDatabase().savePlayerEquippedHats(id, new ArrayList<Hat>(activeHats));
+		playerState.clearActiveHats();
 		
 		core.removePlayerState(id);
 	}
