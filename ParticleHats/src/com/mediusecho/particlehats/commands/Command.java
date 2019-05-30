@@ -104,13 +104,21 @@ public abstract class Command {
 			
 			else
 			{
-				String cmd = args.get(0);
+				String cmd = args.get(0);				
 				if (subCommands.containsKey(cmd))
 				{
 					args.remove(0);
-					return subCommands.get(cmd).tabCompelete(core, sender, label, args);
+					return subCommands.get(cmd).onTabComplete(core, sender, label, args);
 				}
 			}
+		}
+		return Arrays.asList("");
+	}
+	
+	public List<String> onTabComplete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
+	{
+		if (hasPermission(sender)) {
+			return tabComplete(core, sender, label, args);
 		}
 		return Arrays.asList("");
 	}
