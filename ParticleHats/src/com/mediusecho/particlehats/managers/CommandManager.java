@@ -74,7 +74,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	{
 		Sender sender = new Sender(commandSender);
 		
-		List<String> arguments = mainCommand.tabCompelete(core, sender, label, new ArrayList<String>(Arrays.asList(args)));
+		List<String> arguments = mainCommand.onTabComplete(core, sender, label, new ArrayList<String>(Arrays.asList(args)));
 		String currentCommand = args[args.length - 1];
 		
 		return sortCommandSuggestions(arguments, currentCommand);
