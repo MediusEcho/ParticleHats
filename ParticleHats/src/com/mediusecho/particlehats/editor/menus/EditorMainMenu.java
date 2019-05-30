@@ -15,6 +15,7 @@ import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenu;
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
@@ -266,6 +267,13 @@ public class EditorMainMenu extends EditorMenu {
 		ItemStack equipItem = ItemUtil.createItem(Material.DIAMOND_HELMET, Message.EDITOR_MISC_EQUIP, Message.EDITOR_MAIN_MENU_EQUIP_DESCRIPTION);
 		setButton(equipItemSlot, equipItem, (event, slot) ->
 		{
+			// Stop if the player has more than the maximum allowed hats
+			if (!menuBuilder.getOwnerState().canEquip())
+			{
+				owner.sendMessage(Message.HAT_EQUIPPED_OVERFLOW.replace("{1}", Integer.toString(SettingsManager.MAXIMUM_HAT_LIMIT.getInt())));
+				return EditorClickType.NEGATIVE;
+			}
+			
 			Hat clone;
 			
 			if (event.isShiftClick()) {
