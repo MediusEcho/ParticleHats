@@ -61,7 +61,7 @@ public class GroupsCommand extends Command {
 				if (subCommand.hasPermission(sender))
 				{
 					args.remove(0);
-					return subCommand.tabCompelete(core, sender, label, args);
+					return subCommand.onTabComplete(core, sender, label, args);
 				}
 			}
 		}

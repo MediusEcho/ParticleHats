@@ -59,7 +59,7 @@ public class TypeCommand extends Command {
 				if (sender.hasPermission(subCommand.getPermission()))
 				{
 					args.remove(0);
-					return subCommand.tabCompelete(core, sender, label, args);
+					return subCommand.onTabComplete(core, sender, label, args);
 				}
 			}
 		}
