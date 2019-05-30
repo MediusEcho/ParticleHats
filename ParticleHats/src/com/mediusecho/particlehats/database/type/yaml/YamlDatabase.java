@@ -555,6 +555,8 @@ public class YamlDatabase implements Database {
 		CustomConfig playerConfig = getPlayerConfig(id);
 		
 		List<String> equippedHats = playerConfig.getConfig().getStringList("equipped-hats");
+		equippedHats.clear();
+		
 		for (Hat hat : hats) {
 			equippedHats.add(hat.getMenu() + ":" + hat.getSlot());
 		}
