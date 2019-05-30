@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.ParticleHats;
@@ -16,7 +15,7 @@ public class ClearPlayerCommand extends Command {
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
-		Player player = Bukkit.getPlayer(args.get(0));
+		Player player = getPlayer(sender, args.get(0));
 		if (player == null)
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_PLAYER.getValue().replace("{1}", args.get(0)));
