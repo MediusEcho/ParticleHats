@@ -28,7 +28,7 @@ public class SetCommand extends Command {
 			return false;
 		}
 		
-		Player player = Bukkit.getPlayer(args.get(0));
+		Player player = getPlayer(sender, args.get(0));//Bukkit.getPlayer(args.get(0));
 		if (player == null)
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_PLAYER.getValue().replace("{1}", args.get(0)));
@@ -81,7 +81,7 @@ public class SetCommand extends Command {
 		}
 		
 		hat.setPermanent(permanent);
-		core.getParticleManager().equipHat(player.getUniqueId(), hat);
+		core.getParticleManager().equipHat(player.getUniqueId(), hat, false);
 		
 		if (tellPlayer) {
 			player.sendMessage(Message.COMMAND_SET_SUCCESS.getValue().replace("{1}", hat.getDisplayName()));
@@ -101,6 +101,8 @@ public class SetCommand extends Command {
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					players.add(p.getName());
 				}
+				players.add("@p");
+				
 				return players;
 			}
 			
