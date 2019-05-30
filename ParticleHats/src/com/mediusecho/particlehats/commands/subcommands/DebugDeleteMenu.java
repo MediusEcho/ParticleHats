@@ -12,7 +12,7 @@ import com.mediusecho.particlehats.permission.Permission;
 public class DebugDeleteMenu extends Command {
 
 	@Override
-	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabComplete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		return new ArrayList<String>(core.getDatabase().getMenus(false).keySet());
 	}

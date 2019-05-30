@@ -66,7 +66,7 @@ public class EditGroupCommand extends Command {
 	}
 	
 	@Override
-	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
+	public List<String> tabComplete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
 		switch (args.size())
 		{
