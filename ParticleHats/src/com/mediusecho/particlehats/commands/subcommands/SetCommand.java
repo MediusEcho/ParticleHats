@@ -101,7 +101,9 @@ public class SetCommand extends Command {
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					players.add(p.getName());
 				}
+				
 				players.add("@p");
+				players.add("@r");
 				
 				return players;
 			}
