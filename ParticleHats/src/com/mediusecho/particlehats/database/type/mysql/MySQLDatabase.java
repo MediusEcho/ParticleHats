@@ -402,8 +402,21 @@ public class MySQLDatabase implements Database {
 					int slot = set.getInt("slot");
 					
 					Hat hat = new Hat();
-					loadHat(menuName, slot, hat);
-					
+					String hatQuery = "SELECT * FROM " + Table.ITEMS.format(menuName) + " WHERE slot = ?";
+					try (PreparedStatement hatStatement = connection.prepareStatement(hatQuery))
+					{
+						hatStatement.setInt(1, slot);
+						ResultSet hatSet = hatStatement.executeQuery();
+						while (hatSet.next())
+						{
+							loadHat(connection, hatSet, hat, menuName);
+							
+							ItemStack item = hat.getItem();
+							ItemUtil.setItemName(item, hat.getDisplayName());
+							loadMetaData(connection, menuName, hat, item);
+						}
+					}
+							
 					return hat;
 				}
 				return null;
