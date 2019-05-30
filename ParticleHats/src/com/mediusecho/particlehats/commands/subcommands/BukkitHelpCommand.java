@@ -1,9 +1,7 @@
 package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -93,15 +91,6 @@ public class BukkitHelpCommand extends Command {
 		}
 		
 		return true;
-	}
-	
-	@Override
-	public List<String> tabCompelete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
-	{
-		if (args.size() == 1) {
-			return Arrays.asList("page");
-		}
-		return Arrays.asList("");
 	}
 
 	@Override
