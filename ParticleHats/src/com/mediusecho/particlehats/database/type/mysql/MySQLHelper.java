@@ -159,6 +159,54 @@ public class MySQLHelper {
 						imageInsertStatement.executeBatch();
 					}
 				}
+				
+				if (SettingsManager.LOAD_INCLUDED_MENUS.getBoolean())
+				{
+					String menuQuery = "SELECT COUNT(*) AS count FROM " + Table.MENUS.getFormat() + " WHERE name = ?";
+					try (PreparedStatement menuStatement = connection.prepareStatement(menuQuery))
+					{
+						menuStatement.setString(1, "particles");
+						ResultSet set = menuStatement.executeQuery();
+						
+						while (set.next())
+						{
+							// Make sure this menu doesn't exist
+							if (set.getInt("count") == 0)
+							{
+								// Create a temporary .yml file and import it as 'particles.yml'
+								// Then delete it
+								
+								File tempFolder = new File(core.getDataFolder() + File.separator + "temp");
+								if (!tempFolder.exists()) {
+									tempFolder.mkdirs();
+								}
+								
+								InputStream particleStream = ResourceUtil.getMostCompatibleParticlesMenu();
+								if (particleStream != null)
+								{
+									File particlesFile = new File(core.getDataFolder() + File.separator + "temp" + File.separator + "particles.yml");
+									try
+									{
+										ResourceUtil.copyFile(particleStream, particlesFile);
+										CustomConfig menuConfig = new CustomConfig(core, "temp", "particles.yml", false);
+										
+										if (menuConfig != null) 
+										{
+											database.importMenu(menuConfig, connection);
+											
+											menuConfig.delete();
+											tempFolder.delete();
+										}
+									}
+									
+									catch (IOException e) {
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					}
+				}
 			});
 		});
 	}
