@@ -23,20 +23,6 @@ public class StringUtil {
 	private static final String newLineCharacter = "/n";
 	private static final Map<String, Pattern> patternCache = new HashMap<String, Pattern>();
 	
-	public static final String PRICE_REGEX    = "%price%";
-	public static final String CURRENCY_REGEX = "%currency%";
-	public static final String TYPE_REGEX     = "%type%";
-	public static final String LOCATION_REGEX = "%location%";
-	public static final String MODE_REGEX     = "%mode%";
-	public static final String SOUND_REGEX    = "%sound%";
-	public static final String POTION_REGEX   = "%potion%";
-	
-	public static final String PRICE_REGEX_LEGACY    = "{PRICE}";
-	public static final String CURRENCY_REGEX_LEGACY = "{CURRENCY}";
-	public static final String TYPE_REGEX_LEGACY     = "{TYPE}";
-	public static final String LOCATION_REGEX_LEGACY = "{LOCATION}";
-	public static final String MODE_REGEX_LEGACY     = "{MODE}";
-	
 	static
 	{
 		romanNumerals.put(40, "XL");
