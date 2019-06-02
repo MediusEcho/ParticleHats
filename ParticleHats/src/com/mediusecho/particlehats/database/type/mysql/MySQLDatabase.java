@@ -1545,7 +1545,7 @@ public class MySQLDatabase implements Database {
 		if (legacy) {
 			hat.setItem(ItemUtil.createItem(material, set.getShort("durability")));
 		} else {
-			hat.setItem(new ItemStack(material));
+			hat.setItem(ItemUtil.createItem(material, 1));
 		}
 		
 		String potionName = set.getString("potion");
