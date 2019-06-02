@@ -129,4 +129,17 @@ public class ResourceUtil {
 			}
 		}
 	}
+	
+	public static InputStream getMostCompatibleParticlesMenu ()
+	{
+		String menuName = "menus/particles_" + ParticleHats.serverVersion + ".yml";
+		InputStream particleStream = core.getResource(menuName);
+		
+		// Default to the most compatible menu
+		if (particleStream == null) {
+			particleStream = core.getResource("menus/particles_8.yml");
+		}
+		
+		return particleStream;
+	}
 }
