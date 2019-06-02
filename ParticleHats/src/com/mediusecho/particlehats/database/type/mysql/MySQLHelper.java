@@ -32,9 +32,6 @@ public class MySQLHelper {
 	private final MySQLDatabase database;
 	private int menuTableVersion = 1;
 	
-	private double equippedTableVersion = 1.0;
-	private double imagesTableVersion = 1.0;
-	
 	public MySQLHelper (final MySQLDatabase database)
 	{
 		this.database = database;
@@ -117,7 +114,7 @@ public class MySQLHelper {
 					for (TableType type : TableType.values())
 					{
 						verStatement.setString(1, type.getValue());
-						verStatement.setDouble(2, 1.0);
+						verStatement.setDouble(2, type.getVersion());
 						verStatement.addBatch();
 					}
 					

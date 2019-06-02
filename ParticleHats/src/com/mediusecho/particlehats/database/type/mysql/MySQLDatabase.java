@@ -2113,24 +2113,30 @@ public class MySQLDatabase implements Database {
 	
 	public enum TableType
 	{
-		MENU      ("menus"),
-		ITEMS     ("items"),
-		META      ("meta"),
-		NODES     ("nodes"),
-		PARTICLES ("particles"),
-		IMAGES    ("images"),
-		EQUIPPED  ("equipped"),
-		PURCHASED ("purchased");
+		MENU      ("menus", 1.0),
+		ITEMS     ("items", 1.0),
+		META      ("meta", 1.0),
+		NODES     ("nodes", 1.0),
+		PARTICLES ("particles", 1.0),
+		IMAGES    ("images", 1.0),
+		EQUIPPED  ("equipped", 1.0),
+		PURCHASED ("purchased", 1.0);
 		
 		private final String value;
+		private final double version;
 		
-		private TableType (final String value)
+		private TableType (final String value, final double version)
 		{
 			this.value = value;
+			this.version = version;
 		}
 		
 		public String getValue () {
 			return value;
+		}
+		
+		public double getVersion () {
+			return version;
 		}
 	}
 
