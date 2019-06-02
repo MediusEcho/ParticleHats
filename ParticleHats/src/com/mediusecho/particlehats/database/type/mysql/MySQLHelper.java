@@ -3,11 +3,14 @@ package com.mediusecho.particlehats.database.type.mysql;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -16,11 +19,13 @@ import javax.imageio.ImageIO;
 import org.bukkit.Material;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.Table;
 import com.mediusecho.particlehats.database.type.mysql.MySQLDatabase.TableType;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
+import com.mediusecho.particlehats.util.ResourceUtil;
 
 public class MySQLHelper {
 
@@ -45,72 +50,65 @@ public class MySQLHelper {
 		{
 			database.connect((connection) ->
 			{
-				String versionTable = "CREATE TABLE IF NOT EXISTS " + Table.VERSION.getFormat() + "("
-						+ "type VARCHAR(32) PRIMARY KEY,"
-						+ "version DECIMAL(4,2)"
-						+ ")";
-				try (PreparedStatement versionStatement = connection.prepareStatement(versionTable)) {
-					versionStatement.execute();
-				}
-				
-				String menuTable = "CREATE TABLE IF NOT EXISTS " + Table.MENUS.getFormat() + " ("
-						+ "name VARCHAR(128) PRIMARY KEY,"
-						+ "title VARCHAR(40) NOT NULL DEFAULT '',"
-						+ "size TINYINT(3) NOT NULL DEFAULT 6,"
-						+ "alias VARCHAR(64)"
-						+ ")";
-				try (PreparedStatement menuStatement = connection.prepareStatement(menuTable)) {
-					menuStatement.execute();
-				}
-				
-				String groupTable = "CREATE TABLE IF NOT EXISTS " + Table.GROUPS.getFormat() + " ("
-						+ "name VARCHAR(128) PRIMARY KEY,"
-						+ "menu VARCHAR(128) NOT NULL,"
-						+ "weight INT NOT NULL"
-						+ ")";
-				try (PreparedStatement groupStatement = connection.prepareStatement(groupTable)) 
+				try (Statement initStatement = connection.createStatement())
 				{
-					groupStatement.execute();
+					// Version Table
+					String versionTable = "CREATE TABLE IF NOT EXISTS " + Table.VERSION.getFormat() + "("
+							+ "type VARCHAR(32) PRIMARY KEY,"
+							+ "version DECIMAL(4,2)"
+							+ ")";
+					initStatement.addBatch(versionTable);
 					
-					String defaultGroupQuery = "INSERT IGNORE INTO " + Table.GROUPS.getFormat() + " VALUES (?,?,?)";
-					try (PreparedStatement defaultGroupStatement = connection.prepareStatement(defaultGroupQuery))
-					{
-						defaultGroupStatement.setString(1, "default");
-						defaultGroupStatement.setString(2, "particles");
-						defaultGroupStatement.setInt(3, 0);
-						
-						defaultGroupStatement.execute();
-					}
-				}
-				
-				String imageTable = "CREATE TABLE IF NOT EXISTS " + Table.IMAGES.getFormat() + "("
-						+ "name VARCHAR(64) PRIMARY KEY,"
-						+ "image BLOB"
-						+ ")";
-				try (PreparedStatement imageStatement = connection.prepareStatement(imageTable)) {
-					imageStatement.execute();
-				}
-				
-				String equippedQuery = "CREATE TABLE IF NOT EXISTS " + Table.EQUIPPED.getFormat() + " ("
-						+ "id VARCHAR(36),"
-						+ "name VARCHAR(128),"
-						+ "slot TINYINT,"
-						+ "hidden BOOLEAN,"
-						+ "PRIMARY KEY(id, name, slot)"
-						+ ")";
-				try (PreparedStatement equippedStatement = connection.prepareStatement(equippedQuery)) {
-					equippedStatement.execute();
-				}
-				
-				String purchasedQuery = "CREATE TABLE IF NOT EXISTS " + Table.PURCHASED.getFormat() + " ("
-						+ "id VARCHAR(36),"
-						+ "name VARCHAR(128),"
-						+ "slot TINYINT,"
-						+ "PRIMARY KEY(id, name, slot)"
-						+ ")";
-				try (PreparedStatement purchasedStatement = connection.prepareStatement(purchasedQuery)) {
-					purchasedStatement.execute();
-				}
+					// Menus Table
+					String menuTable = "CREATE TABLE IF NOT EXISTS " + Table.MENUS.getFormat() + " ("
+							+ "name VARCHAR(128) PRIMARY KEY,"
+							+ "title VARCHAR(40) NOT NULL DEFAULT ''," // CHARACTER SET utf8
+							+ "size TINYINT(3) NOT NULL DEFAULT 6,"
+							+ "alias VARCHAR(64)"
+							+ ")";
+					initStatement.addBatch(menuTable);
+					
+					// Groups Table
+					String groupTable = "CREATE TABLE IF NOT EXISTS " + Table.GROUPS.getFormat() + " ("
+							+ "name VARCHAR(128) PRIMARY KEY,"
+							+ "menu VARCHAR(128) NOT NULL,"
+							+ "weight INT NOT NULL"
+							+ ")";
+					initStatement.addBatch(groupTable);
+					
+					// Default Group Data
+					String defaultGroupQuery = "INSERT IGNORE INTO " + Table.GROUPS.getFormat() + " VALUES ('default', 'particles', 0)";
+					initStatement.addBatch(defaultGroupQuery);
+					
+					// Images Table
+					String imageTable = "CREATE TABLE IF NOT EXISTS " + Table.IMAGES.getFormat() + "("
+							+ "name VARCHAR(64) PRIMARY KEY,"
+							+ "image BLOB"
+							+ ")";
+					initStatement.addBatch(imageTable);
+					
+					// Equipped Table
+					String equippedTable = "CREATE TABLE IF NOT EXISTS " + Table.EQUIPPED.getFormat() + " ("
+							+ "id VARCHAR(36),"
+							+ "name VARCHAR(128),"
+							+ "slot TINYINT,"
+							+ "hidden BOOLEAN,"
+							+ "PRIMARY KEY(id, name, slot)"
+							+ ")";
+					initStatement.addBatch(equippedTable);
+					
+					// Purchases Table
+					String purchasedTable = "CREATE TABLE IF NOT EXISTS " + Table.PURCHASED.getFormat() + " ("
+							+ "id VARCHAR(36),"
+							+ "name VARCHAR(128),"
+							+ "slot TINYINT,"
+							+ "PRIMARY KEY(id, name, slot)"
+							+ ")";
+					initStatement.addBatch(purchasedTable);
+					
+					// Execute
+					initStatement.executeBatch();
+				}				
 				
 				// Insert our versions
 				String versionQuery = "INSERT IGNORE INTO " + Table.VERSION.getFormat() + " VALUES (?,?)";
