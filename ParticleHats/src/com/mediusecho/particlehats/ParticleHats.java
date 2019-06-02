@@ -52,11 +52,8 @@ public class ParticleHats extends JavaPlugin {
 	// Store fixed particles in a menu that is separate from player menus
 	// Players can sort by nearest and teleport to the particle
 	
-	// TODO: Include particles.yml in MySQL database
 	// TODO: ItemStack particle items don't completely despawn in 1.8
-	// TODO: Cant show overequipped message inside editor
-	// TODO: Check equipped particle saving for yaml
-	// TODO: Add default group for mysql
+	// TODO: /h open test [player]
 	
 	public static ParticleHats instance;
 	public static int serverVersion;
