@@ -82,6 +82,7 @@ public class Hat {
 	
 	private List<ParticleTag> tags;
 	private List<Hat> nodes;
+	private Hat parent;
 	
 	private PotionEffect potion;
 	
@@ -975,8 +976,12 @@ public class Hat {
 	 * Get all ParticleTags that belong to this hat
 	 * @return
 	 */
-	public List<ParticleTag> getTags () {
-		return tags;
+	public List<ParticleTag> getTags () 
+	{
+		if (parent == null) {
+			return tags;
+		}
+		return parent.getTags();
 	}
 	
 	/**
@@ -1055,6 +1060,14 @@ public class Hat {
 	 */
 	public int getNodeCount () {
 		return nodes.size();
+	}
+	
+	/**
+	 * Set this hat's parent hat
+	 * @param parent
+	 */
+	public void setParent (Hat parent) {
+		this.parent = parent;
 	}
 	
 	/**
@@ -1662,6 +1675,7 @@ public class Hat {
 		clone.randomOffset = randomOffset.clone();
 		clone.angle = angle.clone();
 		clone.scale = scale;
+		clone.parent = parent;
 		
 		for (int i = 0; i < type.getParticlesSupported(); i++) {
 			clone.setParticleData(i, getParticleData(i).clone());
