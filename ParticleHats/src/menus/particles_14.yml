@@ -310,7 +310,7 @@ items:
       '1':
         particle: REDSTONE
         color: 16777215
-        size: 0.2
+        size: 0.3
   '24':
     name: '&bBubble Wings'
     id: CYAN_DYE
