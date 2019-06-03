@@ -22,10 +22,15 @@ public class OpenCommand extends Command {
 	private final ParticleHats core;
 	private final Database database;
 	
+	private OpenPlayerCommand openPlayerCommand;
+	
 	public OpenCommand (final ParticleHats core)
 	{			
 		this.core = core;
 		database = core.getDatabase();
+		
+		openPlayerCommand = new OpenPlayerCommand(this);
+		register(openPlayerCommand);
 	}
 	
 	@Override
@@ -44,6 +49,10 @@ public class OpenCommand extends Command {
 			}
 			
 			return result;
+		}
+		
+		else if (args.size() == 2) {
+			return openPlayerCommand.onTabComplete(core, sender, label, args);
 		}
 		return Arrays.asList("");
 	}
@@ -86,7 +95,10 @@ public class OpenCommand extends Command {
 			
 			return true;
 		}
-		return false;
+		
+		else {
+			return openPlayerCommand.onCommand(core, sender, label, args);
+		}
 	}
 
 	@Override
