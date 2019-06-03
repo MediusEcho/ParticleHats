@@ -163,7 +163,7 @@ public class EditorColorMenu extends EditorMenu {
 			setButton(50, sizeItem, (event, slot) ->
 			{
 				double normal = event.isLeftClick() ? 0.1 : -0.1;
-				double shift = event.isShiftClick() ? 10 : 1;
+				double shift = event.isShiftClick() ? 0.1 : 1;
 				double modifier = normal * shift;
 				
 				ParticleData data = targetHat.getParticleData(particleIndex);
