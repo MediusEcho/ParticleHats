@@ -144,14 +144,14 @@ public class ParticleTask extends BukkitRunnable {
 		{
 			case ACTIVE:
 			{
-				displayHat(player, hat, checkNode);
+				displayHat(player, hat);
 				break;
 			}
 			
 			case WHEN_MOVING:
 			{
 				if (afkState == AFKState.ACTIVE) {
-					displayHat(player, hat, checkNode);
+					displayHat(player, hat);
 				}
 				break;
 			}
@@ -159,7 +159,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_AFK:
 			{
 				if (afkState == AFKState.AFK) {
-					displayHat(player, hat, checkNode);
+					displayHat(player, hat);
 				}
 				break;
 			}
@@ -167,7 +167,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_PEACEFUL:
 			{
 				if (pvpState == PVPState.PEACEFUL) {
-					displayHat(player, hat, checkNode);
+					displayHat(player, hat);
 				}
 				break;
 			}
@@ -175,7 +175,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_GLIDING:
 			{
 				if (player.isGliding()) {
-					displayHat(player, hat, checkNode);
+					displayHat(player, hat);
 				}
 				break;
 			}
@@ -183,7 +183,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_SPRINTING:
 			{
 				if (player.isSprinting()) {
-					displayHat(player, hat, checkNode);
+					displayHat(player, hat);
 				}
 				break;
 			}
@@ -191,7 +191,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_SWIMMING:
 			{
 				if (player.isSwimming()) {
-					displayHat(player, hat, checkNode);
+					displayHat(player, hat);
 				}
 				break;
 			}
@@ -199,7 +199,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_FLYING:
 			{
 				if (player.isFlying()) {
-					displayHat(player, hat, checkNode);
+					displayHat(player, hat);
 				}
 				break;
 			}
@@ -214,13 +214,13 @@ public class ParticleTask extends BukkitRunnable {
 		}
 	}
 
-	private void displayHat (Player player, Hat hat, boolean rootHat)
+	private void displayHat (Player player, Hat hat)
 	{
 		ParticleType type = hat.getType();
 		if (type != ParticleType.NONE)
 		{
 			// Continue if we're displaying a node, or if we can't use a tag
-			if (!rootHat || handleTags(player, hat, ticks))
+			if (handleTags(player, hat, ticks))
 			{
 				hat.displayType(ticks, player);
 				
@@ -254,7 +254,7 @@ public class ParticleTask extends BukkitRunnable {
 			return false;
 		}
 		
-		if (tags.contains(ParticleTag.ARMOUR_STAND))
+		if (tags.contains(ParticleTag.PICTURE_MODE))
 		{
 			displayToNearestEntity(player, hat, ticks, ArmorStand.class);
 			return false;
