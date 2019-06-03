@@ -1016,6 +1016,9 @@ public class MySQLDatabase implements Database {
 	}
 	
 	@Override
+	public void onLabelChange (String oldLabel, String newLabel, String menu, int slot) {}
+	
+	@Override
 	public void onReload () {}
 	
 	public void importMenu (Sender sender, CustomConfig menuConfig)

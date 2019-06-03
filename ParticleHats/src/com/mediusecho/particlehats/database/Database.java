@@ -270,6 +270,13 @@ public interface Database {
 	public boolean deleteImage (String imageName);
 	
 	/**
+	 * Handle label changes
+	 * @param oldLabel
+	 * @param newLabel
+	 */
+	public void onLabelChange (String oldLabel, String newLabel, String menu, int slot);
+	
+	/**
 	 * Reloads any important data in this database
 	 */
 	public void onReload ();

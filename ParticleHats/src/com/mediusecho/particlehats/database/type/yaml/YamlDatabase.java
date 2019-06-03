@@ -677,6 +677,30 @@ public class YamlDatabase implements Database {
 	{
 		return false;
 	}
+	
+	@Override
+	public void onLabelChange (String oldLabel, String newLabel, String menu, int slot)
+	{		
+		ParticleLabel label = null;
+		if (oldLabel != null && labels.containsKey(oldLabel))
+		{
+			label = labels.get(oldLabel);
+			labels.remove(oldLabel);
+		}
+		
+		if (label == null)
+		{
+			if (newLabel != null && menuExists(menu)) {
+				label = new ParticleLabel(menus.get(menu), slot);
+			}
+		}
+		
+		if (label != null && newLabel != null) 
+		{
+			ParticleHats.debug("adding label under: " + newLabel);
+			labels.put(newLabel, label);
+		}
+	}
 
 	@Override
 	public void onReload ()
