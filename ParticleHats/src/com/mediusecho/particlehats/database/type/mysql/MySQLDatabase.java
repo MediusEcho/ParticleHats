@@ -1491,9 +1491,12 @@ public class MySQLDatabase implements Database {
 						if (!playerState.hasPurchased(hat))
 						{
 							Player player = playerState.getOwner();
-							hat.setLocked(
-									!player.hasPermission(hat.getFullPermission()) && 
-									!player.hasPermission(Permission.PARTICLE_ALL.getPermission()));
+							if (hat.canBeLocked())
+							{
+								hat.setLocked(
+										!player.hasPermission(hat.getFullPermission()) && 
+										!player.hasPermission(Permission.PARTICLE_ALL.getPermission()));
+							}
 						}
 						
 						ItemStack item = hat.getItem();//ItemUtil.createItem(hat.getMaterial(), 1);
