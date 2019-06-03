@@ -8,7 +8,7 @@ public enum ParticleTag {
 	NONE ("", ""),
 	CUSTOM ("Custom", ""),
 	ARROWS ("arrow", "Arrows", "&8Particles follow the arrows you shoot"),
-	ARMOUR_STAND ("devtest", "Armour Stand", "&8Particles are equipped/n&8to the nearest Armour Stand");
+	PICTURE_MODE ("devtest", "Picture Mode", "&8Particles are equipped/n&8to the nearest Armour Stand");
 	
 	private final String name;
 	private final String legacy;
@@ -51,19 +51,16 @@ public enum ParticleTag {
 		return description;
 	}
 	
-	public static ParticleTag fromLegacy (String legacy)
-	{
-		if (legacyName.containsKey(legacy)) {
-			return legacyName.get(legacy);
-		}
-		return NONE;
-	}
-	
 	public static ParticleTag fromName (String name)
 	{
 		if (names.containsKey(name)) {
 			return names.get(name);
 		}
+		
+		if (legacyName.containsKey(name)) {
+			return legacyName.get(name);
+		}
+		
 		return NONE;
 	}
 }
