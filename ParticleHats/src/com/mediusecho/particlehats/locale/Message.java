@@ -73,6 +73,7 @@ public enum Message {
 	COMMAND_CREATE_DESCRIPTION ("Creates a new menu with the given name"),
 	COMMAND_CREATE_USAGE       ("/h create <menu name>"),
 	COMMAND_CREATE_SUCCESS     ("&aCreated menu {1}"),
+	COMMAND_CREATE_INVALID     ("&cInvalid menu name"),
 	
 	// Edit Command
 	COMMAND_EDIT_DESCRIPTION ("Opens a menu in the editor"),
@@ -86,6 +87,11 @@ public enum Message {
 	COMMAND_OPEN_DESCRIPTION ("Opens the selected menu"),
 	COMMAND_OPEN_USAGE       ("/h open <menu name>"),
 	COMMAND_OPEN_ERROR       ("&cCan't open menu '&7{1}&c' from command"),
+	
+	// Open Player Command
+	COMMAND_OPEN_PLAYER_DESCRIPTION ("Opens the selected menu for the target player"),
+	COMMAND_OPEN_PLAYER_USAGE       ("/h open <menu name> <player>"),
+	COMMAND_OPEN_PLAYER_EDITING     ("&c{1} can't open menus while editing"),
 	
 	// Particles Command
 	COMMAND_PARTICLE_DESCRIPTION ("Lets players manage their equipped particles"),

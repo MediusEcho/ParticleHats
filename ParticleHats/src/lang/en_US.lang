@@ -158,6 +158,13 @@ command_open_usage: "/h open <menu name>"
 # {1}: The name of the menu the player is trying to open
 command_open_error: "&cCan't open menu '&7{1}&c' from command"
 
+# Open Player Command
+command_open_player_description: "Opens the selected menu for the target player"
+command_open_player_usage: "/h open <menu name> <player>"
+
+# {1}: Name of the player
+command_open_player_editing: "&c{1} can't open menus while editing"
+
 # Particles Command
 command_particle_description: "Lets players manage their equipped particles"
 command_particle_usage: "/h particles"
