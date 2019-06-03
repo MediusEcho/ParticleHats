@@ -370,7 +370,7 @@ public class ParticleHats extends JavaPlugin {
 	public static void debug (Object obj) 
 	{
 		if (debugging) {
-			logger.log(Level.INFO, "[ParticleHats] " + obj.toString());
+			logger.log(Level.INFO, "[ParticleHats Debug] " + obj.toString());
 		}
 	}
 	
