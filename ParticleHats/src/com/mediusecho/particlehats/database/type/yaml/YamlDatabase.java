@@ -1423,6 +1423,7 @@ public class YamlDatabase implements Database {
 				node.setIndex(StringUtil.toInt(key, 1) - 1);
 				loadEssentialHatData(config, node, nodePath, menuName, slot);
 				
+				node.setParent(hat);
 				hat.addNode(node);
 			}
 		}

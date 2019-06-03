@@ -1742,6 +1742,7 @@ public class MySQLDatabase implements Database {
 					}
 				}
 				
+				node.setParent(hat);
 				node.clearPropertyChanges();
 				node.setLoaded(true);
 				hat.addNode(node);
