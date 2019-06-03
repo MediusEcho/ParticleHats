@@ -19,6 +19,7 @@ public class StringUtil {
 	//private final static char[] chars = new char[] {'~','`','!','@','#','$','%','^','&','*','(',')','_','-','=','+','[',']','{','}',';','\'','"',':',',','<','>','.','/','?','|','\\'};
 	private final static String[] chars = {"\\","^","$","{","}","[","]","(",")",".","*","+","?","|","<",">","-","&","%"};
 	private final static TreeMap<Integer, String> romanNumerals = new TreeMap<Integer, String>();
+	private final static String sanitizeRegex = "[\\@\\^\\$\\{\\}\\[\\]\\(\\)\\.\\,\\*\\+\\?\\|\\<\\>\\-\\&\\%\\#]";
 	
 	private static final String newLineCharacter = "/n";
 	private static final Map<String, Pattern> patternCache = new HashMap<String, Pattern>();
@@ -340,5 +341,9 @@ public class StringUtil {
 		String disSec = (seconds < 10 ? "0" : "") + seconds; // get seconds and add "0" before if lower than 10
 		
 		return disMinu + ":" + disSec; //get the whole time
+	}
+	
+	public static String sanitizeString (String s) {
+		return s.replaceAll(sanitizeRegex, "");
 	}
 }
