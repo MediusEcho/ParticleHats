@@ -110,19 +110,22 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		
 		List<String> matchingCommands = new ArrayList<String>();
-		commandLoop:
-		for (String s : commands)
+		if (commands != null)
 		{
-			for (int i = 0; i < s.length(); i++)
+			commandLoop:
+			for (String s : commands)
 			{
-				if (i < currentCommand.length())
+				for (int i = 0; i < s.length(); i++)
 				{
-					if (s.charAt(i) != currentCommand.charAt(i)) {
-						continue commandLoop;
+					if (i < currentCommand.length())
+					{
+						if (s.charAt(i) != currentCommand.charAt(i)) {
+							continue commandLoop;
+						}
 					}
 				}
+				matchingCommands.add(s);
 			}
-			matchingCommands.add(s);
 		}
 		return matchingCommands;
 	}
