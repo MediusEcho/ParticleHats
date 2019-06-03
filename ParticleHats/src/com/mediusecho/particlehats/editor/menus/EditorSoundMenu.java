@@ -202,9 +202,12 @@ public class EditorSoundMenu extends EditorMenu {
 		generateSoundMenu(entityMenus, entityPages, Message.EDITOR_SOUND_MENU_ENTITY_TITLE, 2);
 		
 		// Fill our menus with sound
-		populateSoundMenu(miscSounds, menus, CompatibleMaterial.MUSIC_DISC_CAT);
-		populateSoundMenu(blockSounds, blockMenus, CompatibleMaterial.MUSIC_DISC_BLOCKS);
-		populateSoundMenu(entitySounds, entityMenus, CompatibleMaterial.MUSIC_DISC_FAR);
+		int blocksSize = blockSounds.size();
+		int entitiesSize = entitySounds.size();
+		
+		populateSoundMenu(miscSounds, menus, CompatibleMaterial.MUSIC_DISC_CAT, blocksSize, entitiesSize);
+		populateSoundMenu(blockSounds, blockMenus, CompatibleMaterial.MUSIC_DISC_BLOCKS, blocksSize, entitiesSize);
+		populateSoundMenu(entitySounds, entityMenus, CompatibleMaterial.MUSIC_DISC_FAR, blocksSize, entitiesSize);
 		
 		// Setup buttons
 		setAction(49, (event, slot) ->
@@ -326,7 +329,7 @@ public class EditorSoundMenu extends EditorMenu {
 		}
 	}
 	
-	private void populateSoundMenu (List<Sound> sounds, Map<Integer, Inventory> menus, CompatibleMaterial disc)
+	private void populateSoundMenu (List<Sound> sounds, Map<Integer, Inventory> menus, CompatibleMaterial disc, int blockSoundSize, int entitySoundSize)
 	{
 		int index = 0;
 		int page = 0;
@@ -343,8 +346,18 @@ public class EditorSoundMenu extends EditorMenu {
 			if (targetHatSound != null && targetHatSound.equals(s)) {
 				ItemUtil.highlightItem(item);
 			}
+			
+			Inventory menu = menus.get(page);
+			menu.setItem(index, item);
 					
-			menus.get(page).setItem(index, item);
+			if (blockSoundSize == 0) {
+				menu.setItem(46, null);
+			}
+			
+			if (entitySoundSize == 0) {
+				menu.setItem(47, null);
+			}
+			
 			index++;
 			if (index % 45 == 0)
 			{
