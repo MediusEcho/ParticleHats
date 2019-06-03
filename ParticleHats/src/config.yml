@@ -119,6 +119,7 @@ menu:
   lock-hats-without-permission: false
   #
   # Shows the hats description when it is locked
+  # This only affects the "description" property, an items "permission-description" will still appear
   show-description-when-locked: false
   #
   locked-item:
