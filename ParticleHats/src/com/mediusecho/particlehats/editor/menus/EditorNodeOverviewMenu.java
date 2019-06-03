@@ -66,6 +66,7 @@ public class EditorNodeOverviewMenu extends EditorListMenu {
 			
 			node.setIndex(index);
 			node.setSlot(targetHat.getSlot());
+			node.setParent(targetHat);
 			nodes.add(node);
 			
 			String title = nodeTitle.replace("{1}", Integer.toString(size + 1));
