@@ -306,7 +306,7 @@ public class MySQLHelper {
 				+ "particle_id TINYINT,"
 				+ "color INT NOT NULL DEFAULT 16711680," // Red
 				+ "random BOOLEAN,"
-				+ "scale DECIMAL(3,1),"
+				+ "scale DECIMAL(4,2),"
 				+ "item_data VARCHAR(64),"
 				+ "block_data VARCHAR(64),"
 				+ "duration SMALLINT,"
