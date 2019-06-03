@@ -11,6 +11,7 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
+import com.mediusecho.particlehats.util.StringUtil;
 
 public class CreateCommand extends Command {
 	
@@ -27,7 +28,16 @@ public class CreateCommand extends Command {
 				return false;
 			}
 			
-			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
+			String unsanitizedMenuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
+			String menuName = StringUtil.sanitizeString(unsanitizedMenuName);
+			
+			if (menuName.isEmpty())
+			{
+				sender.sendMessage(Message.COMMAND_CREATE_INVALID);
+				return false;
+			}
+			
+			//String menuName = unfilteredMenuName.replaceAll("[^a-zA-Z0-9\\-\\_]", "");
 			Database database = core.getDatabase();
 			
 			// "purchase" is a reserved menu name, used for the plugin's purchase menu
