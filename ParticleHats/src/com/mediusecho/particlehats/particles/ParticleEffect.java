@@ -35,7 +35,7 @@ public enum ParticleEffect {
 	EXPLOSION_LARGE        (18, 1, -1, "largeexplode", Material.TNT),
 	EXPLOSION_NORMAL       (19, 0, -1, "explode", Material.TNT),
 	FALLING_DUST           (20, 46, 10, "fallingdust", Material.SAND, ParticleProperty.BLOCK_DATA),
-	FIREWORKS_SPARK        (21, 3, -1, "fireworksspark", CompatibleMaterial.FIREWORK_ROCKET),
+	FIREWORKS_SPARK        (21, 3, -1, "fireworksSpark", CompatibleMaterial.FIREWORK_ROCKET),
 	FLAME                  (22, 26, -1, "flame", Material.TORCH),
 	HEART                  (23, 34, -1, "heart", Material.REDSTONE_BLOCK),
 	ITEM_CRACK             (24, 36, -1, "iconcrack", Material.APPLE, ParticleProperty.ITEM_DATA),
