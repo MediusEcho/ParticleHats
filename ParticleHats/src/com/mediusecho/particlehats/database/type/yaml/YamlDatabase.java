@@ -120,17 +120,13 @@ public class YamlDatabase implements Database {
 			File particlesFile = new File(core.getDataFolder() + File.separator + "menus" + File.separator + "particles.yml");
 			if (!particlesFile.exists())
 			{
-				String menuName = "menus/particles_" + ParticleHats.serverVersion + ".yml";
-				InputStream particleStream = core.getResource(menuName);
-				
-				// Default to the most compatible menu
-				if (particleStream == null) {
-					particleStream = core.getResource("menus/particles_8.yml");
+				InputStream particleStream = ResourceUtil.getMostCompatibleParticlesMenu();
+				if (particleStream != null)
+				{
+					try {
+						ResourceUtil.copyFile(particleStream, particlesFile);
+					} catch (IOException e) {}
 				}
-
-				try {
-					ResourceUtil.copyFile(particleStream, particlesFile);
-				} catch (IOException e) {}
 			}
 		}
 		
