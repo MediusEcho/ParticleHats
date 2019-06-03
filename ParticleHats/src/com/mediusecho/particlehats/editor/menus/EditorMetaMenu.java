@@ -150,6 +150,7 @@ public class EditorMetaMenu extends EditorMenu {
 			
 			else if (event.isShiftRightClick())
 			{
+				core.getDatabase().onLabelChange(targetHat.getLabel(), null, null, -1);
 				targetHat.removeLabel();
 				EditorLore.updateLabelDescription(getItem(29), targetHat.getLabel());
 			}

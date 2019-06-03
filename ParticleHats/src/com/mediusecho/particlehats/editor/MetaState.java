@@ -152,6 +152,7 @@ public enum MetaState {
 			case HAT_LABEL:
 			{
 				String label = rawString.replace(" ", "_");
+				core.getDatabase().onLabelChange(targetHat.getLabel(), label, targetHat.getMenu(), targetHat.getSlot());
 				targetHat.setLabel(label);
 				reopenEditor(menuBuilder);
 			}
