@@ -140,6 +140,7 @@ command_create_usage: "/h create <menu name>"
 #
 # {1}: The name of the newly created menu
 command_create_success: "&aCreated menu {1}"
+command_create_invalid: "&cInvalid menu name"
 
 # Edit Command
 command_edit_description: "Opens the selected menu for editing"
@@ -1163,7 +1164,7 @@ editor_colour_menu_random_suffix: "Random"
 editor_colour_menu_random_description: "&8Give this particle random colours"
 
 # {1}: Particle size
-editor_colour_menu_size_description: "/n&8Set the size of these particles/n/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"
+editor_colour_menu_size_description: "/n&8Set the size of these particles/n/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 0.01"
 
 # Search Menu
 # {1=}: Search query

@@ -792,7 +792,7 @@ public enum Message {
 	EDITOR_COLOUR_MENU_B_DESCRIPTION      ("/n&8� R: &7{1}/n&8� G: &7{2}/n&e� B: {3}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1/n&3Shift Click to Adjust by 10"),
 	EDITOR_COLOUR_MENU_RANDOM_SUFFIX      ("Random"),
 	EDITOR_COLOUR_MENU_RANDOM_DESCRIPTION ("&8Give this particle random colours"),
-	EDITOR_COLOUR_MENU_SIZE_DESCRIPTION   ("/n&8Set the size of these particles/n/n&8� &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 1"),
+	EDITOR_COLOUR_MENU_SIZE_DESCRIPTION   ("/n&8Set the size of these particles/n/n&8� &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1/n&cShift Click to Adjust by 0.01"),
 
 	// Search Menu
 	EDITOR_SEARCH_MENU_TITLE ("Results for ({1=...}&r)"),
