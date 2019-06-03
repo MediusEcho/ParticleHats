@@ -59,8 +59,14 @@ public class OpenCommand extends Command {
 			return false;
 		}
 		
-		if (args.size() >= 1)
+		if (args.size() == 1)
 		{
+			if (!sender.isPlayer())
+			{
+				sender.sendMessage(Message.COMMAND_ERROR_PLAYER_ONLY);
+				return false;
+			}
+			
 			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
 			
 			if (playerState.isEditing()) 
@@ -69,29 +75,9 @@ public class OpenCommand extends Command {
 				return false;
 			}
 			
-			// Grab the name without any extensions
-			String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));
-			
-			if (menuName.equals("purchase")) 
-			{
-				sender.sendMessage(Message.COMMAND_OPEN_ERROR.replace("{1}", menuName));
+			Menu menu = getRequestedMenu(playerState, args.get(0), sender);
+			if (menu == null) {
 				return false;
-			}
-			
-			Menu menu = playerState.getOpenMenu(menuName);
-			if (menu == null)
-			{
-				ParticleHats.debug("cache didnt exist, loading menu " + menuName);
-				Database database = core.getDatabase();
-				MenuInventory inventory = database.loadInventory(menuName, core.getPlayerState(sender.getPlayerID()));
-				
-				if (inventory == null)
-				{
-					sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
-					return false;
-				}
-				
-				menu = new StaticMenu(core, sender.getPlayer(), inventory);
 			}
 			
 			playerState.setGuiState(GuiState.SWITCHING_MENU);
@@ -145,7 +131,7 @@ public class OpenCommand extends Command {
 
 	@Override
 	public boolean isPlayerOnly() {
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -209,4 +195,32 @@ public class OpenCommand extends Command {
 		return false;
 	}
 	
+	public Menu getRequestedMenu (PlayerState playerState, String requestedMenuName, Sender sender)
+	{
+		// Grab the name without any extensions
+		String menuName = (requestedMenuName.contains(".") ? requestedMenuName.split("\\.")[0] : requestedMenuName);
+		
+		if (menuName.equals("purchase")) 
+		{
+			sender.sendMessage(Message.COMMAND_OPEN_ERROR.replace("{1}", menuName));
+			return null;
+		}
+		
+		Menu menu = playerState.getOpenMenu(menuName);
+		if (menu == null)
+		{
+			ParticleHats.debug("cache didnt exist, loading menu " + menuName);
+			MenuInventory inventory = core.getDatabase().loadInventory(menuName, playerState);
+			
+			if (inventory == null)
+			{
+				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
+				return null;
+			}
+			
+			menu = new StaticMenu(core, playerState.getOwner(), inventory);
+		}
+		
+		return menu;
+	}
 }
