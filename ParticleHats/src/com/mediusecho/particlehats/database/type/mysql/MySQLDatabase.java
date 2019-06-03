@@ -64,8 +64,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class MySQLDatabase implements Database {
-
-	// TODO: ability to update tables
 	
 	private HikariDataSource dataSource;
 	private MySQLHelper helper;
