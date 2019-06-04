@@ -59,7 +59,7 @@ public class MySQLHelper {
 					// Menus Table
 					String menuTable = "CREATE TABLE IF NOT EXISTS " + Table.MENUS.getFormat() + " ("
 							+ "name VARCHAR(128) PRIMARY KEY,"
-							+ "title VARCHAR(40) NOT NULL DEFAULT ''," // CHARACTER SET utf8
+							+ "title VARCHAR(40) NOT NULL DEFAULT '',"
 							+ "size TINYINT(3) NOT NULL DEFAULT 6,"
 							+ "alias VARCHAR(64)"
 							+ ")";
