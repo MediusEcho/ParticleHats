@@ -18,7 +18,7 @@ public class BukkitPrompt implements Prompt {
 
 	@Override
 	public boolean canPrompt(int passes) {
-		return passes % 18 == 0;
+		return passes % 12 == 0;
 	}
 
 }
