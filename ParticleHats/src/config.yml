@@ -71,7 +71,9 @@ database:
   hostname: host
   port: 3306
   database: ParticleHats
-  use-ssl: false
+  
+  # Advanced properties used when connecting to the database
+  configuration-properties: ?useSSL=false
 #
 flags:
   #

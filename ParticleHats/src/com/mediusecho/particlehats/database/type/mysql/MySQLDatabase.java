@@ -73,7 +73,7 @@ public class MySQLDatabase implements Database {
 	private final String password = SettingsManager.DATABASE_PASSWORD.getString();
 	private final String port     = SettingsManager.DATABASE_PORT.asString();
 	private final String database = SettingsManager.DATABASE_DATABASE.getString();
-	private final String useSSL   = SettingsManager.DATABASE_USESSL.getString();
+	private final String configurationProperties = SettingsManager.DATABASE_CONFIGURATION_PROPERTIES.getString();
 	
 	private final boolean legacy;
 	
@@ -105,7 +105,7 @@ public class MySQLDatabase implements Database {
 		helper = new MySQLHelper(this);
 		
 		HikariConfig config = new HikariConfig();
-		config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database + "?useSSL=" + useSSL);
+		config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database + configurationProperties);
 		config.setUsername(username);
 		config.setPassword(password);
 		
