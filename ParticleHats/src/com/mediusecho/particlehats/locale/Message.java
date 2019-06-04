@@ -714,7 +714,7 @@ public enum Message {
 	EDITOR_META_MENU_SET_TAG                    ("&bChange Tags"),
 	
 	EDITOR_META_MENU_NAME_DESCRIPTION              ("/n&8Current:/n&8� {1}/n/n&3Left Click to Change{2=/n&cShift Right Click to Reset}"),
-	EDITOR_META_MENU_LABEL_DESCRIPTION             ("/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <label>/n/n&8Current:/n&8� &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
+	EDITOR_META_MENU_LABEL_DESCRIPTION             ("/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <player> <label>/n/n&8Current:/n&8� &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
 	EDITOR_META_MENU_DESCRIPTION_DESCRIPTION       ("/n&8Current:/n{1}/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"),
 	EDITOR_META_MENU_EMPTY_DESCRIPTION             ("/n&8Current:/n&8� &cNot Set/n/n&3Left Click to Change"),
 	EDITOR_META_MENU_PERMISSION_DESCRIPTION        ("/n&8Current:/n&8� &7{1}/n/n&8Usage:/n&8� &7{2}/n/n&3Click to Change"),

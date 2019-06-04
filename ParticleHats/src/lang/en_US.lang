@@ -1042,7 +1042,7 @@ editor_meta_menu_name_description: "/n&8Current:/n&8» {1}/n/n&3Left Click to Ch
 
 # {1=}: Hat's label
 # {2=}: Value used if we can reset this hat's label
-editor_meta_menu_label_description: "/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <label>/n/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
+editor_meta_menu_label_description: "/n&8Labels allow you to use this hat/n&8in commands like: &7/h set <player> <label>/n/n&8Current:/n&8» &7{1=&cNot Set}/n/n&3Left Click to Change{2=/n&cShift Right Click to Clear}"
 
 # {1}: Hat's description
 # {2=}: Value used if we can clear this hat's description
