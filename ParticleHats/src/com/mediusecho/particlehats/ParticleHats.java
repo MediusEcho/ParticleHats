@@ -46,6 +46,9 @@ import com.mediusecho.particlehats.util.ResourceUtil;
 @SuppressWarnings("unused")
 public class ParticleHats extends JavaPlugin {
 	
+	// TODO: [4.1 ?] Ability to use particles that haven't been implemented yet by using their name.
+	// For when the plugin hasn't updated to support 1.x, but can still load the particles by name 
+	
 	// TODO: [4.1] Re-implement text particle type
 	// TODO: [4.1] Test animated custom type support
 	// TODO: [4.1] Separate menu for block-fixed particles?
@@ -141,6 +144,9 @@ public class ParticleHats extends JavaPlugin {
 				
 				if (database.getException() != null) {
 					log("Error: " + database.getException().getClass().getSimpleName());
+					if (debugging) {
+						database.getException().printStackTrace();
+					}
 				}
 				
 				log("Switching to yaml");
