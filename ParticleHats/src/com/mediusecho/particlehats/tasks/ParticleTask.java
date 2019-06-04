@@ -28,8 +28,8 @@ public class ParticleTask extends BukkitRunnable {
 	private final ParticleHats core;
 	
 	private int ticks = 0;
-	private int afkCooldown = SettingsManager.AFK_COOLDOWN.getInt();
-	private int pvpCooldown = SettingsManager.COMBAT_COOLDOWN.getInt();
+	private int afkCooldown = SettingsManager.AFK_COOLDOWN.getInt() * 1000;
+	private int pvpCooldown = SettingsManager.COMBAT_COOLDOWN.getInt() * 1000;
 	
 	private List<String> disabledWorlds;
 	private boolean checkWorldPermission;
@@ -100,8 +100,8 @@ public class ParticleTask extends BukkitRunnable {
 	
 	public void onReload ()
 	{
-		afkCooldown = SettingsManager.AFK_COOLDOWN.getInt();
-		pvpCooldown = SettingsManager.COMBAT_COOLDOWN.getInt();
+		afkCooldown = SettingsManager.AFK_COOLDOWN.getInt() * 1000;
+		pvpCooldown = SettingsManager.COMBAT_COOLDOWN.getInt() * 1000;
 		
 		disabledWorlds.clear();
 		disabledWorlds = SettingsManager.DISABLED_WORLDS.getList();
