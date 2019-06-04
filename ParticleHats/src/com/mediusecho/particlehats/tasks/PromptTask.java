@@ -37,6 +37,13 @@ public class PromptTask extends BukkitRunnable {
 					continue;
 				}
 				
+				int time = playerState.getMetaStateTime();
+				if (time <= 0)
+				{
+					metaState.reopenEditor(playerState.getMenuBuilder());
+					continue;
+				}
+				
 				Prompt prompt = core.getPrompt();
 				if (prompt.canPrompt(passes)) {
 					prompt.prompt(player, metaState);
