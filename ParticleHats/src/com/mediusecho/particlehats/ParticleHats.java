@@ -54,7 +54,7 @@ public class ParticleHats extends JavaPlugin {
 	// TODO: [4.1] Separate menu for block-fixed particles?
 	// Store fixed particles in a menu that is separate from player menus
 	// Players can sort by nearest and teleport to the particle
-			
+	
 	public static ParticleHats instance;
 	public static int serverVersion;
 	private static Logger logger;
@@ -91,7 +91,7 @@ public class ParticleHats extends JavaPlugin {
 	private boolean enabled = false;
 	
 	// Debugging
-	public static final boolean debugging = true;
+	public static final boolean debugging = false;
 	
 	@Override
 	public void onEnable ()
