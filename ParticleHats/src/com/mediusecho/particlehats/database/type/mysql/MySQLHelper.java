@@ -347,7 +347,10 @@ public class MySQLHelper {
 		
 		String properties = propertyBuilder.toString();
 		String values = valueBuilder.toString();
-		String updates = updateBuilder.deleteCharAt(0).toString();
+		String updates = "";
+		if (updateBuilder.length() > 0) {
+			updates = updateBuilder.deleteCharAt(0).toString();
+		}
 		
 		return insertQuery.replace("{1}", properties).replace("{2}", values).replace("{3}", updates);
 	}
