@@ -376,6 +376,7 @@ public class EditorBaseMenu extends EditorMenu {
 	{
 		Hat hat = new Hat();
 		hat.setSlot(slot);
+		hat.setLoaded(true);
 		
 		ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, Message.EDITOR_MISC_NEW_PARTICLE.getValue());
 		

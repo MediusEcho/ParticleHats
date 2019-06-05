@@ -1749,6 +1749,7 @@ public class Hat {
 		clone.randomOffset = randomOffset.clone();
 		clone.angle = angle.clone();
 		clone.iconData = iconData.clone();
+		clone.isLoaded = isLoaded;
 		
 		if (customEffect != null) {
 			clone.customEffect = customEffect.clone();
