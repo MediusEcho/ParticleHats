@@ -582,6 +582,13 @@ public class EditorMainMenu extends EditorMenu {
 		ItemStack cloneItem = ItemUtil.createItem(CompatibleMaterial.PRISMARINE_SHARD, Message.EDITOR_MAIN_MENU_CLONE, Message.EDITOR_MAIN_MENU_CLONE_DESCRIPTION);
 		setButton(30, cloneItem, (event, slot) ->
 		{
+			if (targetHat.isModified())
+			{
+				int targetSlot = menuBuilder.getTargetSlot();
+				core.getDatabase().saveHat(menuBuilder.getMenuName(), targetSlot, targetHat);
+				targetHat.clearPropertyChanges();
+			}
+			
 			EditorSlotMenu editorSlotMenu = new EditorSlotMenu(core, owner, menuBuilder, true);
 			menuBuilder.addMenu(editorSlotMenu);
 			editorSlotMenu.open();
