@@ -73,7 +73,7 @@ database:
   database: ParticleHats
   
   # Advanced properties used when connecting to the database
-  configuration-properties: ?useSSL=false
+  configuration-properties: "?useSSL=false"
 #
 flags:
   #
