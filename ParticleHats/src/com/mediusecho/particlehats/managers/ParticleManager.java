@@ -92,13 +92,18 @@ public class ParticleManager
 			hat.setVanished(isVanished);
 			playerState.addHat(hat);
 			
-			if (!hat.isVanished() && showEquipMessage)
+			if (showEquipMessage)
 			{
-				String message = hat.getEquipMessage();
-				if (!message.equals("")) {
-					player.sendMessage(message);
-				} else {
-					player.sendMessage(Message.HAT_EQUIPPED.getValue().replace("{1}", hat.getDisplayName()));
+				String equipMessage = hat.getEquipMessage();
+				
+				if (!equipMessage.equals("")) {
+					player.sendMessage(equipMessage);
+				} 
+				
+				else 
+				{
+					Message defaultMessage = hat.isVanished() ? Message.HAT_EQUIPPED_VANISHED : Message.HAT_EQUIPPED;
+					player.sendMessage(defaultMessage.replace("{1}", hat.getDisplayName()));
 				}
 			}
 		}
