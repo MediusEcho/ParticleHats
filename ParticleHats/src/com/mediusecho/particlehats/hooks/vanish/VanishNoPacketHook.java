@@ -24,8 +24,11 @@ public class VanishNoPacketHook implements VanishHook, Listener {
 	@Override
 	public boolean isVanished(Player player) 
 	{
-		if (player.hasMetadata("vanished")) {
-			return player.getMetadata("vanished").get(0).asBoolean();
+		if (player.hasMetadata("vanished")) 
+		{
+			try {
+				return player.getMetadata("vanished").get(0).asBoolean();
+			} catch (IndexOutOfBoundsException e) {}
 		}
 		return false;
 	}
