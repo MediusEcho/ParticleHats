@@ -950,6 +950,7 @@ public class Hat {
 	
 	/**
 	 * Get this menus cached description.  
+	 * Cached description contains the raw description info before being translated
 	 * @return
 	 */
 	public List<String> getCachedDescription () {
