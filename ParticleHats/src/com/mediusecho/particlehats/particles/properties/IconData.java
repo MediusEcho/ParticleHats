@@ -21,7 +21,7 @@ public class IconData {
 	private ItemStackTemplate previousItem;
 	
 	private int index = 0;
-	private int updateFrequency = 1;
+	private int updateFrequency = 2;
 	
 	private static final ItemStack tempMainItem = ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, 1);
 	
