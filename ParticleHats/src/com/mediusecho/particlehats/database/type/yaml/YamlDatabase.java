@@ -1049,7 +1049,7 @@ public class YamlDatabase implements Database {
 							double x = config.getDouble(path + "item-velocity.x", 0);
 							double y = config.getDouble(path + "item-velocity.y", 0);
 							double z = config.getDouble(path + "item-velocity.z", 0);
-							itemStackData.setVelocity(new Vector(x, y, z));
+							itemStackData.setVelocity(x, y, z);
 							break;
 						}
 					}
