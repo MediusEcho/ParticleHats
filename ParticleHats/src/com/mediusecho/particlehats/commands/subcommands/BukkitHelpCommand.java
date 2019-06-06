@@ -53,6 +53,7 @@ public class BukkitHelpCommand extends Command {
 	protected void readPage (Sender sender, int page)
 	{
 		sender.sendMessage("&f> &6ParticleHats v" + core.getDescription().getVersion());
+		sender.sendMessage("&7> " + Message.COMMAND_HELP_TIP.getValue());
 		for (Entry<Integer, String> entry : commands.entrySet()) {
 			sender.sendMessage(entry.getValue());
 		}
