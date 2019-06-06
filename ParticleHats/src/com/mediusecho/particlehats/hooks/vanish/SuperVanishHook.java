@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.hooks.vanish;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.mediusecho.particlehats.ParticleHats;
@@ -35,21 +36,27 @@ public class SuperVanishHook implements Listener, VanishHook {
 		PlayerShowEvent.getHandlerList().unregister(this);
 	}
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerHide (PlayerHideEvent event)
 	{
-		PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
-		for (Hat hat : playerState.getActiveHats()) {
-			hat.setVanished(true);
+		if (!event.isCancelled())
+		{
+			PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
+			for (Hat hat : playerState.getActiveHats()) {
+				hat.setVanished(true);
+			}
 		}
 	}
 	
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerShow (PlayerShowEvent event)
 	{
-		PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
-		for (Hat hat : playerState.getActiveHats()) {
-			hat.setVanished(false);
+		if (!event.isCancelled())
+		{
+			PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
+			for (Hat hat : playerState.getActiveHats()) {
+				hat.setVanished(false);
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.hooks.vanish;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 
@@ -34,7 +35,7 @@ public class VanishNoPacketHook implements VanishHook, Listener {
 		VanishStatusChangeEvent.getHandlerList().unregister(this);
 	}
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onVanishToggle (VanishStatusChangeEvent event)
 	{
 		PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
