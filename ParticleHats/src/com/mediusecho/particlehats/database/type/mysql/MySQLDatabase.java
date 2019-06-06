@@ -1525,6 +1525,7 @@ public class MySQLDatabase implements Database {
 		hat.setSlot(set.getInt("slot"));
 		hat.setName(getString(set, "title", Message.EDITOR_MISC_NEW_PARTICLE.getValue()));
 		hat.setPermission(getString(set, "permission", "all"));
+		hat.setPermissionDeniedMessage(getString(set, "permission_denied", ""));
 		hat.setType(ParticleType.fromID(set.getInt("type")));
 		hat.setLocation(ParticleLocation.fromId(set.getInt("location")));
 		hat.setMode(ParticleMode.fromId(set.getInt("mode")));

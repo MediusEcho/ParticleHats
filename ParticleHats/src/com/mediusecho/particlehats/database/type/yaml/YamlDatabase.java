@@ -1328,6 +1328,7 @@ public class YamlDatabase implements Database {
 		
 		hat.setName(config.getString(path + "name", Message.EDITOR_MISC_NEW_PARTICLE.getValue()));
 		hat.setPermission(config.getString(path + "permission", "all"));	
+		hat.setPermissionDeniedMessage(config.getString(path + "permission-denied", ""));
 		hat.setLabel(config.getString(path + "label", ""));
 		hat.setEquipMessage(config.getString(path + "equip-message", ""));
 		hat.setLeftClickAction(ParticleAction.fromName(config.getString(path + "action.left-click.id"), ParticleAction.EQUIP));
