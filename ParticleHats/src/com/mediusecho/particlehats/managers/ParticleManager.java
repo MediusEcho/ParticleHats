@@ -94,7 +94,7 @@ public class ParticleManager
 			
 			if (showEquipMessage)
 			{
-				String equipMessage = hat.getEquipMessage();
+				String equipMessage = hat.getEquipDisplayMessage();
 				
 				if (!equipMessage.equals("")) {
 					player.sendMessage(equipMessage);
