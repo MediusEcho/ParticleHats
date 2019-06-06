@@ -550,7 +550,7 @@ public class YamlDatabase implements Database {
 		equippedHats.clear();
 		
 		for (Hat hat : hats) {
-			equippedHats.add(hat.getMenu() + ":" + hat.getSlot());
+			equippedHats.add(hat.getMenu() + ":" + hat.getSlot() + ":" + hat.isHidden());
 		}
 		
 		playerConfig.set("equipped-hats", equippedHats);
@@ -568,25 +568,29 @@ public class YamlDatabase implements Database {
 		for (String hatReference : equippedHats)
 		{
 			String[] info = hatReference.split(":");
-			String menuName = info[0];
-			
-			CustomConfig menuConfig = getMenu(menuName);
-			if (menuConfig != null)
+			if (info.length >= 3)
 			{
-				String path = "items." + info[1] + ".";
-				int slot = StringUtil.toInt(info[1], 0);
+				String menuName = info[0];
 				
-				FileConfiguration config = menuConfig.getConfig();
-				Hat hat = new Hat();
-				
-				loadBaseHatData(config, hat, path);
-				loadEssentialHatData(config, hat, path, info[0], slot);
-				
-				ItemStack item = hat.getItem();
-				ItemUtil.setItemName(item, hat.getDisplayName());
-				loadMetaData(config, hat, path, item);
-				
-				loadedHats.add(hat);
+				CustomConfig menuConfig = getMenu(menuName);
+				if (menuConfig != null)
+				{
+					String path = "items." + info[1] + ".";
+					int slot = StringUtil.toInt(info[1], 0);
+					
+					FileConfiguration config = menuConfig.getConfig();
+					Hat hat = new Hat();
+					hat.setHidden(Boolean.valueOf(info[2]));
+					
+					loadBaseHatData(config, hat, path);
+					loadEssentialHatData(config, hat, path, info[0], slot);
+					
+					ItemStack item = hat.getItem();
+					ItemUtil.setItemName(item, hat.getDisplayName());
+					loadMetaData(config, hat, path, item);
+					
+					loadedHats.add(hat);
+				}
 			}
 		}
 		
