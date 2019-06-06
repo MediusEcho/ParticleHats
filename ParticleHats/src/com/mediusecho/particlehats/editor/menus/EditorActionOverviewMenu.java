@@ -128,6 +128,7 @@ public class EditorActionOverviewMenu extends EditorMenu {
 			
 			targetHat.setEditingAction(leftClick ? 1 : 2);
 			menuBuilder.setOwnerState(MetaState.HAT_COMMAND);
+			core.prompt(owner, MetaState.HAT_COMMAND);
 			owner.closeInventory();
 		}
 		break;
