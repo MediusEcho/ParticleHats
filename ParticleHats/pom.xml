@@ -4,7 +4,7 @@
   <artifactId>ParticleHats</artifactId>
   <version>4.0</version>
   <build>
-    <finalName>ParticleHats-RC1</finalName>
+    <finalName>ParticleHats-RC2</finalName>
     <plugins>
     
       <plugin>
