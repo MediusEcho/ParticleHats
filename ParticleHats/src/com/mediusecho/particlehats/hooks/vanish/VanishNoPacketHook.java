@@ -41,7 +41,7 @@ public class VanishNoPacketHook implements VanishHook, Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onVanishToggle (VanishStatusChangeEvent event)
 	{
-		PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
+		PlayerState playerState = core.getPlayerState(event.getPlayer());
 		boolean vanished = event.isVanishing();
 		
 		for (Hat hat : playerState.getActiveHats()) {

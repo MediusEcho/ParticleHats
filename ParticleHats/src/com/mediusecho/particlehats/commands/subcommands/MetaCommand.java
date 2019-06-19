@@ -21,7 +21,7 @@ public class MetaCommand extends EditCommand {
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
-		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+		PlayerState playerState = core.getPlayerState(sender.getPlayer());
 		MenuBuilder menuBuilder = playerState.getMenuBuilder();
 		
 		if (menuBuilder == null)
@@ -53,7 +53,7 @@ public class MetaCommand extends EditCommand {
 	{
 		if (sender.isPlayer())
 		{
-			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+			PlayerState playerState = core.getPlayerState(sender.getPlayer());
 			
 			if (args.size() == 1) {
 				return Arrays.asList(playerState.getMetaState().getSuggestion(), "cancel");

@@ -28,7 +28,7 @@ public class ClearPlayerCommand extends Command {
 			return false;
 		}
 		
-		core.getPlayerState(player.getUniqueId()).clearActiveHats();
+		core.getPlayerState(player).clearActiveHats();
 		sender.sendMessage(Message.COMMAND_CLEAR_PLAYER_SUCCESS.getValue().replace("{1}", player.getName()));
 		return true;
 	}

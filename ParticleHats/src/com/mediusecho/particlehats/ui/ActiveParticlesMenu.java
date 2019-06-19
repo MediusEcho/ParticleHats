@@ -32,7 +32,7 @@ public class ActiveParticlesMenu extends Menu {
 		super(core, owner);
 		
 		this.fromMenu = fromMenu;
-		ownerState = core.getPlayerState(ownerID);
+		ownerState = core.getPlayerState(owner);
 		activeHats = ownerState.getActiveHats();
 		
 		actions = new HashMap<Integer, MenuAction>();
@@ -119,7 +119,7 @@ public class ActiveParticlesMenu extends Menu {
 			inventory.setItem(49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_GO_BACK));
 			setAction(49, (event, slot) ->
 			{
-				PlayerState playerState = core.getPlayerState(ownerID);
+				PlayerState playerState = core.getPlayerState(owner);
 				Menu menu = playerState.getPreviousOpenMenu();
 				
 				playerState.setOpenMenu(menu);

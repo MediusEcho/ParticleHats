@@ -66,7 +66,7 @@ public class StaticMenu extends Menu {
 	@Override
 	public void open ()
 	{
-		PlayerState playerState = core.getPlayerState(ownerID);
+		PlayerState playerState = core.getPlayerState(owner);
 		List<Hat> equippedHats = playerState.getActiveHats();
 		
 		for (Hat hat : playerEquippedHats)
@@ -132,7 +132,7 @@ public class StaticMenu extends Menu {
 	 */
 	private void build ()
 	{
-		PlayerState playerState = core.getPlayerState(ownerID);
+		PlayerState playerState = core.getPlayerState(owner);
 		
 		// Get all equipped hats that belong to this menu
 		List<Hat> equippedHats = playerState.getActiveHats();

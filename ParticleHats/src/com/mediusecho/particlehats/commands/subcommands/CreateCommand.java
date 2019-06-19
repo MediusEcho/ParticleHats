@@ -20,7 +20,7 @@ public class CreateCommand extends Command {
 	{
 		if (args.size() == 1)
 		{
-			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+			PlayerState playerState = core.getPlayerState(sender.getPlayer());
 			
 			if (playerState.isEditing()) 
 			{

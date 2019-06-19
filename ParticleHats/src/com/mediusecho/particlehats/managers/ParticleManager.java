@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.ParticleHats;
@@ -68,14 +67,14 @@ public class ParticleManager
 		return emptyRecents;
 	}
 	
-	public void equipHat (UUID id, Hat hat) {
-		equipHat(id, hat, true);
+	public void equipHat (Player player, Hat hat) {
+		equipHat(player, hat, true);
 	}
 	
-	public void equipHat (UUID id, Hat hat, boolean showEquipMessage)
+	public void equipHat (Player player, Hat hat, boolean showEquipMessage)
 	{
-		Player player = Bukkit.getPlayer(id);
-		PlayerState playerState = core.getPlayerState(id);
+		//Player player = Bukkit.getPlayer(id);
+		PlayerState playerState = core.getPlayerState(player);
 		
 		if (playerState.canEquip())
 		{

@@ -72,7 +72,7 @@ public class InteractListener implements Listener {
 					return;
 				}
 				
-				PlayerState playerState = core.getPlayerState(player.getUniqueId());
+				PlayerState playerState = core.getPlayerState(player);
 				MenuInventory inventory = database.loadInventory(menuName, playerState);
 				
 				if (inventory == null)

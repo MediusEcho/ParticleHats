@@ -32,7 +32,7 @@ public class CommandListener implements Listener {
 		}
 		
 		Player player = event.getPlayer();
-		PlayerState playerState = core.getPlayerState(player.getUniqueId());
+		PlayerState playerState = core.getPlayerState(player);
 		
 		// Cancel any commands if this player is editing a meta property
 		if (SettingsManager.EDITOR_RESTRICT_COMMANDS.getBoolean() && playerState.isEditing())

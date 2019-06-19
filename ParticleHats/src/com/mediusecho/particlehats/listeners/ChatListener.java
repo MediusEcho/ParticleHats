@@ -2,10 +2,10 @@ package com.mediusecho.particlehats.listeners;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,8 +37,8 @@ public class ChatListener implements Listener {
 	{
 		if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean())
 		{
-			UUID id = event.getPlayer().getUniqueId();
-			PlayerState playerState = core.getPlayerState(id);
+			Player player = event.getPlayer();
+			PlayerState playerState = core.getPlayerState(player);
 			MenuBuilder menuBuilder = playerState.getMenuBuilder();
 			
 			if (menuBuilder != null)

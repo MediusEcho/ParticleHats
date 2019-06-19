@@ -29,7 +29,7 @@ public class PurchaseMenu extends StaticMenu {
 		inventory.setHat(32, cancel);
 		inventory.setItem(32, ItemUtil.createItem(Material.COAL, Message.PURCHASE_MENU_CANCEL));
 		
-		Hat pending = core.getPlayerState(ownerID).getPendingPurchase().clone();
+		Hat pending = core.getPlayerState(owner).getPendingPurchase().clone();
 		pending.setLeftClickAction(ParticleAction.PURCHASE_ITEM);
 		pending.setLoaded(true);
 		inventory.setItem(13, pending.getMenuItem());

@@ -59,7 +59,7 @@ public class SetCommand extends Command {
 		String hatLabel = args.get(1);
 		
 		// Check to see if this player is already wearing a hat with this label
-		PlayerState playerState = core.getPlayerState(player.getUniqueId());
+		PlayerState playerState = core.getPlayerState(player.getPlayer());
 		for (Hat h : playerState.getActiveHats())
 		{
 			if (h.getLabel().equalsIgnoreCase(hatLabel))
@@ -81,7 +81,7 @@ public class SetCommand extends Command {
 		}
 		
 		hat.setPermanent(permanent);
-		core.getParticleManager().equipHat(player.getUniqueId(), hat, false);
+		core.getParticleManager().equipHat(player, hat, false);
 		
 		if (tellPlayer) {
 			player.sendMessage(Message.COMMAND_SET_SUCCESS.getValue().replace("{1}", hat.getDisplayName()));

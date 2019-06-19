@@ -34,7 +34,7 @@ public class InventoryListener implements Listener {
 		if (item != null && item.getType() != Material.AIR)
 		{
 			Player player = (Player)event.getWhoClicked();
-			PlayerState playerState = core.getPlayerState(player.getUniqueId());
+			PlayerState playerState = core.getPlayerState(player);
 			playerState.getGuiState().onClick(event, playerState);	
 		}
 	}
@@ -47,7 +47,7 @@ public class InventoryListener implements Listener {
 		}
 		
 		Player player = (Player)event.getPlayer();
-		PlayerState playerState = core.getPlayerState(player.getUniqueId());
+		PlayerState playerState = core.getPlayerState(player);
 		playerState.getGuiState().onClose(playerState);
 	}
 	
@@ -59,7 +59,7 @@ public class InventoryListener implements Listener {
 		}
 		
 		Player player = (Player)event.getPlayer();
-		PlayerState playerState = core.getPlayerState(player.getUniqueId());
+		PlayerState playerState = core.getPlayerState(player);
 		GuiState guiState = playerState.getGuiState();
 		
 		if (guiState == GuiState.SWITCHING_MENU) {

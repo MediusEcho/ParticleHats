@@ -42,7 +42,7 @@ public class HatAPI extends ParticleHatsAPI {
 		}
 		
 		hat.setPermanent(permanent);
-		core.getParticleManager().equipHat(player.getUniqueId(), hat);
+		core.getParticleManager().equipHat(player, hat);
 		
 		if (tellPlayer) {
 			player.sendMessage(Message.COMMAND_SET_SUCCESS.getValue().replace("{1}", hat.getDisplayName()));
@@ -61,20 +61,20 @@ public class HatAPI extends ParticleHatsAPI {
 	
 	@Override
 	public int getHatCount (Player player) {
-		return core.getPlayerState(player.getUniqueId()).getHatCount();
+		return core.getPlayerState(player).getHatCount();
 	}
 	
 	@Override
 	public void toggleHat (Player player, int index, boolean toggleStatus) throws IndexOutOfBoundsException
 	{
-		Hat hat = core.getPlayerState(player.getUniqueId()).getActiveHats().get(index);
+		Hat hat = core.getPlayerState(player).getActiveHats().get(index);
 		hat.setHidden(toggleStatus);
 	}
 	
 	@Override
 	public void toggleAllHats (Player player, boolean toggleStatus)
 	{
-		for (Hat hat : core.getPlayerState(player.getUniqueId()).getActiveHats()) {
+		for (Hat hat : core.getPlayerState(player).getActiveHats()) {
 			hat.setHidden(toggleStatus);
 		}
 	}
@@ -120,8 +120,12 @@ public class HatAPI extends ParticleHatsAPI {
 	@Deprecated
 	public void toggleHat (UUID playerID)
 	{
-		Hat hat = core.getPlayerState(playerID).getActiveHats().get(0);
-		hat.setHidden(!hat.isHidden());
+		Player player = Bukkit.getPlayer(playerID);
+		if (player != null)
+		{		
+			Hat hat = core.getPlayerState(player).getActiveHats().get(0);
+			hat.setHidden(!hat.isHidden());
+		}
 	}
 	
 	@Override

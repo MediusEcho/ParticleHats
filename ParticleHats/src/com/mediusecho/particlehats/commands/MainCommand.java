@@ -41,7 +41,7 @@ public class MainCommand extends Command {
 			
 			String menuName = defaultMenu.contains(".") ? defaultMenu.split("\\.")[0] : defaultMenu;
 			Database database = core.getDatabase();
-			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+			PlayerState playerState = core.getPlayerState(sender.getPlayer());
 			MenuInventory inventory = database.loadInventory(menuName, playerState);
 			
 			if (inventory == null)

@@ -30,7 +30,7 @@ public class PromptTask extends BukkitRunnable {
 			passes++;
 			for (Player player : onlinePlayers)
 			{
-				PlayerState playerState = core.getPlayerState(player.getUniqueId());
+				PlayerState playerState = core.getPlayerState(player);
 				MetaState metaState = playerState.getMetaState();
 				
 				if (metaState == MetaState.NONE) {

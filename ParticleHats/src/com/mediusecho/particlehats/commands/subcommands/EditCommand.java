@@ -56,7 +56,7 @@ public class EditCommand extends Command {
 			return false;
 		}
 			
-		PlayerState playerState = core.getPlayerState(sender.getPlayerID());	
+		PlayerState playerState = core.getPlayerState(sender.getPlayer());	
 		Database database = core.getDatabase();
 		
 		if (playerState.isEditing()) 

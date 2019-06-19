@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -30,8 +31,9 @@ public class ConnectionListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin (PlayerJoinEvent event)
 	{
+		Player player = event.getPlayer();
 		UUID id = event.getPlayer().getUniqueId();
-		PlayerState playerState = core.getPlayerState(id);
+		PlayerState playerState = core.getPlayerState(player);
 		
 		// Load equipped hats
 		core.getDatabase().loadPlayerEquippedHats(id, (loadedHats) ->
@@ -80,8 +82,9 @@ public class ConnectionListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit (PlayerQuitEvent event)
 	{
+		Player player = event.getPlayer();
 		UUID id = event.getPlayer().getUniqueId();
-		PlayerState playerState = core.getPlayerState(id);
+		PlayerState playerState = core.getPlayerState(player);
 		List<Hat> activeHats = playerState.getActiveHats();
 		
 		core.getDatabase().savePlayerEquippedHats(id, new ArrayList<Hat>(activeHats));

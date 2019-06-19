@@ -16,7 +16,7 @@ public class ParticlesCommand extends Command {
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
-		PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+		PlayerState playerState = core.getPlayerState(sender.getPlayer());
 		
 		if (playerState.isEditing()) 
 		{

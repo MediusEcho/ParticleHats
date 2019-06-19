@@ -68,7 +68,7 @@ public class ParticleTask extends BukkitRunnable {
 				}
 				
 				UUID id = player.getUniqueId();
-				PlayerState playerState = core.getPlayerState(id);
+				PlayerState playerState = core.getPlayerState(player);
 				
 				// Loop through each of this players active hats
 				List<Hat> activeHats = playerState.getActiveHats();

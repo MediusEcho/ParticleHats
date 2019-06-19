@@ -76,7 +76,7 @@ public class OpenCommand extends Command {
 				return false;
 			}
 			
-			PlayerState playerState = core.getPlayerState(sender.getPlayerID());
+			PlayerState playerState = core.getPlayerState(sender.getPlayer());
 			
 			if (playerState.isEditing()) 
 			{

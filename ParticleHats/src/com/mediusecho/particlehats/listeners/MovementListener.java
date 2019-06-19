@@ -1,8 +1,7 @@
 package com.mediusecho.particlehats.listeners;
 
-import java.util.UUID;
-
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -24,8 +23,8 @@ public class MovementListener implements Listener {
 	@EventHandler
 	public void onPlayerMove (PlayerMoveEvent event)
 	{
-		UUID id = event.getPlayer().getUniqueId();
-		PlayerState playerState = core.getPlayerState(id);
+		Player player = event.getPlayer();
+		PlayerState playerState = core.getPlayerState(player);
 		
 		// We only need to check modes if this player has a hat equipped
 		if (playerState.getHatCount() > 0)

@@ -145,7 +145,7 @@ public enum ParticleAction {
 	@SuppressWarnings("incomplete-switch")
 	public void onClick (Player player, Hat hat, int slot, MenuInventory inventory, String argument)
 	{
-		PlayerState playerState = core.getPlayerState(player.getUniqueId());
+		PlayerState playerState = core.getPlayerState(player);
 		boolean canClose = SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean();	
 	
 		switch (this)
@@ -202,7 +202,7 @@ public enum ParticleAction {
 					// Check to see if we have already purchased this hat
 					if (playerState.hasPurchased(hat))
 					{
-						core.getParticleManager().equipHat(player.getUniqueId(), hat);
+						core.getParticleManager().equipHat(player, hat);
 						
 						if (canClose) {
 							player.closeInventory();
@@ -241,7 +241,7 @@ public enum ParticleAction {
 						// We have permission
 						else
 						{
-							core.getParticleManager().equipHat(player.getUniqueId(), hat);
+							core.getParticleManager().equipHat(player, hat);
 							
 							if (canClose) {
 								player.closeInventory();
@@ -303,7 +303,7 @@ public enum ParticleAction {
 					else
 					{
 						if (!canUsePermission && !canUseCurrency && !canUseExp) {
-							core.getParticleManager().equipHat(player.getUniqueId(), hat);
+							core.getParticleManager().equipHat(player, hat);
 						}
 						
 						if (canClose) {
@@ -351,7 +351,7 @@ public enum ParticleAction {
 					return;
 				}
 				
-				core.getParticleManager().equipHat(player.getUniqueId(), hat);
+				core.getParticleManager().equipHat(player, hat);
 				if (canClose) {
 					player.closeInventory();
 				}
@@ -360,7 +360,7 @@ public enum ParticleAction {
 			
 			case CLEAR:
 			{
-				core.getPlayerState(player.getUniqueId()).clearActiveHats();
+				core.getPlayerState(player).clearActiveHats();
 				player.sendMessage(Message.COMMAND_CLEAR_SUCCESS.getValue());
 				break;
 			}
@@ -439,7 +439,7 @@ public enum ParticleAction {
 					playerState.addPurchasedHat(pendingHat);
 					
 					core.getDatabase().savePlayerPurchase(player.getUniqueId(), pendingHat);
-					core.getParticleManager().equipHat(player.getUniqueId(), pendingHat);
+					core.getParticleManager().equipHat(player, pendingHat);
 					
 					if (SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean()) {
 						player.closeInventory();
@@ -465,7 +465,7 @@ public enum ParticleAction {
 				if (!event.isCancelled()) 
 				{
 					hat.setPermanent(false);
-					core.getParticleManager().equipHat(player.getUniqueId(), hat);
+					core.getParticleManager().equipHat(player, hat);
 				}
 				break;
 			}

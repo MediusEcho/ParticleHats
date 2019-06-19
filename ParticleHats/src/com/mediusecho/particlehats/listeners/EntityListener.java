@@ -1,7 +1,5 @@
 package com.mediusecho.particlehats.listeners;
 
-import java.util.UUID;
-
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -62,20 +60,20 @@ public class EntityListener implements Listener {
 		Entity attacker = event.getDamager();
 		Entity victim = event.getEntity();
 		
-		if (victim instanceof Player)
+		if (victim instanceof Player && !victim.hasMetadata("NPC"))
 		{
 			if (checkCombat(attacker)) 
 			{
-				handleCombat(victim);
+				handleCombat((Player)victim);
 				return;
 			}
 		}
 		
-		if (attacker instanceof Player)
+		if (attacker instanceof Player  && !attacker.hasMetadata("NPC"))
 		{
 			if (checkCombat(victim))
 			{
-				handleCombat(attacker);
+				handleCombat((Player)attacker);
 				return;
 			}
 		}
@@ -118,10 +116,9 @@ public class EntityListener implements Listener {
 		return false;
 	}
 	
-	private void handleCombat (Entity e)
+	private void handleCombat (Player player)
 	{
-		UUID id = ((Player)e).getUniqueId();
-		PlayerState playerState = core.getPlayerState(id);
+		PlayerState playerState = core.getPlayerState(player);
 		
 		playerState.setLastCombatTime(System.currentTimeMillis());
 		playerState.setPVPState(PVPState.ENGAGED);

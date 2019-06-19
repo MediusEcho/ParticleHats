@@ -47,7 +47,7 @@ public class OpenPlayerCommand extends Command {
 			return false;
 		}
 		
-		PlayerState playerState = core.getPlayerState(targetPlayer.getUniqueId());
+		PlayerState playerState = core.getPlayerState(targetPlayer.getPlayer());
 		if (playerState.isEditing()) 
 		{
 			sender.sendMessage(Message.COMMAND_OPEN_PLAYER_EDITING.replace("{1}", targetPlayer.getName()));

@@ -41,7 +41,7 @@ public class SuperVanishHook implements Listener, VanishHook {
 	{
 		if (!event.isCancelled())
 		{
-			PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
+			PlayerState playerState = core.getPlayerState(event.getPlayer());
 			for (Hat hat : playerState.getActiveHats()) {
 				hat.setVanished(true);
 			}
@@ -53,7 +53,7 @@ public class SuperVanishHook implements Listener, VanishHook {
 	{
 		if (!event.isCancelled())
 		{
-			PlayerState playerState = core.getPlayerState(event.getPlayer().getUniqueId());
+			PlayerState playerState = core.getPlayerState(event.getPlayer());
 			for (Hat hat : playerState.getActiveHats()) {
 				hat.setVanished(false);
 			}

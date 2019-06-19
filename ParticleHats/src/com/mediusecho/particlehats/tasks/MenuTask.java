@@ -29,7 +29,7 @@ public class MenuTask extends BukkitRunnable {
 			ticks++;
 			for (Player player : onlinePlayers)
 			{
-				PlayerState playerState = core.getPlayerState(player.getUniqueId());
+				PlayerState playerState = core.getPlayerState(player);
 				GuiState guiState = playerState.getGuiState();
 				
 				// Skip this player if they don't have a menu open
