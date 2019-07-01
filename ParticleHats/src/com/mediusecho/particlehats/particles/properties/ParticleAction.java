@@ -15,7 +15,6 @@ import com.mediusecho.particlehats.hooks.CurrencyHook;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
 import com.mediusecho.particlehats.ui.GuiState;
@@ -162,43 +161,6 @@ public enum ParticleAction {
 						return;
 					}
 					
-					// Stop if the player has more than the maximum allowed hats
-					if (!playerState.canEquip())
-					{
-						player.sendMessage(Message.HAT_EQUIPPED_OVERFLOW.replace("{1}", Integer.toString(SettingsManager.MAXIMUM_HAT_LIMIT.getInt())));
-						return;
-					}
-					
-					String worldName = player.getWorld().getName().toLowerCase();
-					
-					// Disabled worlds
-					List<String> disabledWorlds = SettingsManager.DISABLED_WORLDS.getList();
-					if (disabledWorlds.contains(worldName))
-					{
-						player.sendMessage(Message.WORLD_DISABLED.getValue());
-	
-						if (canClose) {
-							player.closeInventory();
-						}
-						
-						return;
-					}
-					
-					// World Permission
-					if (SettingsManager.CHECK_WORLD_PERMISSION.getBoolean())
-					{
-						if (!player.hasPermission(Permission.WORLD_ALL.getPermission()) && !player.hasPermission(Permission.WORLD.append(worldName)))
-						{
-							player.sendMessage(Message.WORLD_NO_PERMISSION.getValue());
-							
-							if (canClose) {
-								player.closeInventory();
-							}
-							
-							return;
-						}
-					}
-					
 					// Check to see if we have already purchased this hat
 					if (playerState.hasPurchased(hat))
 					{
@@ -341,13 +303,6 @@ public enum ParticleAction {
 			{
 				// Remove an already equipped hat
 				if (checkAgainstEquippedHats(hat, slot, playerState, inventory)) {
-					return;
-				}
-				
-				// Stop if the player has more than the maximum allowed hats
-				if (!playerState.canEquip())
-				{
-					player.sendMessage(Message.HAT_EQUIPPED_OVERFLOW.replace("{1}", Integer.toString(SettingsManager.MAXIMUM_HAT_LIMIT.getInt())));
 					return;
 				}
 				

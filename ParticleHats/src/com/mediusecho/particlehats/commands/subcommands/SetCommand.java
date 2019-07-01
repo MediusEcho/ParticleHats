@@ -81,10 +81,11 @@ public class SetCommand extends Command {
 		}
 		
 		hat.setPermanent(permanent);
-		core.getParticleManager().equipHat(player, hat, false);
-		
-		if (tellPlayer) {
-			player.sendMessage(Message.COMMAND_SET_SUCCESS.getValue().replace("{1}", hat.getDisplayName()));
+		if (core.getParticleManager().equipHat(player, hat, false))
+		{
+			if (tellPlayer) {
+				player.sendMessage(Message.COMMAND_SET_SUCCESS.getValue().replace("{1}", hat.getDisplayName()));
+			}
 		}
 		
 		return true;

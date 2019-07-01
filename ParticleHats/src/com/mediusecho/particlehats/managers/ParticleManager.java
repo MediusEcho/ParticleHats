@@ -3,6 +3,7 @@ package com.mediusecho.particlehats.managers;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
+import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 
 public class ParticleManager 
@@ -67,14 +69,50 @@ public class ParticleManager
 		return emptyRecents;
 	}
 	
-	public void equipHat (Player player, Hat hat) {
-		equipHat(player, hat, true);
+	public boolean equipHat (Player player, Hat hat) {
+		return equipHat(player, hat, true);
 	}
 	
-	public void equipHat (Player player, Hat hat, boolean showEquipMessage)
-	{
-		//Player player = Bukkit.getPlayer(id);
+	public boolean equipHat (Player player, Hat hat, boolean showEquipMessage)
+	{	
 		PlayerState playerState = core.getPlayerState(player);
+		
+		String worldName = player.getWorld().getName().toLowerCase();
+		List<String> disabledWorlds = SettingsManager.DISABLED_WORLDS.getList();
+		
+		// Disabled World
+		if (disabledWorlds.contains(worldName))
+		{
+			player.sendMessage(Message.WORLD_DISABLED.getValue());
+			return false;
+		}
+		
+		// No World Permission
+		if (SettingsManager.CHECK_WORLD_PERMISSION.getBoolean())
+		{
+			if (!player.hasPermission(Permission.WORLD_ALL.getPermission()) && !player.hasPermission(Permission.WORLD.append(worldName)))
+			{
+				player.sendMessage(Message.WORLD_NO_PERMISSION.getValue());
+				return false;
+			}
+		}
+		
+		// Too many hats equipped
+		if (!playerState.canEquip())
+		{
+			if (SettingsManager.UNEQUIP_OVERFLOW_HATS.getBoolean())
+			{
+				if (playerState.isEquipOverflowed()) {
+					playerState.removeLastHat();
+				}
+			}
+			
+			else
+			{
+				player.sendMessage(Message.HAT_EQUIPPED_OVERFLOW.replace("{1}", Integer.toString(SettingsManager.MAXIMUM_HAT_LIMIT.getInt())));
+				return false;
+			}
+		}
 		
 		if (playerState.canEquip())
 		{
@@ -106,5 +144,7 @@ public class ParticleManager
 				}
 			}
 		}
+			
+		return true;
 	}
 }
