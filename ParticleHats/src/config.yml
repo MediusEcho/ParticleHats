@@ -10,7 +10,7 @@
 #
 # Don't Change This!
 # This value gets updated automatically
-version: 1.0
+version: 1.1
 #
 # Set the default menu that will open any time a player executes /h
 default-menu: particles.yml
@@ -48,6 +48,9 @@ live-menu-update-frequency: 5
 #
 # Set the maximum amount of hats a player can be wearing at once. Range is (1 - 28)
 max-hats: 7
+#
+# unequips a players oldest hat if they equip more than allowed
+unequip-overflow-hats: false
 #
 # Checks the players purchased history from older versions
 # 
