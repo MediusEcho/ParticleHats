@@ -393,6 +393,14 @@ public class PlayerState {
 		return activeHats.size() < SettingsManager.MAXIMUM_HAT_LIMIT.getInt();
 	}
 	
+	 /**
+	  * Checks to see if the player has too many hats equipped
+	  * @return
+	  */
+	public boolean isEquipOverflowed () {
+		return activeHats.size() >= SettingsManager.MAXIMUM_HAT_LIMIT.getInt();
+	}
+	
 	/**
 	 * Removes all active hats
 	 */
@@ -414,6 +422,16 @@ public class PlayerState {
 	 */
 	public void removeHat (Hat hat) {
 		activeHats.remove(hat);
+	}
+	
+	/**
+	 * Removes the oldest equipped hat
+	 */
+	public void removeLastHat ()
+	{
+		if (activeHats.size() > 0) {
+			activeHats.remove(0);
+		}
 	}
 	
 	/**
