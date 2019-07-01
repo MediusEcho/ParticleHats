@@ -42,6 +42,7 @@ import com.mediusecho.particlehats.tasks.MenuTask;
 import com.mediusecho.particlehats.tasks.ParticleTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
 import com.mediusecho.particlehats.util.ResourceUtil;
+import com.mediusecho.particlehats.util.YamlUtil;
 
 @SuppressWarnings("unused")
 public class ParticleHats extends JavaPlugin {
@@ -163,6 +164,12 @@ public class ParticleHats extends JavaPlugin {
 			log("");
 			checkDefaultLang();
 			loadLang();
+			
+			if (YamlUtil.checkConfigForUpdates(getConfig()))
+			{
+				log("Updating config.yml");
+				YamlUtil.updateConfig(this, getConfig());
+			}
 			
 			// Create our managers
 			resourceManager = new ResourceManager(this);

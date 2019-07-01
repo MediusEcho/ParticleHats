@@ -13,6 +13,7 @@ import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 public class YamlUtil {
 
 	private static final double MENU_VERSION = 4.0;
+	private static final double CONFIG_VERSION = 1.1;
 	
 	/**
 	 * Checks to see if this CustomConfig is updated to the current version
@@ -231,5 +232,29 @@ public class YamlUtil {
 				config.set(newPath + "particles.1.block-data.damage-value", durability);
 			}
 		}
+	}
+	
+	/**
+	 * Checks this configuration file for updates and returns true if updates are found
+	 * @param config
+	 * @return
+	 */
+	public static boolean checkConfigForUpdates (FileConfiguration config)
+	{
+		if (!config.contains("version")) {
+			return false;
+		}
+		return config.getDouble("version") < CONFIG_VERSION;
+	}
+	
+	public static void updateConfig (ParticleHats core, FileConfiguration config)
+	{
+		// unequip hat overflows
+		if (!config.isSet("unequip-overflow-hats")) {
+			config.set("unequip-overflow-hats", false);
+		}
+		
+		config.set("version", CONFIG_VERSION);
+		core.saveConfig();
 	}
 }
