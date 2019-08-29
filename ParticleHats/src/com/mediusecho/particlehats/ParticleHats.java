@@ -133,7 +133,20 @@ public class ParticleHats extends JavaPlugin {
 		
 		log("Initializing");
 		log("");
-		{					
+		{		
+			if (YamlUtil.checkConfigForUpdates(getConfig()))
+			{
+				if (SettingsManager.CONFIG_AUTO_UPDATE.getBoolean())
+				{
+					log("Updating config.yml");
+					YamlUtil.updateConfig(this, getConfig());
+				}
+				
+				else {
+					log("There is an update for config.yml, auto updates are disabled.");
+				}
+			}
+			
 			// Load our database
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
 			database = databaseType.getDatabase(this);
@@ -164,12 +177,6 @@ public class ParticleHats extends JavaPlugin {
 			log("");
 			checkDefaultLang();
 			loadLang();
-			
-			if (YamlUtil.checkConfigForUpdates(getConfig()))
-			{
-				log("Updating config.yml");
-				YamlUtil.updateConfig(this, getConfig());
-			}
 			
 			// Create our managers
 			resourceManager = new ResourceManager(this);
