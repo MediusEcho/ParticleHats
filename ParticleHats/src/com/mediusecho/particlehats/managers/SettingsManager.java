@@ -123,6 +123,18 @@ public enum SettingsManager {
 		this(key, dataType, defaultData, -1);
 	}
 	
+	public String getKey () {
+		return key;
+	}
+	
+	public Type getType () {
+		return dataType;
+	}
+	
+	public Object getDefaultData () {
+		return defaultData;
+	}
+	
 	/**
 	 * Returns the data that belongs to this key, or the default data
 	 * @return
