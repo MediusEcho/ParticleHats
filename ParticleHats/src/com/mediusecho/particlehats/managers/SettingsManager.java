@@ -357,7 +357,7 @@ public enum SettingsManager {
 		loadData();
 	}
 	
-	private enum Type
+	public enum Type
 	{
 		INT,
 		INT_CLAMPED,
