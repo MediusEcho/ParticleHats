@@ -264,6 +264,40 @@ public enum SettingsManager {
 		return String.valueOf(getData());
 	}
 	
+	/**
+	 * Returns a config friendly version of the default data
+	 */
+	@SuppressWarnings("unchecked")
+	public Object getDefaultConfigValue () 
+	{
+		switch (dataType)
+		{
+			case INT:
+				return (Integer)defaultData;
+				
+			case DOUBLE:
+				return (Double)defaultData;
+				
+			case STRING:
+				return (String)defaultData;
+				
+			case BOOLEAN:
+				return (Boolean)defaultData;
+				
+			case MATERIAL:
+				return ((Material)defaultData).toString();
+				
+			case STRING_LIST:
+				return (ArrayList<String>)defaultData;
+				
+			case SOUND:
+				return ((Sound)defaultData).toString();
+				
+			default:
+				return defaultData;
+		}
+	}
+	
 	private static void loadData ()
 	{
 		FileConfiguration config = plugin.getConfig();
