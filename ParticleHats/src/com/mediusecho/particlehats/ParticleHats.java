@@ -111,7 +111,7 @@ public class ParticleHats extends JavaPlugin {
 			{
 				log("-----------------------------------------------------------------------");
 				log("This version of ParticleHats is not compatible with your server version");
-				log("Download version 3.7.5 if your server is on 1.7.10");
+				log("Download version 3.7.5 if your server is on a version older than 1.8");
 				log("-----------------------------------------------------------------------");
 				
 				getServer().getPluginManager().disablePlugin(this);
