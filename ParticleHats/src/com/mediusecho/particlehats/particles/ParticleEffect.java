@@ -77,7 +77,12 @@ public enum ParticleEffect {
 	FLASH                  (60, -1, 14, CompatibleMaterial.LANTERN),
 	SNEEZE                 (61, -1, 14, CompatibleMaterial.GRAY_DYE),
 	EMPTY_SPACE            (62, -1, -1, CompatibleMaterial.BARRIER),
-	LANDING_LAVA           (63, -1, 14, Material.MAGMA_CREAM);
+	LANDING_LAVA           (63, -1, 14, Material.MAGMA_CREAM),
+	
+	DRIPPING_HONEY         (64, -1, 15, CompatibleMaterial.HONEY_BOTTLE),
+	FALLING_HONEY          (65, -1, 15, CompatibleMaterial.HONEYCOMB),
+	FALLING_NECTAR         (66, -1, 15, CompatibleMaterial.DANDELION),
+	LANDING_HONEY          (67, -1, 15, CompatibleMaterial.HONEY_BOTTLE);
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
