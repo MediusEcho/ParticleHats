@@ -131,7 +131,7 @@ public class ParticleHats extends JavaPlugin {
 		// Save default config
 		saveDefaultConfig();
 		
-		log("Initializing");
+		log("Loading ParticleHats v" + getDescription().getVersion());
 		log("");
 		{		
 			if (YamlUtil.checkConfigForUpdates(getConfig()))
@@ -208,7 +208,7 @@ public class ParticleHats extends JavaPlugin {
 			particleTask.runTaskTimer(this, 0, 1);
 		}
 		log("");
-		log("" + this.getDescription().getVersion() + " loaded");
+		log("Done :)");
 		
 		enabled = true;
 	}
