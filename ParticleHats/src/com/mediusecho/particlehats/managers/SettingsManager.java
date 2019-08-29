@@ -366,6 +366,7 @@ public enum SettingsManager {
 		BOOLEAN,
 		MATERIAL,
 		STRING_LIST,
-		SOUND;
+		SOUND,
+		DEPRECATED;
 	}
 }
