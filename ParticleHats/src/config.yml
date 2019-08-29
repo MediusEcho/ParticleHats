@@ -12,6 +12,9 @@
 # This value gets updated automatically
 version: 1.1
 #
+# Enable automatic config updates
+config-auto-update: true
+#
 # Set the default menu that will open any time a player executes /h
 default-menu: particles.yml
 #

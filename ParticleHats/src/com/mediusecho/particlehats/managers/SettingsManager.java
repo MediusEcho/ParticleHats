@@ -19,6 +19,7 @@ public enum SettingsManager {
 	/**
 	 * General Properties
 	 */
+	CONFIG_AUTO_UPDATE ("config-auto-update", Type.BOOLEAN, true),
 	DEFAULT_MENU ("default-menu", Type.STRING, "particles.yml"),
 	LANG ("lang", Type.STRING, "en_US.lang"),
 	LOAD_INCLUDED_MENUS ("load-included-menus", Type.BOOLEAN, true),
