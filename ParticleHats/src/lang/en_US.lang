@@ -112,6 +112,7 @@ command_error_already_editing: "&cYou cannot use this command while editing a me
 # Main command
 command_main_description: "Main Command"
 command_main_usage: "/h"
+command_main_default_menu_error: "&cThere is no default menu set in config.yml"
 
 # Help Command
 command_help_description: "Displays all commands and their usage"

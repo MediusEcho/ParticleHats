@@ -50,6 +50,7 @@ public enum Message {
 	// Main Command
 	COMMAND_MAIN_DESCRIPTION ("Main Command"),
 	COMMAND_MAIN_USAGE       ("/h"),
+	COMMAND_MAIN_DEFAULT_MENU_ERROR ("&cThere is no default menu set in config.yml"),
 	
 	// Help
 	COMMAND_HELP_DESCRIPTION ("Displays all commands and their usage"),
