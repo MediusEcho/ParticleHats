@@ -19,8 +19,14 @@ public class GroupInfoCommand extends Command {
 		String infoTemplate = Message.COMMAND_GROUP_INFO.getValue();
 		
 		sender.sendMessage("&f> " + Message.COMMAND_GROUP_INFO_TIP.getValue());
-		for (Group g : groups) {
-			sender.sendMessage("&f> " + infoTemplate.replace("{1}", g.getName()).replace("{2}", g.getDefaultMenu()).replace("{3}", Integer.toString(g.getWeight())));
+		for (Group g : groups) 
+		{
+			String info = infoTemplate
+					.replace("{1}", g.getName())
+					.replace("{2}", g.getDefaultMenu())
+					.replace("{3}", Integer.toString(g.getWeight()));
+			
+			sender.sendMessage("&f> " + info);		
 		}
 		
 		return false;
