@@ -91,7 +91,6 @@ public class EditorPotionMenu extends EditorMenu {
 		if (menus.containsKey(currentPage))
 		{
 			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			//menuBuilder.setOwnerState(MenuState.SWITCHING);
 			owner.openInventory(menus.get(currentPage));
 		}
 	}
@@ -121,6 +120,22 @@ public class EditorPotionMenu extends EditorMenu {
 			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
 		});
 		
+		// Previous Page
+		setAction(48, (clickEvent, slot) ->
+		{
+			currentPage--;
+			open();
+			return EditorClickType.NEUTRAL;
+		});
+		
+		// Next Page
+		setAction(50, (clickEvent, slot) ->
+		{
+			currentPage++;
+			open();
+			return EditorClickType.NEUTRAL;
+		});
+		
 		boolean useBlacklist = !SettingsManager.EDITOR_SHOW_BLACKLISTED_POTIONS.getBoolean();
 		int potionCount = 0;
 		
@@ -134,6 +149,7 @@ public class EditorPotionMenu extends EditorMenu {
 				continue;
 			}
 			
+			// Don't allow invisibility since it messes with our vanish support
 			if (potionType.getName().equals("INVISIBILITY")) {
 				continue;
 			}
