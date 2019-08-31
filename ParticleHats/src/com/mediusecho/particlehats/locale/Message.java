@@ -124,7 +124,7 @@ public enum Message {
 	COMMAND_GROUP_INFO_DESCRIPTION ("Lists all available groups"),
 	COMMAND_GROUP_INFO_USAGE       ("/h group info"),  
 	COMMAND_GROUP_INFO_TIP         ("&3Groups:"),
-	COMMAND_GROUP_INFO             ("&3name: &f{1} &3menu: &f{1} &3weight: &f{3}"),
+	COMMAND_GROUP_INFO             ("&3name: &f{1} &3menu: &f{2} &3weight: &f{3}"),
 	
 	// Add Type Command
 	COMMAND_ADD_TYPE_DESCRIPTION ("Adds a custom type to the MySQL database"),
