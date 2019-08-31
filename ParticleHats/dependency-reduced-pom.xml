@@ -46,10 +46,6 @@
       <name>Dakani Nexus Repo</name>
       <url>http://repo.dakanilabs.com/content/repositories/public</url>
     </repository>
-    <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-    </repository>
   </repositories>
   <dependencies>
     <dependency>
