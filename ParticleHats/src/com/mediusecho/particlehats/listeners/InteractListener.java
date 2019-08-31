@@ -21,9 +21,6 @@ import com.mediusecho.particlehats.ui.Menu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
 
-// TODO: [4.1] Maybe add ability to select a block, let particles be displayed in the world
-//
-
 public class InteractListener implements Listener {
 
 	private final ParticleHats core;
