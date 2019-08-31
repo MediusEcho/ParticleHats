@@ -310,19 +310,19 @@ public enum SettingsManager {
 				switch (entry.dataType)
 				{
 					case INT:
-						value = config.getInt(entry.key);
+						value = config.getInt(entry.key, (Integer) entry.defaultData);
 						break;
 						
 					case DOUBLE:
-						value = config.getDouble(entry.key);
+						value = config.getDouble(entry.key, (Double) entry.defaultData);
 						break;
 						
 					case STRING:
-						value = config.getString(entry.key);
+						value = config.getString(entry.key, (String) entry.defaultData);
 						break;
 						
 					case BOOLEAN:
-						value = config.getBoolean(entry.key);
+						value = config.getBoolean(entry.key, (Boolean) entry.defaultData);
 						break;
 						
 					case MATERIAL:
