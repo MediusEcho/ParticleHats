@@ -50,6 +50,9 @@ public class ParticleHats extends JavaPlugin {
 	// TODO: [?] Ability to use particles that haven't been implemented yet by using their name.
 	// For when the plugin hasn't updated to support 1.x, but can still load the particles by name 
 	
+	// TODO: [?] Enjin economy support?
+	// TODO: [?] Head Database support?
+	
 	// TODO: [Future] NPC Support (Citizens?)
 	// TODO: [Future] Allow adding custom types images as frames to an animation
 	// TODO: [Future] Re-implement text particle type
@@ -76,6 +79,8 @@ public class ParticleHats extends JavaPlugin {
 	// Lang
 	private File langFile;
 	private YamlConfiguration lang;
+	
+	// Update en_US.lang version as well.
 	private final double LANG_VERSION = 1.1;
 	
 	private Map<UUID, PlayerState> playerState;
@@ -151,6 +156,7 @@ public class ParticleHats extends JavaPlugin {
 			databaseType = DatabaseType.fromAlias(SettingsManager.DATABASE_TYPE.getString());
 			database = databaseType.getDatabase(this);
 			
+			// yaml always returns true, mysql will return false if the connection could not be made
 			if (!database.isEnabled())
 			{
 				log("---------------------------------------------------");
