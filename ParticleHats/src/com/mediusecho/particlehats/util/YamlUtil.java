@@ -245,14 +245,14 @@ public class YamlUtil {
 	public static boolean checkConfigForUpdates (FileConfiguration config)
 	{
 		if (!config.contains("version")) {
-			return false;
+			return true;
 		}
 		return config.getDouble("version") < CONFIG_VERSION;
 	}
 	
 	public static void updateConfig (ParticleHats core, FileConfiguration config)
 	{
-		if (config.getDouble("version") >= CONFIG_VERSION) {
+		if (config.getDouble("version", 0) >= CONFIG_VERSION) {
 			return;
 		}
 		
@@ -324,7 +324,9 @@ public class YamlUtil {
 	
 	private enum LegacyType {
 		
+		DEFAULT_MENU ("defaults.default_menu", "default-menu", Type.STRING, "particles.yml"),
 		GENERATE_CONFIG_FILES ("defaults.generate_config_files", "load-included-menus", Type.BOOLEAN, true),
+		GENERATE_CUSTOM_TYPES ("defaults.generate_custom_types", "load-included-custom-types", Type.BOOLEAN, true),
 		DISABLED_WORLDS ("defaults.disabled_worlds", "disabled-worlds", Type.STRING_LIST, new ArrayList<String>()),
 		CHECK_WORLD_PERMISSION ("defaults.check_world_permission", "check-world-permission", Type.BOOLEAN, false),
 		HALO ("defaults.halo", "", Type.DEPRECATED, 0),
@@ -333,12 +335,20 @@ public class YamlUtil {
 		FLAGS_EXPERIENCE ("defaults.flags.experience", "flags.experience", Type.BOOLEAN, false),
 		FLAGS_PERMISSION ("defaults.flags.permission", "flags.permission", Type.BOOLEAN, true),
 		FLAGS_VANISH ("defaults.flags.vanish", "flags.vanish", Type.BOOLEAN, false),
+		FLAGS_PLAYERPOINTS ("defaults.flag.playerpoints", "flags.playerpoints", Type.BOOLEAN, false),
 		CURRENCY_TYPE ("defaults.currency_type", "currency", Type.STRING, "$"),
 		CLOSE_MENU_ON_EQUIP ("defaults.close_menu_on_equip", "close-menu-on-equip", Type.BOOLEAN, true),
+		MENU_LOCK_HATS_WITHOUT_PERMISSION ("defaults.menu.lock_hats_without_permission", "menu.lock-hats-without-permission", Type.BOOLEAN, false),
+		MENU_LOCKED_ITEM_ID ("defaults.menu.locked_item.id", "menu.locked-item.id", Type.STRING, "LAPIS_LAZULI"),
+		MENU_LOCKED_ITEM_TITLE ("defaults.menu.locked_item.title", "menu.locked-item.title", Type.STRING, "&8Locked"),
 		MENU_SOUND_ENABLED ("defaults.menu_sound.enabled", "menu.sound.enabled", Type.BOOLEAN, true),
 		MENU_SOUND ("defaults.menu_sound.sound", "menu.sound.id", Type.STRING, "UI_BUTTON_CLICK"),
 		MENU_SOUND_VOLUME ("defaults.menu_sound.volume", "menu.sound.volume", Type.DOUBLE, 1.0),
 		MENU_SOUND_PITCH ("defaults.menu_sound.pitch", "menu.sound.pitch", Type.DOUBLE, 1.0),
+		EDITING_SOUND_ENABLED ("defaults.editing.editor_sound.enabled", "editor.sound.enabled", Type.BOOLEAN, true),
+		EDITING_SOUND ("defaults.editing.editor_sound.sound", "editor.sound.id", Type.STRING, "BLOCK_METAL_PLACE"),
+		EDITING_SOUND_VOLUME ("defaults.editing.editor_sound.volume", "editor.sound.volume", Type.DOUBLE, 1.0),
+		EDITING_SOUND_PITCH ("defaults.editing.editor_sound.pitch", "editor.sound.pitch", Type.DOUBLE, 1.0),
 		AFK_COOLDOWN ("defaults.afk.cooldown", "afk.cooldown", Type.INT, 7),
 		COMBAT_COOLDOWN ("defaults.combat.cooldown", "combat.cooldown", Type.INT, 5),
 		COMBAT_CHECK_PLAYERS ("defaults.combat.check_players", "combat.check-players", Type.BOOLEAN, true),
@@ -348,7 +358,13 @@ public class YamlUtil {
 		OPEN_MENU_WITH_ITEM_ENABLED ("defaults.open_menu_with_item.enabled", "menu.open-menu-with-item.enabled", Type.BOOLEAN, false),
 		OPEN_MENU_WITH_ITEM_DEFAULT_MENU ("defaults.open_menu_with_item.default_menu", "menu.open-menu-with-item.default-menu", Type.STRING, "particles.yml"),
 		OPEN_MENU_WITH_ITEM_ID ("defaults.open_menu_with_item.id", "menu.open-menu-with-item.id", Type.STRING, "NETHER_STAR"),
-		OPEN_MENU_WITH_ITEM_DAMAGE_VALUE ("defaults.open_menu_with_item.damage-value", "menu.open-menu-with-item.damage-value", Type.INT, 0);
+		OPEN_MENU_WITH_ITEM_DAMAGE_VALUE ("defaults.open_menu_with_item.damage-value", "menu.open-menu-with-item.damage-value", Type.INT, 0),
+		DATABASE_TYPE ("defaults.database.type", "database.type", Type.STRING, "yml"),
+		DATABASE_USERNAME ("defaults.database.username", "database.username", Type.STRING, "username"),
+		DATABASE_PASSWORD ("defaults.database.password", "database.password", Type.STRING, "password"),
+		DATABASE_HOSTNAME ("defaults.database.hostname", "database.hostname", Type.STRING, "host"),
+		DATABASE_PORT ("defaults.database.port", "database.port", Type.STRING, "3306"),
+		DATABASE_DATABASE ("defaults.database.database", "database.database", Type.STRING, "ParticleHats");
 		
 		private final String oldKey;
 		private final String newKey;
