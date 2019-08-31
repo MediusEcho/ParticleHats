@@ -30,13 +30,25 @@ public class MainCommand extends Command {
 			}
 			
 			List<Group> groups = core.getDatabase().getGroups(true);
-			String defaultMenu = SettingsManager.DEFAULT_MENU.getString();
+			String defaultMenu = "";
 			
+			// Check for a players group menu first
 			for (Group g : groups)
 			{
 				if (sender.hasPermission(Permission.GROUP.append(g.getName()))) {
 					defaultMenu = g.getDefaultMenu();
 				}
+			}
+			
+			// Use default menu if nothing was found
+			if (defaultMenu.equals("")) {
+				defaultMenu = SettingsManager.DEFAULT_MENU.getString();
+			}
+			
+			if (defaultMenu == null) 
+			{
+				sender.sendMessage(Message.COMMAND_MAIN_DEFAULT_MENU_ERROR);
+				return false;
 			}
 			
 			String menuName = defaultMenu.contains(".") ? defaultMenu.split("\\.")[0] : defaultMenu;
