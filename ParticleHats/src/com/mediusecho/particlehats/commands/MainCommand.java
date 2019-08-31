@@ -31,11 +31,14 @@ public class MainCommand extends Command {
 			
 			List<Group> groups = core.getDatabase().getGroups(true);
 			String defaultMenu = "";
+			boolean usingGroupMenu = false;
 			
 			// Check for a players group menu first
 			for (Group g : groups)
 			{
-				if (sender.hasPermission(Permission.GROUP.append(g.getName()))) {
+				if (sender.hasPermission(Permission.GROUP.append(g.getName()))) 
+				{
+					usingGroupMenu = true;
 					defaultMenu = g.getDefaultMenu();
 				}
 			}
@@ -45,12 +48,6 @@ public class MainCommand extends Command {
 				defaultMenu = SettingsManager.DEFAULT_MENU.getString();
 			}
 			
-			if (defaultMenu == null) 
-			{
-				sender.sendMessage(Message.COMMAND_MAIN_DEFAULT_MENU_ERROR);
-				return false;
-			}
-			
 			String menuName = defaultMenu.contains(".") ? defaultMenu.split("\\.")[0] : defaultMenu;
 			Database database = core.getDatabase();
 			PlayerState playerState = core.getPlayerState(sender.getPlayer());
@@ -58,7 +55,11 @@ public class MainCommand extends Command {
 			
 			if (inventory == null)
 			{
-				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.getValue().replace("{1}", menuName));
+				if (usingGroupMenu) {
+					sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_GROUP_MENU.getValue().replace("{1}", menuName));
+				} else {
+					sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.getValue().replace("{1}", menuName));
+				}
 				return false;
 			}
 			

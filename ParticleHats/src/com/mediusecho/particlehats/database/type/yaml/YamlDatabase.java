@@ -789,6 +789,11 @@ public class YamlDatabase implements Database {
 		for (String key : config.getKeys(false)) 
 		{
 			String menuName = config.getString(key + ".default-menu");
+			
+			if (menuName == null) {
+				continue;
+			}
+			
 			int weight = config.getInt(key + ".weight", 0);
 			groups.add(new Group(key, menuName, weight));
 		}
