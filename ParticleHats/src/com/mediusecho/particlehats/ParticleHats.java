@@ -47,11 +47,15 @@ import com.mediusecho.particlehats.util.YamlUtil;
 @SuppressWarnings("unused")
 public class ParticleHats extends JavaPlugin {
 	
+	// [Future] Are features that i plan on adding.
+	// [?] Are ideas that may or may not get added.
+	
 	// TODO: [?] Ability to use particles that haven't been implemented yet by using their name.
 	// For when the plugin hasn't updated to support 1.x, but can still load the particles by name 
 	
 	// TODO: [?] Enjin economy support?
 	// TODO: [?] Head Database support?
+	// TODO: [?] Type texture support? Lets built-in types display custom images (eg. capes)
 	
 	// TODO: [Future] NPC Support (Citizens?)
 	// TODO: [Future] Allow adding custom types images as frames to an animation
