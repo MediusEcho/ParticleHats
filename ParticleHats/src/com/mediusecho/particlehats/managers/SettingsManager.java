@@ -334,14 +334,13 @@ public enum SettingsManager {
 						break;
 						
 					case SOUND:
-						value = ResourceUtil.getSound(entry.key, "CLICK");//Sound.valueOf(config.getString(entry.key));
+						value = ResourceUtil.getSound(entry.key, "CLICK");
 						break;
 					
 					default:
 						value = config.get(entry.key);
 				}
 				
-				//Object value = config.get(entry.key);
 				if (value != null) {
 					data.put(entry.key, value);
 				} else {
