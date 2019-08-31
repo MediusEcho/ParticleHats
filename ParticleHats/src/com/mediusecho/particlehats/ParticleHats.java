@@ -57,6 +57,7 @@ public class ParticleHats extends JavaPlugin {
 	// TODO: [?] Head Database support?
 	// TODO: [?] Type texture support? Lets built-in types display custom images (eg. capes)
 	
+	// TODO: [Future] Add update notifier
 	// TODO: [Future] NPC Support (Citizens?)
 	// TODO: [Future] Allow adding custom types images as frames to an animation
 	// TODO: [Future] Re-implement text particle type
