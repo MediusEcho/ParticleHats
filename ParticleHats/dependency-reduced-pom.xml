@@ -47,8 +47,8 @@
       <url>http://repo.dakanilabs.com/content/repositories/public</url>
     </repository>
     <repository>
-      <id>vault-repo</id>
-      <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
   <dependencies>
