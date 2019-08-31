@@ -29,6 +29,6 @@ public class EditorNodeMainMenu extends EditorMainMenu {
 		
 		setButton(38, backButton, backAction);
 		
-		// TODO: [4.1] Add option to move a node to a different hat?
+		// TODO: [Future] Add option to move a node to a different hat?
 	}
 }

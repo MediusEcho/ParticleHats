@@ -7,7 +7,8 @@ import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 
-// TODO: [4.1] Finish Animated Effect
+// TODO: [Future] Finish Animated Effect
+
 public class AnimatedEffect extends Effect {
 
 	@Override
