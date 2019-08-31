@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.1
+version: 1.2
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -78,6 +78,10 @@ command_error_menu_exists: "&7'&c{1}&7' already exists"
 # Trying to access a menu that doesn't exist
 # {1}: The name of the menu
 command_error_unknown_menu: "&cUnable to find menu '&7{1}&c'"
+
+# Trying to access a group menu that doesn't exist
+# {1}: The name of the menu
+command_error_unknown_group_menu: "&cUnable to find group menu '&7{1}&c'"
 
 # Trying to reference a player that doesn't exist
 # {1}: The name of the player

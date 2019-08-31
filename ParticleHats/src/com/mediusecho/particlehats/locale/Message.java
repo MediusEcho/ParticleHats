@@ -39,6 +39,7 @@ public enum Message {
 	COMMAND_ERROR_ARGUMENTS      ("&cWrong number of arguments"),
 	COMMAND_ERROR_MENU_EXISTS    ("&7Menu '&c{1}&7' already exists"),
 	COMMAND_ERROR_UNKNOWN_MENU   ("&cUnable to find menu '&7{1}&c'"),
+	COMMAND_ERROR_UNKNOWN_GROUP_MENU ("&cUnable to find group menu '&7{1}&c'"),
 	COMMAND_ERROR_UNKNOWN_PLAYER ("&7Unable to find '&c{1}&7'"),
 	COMMAND_ERROR_OFFLINE_PLAYER ("&7'&c{1}&7' is offline"),
 	COMMAND_ERROR_GROUP_EXISTS   ("&7Group '&c{1}&7' already exists"),
