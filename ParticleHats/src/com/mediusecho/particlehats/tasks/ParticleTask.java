@@ -33,12 +33,14 @@ public class ParticleTask extends BukkitRunnable {
 	
 	private List<String> disabledWorlds;
 	private boolean checkWorldPermission;
+	private boolean essentialsVanishFlag;
 	
 	public ParticleTask (ParticleHats core)
 	{
 		this.core = core;
 		disabledWorlds = SettingsManager.DISABLED_WORLDS.getList();
 		checkWorldPermission = SettingsManager.CHECK_WORLD_PERMISSION.getBoolean();
+		essentialsVanishFlag = SettingsManager.FLAG_ESSENTIALS_VANISH.getBoolean();
 	}
 	
 	@Override
@@ -63,7 +65,7 @@ public class ParticleTask extends BukkitRunnable {
 				}
 				
 				// Skip if the player has a potion of invisibility
-				if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+				if (essentialsVanishFlag && player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
 					continue;
 				}
 				
@@ -107,6 +109,7 @@ public class ParticleTask extends BukkitRunnable {
 		disabledWorlds = SettingsManager.DISABLED_WORLDS.getList();
 		
 		checkWorldPermission = SettingsManager.CHECK_WORLD_PERMISSION.getBoolean();
+		essentialsVanishFlag = SettingsManager.FLAG_ESSENTIALS_VANISH.getBoolean();
 	}
 	
 	private void checkMode (UUID id, PlayerState playerState, Hat hat)
