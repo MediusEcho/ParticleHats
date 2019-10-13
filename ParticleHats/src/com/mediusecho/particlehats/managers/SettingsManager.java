@@ -53,6 +53,7 @@ public enum SettingsManager {
 	FLAG_EXPERIENCE ("flags.experience", Type.BOOLEAN, false),
 	FLAG_PERMISSION ("flags.permission", Type.BOOLEAN, true),
 	FLAG_VANISH ("flags.vanish", Type.BOOLEAN, false),
+	FLAG_ESSENTIALS_VANISH ("flags.essentials-vanish", Type.BOOLEAN, false),
 	
 	/**
 	 * Afk / Combat cooldown and flags
