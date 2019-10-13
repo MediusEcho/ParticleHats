@@ -98,6 +98,9 @@ flags:
   # Use a supported vanish plugin, and hide particles any time a player vanishes
   # Supported plugins are: SuperVanish, PremiumVanish, & VanishNoPacket
   vanish: false
+  #
+  # Disable particle effects when a player has a potion of invisibility effect
+  essentials-vanish: false
 #
 afk:
   # Set how many seconds the plugin will wait before marking a player as AFK
