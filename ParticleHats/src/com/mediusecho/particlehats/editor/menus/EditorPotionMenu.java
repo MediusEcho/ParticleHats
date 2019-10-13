@@ -49,7 +49,8 @@ public class EditorPotionMenu extends EditorMenu {
 			"WEAKNESS",
 			"WITHER",
 			"UNLUCK",
-			"HUNGER");
+			"HUNGER",
+			"BAD_OMEN");
 	
 	public EditorPotionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
 	{
@@ -149,11 +150,6 @@ public class EditorPotionMenu extends EditorMenu {
 				continue;
 			}
 			
-			// Don't allow invisibility since it messes with our vanish support
-			if (potionType.getName().equals("INVISIBILITY")) {
-				continue;
-			}
-			
 			potionCount++;
 		}
 		
@@ -202,10 +198,6 @@ public class EditorPotionMenu extends EditorMenu {
 			}
 			
 			if (useBlacklist && potionBlacklist.contains(potionType.getName())) {
-				continue;
-			}
-			
-			if (potionType.getName().equals("INVISIBILITY")) {
 				continue;
 			}
 			
