@@ -16,7 +16,7 @@ import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 public class YamlUtil {
 
 	private static final double MENU_VERSION = 4.0;
-	private static final double CONFIG_VERSION = 2.0;
+	private static final double CONFIG_VERSION = 2.1;
 	
 	/**
 	 * Checks to see if this CustomConfig is updated to the current version
