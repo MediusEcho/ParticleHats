@@ -1666,6 +1666,7 @@ public class Hat {
 		clone.animation = animation;
 		clone.trackingMethod = trackingMethod;
 		clone.customEffect = customEffect;
+		clone.potion = potion;
 		
 		clone.updateFrequency = updateFrequency;
 		clone.count = count;
