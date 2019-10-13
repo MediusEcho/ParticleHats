@@ -1,3 +1,10 @@
+4.0.1
+- Added separate vanish flag for Essentials vanish
+  - Missing flag for Essentials vanish meant the plugin would always disable particles when a player had a potion of invisibility
+- Added potion of invisibility to potion menu.
+- Moved Bad Omen potion effect to blacklist. You can still access this potion by enabling blacklist support in config.yml
+- Fixed potion effects not being applied when trying on a hat from the menu editor.
+
 4.0.0:
 - Supports Versions
   - 1.14
