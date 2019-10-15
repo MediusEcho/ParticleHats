@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -84,6 +85,14 @@ public class InteractListener implements Listener {
 				playerState.setOpenMenu(menu);
 				menu.open();
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onEntityInteract (PlayerInteractEntityEvent event)
+	{
+		if (event.getRightClicked() != null && event.getRightClicked().hasMetadata("NPC")) {
+			ParticleHats.log("interacting with an NPC");
 		}
 	}
 }

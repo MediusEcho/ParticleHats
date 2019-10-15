@@ -18,7 +18,7 @@ import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
 import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.ui.Menu;
 
-public class PlayerState {
+public class PlayerState extends EntityState {
 	
 	private final Player owner;
 	private final UUID ownerID;
@@ -56,6 +56,8 @@ public class PlayerState {
 	
 	public PlayerState (final Player owner)
 	{
+		super(owner);
+		
 		this.owner = owner;
 		this.ownerID = owner.getUniqueId();
 		

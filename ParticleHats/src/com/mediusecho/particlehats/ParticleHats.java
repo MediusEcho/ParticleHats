@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +35,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.particles.renderer.legacy.LegacyParticleRenderer;
 import com.mediusecho.particlehats.particles.renderer.spigot.SpigotParticleRenderer;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.prompt.BukkitPrompt;
 import com.mediusecho.particlehats.prompt.Prompt;
@@ -89,6 +92,7 @@ public class ParticleHats extends JavaPlugin {
 	private final double LANG_VERSION = 1.2;
 	
 	private Map<UUID, PlayerState> playerState;
+	private Map<UUID, EntityState> entityState;
 	
 	// Lets us know we can use the BaseComponent class from the bungee api
 	private boolean supportsBaseComponent = true;
@@ -184,6 +188,7 @@ public class ParticleHats extends JavaPlugin {
 			
 			// Initialize our player state map
 			playerState = new HashMap<UUID, PlayerState>();
+			entityState = new HashMap<UUID, EntityState>();
 			
 			log("");
 			checkDefaultLang();
@@ -336,6 +341,42 @@ public class ParticleHats extends JavaPlugin {
 		playerState.put(id, state);
 		
 		return state;
+	}
+	
+	public EntityState getEntityState (Entity entity)
+	{
+		UUID id = entity.getUniqueId();
+		
+		if (entityState.containsKey(id)) {
+			return entityState.get(id);
+		}
+		
+		if (entity instanceof Player)
+		{
+			EntityState eState;
+			
+			if (entity.hasMetadata("NPC")) {
+				eState = new EntityState(entity);
+			} else {
+				eState = new PlayerState((Player)entity);
+			}
+			
+			entityState.put(id, eState);
+			return eState;
+		}
+		
+		EntityState eState = new EntityState(entity);
+		
+		entityState.put(id, eState);
+		return eState;
+	}
+	
+	/**
+	 * Returns all currently active player states
+	 * @return
+	 */
+	public Collection<EntityState> getEntityStates () {
+		return entityState.values();
 	}
 	
 	public void removePlayerState (UUID id) {

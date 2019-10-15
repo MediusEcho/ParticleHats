@@ -19,6 +19,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.player.PlayerState.AFKState;
 import com.mediusecho.particlehats.player.PlayerState.PVPState;
@@ -46,6 +47,21 @@ public class ParticleTask extends BukkitRunnable {
 	@Override
 	public void run() 
 	{
+		Collection<EntityState> entityStates = core.getEntityStates();
+		if (entityStates.size() > 0)
+		{
+			for (EntityState entityState : entityStates)
+			{
+				Entity owner = entityState.getOwner();
+				
+				for (Hat hat : entityState.getActiveHats())
+				{
+					displayHat(owner, hat);
+				}
+			}
+		}
+		
+		
 		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
 		if (onlinePlayers.size() > 0)
 		{
@@ -215,6 +231,15 @@ public class ParticleTask extends BukkitRunnable {
 				checkHat(id, playerState, node, false);
 			}
 		}
+	}
+	
+	private void displayHat (Entity entity, Hat hat)
+	{
+		if (hat.getType() == ParticleType.NONE) {
+			return;
+		}
+		
+		hat.displayType(ticks, entity);
 	}
 
 	private void displayHat (Player player, Hat hat)
