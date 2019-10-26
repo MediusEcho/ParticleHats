@@ -35,7 +35,14 @@ public class InventoryListener implements Listener {
 		{
 			Player player = (Player)event.getWhoClicked();
 			PlayerState playerState = core.getPlayerState(player);
-			playerState.getGuiState().onClick(event, playerState);	
+			
+			if (playerState.hasMenuManager())
+			{
+				boolean inMenu = event.getRawSlot() < event.getInventory().getSize();
+				playerState.getMenuManager().onClick(event, inMenu);
+			}
+			
+			playerState.getGuiState().onClick(event, playerState);
 		}
 	}
 	
@@ -49,6 +56,10 @@ public class InventoryListener implements Listener {
 		Player player = (Player)event.getPlayer();
 		PlayerState playerState = core.getPlayerState(player);
 		playerState.getGuiState().onClose(playerState);
+		
+		if (playerState.hasMenuManager()) {
+			playerState.getMenuManager().onInventoryClose(event);
+		}
 	}
 	
 	@EventHandler
@@ -62,12 +73,31 @@ public class InventoryListener implements Listener {
 		PlayerState playerState = core.getPlayerState(player);
 		GuiState guiState = playerState.getGuiState();
 		
-		if (guiState == GuiState.SWITCHING_MENU) {
-			playerState.setGuiState(GuiState.ACTIVE);
+		if (playerState.hasMenuManager()) {
+			playerState.getMenuManager().onInventoryOpen(event);
 		}
 		
-		else if (guiState == GuiState.SWITCHING_EDITOR) {
+		switch (guiState)
+		{
+		case SWITCHING_MENU:
+			playerState.setGuiState(GuiState.ACTIVE);
+			break;
+			
+		case SWITCHING_EDITOR:
 			playerState.setGuiState(GuiState.EDITOR);
+			break;
+			
+		case SWITCHING_MANAGER:
+			playerState.setGuiState(GuiState.CITIZENS_MANAGER);
+			break;
 		}
+//		
+//		if (guiState == GuiState.SWITCHING_MENU) {
+//			playerState.setGuiState(GuiState.ACTIVE);
+//		}
+//		
+//		else if (guiState == GuiState.SWITCHING_EDITOR) {
+//			playerState.setGuiState(GuiState.EDITOR);
+//		}
 	}
 }
