@@ -50,70 +50,116 @@ public class ParticleTask extends BukkitRunnable {
 		Collection<EntityState> entityStates = core.getEntityStates();
 		if (entityStates.size() > 0)
 		{
-			for (EntityState entityState : entityStates)
-			{
-				Entity owner = entityState.getOwner();
-				
-				for (Hat hat : entityState.getActiveHats())
-				{
-					displayHat(owner, hat);
-				}
-			}
-		}
-		
-		
-		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
-		if (onlinePlayers.size() > 0)
-		{
 			ticks++;
 			
-			for (Player player : onlinePlayers)
+			for (EntityState entityState : entityStates)
 			{
+				Entity entity = entityState.getOwner();
+				
+				// Skip this entity if they don't have any hats
+				if (entityState.getHatCount() == 0) {
+					continue;
+				}
+				
 				// Skip this world if it is disabled
-				World world = player.getWorld();
+				World world = entity.getWorld();
 				if (disabledWorlds.contains(world.getName())) {
 					continue;
 				}
 				
-				// Make sure the player has permission for this world
-				if (checkWorldPermission && !player.hasPermission("particlehats.world." + world.getName())) {
-					continue;
+				// Handle player checks
+				if (entityState instanceof PlayerState)
+				{
+					PlayerState playerState = (PlayerState)entityState;
+					Player player = playerState.getOwner();
+					
+					// Make sure the player has permission for this world
+					if (checkWorldPermission && !player.hasPermission("particlehats.world." + world.getName())) {
+						continue;
+					}
+					
+					// Skip if the player has a potion of invisibility
+					if (essentialsVanishFlag && player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+						continue;
+					}
 				}
 				
-				// Skip if the player has a potion of invisibility
-				if (essentialsVanishFlag && player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-					continue;
-				}
-				
-				UUID id = player.getUniqueId();
-				PlayerState playerState = core.getPlayerState(player);
-				
-				// Loop through each of this players active hats
-				List<Hat> activeHats = playerState.getActiveHats();
+				List<Hat> activeHats = entityState.getActiveHats();
 				for (int i = 0; i < activeHats.size(); i++)
 				{
 					Hat hat = activeHats.get(i);
 					
-					// Skip hats that are vanished
+					// Skip any hat that is hidden / vanished
 					if (hat.isVanished() || hat.isHidden()) {
 						continue;
 					}
 					
-					if (!hat.isPermanent()) 
+					// Update the hats demo count down
+					if (!hat.isPermanent())
 					{
 						if (hat.onTick()) {
-							playerState.removeHat(i);
+							entityState.removeHat(i);
 						}
 					}
 					
-					// Checks and updates the players mode (afk, combat, etc)
-					checkMode(id, playerState, hat);
-					
-					// Checks the hat against the players mode
-					checkHat(id, playerState, hat, true);
+					displayHat(entity, hat);
 				}
 			}
 		}
+		
+		
+//		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
+//		if (onlinePlayers.size() > 0)
+//		{
+//			ticks++;
+//			
+//			for (Player player : onlinePlayers)
+//			{
+//				// Skip this world if it is disabled
+//				World world = player.getWorld();
+//				if (disabledWorlds.contains(world.getName())) {
+//					continue;
+//				}
+//				
+//				// Make sure the player has permission for this world
+//				if (checkWorldPermission && !player.hasPermission("particlehats.world." + world.getName())) {
+//					continue;
+//				}
+//				
+//				// Skip if the player has a potion of invisibility
+//				if (essentialsVanishFlag && player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+//					continue;
+//				}
+//				
+//				UUID id = player.getUniqueId();
+//				PlayerState playerState = core.getPlayerState(player);
+//				
+//				// Loop through each of this players active hats
+//				List<Hat> activeHats = playerState.getActiveHats();
+//				for (int i = 0; i < activeHats.size(); i++)
+//				{
+//					Hat hat = activeHats.get(i);
+//					
+//					// Skip hats that are vanished
+//					if (hat.isVanished() || hat.isHidden()) {
+//						continue;
+//					}
+//					
+//					if (!hat.isPermanent()) 
+//					{
+//						if (hat.onTick()) {
+//							playerState.removeHat(i);
+//						}
+//					}
+//					
+//					// Checks and updates the players mode (afk, combat, etc)
+//					checkMode(id, playerState, hat);
+//					
+//					// Checks the hat against the players mode
+//					checkHat(id, playerState, hat, true);
+//				}
+//			}
+//		}
 	}
 	
 	public void onReload ()
@@ -128,49 +174,49 @@ public class ParticleTask extends BukkitRunnable {
 		essentialsVanishFlag = SettingsManager.FLAG_ESSENTIALS_VANISH.getBoolean();
 	}
 	
-	private void checkMode (UUID id, PlayerState playerState, Hat hat)
+	private void checkMode (UUID id, EntityState entityState, Hat hat)
 	{
-		Player player = playerState.getOwner();
-		AFKState afkState = playerState.getAFKState();
-		PVPState pvpState = playerState.getPVPState();
+		Entity entity = entityState.getOwner();
+		AFKState afkState = entityState.getAFKState();
+		PVPState pvpState = entityState.getPVPState();
 		
 		if (afkState == AFKState.ACTIVE)
 		{
-			final long timeAFK = System.currentTimeMillis() - playerState.getLastMoveTime();
+			final long timeAFK = System.currentTimeMillis() - entityState.getLastMoveTime();
 			if (timeAFK > afkCooldown)
 			{
-				playerState.setAFKState(AFKState.AFK);
-				playerState.setAFKLocation(player.getLocation());
+				entityState.setAFKState(AFKState.AFK);
+				entityState.setAFKLocation(entity.getLocation());
 			}
 		}
 		
 		if (pvpState == PVPState.ENGAGED)
 		{
-			final long timeEngaged = System.currentTimeMillis() - playerState.getLastCombatTime();
+			final long timeEngaged = System.currentTimeMillis() - entityState.getLastCombatTime();
 			if (timeEngaged > pvpCooldown) {
-				playerState.setPVPState(PVPState.PEACEFUL);
+				entityState.setPVPState(PVPState.PEACEFUL);
 			}
 		}
 	}
 	
-	private void checkHat (UUID id, PlayerState playerState, Hat hat, boolean checkNode)
+	private void checkHat (UUID id, EntityState entityState, Hat hat, boolean checkNode)
 	{
-		Player player = playerState.getOwner();
-		AFKState afkState = playerState.getAFKState();
-		PVPState pvpState = playerState.getPVPState();
+		Entity entity = entityState.getOwner();
+		AFKState afkState = entityState.getAFKState();
+		PVPState pvpState = entityState.getPVPState();
 		
 		switch (hat.getMode())
 		{
 			case ACTIVE:
 			{
-				displayHat(player, hat);
+				displayHat(entity, hat);
 				break;
 			}
 			
 			case WHEN_MOVING:
 			{
 				if (afkState == AFKState.ACTIVE) {
-					displayHat(player, hat);
+					displayHat(entity, hat);
 				}
 				break;
 			}
@@ -178,7 +224,7 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_AFK:
 			{
 				if (afkState == AFKState.AFK) {
-					displayHat(player, hat);
+					displayHat(entity, hat);
 				}
 				break;
 			}
@@ -186,39 +232,55 @@ public class ParticleTask extends BukkitRunnable {
 			case WHEN_PEACEFUL:
 			{
 				if (pvpState == PVPState.PEACEFUL) {
-					displayHat(player, hat);
+					displayHat(entity, hat);
 				}
 				break;
 			}
 			
 			case WHEN_GLIDING:
 			{
-				if (player.isGliding()) {
-					displayHat(player, hat);
+				if (entity instanceof Player)
+				{
+					Player player = (Player)entity;
+					if (player.isGliding()) {
+						displayHat(player, hat);
+					}
 				}
 				break;
 			}
 			
 			case WHEN_SPRINTING:
 			{
-				if (player.isSprinting()) {
-					displayHat(player, hat);
+				if (entity instanceof Player)
+				{
+					Player player = (Player)entity;
+					if (player.isSprinting()) {
+						displayHat(entity, hat);
+					}
 				}
 				break;
 			}
 			
 			case WHEN_SWIMMING:
 			{
-				if (player.isSwimming()) {
-					displayHat(player, hat);
+				if (entity instanceof Player)
+				{
+					Player player = (Player)entity;
+					if (player.isSwimming()) {
+						displayHat(entity, hat);
+					}
 				}
 				break;
 			}
 			
 			case WHEN_FLYING:
 			{
-				if (player.isFlying()) {
-					displayHat(player, hat);
+				if (entity instanceof Player)
+				{
+					Player player = (Player)entity;
+					if (player.isFlying()) {
+						displayHat(entity, hat);
+					}
 				}
 				break;
 			}
@@ -228,7 +290,7 @@ public class ParticleTask extends BukkitRunnable {
 		if (checkNode)
 		{
 			for (Hat node : hat.getNodes()) {
-				checkHat(id, playerState, node, false);
+				checkHat(id, entityState, node, false);
 			}
 		}
 	}
@@ -239,7 +301,19 @@ public class ParticleTask extends BukkitRunnable {
 			return;
 		}
 		
+		if (!handleTags(entity, hat, ticks)) {
+			return;
+		}
+		
 		hat.displayType(ticks, entity);
+		
+		if (entity instanceof Player)
+		{
+			PotionEffect potion = hat.getPotion();
+			if (potion != null) {
+				((Player)entity).addPotionEffect(potion);
+			}
+		}
 	}
 
 	private void displayHat (Player player, Hat hat)
@@ -260,13 +334,13 @@ public class ParticleTask extends BukkitRunnable {
 		}
 	}
 	
-	private boolean handleTags (Player player, Hat hat, int ticks)
+	private boolean handleTags (Entity entity, Hat hat, int ticks)
 	{
 		List<ParticleTag> tags = hat.getTags();
 		
 		if (tags.contains(ParticleTag.ARROWS))
 		{
-			for (Entity e : player.getNearbyEntities(50, 50, 50))
+			for (Entity e : entity.getNearbyEntities(50, 50, 50))
 			{
 				if (e instanceof Arrow)
 				{
@@ -282,9 +356,9 @@ public class ParticleTask extends BukkitRunnable {
 			return false;
 		}
 		
-		if (tags.contains(ParticleTag.PICTURE_MODE))
+		if (tags.contains(ParticleTag.PICTURE_MODE) && entity instanceof Player)
 		{
-			displayToNearestEntity(player, hat, ticks, ArmorStand.class);
+			displayToNearestEntity((Player)entity, hat, ticks, ArmorStand.class);
 			return false;
 		}
 		
