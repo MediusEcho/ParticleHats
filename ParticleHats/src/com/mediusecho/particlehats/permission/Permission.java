@@ -38,6 +38,9 @@ public enum Permission {
 	COMMAND_TYPE_ALL      ("command.type.*"),
 	COMMAND_IMPORT        ("command.import"),
 	COMMAND_SELECTORS     ("command.selectors", "command.*"),
+	COMMAND_NPC           ("command.npc"),
+	COMMAND_NPC_CLEAR     ("command.npc.clear"),
+	COMMAND_NPC_MANAGE    ("command.npc.manage"),
 	
 	WORLD     ("world"),
 	WORLD_ALL ("world.all"),
