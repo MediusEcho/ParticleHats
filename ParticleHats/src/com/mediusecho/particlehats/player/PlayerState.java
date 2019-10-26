@@ -4,26 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
+import com.mediusecho.particlehats.editor.citizens.CitizensManager;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
 import com.mediusecho.particlehats.ui.GuiState;
 import com.mediusecho.particlehats.ui.Menu;
+import com.mediusecho.particlehats.ui.MenuManager;
 
 public class PlayerState extends EntityState {
 	
 	private final Player owner;
-	private final UUID ownerID;
 	
+	private MenuManager menuManager;
 	private MenuBuilder menuBuilder;
+	private CitizensManager citizensManager;
 
 	private ActiveParticlesMenu activeParticlesMenu;
 	private Menu purchaseMenu;
@@ -40,17 +41,8 @@ public class PlayerState extends EntityState {
 	private int metaStateTime = 15;
 	private int metaDescriptionLine = 0;
 	
-	private long lastMoveTime = 0L;
-	private long lastCombatTime = 0L;
-	
-	private AFKState afkState = AFKState.ACTIVE;
-	private PVPState pvpState = PVPState.PEACEFUL;
-	
-	private Location afkLocation;
-	
 	private Hat pendingPurchaseHat;
 	
-	private List<Hat> activeHats;
 	private List<HatReference> purchasedHats;
 	private List<String> legacyPurchasedHats;
 	
@@ -59,9 +51,6 @@ public class PlayerState extends EntityState {
 		super(owner);
 		
 		this.owner = owner;
-		this.ownerID = owner.getUniqueId();
-		
-		activeHats = new ArrayList<Hat>();
 		purchasedHats = new ArrayList<HatReference>();
 		legacyPurchasedHats = new ArrayList<String>();
 		
@@ -76,12 +65,16 @@ public class PlayerState extends EntityState {
 		return owner;
 	}
 	
-	/**
-	 * Get the owners UUID
-	 * @return
-	 */
-	public UUID getOwnerID () {
-		return ownerID;
+	public void setMenuManager (MenuManager menuManager) {
+		this.menuManager = menuManager;
+	}
+	
+	public MenuManager getMenuManager () {
+		return menuManager;
+	}
+	
+	public boolean hasMenuManager () {
+		return menuManager != null;
 	}
 
 	/**
@@ -102,6 +95,14 @@ public class PlayerState extends EntityState {
 	
 	public boolean isEditing () {
 		return menuBuilder != null;
+	}
+	
+	public void setCitizensManager (CitizensManager citizensManager) {
+		this.citizensManager = citizensManager;
+	}
+	
+	public CitizensManager getCitizensManager () {
+		return citizensManager;
 	}
 	
 	/**
@@ -242,86 +243,6 @@ public class PlayerState extends EntityState {
 	}
 	
 	/**
-	 * Set the time this player last moved
-	 * @param time
-	 */
-	public void setLastMoveTime (long time) {
-		lastMoveTime = time;
-	}
-	
-	/**
-	 * Get the time since this player has moved
-	 * @return
-	 */
-	public long getLastMoveTime () {
-		return lastMoveTime;
-	}
-	
-	/**
-	 * Set the time this player attacked
-	 * @param time
-	 */
-	public void setLastCombatTime (long time) {
-		lastCombatTime = time;
-	}
-	
-	/**
-	 * Get the time since this player has attacked
-	 * @return
-	 */
-	public long getLastCombatTime () {
-		return lastCombatTime;
-	}
-	
-	/**
-	 * Set the players AFKState
-	 * @param state
-	 */
-	public void setAFKState (AFKState state) {
-		afkState = state;
-	}
-	
-	/**
-	 * Get the players AFKState
-	 * @return
-	 */
-	public AFKState getAFKState () {
-		return afkState;
-	}
-	
-	/**
-	 * Set the players PVPState
-	 * @param state
-	 */
-	public void setPVPState (PVPState state) {
-		pvpState = state;
-	}
-	
-	/**
-	 * Get the players PVPState
-	 * @return
-	 */
-	public PVPState getPVPState () {
-		return pvpState;
-	}
-	
-	/**
-	 * Set the location this player is afk at
-	 * @param location
-	 */
-	public void setAFKLocation (Location location) {
-		afkLocation = location;
-	}
-	
-	/**
-	 * Get the location this player went afk at
-	 * @return
-	 */
-	public Location getAFKLocation () {
-		return afkLocation;
-	}
-	
-	/**
 	 * Set which hat this player is trying to purchase
 	 * @param hat
 	 */
@@ -361,79 +282,6 @@ public class PlayerState extends EntityState {
 	 */
 	public int getMetaStateTime () {
 		return metaStateTime--;
-	}
-	
-	/**
-	 * Adds a hat this this players active hat list
-	 * @param hat
-	 */
-	public void addHat (Hat hat) {
-		activeHats.add(hat);
-	}
-	
-	/**
-	 * Gets all active hats
-	 * @return
-	 */
-	public List<Hat> getActiveHats () {
-		return activeHats;
-	}
-	
-	/**
-	 * Get how many hats this player has equipped
-	 * @return
-	 */
-	public int getHatCount () {
-		return activeHats.size();
-	}
-	
-	/**
-	 * Checks to see if the player can equip a hat
-	 * @return
-	 */
-	public boolean canEquip () {
-		return activeHats.size() < SettingsManager.MAXIMUM_HAT_LIMIT.getInt();
-	}
-	
-	 /**
-	  * Checks to see if the player has too many hats equipped
-	  * @return
-	  */
-	public boolean isEquipOverflowed () {
-		return activeHats.size() >= SettingsManager.MAXIMUM_HAT_LIMIT.getInt();
-	}
-	
-	/**
-	 * Removes all active hats
-	 */
-	public void clearActiveHats () {
-		activeHats.clear();
-	}
-	
-	/**
-	 * Remove the hat at index
-	 * @param index
-	 */
-	public void removeHat (int index) {
-		activeHats.remove(index);
-	}
-	
-	/**
-	 * Removes this hat from the players active hats list
-	 * @param hat
-	 */
-	public void removeHat (Hat hat) {
-		activeHats.remove(hat);
-	}
-	
-	/**
-	 * Removes the oldest equipped hat
-	 */
-	public void removeLastHat ()
-	{
-		if (activeHats.size() > 0) {
-			activeHats.remove(0);
-		}
 	}
 	
 	/**
