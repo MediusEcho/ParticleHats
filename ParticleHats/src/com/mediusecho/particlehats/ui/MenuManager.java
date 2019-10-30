@@ -146,6 +146,12 @@ public abstract class MenuManager {
 	public abstract void open ();
 	
 	/**
+	 * 
+	 * @param ticks
+	 */
+	public abstract void onTick (int ticks);
+	
+	/**
 	 * Plays a sound any time a button is clicked inside a menu
 	 * @param result
 	 */
