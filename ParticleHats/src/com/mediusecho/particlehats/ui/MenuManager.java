@@ -74,7 +74,7 @@ public abstract class MenuManager {
 	 * Notifies the manager that this menu will be opened
 	 * @param menu
 	 */
-	public void isOpeningMenu () {
+	public void isOpeningMenu (AbstractMenu menu) {
 		openingMenu = true;
 	}
 	
