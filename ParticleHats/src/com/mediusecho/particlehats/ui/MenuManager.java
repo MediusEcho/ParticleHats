@@ -177,8 +177,7 @@ public abstract class MenuManager {
 		if (canUnregister())
 		{
 			ParticleHats.debug("Unregistering menu manager since no other menu is being opened");
-			
-			ownerState.setMenuManager(null);
+			willUnregister();
 		}
 		
 		openingMenu = false;
