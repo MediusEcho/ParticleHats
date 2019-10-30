@@ -33,7 +33,7 @@ public class CitizensMenuSelectionMenu extends AbstractListMenu {
 	
 	public CitizensMenuSelectionMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuObjectCallback callback) 
 	{
-		super(core, menuManager, owner);
+		super(core, menuManager, owner, false);
 		
 		this.loadedMenus = core.getDatabase().getMenus(false);
 		this.storedMenus = new HashMap<Integer, String>();
@@ -141,13 +141,9 @@ public class CitizensMenuSelectionMenu extends AbstractListMenu {
 	}
 
 	@Override
-	protected void onClose(boolean forced) {
-		
-	}
+	public void onClose(boolean forced) {}
 
 	@Override
-	protected void onTick(int ticks) {
-		
-	}
+	public void onTick(int ticks) {}
 
 }
