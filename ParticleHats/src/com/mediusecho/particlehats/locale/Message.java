@@ -145,6 +145,19 @@ public enum Message {
 	COMMAND_IMPORT_SUCCESS     ("&aAdded '&3{1}&a' to the MySQL database"),
 	COMMAND_IMPORT_ERROR       ("&cThere was an error importing this menu error: {1}"),
 	
+	// NPC Command
+	COMMAND_NPC_SUPPORT_ERROR ("&cUnable to find Citizens plugin"),
+	
+	// NPC Clear Command
+	COMMAND_NPC_CLEAR_DESCRIPTION ("Clears all active hats for this NPC"),
+	COMMAND_NPC_CLEAR_USAGE ("/h npc clear <id>"),
+	COMMAND_NPC_CLEAR_ERROR ("&cCould not find a NPC with an id of {1}"),
+	COMMAND_NPC_CLEAR_SUCCESS ("&aCleared all hats for this NPC"),
+	
+	// Manage NPC Command
+	COMMAND_MANAGE_NPC_DESCRIPTION ("Manage this NPC's hats"),
+	COMMAND_MANAGE_NPC_USAGE ("/h npc manage"),
+	
 	/**
 	 * Purchase Menu
 	 */
@@ -431,6 +444,8 @@ public enum Message {
 	META_BLOCK_SEARCH_USAGE                     ("&6Use &f/h meta <block name> &6to search"),
 	META_BLOCK_SEARCH_DESCRIPTION               ("Type the &eBlock Name &finto chat, or '&6cancel&f' to return"),
 	META_BLOCK_SEARCH_SUGGESTION                ("block name..."),
+	
+	META_NPC_MANAGE_DESCRIPTION                 ("Right Click on a NPC to manage their hats"),
 	
 	/**
 	 * Tracking
@@ -805,6 +820,18 @@ public enum Message {
 	// Search Menu
 	EDITOR_SEARCH_MENU_TITLE ("Results for ({1=...}&r)"),
 	EDITOR_SEARCH_MENU_NO_RESULTS ("&cNo Search Results"),
+	
+	/**
+	 * NPC Manager
+	 */
+	
+	// Main Menu
+	NPC_MAIN_MENU_NO_EQUIPPED_HATS ("&cNo Hats Equipped"),
+	NPC_MAIN_MENU_EQUIP_HAT ("&3Equip a Hat"),
+	NPC_MAIN_MENU_CLEAR_EQUIPPED_HATS ("&cClear All Hats"),
+	
+	// Hat Selection Menu
+	NPC_HAT_SELECTION_MENU_TITLE ("Selecting From ({1=...}&r)"),
 	
 	/**
 	 * Command Arguments
