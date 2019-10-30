@@ -37,28 +37,30 @@ public abstract class MenuManager {
 		openMenus = new ArrayDeque<AbstractMenu>();
 	}
 	
-	public void onClick (InventoryClickEvent event, boolean inMenu)
+	protected void onClick (InventoryClickEvent event, boolean inMenu, AbstractMenu menu)
 	{
-		AbstractMenu menu = openMenus.peekLast();
-		if (menu != null)
+		if (menu == null) {
+			return;
+		}
+		
+		final Inventory inventory = event.getInventory();
+		if (!menu.hasInventory(inventory)) 
 		{
-			final Inventory inventory = event.getInventory();
-			if (!menu.hasInventory(inventory)) 
-			{
-				ParticleHats.debug(owner.getName() + " is using a foreign menu, unregistering menu manager");
-				
-				ownerState.setMenuManager(null);
-				return;
-			}
+			ParticleHats.debug(owner.getName() + " is using a foreign menu, unregistering menu manager");
 			
-			event.setCancelled(true);
-			
-			MenuClickResult result = menu.onClick(event, event.getRawSlot(), inMenu);
-			if (result != MenuClickResult.NONE) {
-				playSound(result);
-			}
+			ownerState.setMenuManager(null);
+			return;
+		}
+		
+		event.setCancelled(true);
+		
+		MenuClickResult result = menu.onClick(event, event.getRawSlot(), inMenu);
+		if (result != MenuClickResult.NONE) {
+			playSound(result);
 		}
 	}
+	
+	public abstract void onClick (InventoryClickEvent event, boolean inMenu);
 	
 	/**
 	 * Returns the owner's PlayerState
