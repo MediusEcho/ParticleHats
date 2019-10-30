@@ -1,12 +1,18 @@
 package com.mediusecho.particlehats.editor.citizens;
 
+import java.util.Map.Entry;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.editor.EditorLore;
+import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.MenuManager;
@@ -23,7 +29,7 @@ public class CitizensHatSelectionMenu extends AbstractStaticMenu {
 		super(core, menuManager, owner);
 		
 		this.menuInventory = inventory;
-		this.inventory = Bukkit.createInventory(null, inventory.getSize(), inventory.getTitle());
+		this.inventory = Bukkit.createInventory(null, inventory.getSize(), EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.NPC_HAT_SELECTION_MENU_TITLE));
 		
 		hatAction = (event, slot) ->
 		{
@@ -66,21 +72,45 @@ public class CitizensHatSelectionMenu extends AbstractStaticMenu {
 				continue;
 			}
 			
+			Hat hat = menuInventory.getHat(i);
+			if (hat == null || !hat.isEquipable()) 
+			{
+				setButton(i, emptyItem, cancelAction);
+				continue;
+			}
+			
+			// TOOD: Add Locale entries for this text
 			ItemUtil.setItemDescription(item, "&3Left Click to Equip", "&cRight Click to Cancel");
 			setButton(i, item, hatAction);
 		}
 	}
 
 	@Override
-	protected void onClose(boolean forced) 
-	{
-
-	}
+	public void onClose(boolean forced) {}
 
 	@Override
-	protected void onTick(int ticks)
+	public void onTick(int ticks)
 	{
-
+		for (Entry<Integer, Hat> set : menuInventory.getHats().entrySet())
+		{
+			int slot = set.getKey();
+			Hat hat = set.getValue();
+			
+			if (hat == null) {
+				continue;
+			}
+			
+			if (!hat.isEquipable()) {
+				continue;
+			}
+			
+			IconData iconData = hat.getIconData();
+			if (iconData.isLive()) 
+			{
+				ItemStackTemplate itemTemplate = iconData.getNextItem(ticks);
+				ItemUtil.setItemType(inventory.getItem(slot), itemTemplate.getMaterial(), itemTemplate.getDurability());
+			}
+		}
 	}
 
 }
