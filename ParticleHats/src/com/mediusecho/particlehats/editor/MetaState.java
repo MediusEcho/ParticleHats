@@ -28,7 +28,8 @@ public enum MetaState {
 	MENU_TITLE,
 	MENU_ALIAS,
 	NEW_MENU,
-	BLOCK_SEARCH;
+	BLOCK_SEARCH,
+	NPC_MANAGE;
 	
 	private final ParticleHats core = ParticleHats.instance;
 	
