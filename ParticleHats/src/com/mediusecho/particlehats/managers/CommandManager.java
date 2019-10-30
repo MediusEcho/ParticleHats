@@ -23,6 +23,7 @@ import com.mediusecho.particlehats.commands.subcommands.EditCommand;
 import com.mediusecho.particlehats.commands.subcommands.GroupsCommand;
 import com.mediusecho.particlehats.commands.subcommands.ImportCommand;
 import com.mediusecho.particlehats.commands.subcommands.MetaCommand;
+import com.mediusecho.particlehats.commands.subcommands.CitizensCommand;
 import com.mediusecho.particlehats.commands.subcommands.OpenCommand;
 import com.mediusecho.particlehats.commands.subcommands.ParticlesCommand;
 import com.mediusecho.particlehats.commands.subcommands.ReloadCommand;
@@ -52,6 +53,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand.register(new TypeCommand());
 		mainCommand.register(new ImportCommand());
 		mainCommand.register(new MetaCommand(core));
+		mainCommand.register(new CitizensCommand());
 		
 		if (ParticleHats.debugging)
 		{
