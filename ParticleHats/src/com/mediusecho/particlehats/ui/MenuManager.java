@@ -120,6 +120,25 @@ public abstract class MenuManager {
 	}
 	
 	/**
+	 * Notifies the MenuManager that it is about to unregister
+	 * Use this method to save any changes
+	 */
+	public void willUnregister ()
+	{
+		for (AbstractMenu menu : openMenus) {
+			menu.onClose(true);
+		}
+		unregister();
+	}
+	
+	/**
+	 * Unregisters this MenuManager
+	 */
+	protected void unregister () {
+		ownerState.setMenuManager(null);
+	}
+	
+	/**
 	 * Open the first menu in the stack
 	 */
 	public abstract void open ();
