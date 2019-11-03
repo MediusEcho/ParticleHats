@@ -161,13 +161,13 @@ public abstract class AbstractMenu {
 	 * Called when the menu is closed
 	 * @param forced True if this menu is being closed without the players involvement
 	 */
-	protected abstract void onClose (boolean forced);
+	public abstract void onClose (boolean forced);
 	
 	/**
 	 * Called every tick. Used to update the menus visual content
 	 * @param ticks
 	 */
-	protected abstract void onTick (int ticks);
+	public abstract void onTick (int ticks);
 	
 	/**
 	 * Get the name of this menu
