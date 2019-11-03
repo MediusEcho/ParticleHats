@@ -174,6 +174,11 @@ public abstract class AbstractMenu {
 	 */
 	public abstract String getName ();
 	
+	/**
+	 * Action to perform when clicking on an item
+	 * @author MediusEcho
+	 *
+	 */
 	@FunctionalInterface
 	public interface MenuAction {
 		public MenuClickResult onClick (MenuClickEvent event, int slot);
@@ -187,6 +192,16 @@ public abstract class AbstractMenu {
 	@FunctionalInterface
 	protected interface MenuObjectCallback {
 		public void onSelect (Object obj);
+	}
+	
+	/**
+	 * Action to perform when returning from a menu
+	 * @author MediusEcho
+	 *
+	 */
+	@FunctionalInterface
+	protected interface MenuCallback {
+		public void onCallback ();
 	}
 	
 	protected class MenuClickEvent {
