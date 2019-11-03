@@ -59,13 +59,19 @@ public class ParticleHats extends JavaPlugin {
 	// TODO: [?] Enjin economy support?
 	// TODO: [?] Head Database support?
 	// TODO: [?] Type texture support? Lets built-in types display custom images (eg. capes)
+	// TODO: [?] More flexible mode support?
+	// Similar to tags, Have a list of tags that will trigger particles displaying / disabling
+	// Display when: (running, walking, flying, etc)
+	// Disable when: (pvp, swimming, etc)
 	
 	// TODO: [Future] Add update notifier
-	// TODO: [Future] NPC Support (Citizens?)
 	// TODO: [Future] Allow adding custom types images as frames to an animation
 	// TODO: [Future] Re-implement text particle type
 	// TODO: [Future] Let particles be attached to blocks...
 	// Have a separate block menu that shows nearby particles for the player to edit.
+	
+	// TODO: Rewrite menu handling to support different menu types easier (editor, citizens, static menus)
+	// TODO: NPC Support (Citizens?)
 	
 	public static ParticleHats instance;
 	public static int serverVersion;
