@@ -46,6 +46,21 @@ public abstract class AbstractListMenu extends AbstractMenu {
 	}
 	
 	/**
+	 * Get the ItemStack at the current slot
+	 * @param page
+	 * @param slot
+	 * @return
+	 */
+	protected ItemStack getItem (int page, int slot)
+	{
+		Inventory inventory = menus.get(page);
+		if (inventory == null) {
+			return null;
+		}
+		return inventory.getItem(slot);
+	}
+	
+	/**
 	 * Place an item into the inventory at the given page
 	 * @param slot
 	 * @param item
@@ -57,6 +72,31 @@ public abstract class AbstractListMenu extends AbstractMenu {
 			return;
 		}
 		inventory.setItem(slot, item);
+	}
+	
+	/**
+	 * Set the ItemStack and MenuAction for the given slot in the given menu
+	 * @param page
+	 * @param slot
+	 * @param item
+	 * @param action
+	 */
+	protected void setButton (int page, int slot, ItemStack item, MenuAction action)
+	{
+		setItem(page, slot, item);
+		setAction(slot, action);
+	}
+	
+	/**
+	 * Set the MenuButton for the given slot in the given menu
+	 * @param page
+	 * @param slot
+	 * @param button
+	 */
+	protected void setButton (int page, int slot, MenuButton button)
+	{
+		setItem(page, slot, button.getItem());
+		setAction(slot, button.getAction());
 	}
 	
 	/**

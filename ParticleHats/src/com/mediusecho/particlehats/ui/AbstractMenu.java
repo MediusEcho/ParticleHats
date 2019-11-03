@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,7 +12,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.util.ItemUtil;
 
 /**
  * Basic foundation for all menus
@@ -151,6 +154,7 @@ public abstract class AbstractMenu {
 	protected int getNormalIndex (int slot, int startingIndex, int offset) {
 		return (slot + ((slot / (9 - offset)) * offset) + startingIndex);
 	}
+	
 	
 	/**
 	 * Open this menu
