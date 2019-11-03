@@ -23,7 +23,7 @@ public abstract class AbstractStaticMenu extends AbstractMenu {
 	@Override
 	public void open () 
 	{
-		menuManager.isOpeningMenu();
+		menuManager.isOpeningMenu(this);
 		owner.openInventory(inventory);
 	}
 	
