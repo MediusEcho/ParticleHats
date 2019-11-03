@@ -71,7 +71,7 @@ public enum ParticleEffect {
 	ITEMSTACK              (54, -1, -1, Material.DIAMOND, ParticleProperty.ITEMSTACK_DATA),
 	CAMPFIRE_COSY_SMOKE    (55, -1, 14, CompatibleMaterial.CAMPFIRE),
 	CAMPFIRE_SIGNAL_SMOKE  (56, -1, 14, CompatibleMaterial.CAMPFIRE),
-	COMPOSTER              (57, -1, 14, CompatibleMaterial.PLAYER_HEAD),
+	COMPOSTER              (57, -1, 14, CompatibleMaterial.COMPOSTER),
 	FALLING_LAVA           (58, -1, 14, Material.LAVA_BUCKET),
 	FALLING_WATER          (59, -1, 14, Material.WATER_BUCKET),
 	FLASH                  (60, -1, 14, CompatibleMaterial.LANTERN),
