@@ -48,6 +48,11 @@ public abstract class AbstractListMenu extends AbstractMenu {
 		return menus.containsValue(inventory);
 	}
 	
+	@Override
+	public String getName () {
+		return "";
+	}
+	
 	/**
 	 * Get the ItemStack at the current slot
 	 * @param page
