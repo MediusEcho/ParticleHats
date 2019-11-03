@@ -169,6 +169,11 @@ public abstract class AbstractMenu {
 	 */
 	protected abstract void onTick (int ticks);
 	
+	/**
+	 * Get the name of this menu
+	 */
+	public abstract String getName ();
+	
 	@FunctionalInterface
 	public interface MenuAction {
 		public MenuClickResult onClick (MenuClickEvent event, int slot);
