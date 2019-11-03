@@ -30,6 +30,10 @@ public abstract class AbstractMenu {
 	protected final Map<Integer, MenuAction> actions;
 	protected final static MenuAction emptyAction = (event, slot) -> { return MenuClickResult.NEUTRAL; };
 	
+	protected final ItemStack mainMenuButtonItem;
+	protected final ItemStack backButtonItem;
+	protected final MenuAction backButtonAction;
+	
 	public AbstractMenu (final ParticleHats core, final MenuManager menuManager, final Player owner)
 	{
 		this.core = core;
@@ -38,6 +42,14 @@ public abstract class AbstractMenu {
 		
 		this.owner = owner;
 		this.ownerID = owner.getUniqueId();
+		
+		this.mainMenuButtonItem = ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_MAIN_MENU);
+		this.backButtonItem = ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_GO_BACK);
+		this.backButtonAction = (event, slot) ->
+		{
+			menuManager.closeCurrentMenu();
+			return MenuClickResult.NEUTRAL;
+		};
 		
 		actions = new HashMap<Integer, MenuAction>();
 	}
