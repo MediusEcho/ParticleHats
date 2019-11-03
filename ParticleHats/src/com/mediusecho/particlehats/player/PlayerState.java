@@ -46,6 +46,8 @@ public class PlayerState extends EntityState {
 	private List<HatReference> purchasedHats;
 	private List<String> legacyPurchasedHats;
 	
+	private List<ItemStack> recentItems;
+	
 	public PlayerState (final Player owner)
 	{
 		super(owner);
@@ -55,6 +57,7 @@ public class PlayerState extends EntityState {
 		legacyPurchasedHats = new ArrayList<String>();
 		
 		openMenuCache = new HashMap<String, Menu>();
+		recentItems = new ArrayList<ItemStack>();
 	}
 	
 	/**
@@ -370,6 +373,31 @@ public class PlayerState extends EntityState {
 	 */
 	public GuiState getPreviousGuiState () {
 		return previousGuiState;
+	}
+	
+	/**
+	 * Add this item to the players list of recent items
+	 * @param item
+	 */
+	public void addRecentItem (ItemStack item)
+	{
+		if (recentItems.contains(item)) {
+			return;
+		}
+		
+		if (recentItems.size() >= 20) {
+			recentItems.remove(0);
+		}
+		
+		recentItems.add(item);
+	}
+	
+	/**
+	 * Get a list of items the player recently used when editing
+	 * @return
+	 */
+	public List<ItemStack> getRecentItems () {
+		return recentItems;
 	}
 	
 	public enum AFKState
