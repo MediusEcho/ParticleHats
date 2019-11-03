@@ -1596,6 +1596,31 @@ public class Hat {
 	}
 	
 	/**
+	 * Check to see if this Hat is equipable
+	 * @return
+	 */
+	public boolean isEquipable ()
+	{
+		boolean isEquipable = false;
+		
+		for (Entry<Integer, ParticleData> particles : particleData.entrySet())
+		{
+			ParticleData data = particles.getValue();
+			if (data == null) {
+				continue;
+			}
+			
+			if (data.getParticle() == ParticleEffect.NONE) {
+				continue;
+			}
+			
+			isEquipable = true;
+		}
+		
+		return isEquipable;
+	}
+	
+	/**
 	 * Get this Hat's legacy purchase path<br>
 	 * Used to check against a list of purchases the player has made
 	 * @return
