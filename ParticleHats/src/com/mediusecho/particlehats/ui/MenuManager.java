@@ -107,6 +107,17 @@ public abstract class MenuManager {
 	}
 	
 	/**
+	 * Opens the most current menu
+	 */
+	public void openCurrentMenu ()
+	{
+		if (openMenus.size() == 0) {
+			return;
+		}
+		getCurrentMenu().open();
+	}
+	
+	/**
 	 * Removes the current menu from the stack
 	 */
 	public void removeCurrentMenu () {
