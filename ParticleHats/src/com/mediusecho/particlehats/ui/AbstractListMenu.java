@@ -3,11 +3,14 @@ package com.mediusecho.particlehats.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.util.ItemUtil;
 
 /**
  * Menu that will have multiple pages of inventories
@@ -16,12 +19,15 @@ import com.mediusecho.particlehats.ParticleHats;
  */
 public abstract class AbstractListMenu extends AbstractMenu {
 
+	protected final ItemStack emptyItem = ItemUtil.createItem(Material.BARRIER, Message.EDITOR_MISC_EMPTY_MENU);
 	protected final boolean canEdit;
 	
 	protected Map<Integer, Inventory> menus;
 	
 	protected int totalPages = 0;
 	protected int currentPage = 0;
+	
+	protected boolean isEmpty = false;
 	
 	public AbstractListMenu(ParticleHats core, MenuManager menuManager, Player owner, final boolean canEdit) 
 	{
@@ -30,6 +36,10 @@ public abstract class AbstractListMenu extends AbstractMenu {
 		this.canEdit = canEdit;
 		this.menus = new HashMap<Integer, Inventory>();
 	}
+	
+	public abstract void insertEmptyItem ();
+	
+	public abstract void removeEmptyItem ();
 	
 	@Override
 	public void open () 
@@ -51,6 +61,25 @@ public abstract class AbstractListMenu extends AbstractMenu {
 	@Override
 	public String getName () {
 		return "";
+	}
+	
+	/**
+	 * Set whether this menu's content is empty
+	 * @param isEmpty
+	 */
+	public void setEmpty (boolean isEmpty) 
+	{
+		if (this.isEmpty == isEmpty) {
+			return;
+		}
+		
+		this.isEmpty = isEmpty;
+		
+		if (isEmpty) {
+			insertEmptyItem();
+		} else {
+			removeEmptyItem();
+		}
 	}
 	
 	/**
