@@ -2,11 +2,12 @@ package com.mediusecho.particlehats.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -15,107 +16,49 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
-import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class StaticMenu extends Menu {
+public class StaticMenu extends AbstractStaticMenu {
 
-	private final List<Hat> playerEquippedHats;
-	private final List<Hat> deleteQueue;
+	private final MenuInventory menuInventory;
+	private final PlayerState ownerState;
 	
-	public StaticMenu(ParticleHats core, Player owner) 
-	{
-		super(core, owner);
-		playerEquippedHats = new ArrayList<Hat>();
-		deleteQueue = new ArrayList<Hat>();
-	}
+	private final MenuAction hatAction;
 	
-	public StaticMenu(ParticleHats core, Player owner, MenuInventory inventory)
+	public StaticMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuInventory menuInventory) 
 	{
-		super(core, owner, inventory);
+		super(core, menuManager, owner);
 		
-		playerEquippedHats = new ArrayList<Hat>();
-		deleteQueue = new ArrayList<Hat>();
+		this.menuInventory = menuInventory;
+		this.ownerState = core.getPlayerState(owner);
+		this.inventory = Bukkit.createInventory(null, menuInventory.getSize(), menuInventory.getTitle());
 		
-		build();
-	}
-
-	@Override
-	public void onTick(int ticks) 
-	{
-		for (Entry<Integer, Hat> set : inventory.getHats().entrySet())
+		hatAction = (event, slot) ->
 		{
-			int slot = set.getKey();
-			Hat hat = set.getValue();
+			Hat hat = menuInventory.getHat(slot);
+			MenuClickResult result = MenuClickResult.NEUTRAL;
 			
-			if (hat != null && !hat.isLocked())
-			{
-				IconData iconData = hat.getIconData();
-				if (iconData.isLive()) 
-				{
-					ItemStackTemplate itemTemplate = iconData.getNextItem(ticks);
-					ItemUtil.setItemType(inventory.getItem(slot), itemTemplate.getMaterial(), itemTemplate.getDurability());
-				}
-			}
-		}
-	}
-	
-	@Override
-	public void open ()
-	{
-		PlayerState playerState = core.getPlayerState(owner);
-		List<Hat> equippedHats = playerState.getActiveHats();
-		
-		for (Hat hat : playerEquippedHats)
-		{
-			if (equippedHats.contains(hat)) {
-				continue;
+			if (hat == null) {
+				return MenuClickResult.NONE;
 			}
 			
-			deleteQueue.add(hat);
-			
-			int slot = hat.getSlot();
-			ItemStack item = inventory.getItem(slot);
-			
-			ItemUtil.stripHighlight(item);
-			ItemUtil.setItemDescription(item, hat.getCachedDescription());
-			
-			inventory.setItem(slot, item);
-		}
-		
-		if (deleteQueue.size() > 0)
-		{
-			playerEquippedHats.removeAll(deleteQueue);
-			deleteQueue.clear();
-		}
-		
-		super.open();
-	}
-
-	@Override
-	public void onClick(InventoryClickEvent event) 
-	{
-		int slot = event.getRawSlot();
-		Hat hat = inventory.getHat(slot);
-		
-		if (hat != null)
-		{
 			if (!hat.isLoaded()) {
-				core.getDatabase().loadHat(getName(), hat.getSlot(), hat);
+				core.getDatabase().loadHat(getName(), slot, hat);
 			}
 			
-			if (!hat.playSound(owner)) {
-				playSound();
+			if (hat.playSound(owner)) {
+				result = MenuClickResult.NONE;
 			}
 			
 			if (event.isLeftClick()) {
 				hat.getLeftClickAction().onClick(owner, hat, slot, inventory, hat.getLeftClickArgument());
 			}
 			
-			else if (event.isRightClick())
+			else if (event.isRightClick()) 
 			{
 				ParticleAction action = hat.getRightClickAction();
 				if (action == ParticleAction.MIMIC) {
@@ -124,46 +67,51 @@ public class StaticMenu extends Menu {
 					action.onClick(owner, hat, slot, inventory, hat.getRightClickArgument());
 				}
 			}
-		}
+			
+			return result;
+		};
+		
+		build();
 	}
+	
+//	@Override
+//	public void open () 
+//	{
+//		menuManager.isOpeningMenu(this);
+//		menuInventory.open(owner);
+//	}
 
-	/**
-	 * Checks each hat in this menu and updates any missing information
-	 */
-	private void build ()
+	@Override
+	protected void build() 
 	{
-		PlayerState playerState = core.getPlayerState(owner);
-		
-		// Get all equipped hats that belong to this menu
-		List<Hat> equippedHats = playerState.getActiveHats();
-		
 		Material lockedMaterial = SettingsManager.MENU_LOCKED_ITEM.getMaterial();
-		int lockedDurability = SettingsManager.MENU_LOCKED_ITEM_DAMAGE.getInt();
-		
+		int lockedMaterialDurability = SettingsManager.MENU_LOCKED_ITEM_DAMAGE.getInt();
 		String lockedTitle = StringUtil.colorize(SettingsManager.MENU_LOCKED_ITEM_TITLE.getString());
+		
+		List<Hat> equippedHats = core.getPlayerState(owner).getActiveHats();
 		
 		for (int i = 0; i < inventory.getSize(); i++)
 		{
-			ItemStack item = inventory.getItem(i);
-			Hat hat = inventory.getHat(i);
+			ItemStack item = menuInventory.getItem(i);
+			Hat hat = menuInventory.getHat(i);
 			
 			if (item == null || hat == null) {
 				continue;
 			}
 			
+			// Check for our PURCHASE_ITEM action
 			if (hat.getLeftClickAction() == ParticleAction.PURCHASE_ITEM)
 			{
-				Hat pendingHat = playerState.getPendingPurchase();
-				if (pendingHat != null) {
-					inventory.setItem(i, pendingHat.getMenuItem());
+				Hat pendingPurchase = ownerState.getPendingPurchase();
+				if (pendingPurchase != null) {
+					inventory.setItem(i, pendingPurchase.getMenuItem());
 				}
 				continue;
 			}
 			
-			if (equippedHats.contains(hat)) 
+			// Highlight our equipped hats
+			if (equippedHats.contains(hat))
 			{
-				playerEquippedHats.add(hat);
-				
 				ItemUtil.highlightItem(item);
 				
 				ItemMeta itemMeta = item.getItemMeta();
@@ -173,33 +121,74 @@ public class StaticMenu extends Menu {
 					lore = new ArrayList<String>();
 				}
 				
-				String equippedDescription = Message.HAT_EQUIPPED_DESCRIPTION.getValue();
-				String[] lineInfo = StringUtil.parseValue(equippedDescription, "1");
+				String equippedLore = Message.HAT_EQUIPPED_DESCRIPTION.getValue();
+				String[] lineInfo = StringUtil.parseValue(equippedLore, "1");
 				
 				if (lore.size() > 0) {
-					equippedDescription = equippedDescription.replace(lineInfo[0], lineInfo[1]);
+					equippedLore = equippedLore.replace(lineInfo[0], lineInfo[1]);
 				} else {
-					equippedDescription = equippedDescription.replace(lineInfo[0], "");
+					equippedLore = equippedLore.replace(lineInfo[0], "");
 				}
 				
-				lore.addAll(StringUtil.parseDescription(equippedDescription));
+				lore.addAll(StringUtil.parseDescription(equippedLore));
 				itemMeta.setLore(lore);
 				
 				item.setItemMeta(itemMeta);
 			}
 			
-			else
-			{				
-				// Lock items that the player doesn't have permission for
-				if (hat.canBeLocked() && hat.isLocked())
+			// Lock hats that aren't equipped if we can
+			else if (hat.canBeLocked() && hat.isLocked())
+			{
+				if (SettingsManager.MENU_LOCK_HATS_WITHOUT_PERMISSION.getBoolean())
 				{
-					if (SettingsManager.MENU_LOCK_HATS_WITHOUT_PERMISSION.getBoolean())
-					{		
-						ItemUtil.setItemType(item, lockedMaterial, lockedDurability);
-						ItemUtil.setItemName(item, lockedTitle);
-					}
+					ItemUtil.setItemType(item, lockedMaterial, lockedMaterialDurability);
+					ItemUtil.setItemName(item, lockedTitle);
 				}
+			}
+			
+			inventory.setItem(i, item);
+		}
+		
+		for (int i = 0; i < inventory.getSize(); i++) {
+			setAction(i, hatAction);
+		}
+	}
+
+	@Override
+	public void onClose(boolean forced) {}
+
+	@Override
+	public void onTick(int ticks) 
+	{		
+		for (Entry<Integer, Hat> set : menuInventory.getHats().entrySet())
+		{
+			int slot = set.getKey();
+			Hat hat = set.getValue();
+			
+			if (hat == null || hat.isLocked()) {
+				continue;
+			}
+			
+			IconData iconData = hat.getIconData();
+			if (iconData.isLive()) 
+			{
+				ItemStackTemplate itemTemplate = iconData.getNextItem(ticks);
+				ItemUtil.setItemType(inventory.getItem(slot), itemTemplate.getMaterial(), itemTemplate.getDurability());
 			}
 		}
 	}
+	
+	@Override
+	public String getName () {
+		return menuInventory.getName();
+	}
+	
+	/**
+	 * Get all hats in this menu
+	 * @return
+	 */
+	public Map<Integer, Hat> getHats () {
+		return menuInventory.getHats();
+	}
+
 }
