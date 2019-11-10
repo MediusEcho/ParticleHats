@@ -7,42 +7,32 @@ import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorDurationMenu extends EditorMenu {
+public class EditorDurationMenu extends AbstractStaticMenu {
 
-	private final EditorActionOverviewMenu editorActionOverviewMenu;
-	private final boolean leftClick;
-	
 	private final Hat targetHat;
+	private final MenuCallback callback;
 	
-	public EditorDurationMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorActionOverviewMenu editorActionOverviewMenu, boolean leftClick)
+	public EditorDurationMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuCallback callback) 
 	{
-		super(core, owner, menuBuilder);
-		this.editorActionOverviewMenu = editorActionOverviewMenu;
-		this.leftClick = leftClick;
-		this.targetHat = menuBuilder.getBaseHat();
+		super(core, menuManager, owner);
 		
-		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_DURATION_MENU_TITLE.getValue());
+		this.targetHat = menuManager.getBaseHat();
+		this.callback = callback;
+		this.inventory = Bukkit.createInventory(null, 27, Message.EDITOR_DURATION_MENU_TITLE.getValue());
+		
 		build();
 	}
-	
-	@Override
-	public void onClose (boolean forced)
-	{
-		if (!forced) {
-			editorActionOverviewMenu.onActionChange(leftClick);
-		}
-	}
 
 	@Override
-	protected void build() 
+	protected void build()
 	{
-		setButton(12, backButton, backAction);
+		setButton(12, backButtonItem, backButtonAction);
 		
 		ItemStack durationItem = ItemUtil.createItem(Material.MAP, Message.EDITOR_DURATION_MENU_SET_DURATION.getValue());
 		EditorLore.updateDurationDescription(durationItem, targetHat.getDemoDuration(), Message.EDITOR_DURATION_MENU_DESCRIPTION);
@@ -56,8 +46,19 @@ public class EditorDurationMenu extends EditorMenu {
 			targetHat.setDemoDuration(duration);
 			
 			EditorLore.updateDurationDescription(getItem(14), targetHat.getDemoDuration(), Message.EDITOR_DURATION_MENU_DESCRIPTION);
-			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
+			return event.isLeftClick() ? MenuClickResult.POSITIVE : MenuClickResult.NEGATIVE;
 		});
 	}
+
+	@Override
+	public void onClose(boolean forced) 
+	{
+		if (!forced) {
+			callback.onCallback();
+		}
+	}
+
+	@Override
+	public void onTick(int ticks) {}
 
 }
