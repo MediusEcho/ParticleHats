@@ -8,26 +8,79 @@ import org.bukkit.util.Vector;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
+import com.mediusecho.particlehats.editor.menus.EditorOffsetMenu.VectorAxis;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ItemStackData;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorVelocityMenu extends EditorOffsetMenu {
+public class EditorVelocityMenu extends AbstractStaticMenu {
 
+	private final EditorMenuManager editorManager;
 	private final int particleIndex;
+	private final MenuCallback callback;
 	
-	public EditorVelocityMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorGenericCallback callback) 
+	public EditorVelocityMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, int particleIndex, MenuCallback callback) 
 	{
-		super(core, owner, menuBuilder, callback);
-		this.particleIndex = particleIndex;
+		super(core, menuManager, owner);
 		
-		inventory = Bukkit.createInventory(null, 27, Message.EDITOR_VELOCITY_MENU_TITLE.getValue());
+		this.editorManager = menuManager;
+		this.particleIndex = particleIndex;
+		this.callback = callback;
+		this.inventory = Bukkit.createInventory(null, 27, Message.EDITOR_VELOCITY_MENU_TITLE.getValue());
+		
 		build();
 	}
 
-	public EditorClickType updateVelocity (EditorClickEvent event, Hat hat, VectorAxis axis)
+	@Override
+	protected void build() 
+	{
+		Hat targetHat = editorManager.getTargetHat();
+		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
+		Vector velocity = itemStackData.getVelocity();
+		
+		// X Offset
+		ItemStack xItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_X);
+		EditorLore.updateVectorDescription(xItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
+		setButton(14, xItem, (event, slot) ->
+		{
+			return updateVelocity(event, targetHat, VectorAxis.X);
+		});
+		
+		// Y Offset
+		ItemStack yItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Y);
+		EditorLore.updateVectorDescription(yItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
+		setButton(15, yItem, (event, slot) ->
+		{
+			return updateVelocity(event, targetHat, VectorAxis.Y);
+		});
+		
+		// Z Offset
+		ItemStack zItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Z);
+		EditorLore.updateVectorDescription(zItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
+		setButton(16, zItem, (event, slot) ->
+		{
+			return updateVelocity(event, targetHat, VectorAxis.Z);
+		});
+		
+		// Back
+		setButton(10, backButtonItem, backButtonAction);
+	}
+
+	@Override
+	public void onClose(boolean forced) 
+	{
+		if (!forced) {
+			callback.onCallback();
+		}
+	}
+
+	@Override
+	public void onTick(int ticks) {}
+	
+	public MenuClickResult updateVelocity (MenuClickEvent event, Hat hat, VectorAxis axis)
 	{
 		double normalClick    = event.isLeftClick() ? 0.1f : -0.1f;
 		double shiftClick     = event.isShiftClick() ? 10 : 1;
@@ -57,46 +110,12 @@ public class EditorVelocityMenu extends EditorOffsetMenu {
 		EditorLore.updateVectorDescription(getItem(16), velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
 		
 		if (event.isMiddleClick()) {
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		}
 		
 		else {
-			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
+			return event.isLeftClick() ? MenuClickResult.POSITIVE : MenuClickResult.NEGATIVE;
 		}
 	}
-	
-	@Override
-	protected void build() 
-	{
-		Hat targetHat = menuBuilder.getTargetHat();
-		ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
-		Vector velocity = itemStackData.getVelocity();
-		
-		// X Offset
-		ItemStack xItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_X);
-		EditorLore.updateVectorDescription(xItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_X_DESCRIPTION);
-		setButton(14, xItem, (event, slot) ->
-		{
-			return updateVelocity(event, targetHat, VectorAxis.X);
-		});
-		
-		// Y Offset
-		ItemStack yItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Y);
-		EditorLore.updateVectorDescription(yItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Y_DESCRIPTION);
-		setButton(15, yItem, (event, slot) ->
-		{
-			return updateVelocity(event, targetHat, VectorAxis.Y);
-		});
-		
-		// Z Offset
-		ItemStack zItem = ItemUtil.createItem(CompatibleMaterial.REPEATER, Message.EDITOR_VELOCITY_MENU_SET_VELOCITY_Z);
-		EditorLore.updateVectorDescription(zItem, velocity, Message.EDITOR_OFFSET_MENU_OFFSET_Z_DESCRIPTION);
-		setButton(16, zItem, (event, slot) ->
-		{
-			return updateVelocity(event, targetHat, VectorAxis.Z);
-		});
-		
-		// Back
-		setButton(10, backButton, backAction);
-	}
+
 }
