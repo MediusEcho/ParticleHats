@@ -2,9 +2,7 @@ package com.mediusecho.particlehats.editor.menus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,36 +13,30 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.AbstractListMenu;
+import com.mediusecho.particlehats.ui.MenuManager;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 
-public class EditorSearchMenu extends EditorMenu {
+public class EditorSearchMenu extends AbstractListMenu {
 
-	private final String menuTitle;
 	private final List<Material> matchingResults;
-	private final Map<Integer, Inventory> menus;
-	private final int pages;
-	private final EditorAction selectAction;
+	private final List<Material> blacklist = Arrays.asList(Material.AIR);
 	
-	private int currentPage = 0;
+	private final MenuAction selectAction;
 	
-	private final List<Material> blacklist = Arrays.asList(
-			Material.AIR);
+	private final String menuTitle;
 	
-	public EditorSearchMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, final String searchQuery, EditorItemCallback itemCallback) 
+	public EditorSearchMenu(ParticleHats core, MenuManager menuManager, Player owner, String searchQuery, MenuObjectCallback callback) 
 	{
-		super(core, owner, menuBuilder);
-		
-		this.matchingResults = new ArrayList<Material>();
-		this.menus = new HashMap<Integer, Inventory>();
+		super(core, menuManager, owner, false);
 		
 		String query = searchQuery.toLowerCase();
-		this.menuTitle = EditorLore.getTrimmedMenuTitle(query, Message.EDITOR_SEARCH_MENU_TITLE);
-		
 		String[] queries = query.split(",");
+		
+		this.matchingResults = new ArrayList<Material>();
+		this.menuTitle = EditorLore.getTrimmedMenuTitle(query, Message.EDITOR_SEARCH_MENU_TITLE);
 		
 		for (Material material : Material.values())
 		{
@@ -52,86 +44,87 @@ public class EditorSearchMenu extends EditorMenu {
 				continue;
 			}
 			
-			if (ItemUtil.isItem(material))
+			if (!ItemUtil.isItem(material)) {
+				continue;
+			}
+			
+			String materialName = material.toString().toLowerCase();
+			for (String q : queries)
 			{
-				String materialName = material.toString().toLowerCase();
-				for (String q : queries) {
-					if (materialName.contains(q)) {
-						matchingResults.add(material);
-					}
+				if (materialName.contains(q)) {
+					matchingResults.add(material);
 				}
 			}
-		}	
-		pages = (int) Math.ceil((double) matchingResults.size() / 45D);
+		}
 		
-		selectAction = (event, slot) ->
+		this.totalPages = MathUtil.calculatePageCount(matchingResults.size(), 45);
+		this.selectAction = (event, slot) ->
 		{
 			int index = slot + (currentPage * 45);
-			if (index < matchingResults.size()) 
-			{
-				itemCallback.onSelect(new ItemStack(matchingResults.get(index)));
-				menuBuilder.goBack();
+			if (index < matchingResults.size()) {
+				callback.onSelect(new ItemStack(matchingResults.get(index)));
 			}
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		};
 		
-		inventory = Bukkit.createInventory(null, 54, menuTitle);
 		build();
 	}
 	
 	@Override
-	public void open ()
-	{
-		if (menus.containsKey(currentPage))
-		{
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			owner.openInventory(menus.get(currentPage));
-		}
-		
-		else {
-			super.open();
-		}
+	public void insertEmptyItem () {
+		setItem(0, 22, ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_SEARCH_MENU_NO_RESULTS));
 	}
+	
+	@Override
+	public void removeEmptyItem () {}
 
 	@Override
 	protected void build() 
 	{
-		setButton(49, backButton, backAction);
-		setItem(22, ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_SEARCH_MENU_NO_RESULTS));
+		// Back
+		setAction(49, backButtonAction);
+		
+		// Previous Page
+		setAction(48, (event, slot) ->
+		{
+			currentPage--;
+			open();
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		// Next Page
+		setAction(50, (event, slot) ->
+		{
+			currentPage++;
+			open();
+			return MenuClickResult.NEUTRAL;
+		});
 		
 		for (int i = 0; i < 45; i++) {
 			setAction(i, selectAction);
 		}
 		
-		setAction(48, (event, slot) ->
+		for (int i = 0; i < totalPages; i++)
 		{
-			currentPage--;
-			open();
-			return EditorClickType.NEUTRAL;
-		});
-		
-		setAction(50, (event, slot) ->
-		{
-			currentPage++;
-			open();
-			return EditorClickType.NEUTRAL;
-		});
-		
-		for (int i = 0; i < pages; i++)
-		{
-			Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
+			Inventory inventory = Bukkit.createInventory(null, 54, menuTitle);
 			
-			menu.setItem(49, backButton);
+			inventory.setItem(49, backButtonItem);
 			
-			if ((i + 1) < pages) {
-				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+			if ((i + 1) < totalPages) {
+				inventory.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
 			}
 			
 			if ((i + 1) > 1) {
-				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+				inventory.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
-			menus.put(i, menu);
+			setMenu(i, inventory);
+		}
+		
+		if (matchingResults.isEmpty())
+		{
+			setEmpty(true);
+			return;
 		}
 		
 		int index = 0;
@@ -146,5 +139,11 @@ public class EditorSearchMenu extends EditorMenu {
 			}
 		}
 	}
+
+	@Override
+	public void onClose(boolean forced) {}
+
+	@Override
+	public void onTick(int ticks) {}
 
 }
