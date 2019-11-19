@@ -11,19 +11,22 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.Database.DataType;
-import com.mediusecho.particlehats.editor.EditorListMenu;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.ui.AbstractListMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorDescriptionMenu extends EditorListMenu {
+public class EditorDescriptionMenu extends AbstractListMenu {
 
-	private final boolean editingDescription;
+	private final EditorMenuManager editorManager;
+	private final boolean isEditingDescription;
 	private final Hat targetHat;
+	
+	private final ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_DESCRIPTION_MENU_EMPTY);
 	
 	private final String lineTitle = Message.EDITOR_DESCIPRION_LINE_TITLE.getValue();
 	private final String lineDescription = Message.EDITOR_DESCRIPTION_MENU_LINE_DESCRIPTION.getValue();
@@ -32,47 +35,28 @@ public class EditorDescriptionMenu extends EditorListMenu {
 	private int editingLine = -1;
 	private boolean isModified = false;
 	
-	public EditorDescriptionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean editingDescription) 
+	public EditorDescriptionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isEditingDescription) 
 	{
-		super(core, owner, menuBuilder);
-		this.editingDescription = editingDescription;
-		this.targetHat = menuBuilder.getBaseHat();
+		super(core, menuManager, owner, true);
 		
-		addItem = ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_DESCRIPTION_MENU_ADD_LINE);
-		editAction = (event, slot) ->
-		{
-			if (event.isLeftClick())
-			{
-				if (event.isShiftClick())
-				{
-					onInsert(slot);
-					return EditorClickType.NEUTRAL;
-				}
-				
-				editingLine = getClampedIndex(slot, 10, 2);
-				menuBuilder.getOwnerState().setMetaDescriptionLine(editingLine);
-				
-				MetaState metaState = editingDescription ? MetaState.HAT_DESCRIPTION : MetaState.HAT_PERMISSION_DESCRIPTION;
-				
-				menuBuilder.setOwnerState(metaState);
-				core.prompt(owner, metaState);
-				owner.closeInventory();
-				
-				isModified = true;
-			}
-
-			else if (event.isShiftRightClick())
-			{
-				onDelete(slot);
-				isModified = true;
-				return EditorClickType.NEGATIVE;
-			}
-			
-			return EditorClickType.NEUTRAL;
-		};
+		this.editorManager = menuManager;
+		this.isEditingDescription = isEditingDescription;
+		this.targetHat = menuManager.getBaseHat();
+		this.totalPages = 1;
 		
-		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_DESCRIPTION_MENU_TITLE.getValue());
+		setMenu(0, Bukkit.createInventory(null, 54, Message.EDITOR_DESCRIPTION_MENU_TITLE.getValue()));
+		
 		build();
+	}
+
+	@Override
+	public void insertEmptyItem() {
+		setButton(0, 22, emptyItem, emptyAction);
+	}
+
+	@Override
+	public void removeEmptyItem() {
+		setButton(0, 22, null, emptyAction);
 	}
 	
 	@Override
@@ -82,34 +66,173 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		{
 			List<String> description = getDescription();
 			String line = description.get(editingLine);
-			ItemStack item = getItem(getNormalIndex(editingLine, 10, 2));
+			ItemStack item = getItem(0, getNormalIndex(editingLine, 10, 2));
 			
 			setLineDescription(item, line);
 			
 			editingLine = -1;
-			EditorLore.updatePreviewDecription(getItem(49), description, targetHat);
+			EditorLore.updatePreviewDecription(getItem(0, 49), description, targetHat);
 		}
 		
 		super.open();
 	}
-	
+
 	@Override
-	public void onClose (boolean forced)
+	protected void build() 
+	{
+		setButton(0, 46, backButtonItem, backButtonAction);
+		
+		// Preview
+		ItemStack previewItem = ItemUtil.createItem(CompatibleMaterial.WRITABLE_BOOK, Message.EDITOR_DESCRIPTION_MENU_PREVIEW);
+		EditorLore.updatePreviewDecription(previewItem, getDescription(), targetHat);
+		setButton(0, 49, previewItem, (event, slot) ->
+		{
+			if (event.isShiftRightClick())
+			{
+				getDescription().clear();
+				for (int i = 0; i <= 27; i++) {
+					setItem(0, getNormalIndex(i, 10, 2), null);
+				}
+				setEmpty(true);
+				
+				EditorLore.updatePreviewDecription(getItem(0, 49), getDescription(), targetHat);
+				isModified = true;
+				
+				return MenuClickResult.NEGATIVE;
+			}
+			return MenuClickResult.NONE;
+		});
+		
+		// Add Line
+		ItemStack addItem = ItemUtil.createItem(CompatibleMaterial.TURTLE_HELMET, Message.EDITOR_DESCRIPTION_MENU_ADD_LINE);
+		setButton(0, 52, addItem, (event, slot) ->
+		{
+			List<String> description = getDescription();
+			int size = description.size();
+			
+			if (size <= 27)
+			{
+				ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(size + 1)));
+				
+				description.add("");
+				EditorLore.updatePreviewDecription(getItem(0, 49), getDescription(), targetHat);
+				
+				setLineDescription(item, "");
+				setItem(0, getNormalIndex(size, 10, 2), item);
+			}
+			
+			setEmpty(false);
+			isModified = true;
+			
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		final MenuAction editAction = (event, slot) ->
+		{
+			if (event.isLeftClick())
+			{
+				if (event.isShiftClick())
+				{
+					onInsert(slot);
+					return MenuClickResult.NEUTRAL;
+				}
+				
+				editingLine = getClampedIndex(slot, 10, 2);
+				editorManager.getOwnerState().setMetaDescriptionLine(editingLine);
+				
+				MetaState metaState = isEditingDescription ? MetaState.HAT_DESCRIPTION : MetaState.HAT_PERMISSION_DESCRIPTION;
+				
+				editorManager.getOwnerState().setMetaState(metaState);
+				core.prompt(owner, metaState);
+				owner.closeInventory();
+				isModified = true;
+			}
+			
+			else if (event.isShiftRightClick())
+			{
+				deleteSlot(0, slot);
+				isModified = true;
+				return MenuClickResult.NEGATIVE;
+			}
+			
+			return MenuClickResult.NEUTRAL;
+		};
+		
+		for (int i = 0; i < 28; i++) {
+			setAction(getNormalIndex(i, 10, 2), editAction);
+		}
+		
+		// Description Lines
+		List<String> description = getDescription();
+		
+		if (description.size() == 0) 
+		{
+			setEmpty(true);
+			return;
+		}
+		
+		for (int i = 0; i < description.size(); i++)
+		{
+			ItemStack lineItem = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(i + 1)));
+			String line = description.get(i);
+			
+			setLineDescription(lineItem, line);
+			setItem(0, getNormalIndex(i, 10, 2), lineItem);
+		}
+	}
+
+	@Override
+	public void onClose(boolean forced) 
 	{
 		if (isModified)
 		{
 			Database database = core.getDatabase();
-			DataType type = editingDescription ? DataType.DESCRIPTION : DataType.PERMISSION_DESCRIPTION;
-			String menuName = menuBuilder.getEditingMenu().getName();
+			DataType type = isEditingDescription ? DataType.DESCRIPTION : DataType.PERMISSION_DESCRIPTION;
+			String menuName = editorManager.getMenuName();
 			
 			database.saveMetaData(menuName, targetHat, type, 0);
 		}
 	}
 
-	private List<String> getDescription () {
-		return editingDescription ? targetHat.getDescription() : targetHat.getPermissionDescription();
+	@Override
+	public void onTick(int ticks) {}
+	
+	@Override
+	public void deleteSlot (int page, int slot)
+	{
+		super.deleteSlot(page, slot);
+		
+		int clampedIndex = getClampedIndex(slot, 10, 2);
+		getDescription().remove(clampedIndex);
+		EditorLore.updatePreviewDecription(getItem(0, 49), getDescription(), targetHat);
+		
+		for (int i = clampedIndex; i <= 27; i++)
+		{			
+			ItemStack item = getItem(0, getNormalIndex(i, 10, 2));
+			if (item == null) {
+				continue;
+			}
+			ItemUtil.setItemName(item, lineTitle.replace("{1}", Integer.toString(i + 1)));
+		}
+		
+		if (getDescription().size() == 0) {
+			setEmpty(true);
+		}
 	}
 	
+	/**
+	 * Get the hat's description depending on the <b>isEditingDescription</b> value
+	 * @return
+	 */
+	private List<String> getDescription () {
+		return isEditingDescription ? targetHat.getDescription() : targetHat.getPermissionDescription();
+	}
+	
+	/**
+	 * Adds a line to this item's description
+	 * @param item
+	 * @param line
+	 */
 	private void setLineDescription (ItemStack item, String line)
 	{
 		String prefix = "";
@@ -122,59 +245,7 @@ public class EditorDescriptionMenu extends EditorListMenu {
 		
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(d));
 	}
-	
-	//@Override
-	protected void onAdd ()
-	{		
-		List<String> description = getDescription();
-		int size = description.size();
-		
-		if (size <= 27)
-		{
-			ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(size + 1)));
-			
-			description.add("");
-			EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
-			
-			setLineDescription(item, "");
-			setItem(getNormalIndex(size, 10, 2), item);
-		}
-		
-		if (isEmpty)
-		{
-			isEmpty = false;
-			removeEmptyItem();
-		}
-		
-		isModified = true;
-	}
-	
-	@Override
-	public void onDelete (int slot)
-	{
-		super.onDelete(slot);
-		
-		int clampedIndex = getClampedIndex(slot, 10, 2);
-		getDescription().remove(clampedIndex);
-		EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
-		
-		for (int i = clampedIndex; i <= 27; i++)
-		{
-			EditorAction action = getAction(i);
-			if (action == addAction) {
-				break;
-			}
-			
-			ItemStack item = getItem(getNormalIndex(i, 10, 2));
-			ItemUtil.setItemName(item, lineTitle.replace("{1}", Integer.toString(i + 1)));
-		}
-		
-		isEmpty = getDescription().size() == 0;
-		if (isEmpty) {
-			insertEmptyItem();
-		}
-	}
-	
+
 	private void onInsert (int slot)
 	{
 		List<String> description = getDescription();
@@ -190,67 +261,19 @@ public class EditorDescriptionMenu extends EditorListMenu {
 				int fromSlot = getNormalIndex(i, 10, 2);
 				int toSlot = getNormalIndex(i + 1, 10, 2);
 				
-				ItemStack item = getItem(fromSlot);
+				ItemStack item = getItem(0, fromSlot);
 				ItemUtil.setItemName(item, lineTitle.replace("{1}", Integer.toString(i + 2)));
 				
-				setItem(fromSlot, null);
-				setItem(toSlot, item);
+				setItem(0, fromSlot, null);
+				setItem(0, toSlot, item);
 			}
 			
 			ItemStack item = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(index + 1)));
-			EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
+			EditorLore.updatePreviewDecription(getItem(0, 49), getDescription(), targetHat);
 			
 			setLineDescription(item, "");
-			setItem(getNormalIndex(index, 10, 2), item);
+			setItem(0, getNormalIndex(index, 10, 2), item);
 		}
 	}
 	
-	@Override
-	protected void build() 
-	{
-		super.build();
-		
-		setButton(46, backButton, backAction);
-		
-		ItemStack previewItem = ItemUtil.createItem(CompatibleMaterial.WRITABLE_BOOK, Message.EDITOR_DESCRIPTION_MENU_PREVIEW);
-		EditorLore.updatePreviewDecription(previewItem, getDescription(), targetHat);
-		setButton(49, previewItem, (event, slot) ->
-		{
-			if (event.isShiftRightClick())
-			{
-				getDescription().clear();
-				for (int i = 0; i <= 27; i++) {
-					setItem(getNormalIndex(i, 10, 2), null);
-				}
-				
-				EditorLore.updatePreviewDecription(getItem(49), getDescription(), targetHat);
-				insertEmptyItem();
-				isModified = true;
-				
-				return EditorClickType.NEGATIVE;
-			}
-			return EditorClickType.NONE;
-		});
-		
-		setButton(52, addItem, (event, slot) ->
-		{
-			onAdd();
-			return EditorClickType.NEUTRAL;
-		});
-		
-		List<String> description = getDescription();
-		for (int i = 0; i < description.size(); i++)
-		{
-			ItemStack lineItem = ItemUtil.createItem(Material.PAPER, lineTitle.replace("{1}", Integer.toString(i + 1)));
-			String line = description.get(i);
-			
-			setLineDescription(lineItem, line);
-			setItem(getNormalIndex(i, 10, 2), lineItem);
-		}
-		
-		isEmpty = description.size() == 0;
-		if (isEmpty) {
-			insertEmptyItem();
-		}
-	}
 }
