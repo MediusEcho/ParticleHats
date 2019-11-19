@@ -1185,6 +1185,22 @@ public class Hat {
 	}
 	
 	/**
+	 * Gets the first displayable ParticleEffect this hat has, or NONE is nothing is found
+	 * @return
+	 */
+	public ParticleEffect getFirstAvailableParticle () 
+	{
+		for (int i = 0; i < type.getParticlesSupported(); i++) 
+		{
+			ParticleEffect pe = getParticle(i);
+			if (pe != ParticleEffect.NONE) {
+				return pe;
+			}
+		}
+		return ParticleEffect.NONE;
+	}
+	
+	/**
 	 * Get all particles the hat currently has
 	 * @return
 	 */
