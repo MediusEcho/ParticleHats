@@ -5,51 +5,88 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
+import com.mediusecho.particlehats.ui.AbstractListMenu;
+import com.mediusecho.particlehats.ui.MenuManager;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorTagMenu extends EditorMenu {
-
-	private final EditorAction selectAction;
-	private final Map<Integer, ParticleTag> tags;
+public class EditorTagMenu extends AbstractListMenu {
 	
 	private final String tagTitle = Message.EDITOR_TAG_MENU_TAG_TITLE.getValue();
+	private final MenuAction selectAction;
 	
-	public EditorTagMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorObjectCallback callback) 
+	private Map<Integer, ParticleTag> storedTags;
+	
+	public EditorTagMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuObjectCallback callback) 
 	{
-		super(core, owner, menuBuilder);
-		tags = new HashMap<Integer, ParticleTag>();
+		super(core, menuManager, owner, false);
 		
-		selectAction = (event, slot) ->
+		this.storedTags = new HashMap<Integer, ParticleTag>();
+		this.totalPages = MathUtil.calculatePageCount(ParticleTag.values().length, 28);
+		
+		this.selectAction = (event, slot) ->
 		{
 			int index = getClampedIndex(slot, 10, 2);
-			if (tags.containsKey(index)) 
+
+			if (storedTags.containsKey(index)) 
 			{
-				callback.onSelect(tags.get(index));
-				menuBuilder.goBack();
-				return EditorClickType.NEUTRAL;
+				callback.onSelect(storedTags.get(index));
+				return MenuClickResult.NEUTRAL;
 			}
-			return EditorClickType.NONE;
+
+			return MenuClickResult.NONE;
 		};
 		
-		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_TAG_MENU_TITLE.getValue());
 		build();
+	}
+
+	@Override
+	public void insertEmptyItem() {
+		
+	}
+
+	@Override
+	public void removeEmptyItem() {
+		
 	}
 
 	@Override
 	protected void build() 
 	{
-		setButton(49, backButton, backAction);
+		String title = Message.EDITOR_TAG_MENU_TITLE.getValue();
+		
+		for (int i = 0; i < totalPages; i++)
+		{
+			Inventory menu = Bukkit.createInventory(null, 54, title);
+			
+			menu.setItem(49, backButtonItem);
+			
+			// Next Page
+			if ((i + 1) < totalPages) {
+				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+			}
+			
+			// Previous Page
+			if ((i + 1) > 1) {
+				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+			}
+			
+			setMenu(i, menu);
+		}
+		
+		setAction(49, backButtonAction);
 		
 		int index = 0;
+		int page = 0;
+		
 		for (ParticleTag tag : ParticleTag.values())
 		{
 			if (tag == ParticleTag.NONE || tag == ParticleTag.CUSTOM) {
@@ -57,9 +94,30 @@ public class EditorTagMenu extends EditorMenu {
 			}
 			
 			ItemStack tagItem = ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), StringUtil.parseDescription(tag.getDescription()));			
-			setButton(getNormalIndex(index, 10, 2), tagItem, selectAction);
+			setItem(page, getNormalIndex(index, 10, 2), tagItem);
 			
-			tags.put(index++, tag);
+			storedTags.put(index++, tag);
+			
+			if (index % 28 == 0)
+			{
+				index = 0;
+				page++;
+			}
+		}
+		
+		for (int i = 0; i < 28; i++) {
+			setAction(getNormalIndex(i, 10, 2), selectAction);
 		}
 	}
+
+	@Override
+	public void onClose(boolean forced) {
+		
+	}
+
+	@Override
+	public void onTick(int ticks) {
+		
+	}
+
 }
