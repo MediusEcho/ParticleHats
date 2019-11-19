@@ -1,3 +1,7 @@
+4.1.0
+- Fixed custom type menu not allowing you to go to the next page
+- Added Citizens npc support
+
 4.0.1
 - Added separate vanish flag for Essentials vanish
   - Missing flag for Essentials vanish meant the plugin would always disable particles when a player had a potion of invisibility
