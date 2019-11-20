@@ -31,7 +31,7 @@ public abstract class AbstractMenu {
 	protected final UUID ownerID;
 	
 	protected final Map<Integer, MenuAction> actions;
-	protected final static MenuAction emptyAction = (event, slot) -> { return MenuClickResult.NEUTRAL; };
+	protected final static MenuAction emptyAction = (event, slot) -> { return MenuClickResult.NONE; };
 	
 	protected final ItemStack mainMenuButtonItem;
 	protected final ItemStack backButtonItem;
