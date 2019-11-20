@@ -47,7 +47,10 @@ public class EditorItemPromptMenu extends AbstractStaticMenu {
 			return MenuClickResult.NONE;
 		}
 		
-		callback.onSelect(new ItemStack(item.getType(), 1));
+		ItemStack i = new ItemStack(item.getType(), 1);
+
+		editorManager.getOwnerState().addRecentItem(i);
+		callback.onSelect(i);
 		return MenuClickResult.NEUTRAL;
 	}
 
@@ -83,7 +86,10 @@ public class EditorItemPromptMenu extends AbstractStaticMenu {
 				return MenuClickResult.NONE;
 			}
 			
-			callback.onSelect(new ItemStack(item.getType(), 1));
+			ItemStack i = new ItemStack(item.getType(), 1);
+			
+			editorManager.getOwnerState().addRecentItem(i);
+			callback.onSelect(i);
 			return MenuClickResult.NEUTRAL;
 		};
 		
@@ -125,6 +131,7 @@ public class EditorItemPromptMenu extends AbstractStaticMenu {
 					}
 					
 					menuManager.closeCurrentMenu();
+					editorManager.getOwnerState().addRecentItem(i);
 					callback.onSelect(i);
 				});
 				

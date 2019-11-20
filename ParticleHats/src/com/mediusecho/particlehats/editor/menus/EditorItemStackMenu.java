@@ -69,7 +69,6 @@ public class EditorItemStackMenu extends AbstractListMenu {
 					ItemStackData itemStackData = targetHat.getParticleData(particleIndex).getItemStackData();
 					itemStackData.updateItem(getClampedIndex(slot, 10, 2), i);
 					
-					editorManager.getOwnerState().addRecentItem(i);
 					itemModified = true;
 				});
 				
@@ -173,7 +172,6 @@ public class EditorItemStackMenu extends AbstractListMenu {
 				
 				ItemStack i = (ItemStack)item;
 				addItem(slot, i);
-				editorManager.getOwnerState().addRecentItem(i);
 			});
 			
 			
