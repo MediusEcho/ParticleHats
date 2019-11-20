@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,10 +16,10 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.GuiState;
-import com.mediusecho.particlehats.ui.Menu;
+import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
 
 public class InteractListener implements Listener {
 
@@ -79,20 +78,12 @@ public class InteractListener implements Listener {
 					return;
 				}
 				
-				Menu menu = new StaticMenu(core, player, inventory);
+				StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
+				AbstractMenu menu = new StaticMenu(core, staticManager, player, inventory);
 				
-				playerState.setGuiState(GuiState.SWITCHING_MENU);
-				playerState.setOpenMenu(menu);
+				staticManager.addMenu(menu);
 				menu.open();
 			}
-		}
-	}
-	
-	@EventHandler
-	public void onEntityInteract (PlayerInteractEntityEvent event)
-	{
-		if (event.getRightClicked() != null && event.getRightClicked().hasMetadata("NPC")) {
-			ParticleHats.log("interacting with an NPC");
 		}
 	}
 }
