@@ -2,7 +2,6 @@ package com.mediusecho.particlehats.editor.menus;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
@@ -120,7 +119,26 @@ public class EditorActionMenuOverview extends AbstractStaticMenu {
 		case OPEN_MENU_PERMISSION:
 		case OPEN_MENU:
 		{
+			EditorMenuSelectionMenu editorMenuSelectionMenu = new EditorMenuSelectionMenu(core, editorManager, owner, false, (menuName) ->
+			{
+				if (menuName == null) {
+					return;
+				}
+				
+				String argument = (String)menuName;
+				
+				if (isLeftClick) {
+					targetHat.setLeftClickArgument(argument);
+				} else {
+					targetHat.setRightClickArgument(argument);
+				}
+				
+				menuManager.closeCurrentMenu();
+				onActionChange(isLeftClick);
+			});
 			
+			menuManager.addMenu(editorMenuSelectionMenu);
+			editorMenuSelectionMenu.open();
 		}
 		break;
 			
