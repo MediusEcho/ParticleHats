@@ -1,5 +1,6 @@
 package com.mediusecho.particlehats.editor.menus;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -16,31 +17,23 @@ import org.bukkit.potion.PotionEffectType;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.AbstractListMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorPotionMenu extends EditorMenu {
+public class EditorPotionMenu extends AbstractListMenu {
 
+	private final Hat targetHat;
+	private final MenuCallback callback;
+	
 	private final String menuTitle = Message.EDITOR_POTION_MENU_TITLE.getValue();
 	private final String potionTitle = Message.EDITOR_POTION_MENU_POTION_TITLE.getValue();
 	private final String potionSelected = Message.EDITOR_POTION_MENU_POTION_DESCRIPTION.getValue();
-	
-	private final Map<Integer, Inventory> menus;
-	private final Map<Integer, PotionEffectType> potions;
-	
-	private final Hat targetHat;
-	private final EditorAction selectAction;
-	
-	private EditorGenericCallback callback;
-	
-	private int currentPage = 0;
-	private int pages = 0;
 	
 	private final List<String> potionBlacklist = Arrays.asList(
 			"CONFUSION",
@@ -52,56 +45,102 @@ public class EditorPotionMenu extends EditorMenu {
 			"HUNGER",
 			"BAD_OMEN");
 	
-	public EditorPotionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback) 
+	private List<PotionEffectType> supportedPotions;
+	private Map<Integer, PotionEffectType> potions;
+	
+	public EditorPotionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuCallback callback) 
 	{
-		super(core, owner, menuBuilder);
+		super(core, menuManager, owner, false);
 		
+		this.targetHat = menuManager.getBaseHat();
 		this.callback = callback;
+		this.supportedPotions = new ArrayList<PotionEffectType>();
+		this.potions = new HashMap<Integer, PotionEffectType>();
 		
-		menus = new HashMap<Integer, Inventory>();
-		potions = new HashMap<Integer, PotionEffectType>();
-		
-		targetHat = menuBuilder.getBaseHat();
-		
-		selectAction = (event, slot) ->
+		boolean useBlacklist = SettingsManager.EDITOR_SHOW_BLACKLISTED_POTIONS.getBoolean();
+		for (PotionEffectType potion : PotionEffectType.values())
 		{
-			int index = getClampedIndex(slot, 10, 2);
-			if (potions.containsKey(index)) 
-			{				
-				targetHat.setPotion(potions.get(index), targetHat.getPotionAmplifier());
-				menuBuilder.goBack();
+			if (potion == null) {
+				continue;
 			}
-			return EditorClickType.NEUTRAL;
-		};
+			
+			if (!useBlacklist && potionBlacklist.contains(potion.getName())) {
+				continue;
+			}
+			
+			supportedPotions.add(potion);
+		}
 		
-		inventory = Bukkit.createInventory(null, 54);
+		this.totalPages = MathUtil.calculatePageCount(supportedPotions.size(), 28);
+		
 		build();
-	}
-	
-	@Override
-	public void onClose (boolean forced)
-	{
-		if (!forced) {
-			callback.onExecute();
-		}
-	}
-	
-	@Override
-	public void open ()
-	{
-		if (menus.containsKey(currentPage))
-		{
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			owner.openInventory(menus.get(currentPage));
-		}
 	}
 
 	@Override
+	public void insertEmptyItem() {}
+
+	@Override
+	public void removeEmptyItem() {}
+
+	@Override
 	protected void build() 
-	{	
+	{
+		for (int i = 0; i < totalPages; i++)
+		{
+			String title = menuTitle.replace("{1}", Integer.toString(i + 1)).replace("{2}", Integer.toString(totalPages));
+			Inventory menu = Bukkit.createInventory(null, 54, title);
+			
+			menu.setItem(49, backButtonItem);
+			
+			// Next Page
+			if ((i + 1) < totalPages) {
+				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+			}
+			
+			// Previous Page
+			if ((i + 1) > 1) {
+				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+			}
+			
+			// Potion Strength
+			menu.setItem(52, ItemUtil.createItem(Material.GHAST_TEAR, Message.EDITOR_POTION_MENU_SET_STRENGTH));
+			EditorLore.updatePotionStrengthDescription(menu.getItem(52), targetHat.getPotion());
+			
+			setMenu(i, menu);
+		}
+		
+		MenuAction selectAction = (event, slot) ->
+		{
+			int index = getClampedIndex(slot, 10, 2);
+			if (potions.containsKey(index))
+			{
+				targetHat.setPotion(potions.get(index), targetHat.getPotionAmplifier());
+				menuManager.closeCurrentMenu();
+			}
+			return MenuClickResult.NEUTRAL;
+		};
+		
 		for (int i = 0; i < 28; i++) {
 			setAction(getNormalIndex(i, 10, 2), selectAction);
 		}
+		
+		setAction(49, backButtonAction);
+		
+		// Previous Page
+		setAction(48, (clickEvent, slot) ->
+		{
+			currentPage--;
+			open();
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		// Next Page
+		setAction(50, (clickEvent, slot) ->
+		{
+			currentPage++;
+			open();
+			return MenuClickResult.NEUTRAL;
+		});
 		
 		setAction(52, (event, slot) ->
 		{
@@ -118,65 +157,8 @@ public class EditorPotionMenu extends EditorMenu {
 			ItemStack item = menus.get(currentPage).getItem(52);
 			EditorLore.updatePotionStrengthDescription(item, targetHat.getPotion());
 			
-			return event.isLeftClick() ? EditorClickType.POSITIVE : EditorClickType.NEGATIVE;
+			return event.isLeftClick() ? MenuClickResult.POSITIVE : MenuClickResult.NEGATIVE;
 		});
-		
-		// Previous Page
-		setAction(48, (clickEvent, slot) ->
-		{
-			currentPage--;
-			open();
-			return EditorClickType.NEUTRAL;
-		});
-		
-		// Next Page
-		setAction(50, (clickEvent, slot) ->
-		{
-			currentPage++;
-			open();
-			return EditorClickType.NEUTRAL;
-		});
-		
-		boolean useBlacklist = !SettingsManager.EDITOR_SHOW_BLACKLISTED_POTIONS.getBoolean();
-		int potionCount = 0;
-		
-		for (PotionEffectType potionType : PotionEffectType.values())
-		{
-			if (potionType == null) {
-				continue;
-			}
-			
-			if (useBlacklist && potionBlacklist.contains(potionType.getName())) {
-				continue;
-			}
-			
-			potionCount++;
-		}
-		
-		pages = Math.max((int) Math.ceil(potionCount / 28D), 1);
-		for (int i = 0; i < pages; i++)
-		{
-			String title = menuTitle.replace("{1}", Integer.toString(i + 1)).replace("{2}", Integer.toString(pages));
-			Inventory menu = Bukkit.createInventory(null, 54, title);
-			
-			menu.setItem(49, backButton);
-			
-			// Next Page
-			if ((i + 1) < pages) {
-				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
-			}
-			
-			// Previous Page
-			if ((i + 1) > 1) {
-				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
-			}
-			
-			// Potion Strength
-			menu.setItem(52, ItemUtil.createItem(Material.GHAST_TEAR, Message.EDITOR_POTION_MENU_SET_STRENGTH));
-			EditorLore.updatePotionStrengthDescription(menu.getItem(52), targetHat.getPotion());
-			
-			menus.put(i, menu);
-		}
 		
 		PotionEffect currentPotion = targetHat.getPotion();
 		PotionEffectType currentType = null;
@@ -191,20 +173,12 @@ public class EditorPotionMenu extends EditorMenu {
 		int index = 0;
 		int page = 0;
 		
-		for (PotionEffectType potionType : PotionEffectType.values())
+		for (PotionEffectType potion : supportedPotions)
 		{
-			if (potionType == null) {
-				continue;
-			}
-			
-			if (useBlacklist && potionBlacklist.contains(potionType.getName())) {
-				continue;
-			}
-			
-			String name = StringUtil.capitalizeFirstLetter(potionType.getName().toLowerCase());
+			String name = StringUtil.capitalizeFirstLetter(potion.getName().toLowerCase());
 			ItemStack item = ItemUtil.createItem(Material.POTION, potionTitle.replace("{1}", name));
 					
-			if (currentType != null && currentType.equals(potionType))
+			if (currentType != null && currentType.equals(potion))
 			{
 				ItemUtil.highlightItem(item);
 				
@@ -225,7 +199,7 @@ public class EditorPotionMenu extends EditorMenu {
 			}
 			
 			menus.get(page).setItem(getNormalIndex(index, 10, 2), item);
-			potions.put(index, potionType);
+			potions.put(index, potion);
 			
 			index++;
 			if (index % 28 == 0)
@@ -234,8 +208,17 @@ public class EditorPotionMenu extends EditorMenu {
 				page++;
 			}
 		}
-		
-		setButton(49, backButton, backAction);
 	}
+
+	@Override
+	public void onClose(boolean forced) 
+	{
+		if (!forced) {
+			callback.onCallback();
+		}
+	}
+
+	@Override
+	public void onTick(int ticks) {}
 
 }
