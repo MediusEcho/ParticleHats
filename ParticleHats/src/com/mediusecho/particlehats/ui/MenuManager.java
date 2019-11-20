@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
 
@@ -24,7 +25,7 @@ public abstract class MenuManager {
 	
 	protected Deque<AbstractMenu> openMenus;
 	
-	private boolean openingMenu = false;
+	protected boolean openingMenu = false;
 	
 	public MenuManager (final ParticleHats core, final Player owner)
 	{
@@ -156,7 +157,9 @@ public abstract class MenuManager {
 	/**
 	 * Unregisters this MenuManager
 	 */
-	protected void unregister () {
+	protected void unregister () 
+	{
+		ownerState.setMetaState(MetaState.NONE);
 		ownerState.setMenuManager(null);
 	}
 	
