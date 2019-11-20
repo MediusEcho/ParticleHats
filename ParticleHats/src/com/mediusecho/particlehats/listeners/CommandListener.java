@@ -10,9 +10,10 @@ import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
 
 public class CommandListener implements Listener {
 
@@ -35,7 +36,7 @@ public class CommandListener implements Listener {
 		PlayerState playerState = core.getPlayerState(player);
 		
 		// Cancel any commands if this player is editing a meta property
-		if (SettingsManager.EDITOR_RESTRICT_COMMANDS.getBoolean() && playerState.isEditing())
+		if (SettingsManager.EDITOR_RESTRICT_COMMANDS.getBoolean() && playerState.hasEditorOpen())
 		{
 			MetaState metaState = playerState.getMetaState();
 			if (metaState != MetaState.NONE) 
@@ -55,10 +56,10 @@ public class CommandListener implements Listener {
 			{
 				event.setCancelled(true);
 				
-				StaticMenu menu = new StaticMenu(core, event.getPlayer(), inventory);
+				StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
+				AbstractMenu menu = new StaticMenu(core, staticManager, player, inventory);
 				
-				playerState.setGuiState(GuiState.SWITCHING_MENU);
-				playerState.setOpenMenu(menu);
+				staticManager.addMenu(menu);
 				menu.open();
 			}
 		}
