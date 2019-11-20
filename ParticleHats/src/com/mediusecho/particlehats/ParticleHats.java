@@ -44,6 +44,7 @@ import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
 import com.mediusecho.particlehats.tasks.ParticleTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
+import com.mediusecho.particlehats.ui.MenuManagerFactory;
 import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.YamlUtil;
 
@@ -77,6 +78,8 @@ public class ParticleHats extends JavaPlugin {
 	public static int serverVersion;
 	private static Logger logger;
 	private static ParticleHatsAPI hatAPI;
+	
+	private MenuManagerFactory menuManagerFactory;
 	
 	private Database database;
 	private DatabaseType databaseType;
@@ -154,6 +157,9 @@ public class ParticleHats extends JavaPlugin {
 		log("Loading ParticleHats v" + getDescription().getVersion());
 		log("");
 		{		
+			// Create our menu manager factory
+			menuManagerFactory = new MenuManagerFactory(this);
+			
 			if (YamlUtil.checkConfigForUpdates(getConfig()))
 			{
 				if (SettingsManager.CONFIG_AUTO_UPDATE.getBoolean())
@@ -296,6 +302,14 @@ public class ParticleHats extends JavaPlugin {
 	 */
 	public DatabaseType getDatabaseType () {
 		return databaseType;
+	}
+	
+	/**
+	 * Returns the MenuManagerFactory class
+	 * @return
+	 */
+	public MenuManagerFactory getMenuManagerFactory () {
+		return menuManagerFactory;
 	}
 	
 	/**
