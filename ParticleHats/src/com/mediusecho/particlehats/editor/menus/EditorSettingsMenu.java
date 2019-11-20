@@ -18,6 +18,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 
 public class EditorSettingsMenu extends AbstractStaticMenu {
 
+	private final EditorMenuManager editorManager;
 	private final EditorBaseMenu editorBaseMenu;
 	private final MenuInventory menuInventory;
 	
@@ -25,6 +26,7 @@ public class EditorSettingsMenu extends AbstractStaticMenu {
 	{
 		super(core, menuManager, owner);
 		
+		this.editorManager = menuManager;
 		this.editorBaseMenu = editorBaseMenu;
 		this.menuInventory = editorBaseMenu.getMenuInventory();
 		this.inventory = Bukkit.createInventory(null, 54, Message.EDITOR_SETTINGS_MENU_TITLE.getValue());
@@ -41,6 +43,7 @@ public class EditorSettingsMenu extends AbstractStaticMenu {
 		ItemStack titleItem = ItemUtil.createItem(Material.SIGN, Message.EDITOR_SETTINGS_MENU_SET_TITLE);
 		setButton(11, titleItem, (event, slot) ->
 		{
+			editorManager.getOwnerState().setMetaState(MetaState.MENU_TITLE);
 			core.prompt(owner, MetaState.MENU_TITLE);
 			owner.closeInventory();
 			return MenuClickResult.NEUTRAL;
@@ -52,6 +55,7 @@ public class EditorSettingsMenu extends AbstractStaticMenu {
 		{
 			if (event.isLeftClick())
 			{
+				editorManager.getOwnerState().setMetaState(MetaState.MENU_ALIAS);
 				core.prompt(owner, MetaState.MENU_ALIAS);
 				owner.closeInventory();
 			}
