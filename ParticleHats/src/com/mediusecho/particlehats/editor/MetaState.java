@@ -75,7 +75,7 @@ public enum MetaState {
 		}
 	}
 	
-	public void onMetaSet (MenuBuilder menuBuilder, Player player, List<String> args)
+	public void onMetaSet (EditorMenuManager editorManager, Player player, List<String> args)
 	{
 		// Stick all arguments together into one string
 		StringBuilder sb = new StringBuilder();
@@ -87,7 +87,7 @@ public enum MetaState {
 		String value = sb.toString();
 		String rawString = ChatColor.stripColor(value);
 		
-		Hat targetHat = menuBuilder.getBaseHat();
+		Hat targetHat = editorManager.getBaseHat();
 		
 		/**
 		 * Solution for adding empty spaces:
@@ -105,15 +105,15 @@ public enum MetaState {
 			case MENU_TITLE:
 			{
 				String title = value.length() <= 40 ? value : value.substring(0, 40);
-				menuBuilder.getEditingMenu().setTitle(title);
-				reopenEditor(menuBuilder);
+				editorManager.getEditingMenu().setTitle(title);
+				editorManager.reopen();
 			}
 			break;
 			
 			case MENU_ALIAS:
 			{
-				menuBuilder.getEditingMenu().setAlias(ChatColor.stripColor(args.get(0)));
-				reopenEditor(menuBuilder);
+				editorManager.getEditingMenu().setAlias(ChatColor.stripColor(args.get(0)));
+				editorManager.reopen();
 			}
 			break;
 			
@@ -130,15 +130,15 @@ public enum MetaState {
 				}
 				
 				database.createMenu(menuName);
-				reopenEditor(menuBuilder);
+				editorManager.reopen();
 			}
 			break;
 			
 			case HAT_NAME:
 			{
 				targetHat.setName(value);
-				menuBuilder.onHatNameChange();
-				reopenEditor(menuBuilder);
+				editorManager.getEditingMenu().onHatNameChange(editorManager.getBaseHat(), editorManager.getTargetSlot());
+				editorManager.reopen();
 			}
 			break;
 			
@@ -146,7 +146,7 @@ public enum MetaState {
 			{
 				String permission = rawString.replace(" ", "_");
 				targetHat.setPermission(permission.replace("particlehats.particle.", ""));
-				reopenEditor(menuBuilder);
+				editorManager.reopen();
 			}
 			break;
 			
@@ -155,35 +155,35 @@ public enum MetaState {
 				String label = rawString.replace(" ", "_");
 				core.getDatabase().onLabelChange(targetHat.getLabel(), label, targetHat.getMenu(), targetHat.getSlot());
 				targetHat.setLabel(label);
-				reopenEditor(menuBuilder);
+				editorManager.reopen();
 			}
 			break;
 			
 			case HAT_EQUIP_MESSAGE:
 			{
 				targetHat.setEquipMessage(value);
-				reopenEditor(menuBuilder);
+				editorManager.reopen();
 			}
 			break;
 			
 			case HAT_PERMISSION_MESSAGE:
 			{
 				targetHat.setPermissionDeniedMessage(value);
-				reopenEditor(menuBuilder);
+				editorManager.reopen();
 			}
 			break;
 			
 			case HAT_DESCRIPTION:
 			case HAT_PERMISSION_DESCRIPTION:
 			{
-				int line = menuBuilder.getOwnerState().getMetaDescriptionLine();
+				int line = editorManager.getOwnerState().getMetaDescriptionLine();
 				List<String> description = this == HAT_DESCRIPTION ? targetHat.getDescription() : targetHat.getPermissionDescription();
 				
 				if (line < description.size()) {
 					description.set(line, value);
 				}
 				
-				reopenEditor(menuBuilder);
+				editorManager.reopen();
 			}
 			break;
 			
@@ -195,25 +195,16 @@ public enum MetaState {
 				}
 				
 				targetHat.setArgument(command);
-				reopenEditor(menuBuilder);
+				editorManager.reopen();
 			}
 			break;
 			
 			case BLOCK_SEARCH:
 			{
-				menuBuilder.setMetaArgument(rawString.replace(" ", ","));
-				reopenEditor(menuBuilder);
+				editorManager.setMetaArgument(rawString.replace(" ", ","));
+				editorManager.reopen();
 			}
 			break;
-		}
-	}
-	
-	public void reopenEditor (MenuBuilder menuBuilder)
-	{
-		if (menuBuilder != null)
-		{
-			menuBuilder.setOwnerState(MetaState.NONE);
-			menuBuilder.openCurrentMenu();
 		}
 	}
 }
