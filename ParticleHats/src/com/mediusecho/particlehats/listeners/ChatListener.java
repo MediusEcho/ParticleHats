@@ -12,10 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.ui.MenuManager;
 
 /**
  * Listens for a player editing meta properties through the menu editor
@@ -39,28 +40,33 @@ public class ChatListener implements Listener {
 		{
 			Player player = event.getPlayer();
 			PlayerState playerState = core.getPlayerState(player);
-			MenuBuilder menuBuilder = playerState.getMenuBuilder();
 			
-			if (menuBuilder != null)
+			if (playerState.hasMenuManager())
 			{
 				MetaState metaState = playerState.getMetaState();
-				if (!metaState.equals(MetaState.NONE))
-				{					
-					event.setCancelled(true);
-					
-					Bukkit.getScheduler().scheduleSyncDelayedTask(ParticleHats.instance, () ->
-					{
-						if (ChatColor.stripColor(event.getMessage()).equalsIgnoreCase("cancel")) {
-							metaState.reopenEditor(menuBuilder);
-						}
-						
-						else
-						{
-							List<String> arguments = Arrays.asList(event.getMessage().split(" "));
-							metaState.onMetaSet(menuBuilder, event.getPlayer(), arguments);
-						}
-					});
+				if (metaState.equals(MetaState.NONE)) {
+					return;
 				}
+				
+				MenuManager menuManager = playerState.getMenuManager();
+				if (!(menuManager instanceof EditorMenuManager)) {
+					return;
+				}
+				
+				EditorMenuManager editorManager = (EditorMenuManager)menuManager;
+				event.setCancelled(true);
+				
+				Bukkit.getScheduler().scheduleSyncDelayedTask(ParticleHats.instance, () ->
+				{
+					if (ChatColor.stripColor(event.getMessage()).equals("cancel")) 
+					{
+						editorManager.reopen();
+						return;
+					}
+					
+					List<String> arguments = Arrays.asList(event.getMessage().split(" "));
+					metaState.onMetaSet(editorManager, player, arguments);
+				});
 			}
 		}
 	}
