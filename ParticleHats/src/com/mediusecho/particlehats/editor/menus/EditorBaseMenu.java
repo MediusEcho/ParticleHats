@@ -1,6 +1,5 @@
 package com.mediusecho.particlehats.editor.menus;
 
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -11,161 +10,164 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
+import com.mediusecho.particlehats.ui.MenuManager;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorBaseMenu extends EditorMenu {
+public class EditorBaseMenu extends AbstractStaticMenu {
 
-	private MenuInventory menuInventory;
+	private final EditorMenuManager editorManager;
+	private final MenuInventory menuInventory;
 	
-	private boolean isModified = false;
-	private boolean isLive = true;
+	private int rows = 0;
+	private boolean canUpdate = true;
 	
 	private final ItemStack emptyItem;
 	
-	private final EditorAction emptyParticleAction;
-	private final EditorAction existingParticleAction;
+	private final MenuAction emptyParticleAction;
+	private final MenuAction existingParticleAction;
 	
-	private int rows = 0;
-	
-	public EditorBaseMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, MenuInventory menuInventory) 
+	public EditorBaseMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuInventory menuInventory) 
 	{
-		super(core, owner, menuBuilder);
+		super(core, menuManager, owner);
+		
+		this.editorManager = (EditorMenuManager)menuManager;
 		this.menuInventory = menuInventory;
-		
-		rows = menuInventory.getSize() / 9;
-		emptyItem = ItemUtil.createItem(CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
-		
-		String title = EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_BASE_MENU_TITLE);
-		inventory = Bukkit.createInventory(null, menuInventory.getSize(), title);
-		inventory.setContents(menuInventory.getContents());
+		this.rows = menuInventory.getSize() / 9;
+		this.emptyItem = ItemUtil.createItem(CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
+		this.inventory = Bukkit.createInventory(null, menuInventory.getSize(), EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_BASE_MENU_TITLE));
+		this.inventory.setContents(menuInventory.getContents());
 		
 		emptyParticleAction = (event, slot) ->
 		{
 			if (event.isLeftClick())
-			{				
-				menuBuilder.setTargetHat(createHat(slot));
-				menuBuilder.setTargetSlot(slot);
-				menuBuilder.openMainMenu(owner);
-				setModified();
+			{
+				editorManager.setTargetHat(createHat(slot));
+				editorManager.setTargetSlot(slot);
+				
+				EditorMainMenu editorMainMenu = new EditorMainMenu(core, editorManager, owner);
+				menuManager.addMenu(editorMainMenu);
+				editorMainMenu.open();
 			}
 			
-			else if (event.isRightClick()) {
-				menuBuilder.openSettingsMenu(owner);
+			else if (event.isRightClick())
+			{
+				EditorSettingsMenu settingsMenu = new EditorSettingsMenu(core, editorManager, owner, this);
+				menuManager.addMenu(settingsMenu);
+				settingsMenu.open();
 			}
-			return EditorClickType.NEUTRAL;
+			
+			return MenuClickResult.NEUTRAL;
 		};
 		
 		existingParticleAction = (event, slot) ->
 		{
 			if (event.isLeftClick())
 			{
-				Hat clickedHat = getHat(slot);
-				if (clickedHat != null)
-				{
-					if (!clickedHat.isLoaded()) {
-						core.getDatabase().loadHat(getName(), slot, clickedHat);
-					}
-					
-					menuBuilder.setTargetHat(clickedHat);
-					menuBuilder.setTargetSlot(slot);
-					menuBuilder.openMainMenu(owner);
-				}
+				editorManager.setTargetHat(menuInventory.getHat(slot));
+				editorManager.setTargetSlot(slot);
+				
+				EditorMainMenu editorMainMenu = new EditorMainMenu(core, editorManager, owner);
+				menuManager.addMenu(editorMainMenu);
+				editorMainMenu.open();
 			}
 			
-			else if (event.isShiftRightClick()) 
+			else if (event.isShiftRightClick())
 			{
 				deleteHat(slot);
-				return EditorClickType.NEGATIVE;
+				return MenuClickResult.NEGATIVE;
 			}
 			
-			else if (event.isRightClick()) {
-				menuBuilder.openSettingsMenu(owner);
+			else if (event.isRightClick())
+			{
+				EditorSettingsMenu settingsMenu = new EditorSettingsMenu(core, editorManager, owner, this);
+				menuManager.addMenu(settingsMenu);
+				settingsMenu.open();
 			}
-			return EditorClickType.NEUTRAL;
+			
+			return MenuClickResult.NEUTRAL;
 		};
 		
 		build();
 	}
 	
 	@Override
-	public void onTick (int ticks)
-	{		
-		if (isLive)
+	public void open ()
+	{
+		int slot = editorManager.getTargetSlot();
+		if (slot < 0) 
 		{
-			for (Entry<Integer, Hat> set : menuInventory.getHats().entrySet())
+			super.open();
+			return;
+		}
+		
+		Hat hat = menuInventory.getHat(slot);
+		if (hat != null) {
+			EditorLore.updateHatDescription(getItem(slot), hat, true);
+		}
+		
+		super.open();
+	}
+
+	@Override
+	protected void build() 
+	{
+		for (int i = 0; i < inventory.getSize(); i++)
+		{
+			if (inventory.getItem(i) == null) {
+				setButton(i, emptyItem, emptyParticleAction);
+			} else {
+				setAction(i, existingParticleAction);
+			}
+			
+			Hat hat = menuInventory.getHat(i);
+			if (hat == null) {
+				continue;
+			}
+			
+			EditorLore.updateHatDescription(inventory.getItem(i), hat, true);
+		}
+	}
+
+	@Override
+	public void onClose(boolean forced) {
+		
+	}
+
+	@Override
+	public void onTick(int ticks) 
+	{
+		if (canUpdate)
+		{
+			for (Entry<Integer, Hat> entry : menuInventory.getHats().entrySet())
 			{
-				int slot = set.getKey();
-				Hat hat = set.getValue();
+				int slot = entry.getKey();
+				Hat hat = entry.getValue();
 				
-				if (hat != null)
-				{
-					IconData iconData = hat.getIconData();
-					if (iconData.isLive()) 
-					{
-						ItemStackTemplate itemTemplate = iconData.getNextItem(ticks);
-						ItemUtil.setItemType(getItem(slot), itemTemplate.getMaterial(), itemTemplate.getDurability());
-					}
+				if (hat == null) {
+					continue;
 				}
+				
+				IconData iconData = hat.getIconData();
+				if (!iconData.isLive()) {
+					continue;
+				}
+				
+				ItemStackTemplate itemTemplate = iconData.getNextItem(ticks);
+				ItemUtil.setItemType(getItem(slot), itemTemplate.getMaterial(), itemTemplate.getDurability());
 			}
 		}
 	}
 	
-	/**
-	 * Sets this menus modified flag to true
-	 */
-	public void setModified () {
-		isModified = true;
-	}
-	
-	/**
-	 * Changes the items material type and durability
-	 */
-	public void setItemType (int slot, ItemStack item) {
-		ItemUtil.setItemType(getItem(slot), item);
-	}
-	
-	/**
-	 * Returns true if this menu has been modified and needs to be saved
-	 * @return
-	 */
-	public boolean isModified () {
-		return isModified;
-	}
-	
-	/**
-	 * Get the name used to save this menu
-	 * @return
-	 */
+	@Override
 	public String getName () {
 		return menuInventory.getName();
-	}
-	
-	/**
-	 * Returns every hat in this menu
-	 * @return
-	 */
-	public Map<Integer, Hat> getHats () {
-		return menuInventory.getHats();
-	}
-	
-	/**
-	 * Returns a Hat object from this slot
-	 */
-	@Override
-	public Hat getHat (int slot) {
-		return menuInventory.getHat(slot);
-	}
-	
-	@Override
-	public void setHat (int slot, Hat hat) {
-		menuInventory.setHat(slot, hat);
 	}
 	
 	/**
@@ -187,11 +189,11 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
-	 * Get this menu's inventory
+	 * Get this menus MenuInventory
 	 * @return
 	 */
-	public Inventory getInventory () {
-		return inventory;
+	public MenuInventory getMenuInventory () {
+		return menuInventory;
 	}
 	
 	/**
@@ -221,10 +223,46 @@ public class EditorBaseMenu extends EditorMenu {
 	}
 	
 	/**
-	 * Set this menus size
-	 * @param rows How many rows this menu will have (chest = 3, double chest = 6)
+	 * Changes the items material type and durability
 	 */
-	public void resize (int rows)
+	public void setItemType (int slot, ItemStack item) {
+		ItemUtil.setItemType(getItem(slot), item);
+	}
+	
+	/**
+	 * Toggle live updates for this menu
+	 */
+	public void toggleUpdates () {
+		canUpdate = !canUpdate;
+	}
+	
+	/**
+	 * Checks to see if this menu can update icons
+	 * @return
+	 */
+	public boolean canUpdate () {
+		return canUpdate;
+	}
+	
+	/**
+	 * Get how many rows this inventory has
+	 * @return
+	 */
+	public int rows () {
+		return rows;
+	}
+	
+	/**
+	 * Syncs all hats icons
+	 */
+	public void syncItems () 
+	{
+		for (Entry<Integer, Hat> hats : menuInventory.getHats().entrySet()) {
+			hats.getValue().getIconData().reset();
+		}
+	}
+	
+	public void resizeTo (int rows)
 	{
 		if (this.rows != rows)
 		{
@@ -252,87 +290,33 @@ public class EditorBaseMenu extends EditorMenu {
 		}
 	}
 	
-	/**
-	 * Get how many rows are in this menu
-	 * @return
-	 */
-	public int getRowCount () {
-		return rows;
-	}
-	
-	/**
-	 * Get this menu's title
-	 * @return
-	 */
-	public String getTitle ()  {
-		return menuInventory.getTitle();
-	}
-	
-	/**
-	 * Get this menu's alias
-	 * @return
-	 */
-	public String getAlias () {
-		return menuInventory.getAlias();
-	}
-	
-	/**
-	 * Reset this menu's alias
-	 */
-	public void resetAlias () 
-	{
-		menuInventory.resetAlias();
-		core.getDatabase().saveMenuAlias(getName(), "NULL");
-	}
-	
-	/**
-	 * Set whether live updates are enabeld
-	 */
-	public void toggleLive () {
-		isLive = !isLive;
-	}
-	
-	/**
-	 * Returns whether live updates are enabled
-	 * @return
-	 */
-	public boolean isLive () {
-		return isLive;
-	}
-	
-	/**
-	 * 
-	 * @param currentSlot
-	 * @param newSlot
-	 * @param swapping
-	 */
 	public void changeSlots (int currentSlot, int newSlot, boolean swapping)
 	{
 		ItemStack currentItem = getItem(currentSlot);
 		ItemStack swappingItem = getItem(newSlot);
-		EditorAction currentAction = getAction(currentSlot);
-		EditorAction swappingAction = getAction(newSlot);
+		MenuAction currentAction = getAction(currentSlot);
+		MenuAction swappingAction = getAction(newSlot);
 		
-		Hat currentHat = getHat(currentSlot);
+		Hat currentHat = menuInventory.getHat(currentSlot);
 		Hat swappingHat = null;
 		currentHat.setSlot(newSlot);
 		
 		if (swapping)
 		{
-			swappingHat = getHat(newSlot);
+			swappingHat = menuInventory.getHat(newSlot);
 			swappingHat.setSlot(currentSlot);
-			setHat(currentSlot, swappingHat);
+			menuInventory.setHat(currentSlot, swappingHat);
 		}
 		
 		else {
-			removeHat(currentSlot);
+			menuInventory.removeHat(currentSlot);
 		}
 		
 		setButton(currentSlot, swappingItem, swappingAction);
 		setButton(newSlot, currentItem, currentAction);
-		setHat(newSlot, currentHat);
+		menuInventory.setHat(newSlot, currentHat);
 		
-		menuBuilder.setTargetSlot(newSlot);
+		editorManager.setTargetSlot(newSlot);
 		
 		core.getDatabase().moveHat(currentHat, swappingHat, getName(), null, currentSlot, newSlot, swapping);
 	}
@@ -344,16 +328,16 @@ public class EditorBaseMenu extends EditorMenu {
 	 */
 	public void cloneHat (int currentSlot, int newSlot)
 	{
-		Hat currentHat = getHat(currentSlot);
+		Hat currentHat = menuInventory.getHat(currentSlot);
 		Hat clonedHat = currentHat.clone();
 		
 		clonedHat.setSlot(newSlot);
 		
-		setHat(newSlot, clonedHat);
+		menuInventory.setHat(newSlot, clonedHat);
 		setButton(newSlot, clonedHat.getItem(), existingParticleAction);
 		
 		onHatNameChange(clonedHat, newSlot);
-		addItemDescription(getItem(newSlot), clonedHat);
+		EditorLore.updateHatDescription(getItem(newSlot), clonedHat, true);
 		
 		core.getDatabase().cloneHat(getName(), currentHat, newSlot);
 	}
@@ -380,9 +364,9 @@ public class EditorBaseMenu extends EditorMenu {
 		
 		ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.SUNFLOWER, Message.EDITOR_MISC_NEW_PARTICLE.getValue());
 		
-		addItemDescription(emptyItem, hat);
+		EditorLore.updateHatDescription(emptyItem, hat, true);
 		
-		setHat(slot, hat);
+		menuInventory.setHat(slot, hat);
 		setButton(slot, emptyItem, existingParticleAction);
 		
 		core.getDatabase().createHat(menuInventory.getName(), hat);
@@ -400,51 +384,5 @@ public class EditorBaseMenu extends EditorMenu {
 
 		core.getDatabase().deleteHat(menuInventory.getName(), slot);
 	}
-	
-	/**
-	 * Adds a brief description of this hat's properties
-	 * @param item
-	 * @param hat
-	 */
-	private void addItemDescription (ItemStack item, Hat hat) {
-		EditorLore.updateHatDescription(item, hat, true);
-	}
-	
-	@Override
-	public void open ()
-	{
-		int slot = menuBuilder.getTargetSlot();
-		if (slot >= 0) 
-		{
-			Hat hat = getHat(slot);
-			if (hat != null) {
-				addItemDescription(getItem(slot), hat);
-			}
-		}
-		
-		super.open();
-	}
-	
-	@Override
-	protected void build () 
-	{
-		int size = menuInventory.getSize();
-		for (int i = 0; i < size; i++)
-		{
-			if (!itemExists(i)) {
-				setButton(i, emptyItem, emptyParticleAction);
-			}
-			
-			else {
-				setAction(i, existingParticleAction);
-			}
-			
-			Hat hat = menuInventory.getHat(i);
-			if (hat != null) 
-			{
-				setHat(i, hat);
-				addItemDescription(getItem(i), hat);
-			}
-		}
-	}
+
 }
