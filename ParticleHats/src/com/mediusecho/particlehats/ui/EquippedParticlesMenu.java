@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
@@ -19,6 +20,8 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 	final boolean fromMenu;
 	final PlayerState playerState;
 	final MenuAction hatAction;
+	
+	private final ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.ACTIVE_PARTICLES_EMPTY);
 	
 	public EquippedParticlesMenu(ParticleHats core, MenuManager menuManager, Player owner, boolean fromMenu) 
 	{
@@ -69,7 +72,7 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 	
 	@Override
 	public void insertEmptyItem () {
-		
+		setButton(0, 22, emptyItem, emptyAction);
 	}
 	
 	@Override
@@ -105,7 +108,11 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 		
 		else
 		{
-			// TODO: Finish porting the rest of the active particles menu
+			setButton(0, 49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_CLOSE), (event, slot) ->
+			{
+				owner.closeInventory();
+				return MenuClickResult.NEUTRAL;
+			});
 		}
 		
 		List<Hat> equippedHats = playerState.getActiveHats();
@@ -140,5 +147,15 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 	@Override
 	public String getName () {
 		return "EquippedParticles";
+	}
+	
+	@Override
+	public void deleteSlot(int page, int slot)
+	{
+		super.deleteSlot(page, slot);
+		
+		if (playerState.getActiveHats().size() == 0) {
+			setEmpty(true);
+		}
 	}
 }
