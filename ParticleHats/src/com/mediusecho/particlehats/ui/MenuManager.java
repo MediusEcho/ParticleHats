@@ -118,6 +118,15 @@ public abstract class MenuManager {
 	}
 	
 	/**
+	 * Reopens this MenuManager to the last open menu
+	 */
+	public void reopen ()
+	{
+		ownerState.setMetaState(MetaState.NONE);
+		openCurrentMenu();
+	}
+	
+	/**
 	 * Removes the current menu from the stack
 	 */
 	public void removeCurrentMenu () {
