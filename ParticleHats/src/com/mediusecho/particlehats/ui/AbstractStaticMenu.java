@@ -32,6 +32,20 @@ public abstract class AbstractStaticMenu extends AbstractMenu {
 		return this.inventory == inventory;
 	}
 	
+	@Override
+	public String getName () {
+		return "";
+	}
+	
+	/**
+	 * Get the item at this slot
+	 * @param slot
+	 * @return
+	 */
+	protected ItemStack getItem (int slot) {
+		return inventory.getItem(slot);
+	}
+	
 	/**
 	 * Place an item into this inventory
 	 * @param slot
