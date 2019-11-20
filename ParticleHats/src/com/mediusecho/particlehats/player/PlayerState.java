@@ -1,21 +1,16 @@
 package com.mediusecho.particlehats.player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
-import com.mediusecho.particlehats.editor.citizens.CitizensManager;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
-import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
-import com.mediusecho.particlehats.ui.GuiState;
-import com.mediusecho.particlehats.ui.Menu;
 import com.mediusecho.particlehats.ui.MenuManager;
 
 public class PlayerState extends EntityState {
@@ -23,20 +18,8 @@ public class PlayerState extends EntityState {
 	private final Player owner;
 	
 	private MenuManager menuManager;
-	private MenuBuilder menuBuilder;
-	private CitizensManager citizensManager;
-
-	private ActiveParticlesMenu activeParticlesMenu;
-	private Menu purchaseMenu;
-	
-	private Menu openMenu;
-	private Menu previousOpenMenu;
-	private Map<String, Menu> openMenuCache;
 	
 	private MetaState metaState = MetaState.NONE;
-	
-	private GuiState guiState = GuiState.INNACTIVE;
-	private GuiState previousGuiState = GuiState.NONE;
 	
 	private int metaStateTime = 15;
 	private int metaDescriptionLine = 0;
@@ -56,7 +39,6 @@ public class PlayerState extends EntityState {
 		purchasedHats = new ArrayList<HatReference>();
 		legacyPurchasedHats = new ArrayList<String>();
 		
-		openMenuCache = new HashMap<String, Menu>();
 		recentItems = new ArrayList<ItemStack>();
 	}
 	
@@ -68,165 +50,40 @@ public class PlayerState extends EntityState {
 		return owner;
 	}
 	
+	/**
+	 * Set this players MenuManager class
+	 * @param menuManager
+	 */
 	public void setMenuManager (MenuManager menuManager) {
 		this.menuManager = menuManager;
 	}
 	
+	/**
+	 * Returns this players MenuManager class
+	 * @return
+	 */
 	public MenuManager getMenuManager () {
 		return menuManager;
 	}
 	
+	/**
+	 * Returns true if this player has a MenuManager class
+	 * @return
+	 */
 	public boolean hasMenuManager () {
 		return menuManager != null;
 	}
-
-	/**
-	 * Set this players menu builder class
-	 * @param menuBuidler
-	 */
-	public void setMenuBuilder (MenuBuilder menuBuilder) {
-		this.menuBuilder = menuBuilder;
-	}
 	
 	/**
-	 * Returns this players menu builder class
+	 * Check to see if this player has the editor open
 	 * @return
 	 */
-	public MenuBuilder getMenuBuilder () {
-		return menuBuilder;
-	}
-	
-	public boolean isEditing () {
-		return menuBuilder != null;
-	}
-	
-	public void setCitizensManager (CitizensManager citizensManager) {
-		this.citizensManager = citizensManager;
-	}
-	
-	public CitizensManager getCitizensManager () {
-		return citizensManager;
-	}
-	
-	/**
-	 * Set this players active particles menu
-	 * @param activeParticlesMenu
-	 */
-	public void setActiveParticlesMenu (ActiveParticlesMenu activeParticlesMenu) {
-		this.activeParticlesMenu = activeParticlesMenu;
-	}
-	
-	/**
-	 * Get this players active particles menu
-	 * @return
-	 */
-	public ActiveParticlesMenu getActiveParticlesMenu () {
-		return activeParticlesMenu;
-	}
-	
-	/**
-	 * Sets this players active particle menu as null
-	 */
-	public void removeActiveParticlesMenu () {
-		activeParticlesMenu = null;
-	}
-	
-	/**
-	 * Set this players purchase menu
-	 * @param purchaseMenu
-	 */
-	public void setPurchaseMenu (Menu purchaseMenu) {
-		this.purchaseMenu = purchaseMenu;
-	}
-	
-	/**
-	 * Get this players purchase menu
-	 * @return
-	 */
-	public Menu getPurchaseMenu () {
-		return purchaseMenu;
-	}
-	
-	/**
-	 * Remove this players purchase menu
-	 */
-	public void removePurchaseMenu () {
-		purchaseMenu = null;
-	}
-	
-	public void setOpenMenu (Menu menu, boolean cacheMenu)
+	public boolean hasEditorOpen () 
 	{
-		if (menu != null)
-		{
-			previousOpenMenu = openMenu;
-			openMenu = menu;
-			
-			if (cacheMenu) 
-			{
-				if (!openMenuCache.containsKey(menu.getName())) {
-					openMenuCache.put(menu.getName(), menu);
-				}
-			}
+		if (hasMenuManager() && menuManager instanceof EditorMenuManager) {
+			return true;
 		}
-	}
-	
-	/**
-	 * Set the players current open menu
-	 * @param menu
-	 */
-	public void setOpenMenu (Menu menu) {
-		setOpenMenu(menu, true);
-	}
-	
-	/**
-	 * Gets the players current open menu
-	 * @return
-	 */
-	public Menu getOpenMenu () {
-		return openMenu;
-	}
-	
-	/**
-	 * Get the players previously open menu
-	 * @return
-	 */
-	public Menu getPreviousOpenMenu () {
-		return previousOpenMenu;
-	}
-	
-	/**
-	 * Gets a cached menu the player has recently opened
-	 * @param menuName
-	 * @return
-	 */
-	public Menu getOpenMenu (String menuName)
-	{
-		if (openMenuCache.containsKey(menuName)) {
-			return openMenuCache.get(menuName);
-		}
-		return null;
-	}
-	
-	/**
-	 * Resets the players current open menu
-	 */
-	public void closeOpenMenu () {
-		openMenu = null;
-	}
-	
-	/**
-	 * Clears the players menu cache
-	 */
-	public void clearMenuCache () {
-		openMenuCache.clear();
-	}
-	
-	/**
-	 * Checks to see if the player has a menu open
-	 * @return
-	 */
-	public boolean hasMenuOpen () {
-		return openMenu != null;
+		return false;
 	}
 	
 	/**
@@ -349,30 +206,6 @@ public class PlayerState extends EntityState {
 		}
 		
 		return false;
-	}
-	
-	/**
-	 * Set this players GuiState
-	 * @param guiState
-	 */
-	public void setGuiState (GuiState guiState) {
-		this.guiState = guiState;
-	}
-	
-	/**
-	 * Get this players GuiState
-	 * @return
-	 */
-	public GuiState getGuiState () {
-		return guiState;
-	}
-	
-	/**
-	 * Get this players previous GuiState
-	 * @return
-	 */
-	public GuiState getPreviousGuiState () {
-		return previousGuiState;
 	}
 	
 	/**
