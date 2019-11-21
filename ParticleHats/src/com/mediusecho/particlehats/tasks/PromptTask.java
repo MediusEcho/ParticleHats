@@ -38,10 +38,6 @@ public class PromptTask extends BukkitRunnable {
 					continue;
 				}
 				
-				if (!playerState.hasEditorOpen()) {
-					continue;
-				}
-				
 				int time = playerState.getMetaStateTime();
 				if (time <= 0)
 				{
