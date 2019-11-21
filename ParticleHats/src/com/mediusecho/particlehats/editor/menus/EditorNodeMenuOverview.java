@@ -14,7 +14,6 @@ import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.AbstractListMenu;
-import com.mediusecho.particlehats.ui.MenuManager;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
@@ -129,8 +128,9 @@ public class EditorNodeMenuOverview extends AbstractListMenu {
 	}
 
 	@Override
-	public void onClose(boolean forced) {
-		
+	public void onClose(boolean forced) 
+	{
+		editorManager.setTargetNode(null);
 	}
 
 	@Override
