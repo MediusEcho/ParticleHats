@@ -17,6 +17,7 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.ui.AbstractListMenu;
 import com.mediusecho.particlehats.ui.MenuManager;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 
 public class CitizensMenuSelectionMenu extends AbstractListMenu {
 
@@ -37,7 +38,7 @@ public class CitizensMenuSelectionMenu extends AbstractListMenu {
 		
 		this.loadedMenus = core.getDatabase().getMenus(false);
 		this.storedMenus = new HashMap<Integer, String>();
-		this.totalPages = this.calculatePageCount((double) loadedMenus.size(), 28);
+		this.totalPages = MathUtil.calculatePageCount((double) loadedMenus.size(), 28);
 		
 		openMenuAction = (event, slot) ->
 		{
@@ -52,6 +53,12 @@ public class CitizensMenuSelectionMenu extends AbstractListMenu {
 		
 		build();
 	}
+	
+	@Override
+	public void insertEmptyItem () {}
+	
+	@Override
+	public void removeEmptyItem () {}
 
 	@Override
 	protected void build() 
