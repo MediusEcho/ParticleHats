@@ -25,13 +25,14 @@ public class EditorBaseMenu extends AbstractStaticMenu {
 	private final EditorMenuManager editorManager;
 	private final MenuInventory menuInventory;
 	
-	private int rows = 0;
-	private boolean canUpdate = true;
+	private final MenuAction emptyParticleAction;
+	private final MenuAction existingParticleAction;
 	
 	private final ItemStack emptyItem;
 	
-	private final MenuAction emptyParticleAction;
-	private final MenuAction existingParticleAction;
+	private int rows = 0;
+	private boolean canUpdate = true;
+	private String editingTitle;
 	
 	public EditorBaseMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuInventory menuInventory) 
 	{
@@ -41,7 +42,8 @@ public class EditorBaseMenu extends AbstractStaticMenu {
 		this.menuInventory = menuInventory;
 		this.rows = menuInventory.getSize() / 9;
 		this.emptyItem = ItemUtil.createItem(CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_EMPTY_SLOT_TITLE, Message.EDITOR_SLOT_DESCRIPTION);
-		this.inventory = Bukkit.createInventory(null, menuInventory.getSize(), EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_BASE_MENU_TITLE));
+		this.editingTitle = EditorLore.getTrimmedMenuTitle(menuInventory.getName(), Message.EDITOR_BASE_MENU_TITLE);
+		this.inventory = Bukkit.createInventory(null, menuInventory.getSize(), editingTitle);
 		this.inventory.setContents(menuInventory.getContents());
 		
 		emptyParticleAction = (event, slot) ->
@@ -49,18 +51,12 @@ public class EditorBaseMenu extends AbstractStaticMenu {
 			if (event.isLeftClick())
 			{
 				editorManager.setTargetHat(createHat(slot));
-				editorManager.setTargetSlot(slot);
-				
-				EditorMainMenu editorMainMenu = new EditorMainMenu(core, editorManager, owner);
-				menuManager.addMenu(editorMainMenu);
-				editorMainMenu.open();
+				editorManager.setTargetSlot(slot);				
+				editorManager.openMainMenu();
 			}
 			
-			else if (event.isRightClick())
-			{
-				EditorSettingsMenu settingsMenu = new EditorSettingsMenu(core, editorManager, owner, this);
-				menuManager.addMenu(settingsMenu);
-				settingsMenu.open();
+			else if (event.isRightClick()) {
+				editorManager.openSettingsMenu();
 			}
 			
 			return MenuClickResult.NEUTRAL;
@@ -72,10 +68,7 @@ public class EditorBaseMenu extends AbstractStaticMenu {
 			{
 				editorManager.setTargetHat(menuInventory.getHat(slot));
 				editorManager.setTargetSlot(slot);
-				
-				EditorMainMenu editorMainMenu = new EditorMainMenu(core, editorManager, owner);
-				menuManager.addMenu(editorMainMenu);
-				editorMainMenu.open();
+				editorManager.openMainMenu();
 			}
 			
 			else if (event.isShiftRightClick())
@@ -84,11 +77,8 @@ public class EditorBaseMenu extends AbstractStaticMenu {
 				return MenuClickResult.NEGATIVE;
 			}
 			
-			else if (event.isRightClick())
-			{
-				EditorSettingsMenu settingsMenu = new EditorSettingsMenu(core, editorManager, owner, this);
-				menuManager.addMenu(settingsMenu);
-				settingsMenu.open();
+			else if (event.isRightClick()) {
+				editorManager.openSettingsMenu();
 			}
 			
 			return MenuClickResult.NEUTRAL;
@@ -203,8 +193,7 @@ public class EditorBaseMenu extends AbstractStaticMenu {
 	public void setTitle (String title)
 	{
 		menuInventory.setTitle(title);
-		String editingTitle =  EditorLore.getTrimmedMenuTitle(title, Message.EDITOR_BASE_MENU_TITLE);
-		
+				
 		Inventory replacementInventory = Bukkit.createInventory(null, inventory.getSize(), editingTitle);
 		replacementInventory.setContents(inventory.getContents());
 		inventory = replacementInventory;
@@ -266,7 +255,7 @@ public class EditorBaseMenu extends AbstractStaticMenu {
 	{
 		if (this.rows != rows)
 		{
-			Inventory replacementInventory = Bukkit.createInventory(null, 9 * rows, menuInventory.getTitle());
+			Inventory replacementInventory = Bukkit.createInventory(null, 9 * rows, editingTitle);
 			
 			// inventory.setContents() only works when resizing the menus to a smaller size. so we need to use a loop to account for the other option
 			for (int i = 0; i < replacementInventory.getSize(); i++)
