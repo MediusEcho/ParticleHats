@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor.purchase.menus;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,61 +11,66 @@ import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.editor.menus.EditorActionMenu;
+import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
 import com.mediusecho.particlehats.editor.menus.EditorDescriptionMenu;
-import com.mediusecho.particlehats.editor.menus.EditorIconOverviewMenu;
+import com.mediusecho.particlehats.editor.menus.EditorIconMenuOverview;
 import com.mediusecho.particlehats.editor.menus.EditorSlotMenu;
 import com.mediusecho.particlehats.editor.menus.EditorSoundMenu;
+import com.mediusecho.particlehats.editor.purchase.PurchaseMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.properties.ParticleAction;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorPurchaseMainMenu extends EditorMenu {
+public class PurchaseEditorMainMenu extends AbstractStaticMenu {
 
+	private final PurchaseMenuManager purchaseManager;
+	private final EditorBaseMenu editorBaseMenu;
 	private Hat targetHat;
 	
-	public EditorPurchaseMainMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
+	public PurchaseEditorMainMenu(ParticleHats core, PurchaseMenuManager menuManager, Player owner)
 	{
-		super(core, owner, menuBuilder);
+		super(core, menuManager, owner);
 		
-		targetHat = menuBuilder.getBaseHat();
+		this.purchaseManager = menuManager;
+		this.editorBaseMenu = menuManager.getEditingMenu();
+		this.targetHat = menuManager.getBaseHat();
+		this.inventory = Bukkit.createInventory(null, 36, Message.EDITOR_MAIN_MENU_TITLE.getValue());
 		
-		inventory = Bukkit.createInventory(null, 36, Message.EDITOR_MAIN_MENU_TITLE.getValue());
 		build();
-	}
-	
-	@Override
-	public void open ()
-	{	
-		EditorLore.updateNameDescription(getItem(13), targetHat);	
-		EditorLore.updateDescriptionDescription(getItem(15), targetHat.getDescription());
-		
-		super.open();
 	}
 
 	@Override
 	protected void build() 
 	{
-		setButton(31, backButton, backAction);
-	
+		setButton(31, backButtonItem, backButtonAction);
+		
 		// Action
 		ItemStack actionItem = ItemUtil.createItem(CompatibleMaterial.GUNPOWDER, Message.EDITOR_MAIN_MENU_SET_ACTION);
 		EditorLore.updateSpecificActionDescription(actionItem, targetHat, targetHat.getLeftClickAction(), targetHat.getLeftClickArgument());
 		setButton(11, actionItem, (event, slot) ->
 		{
-			EditorActionMenu editorActionMenu = new EditorActionMenu(core, owner, menuBuilder, true, true, (action) ->
+			EditorActionMenu editorActionMenu = new EditorActionMenu(core, purchaseManager, owner, true, true, (action) ->
 			{
-				targetHat.setLeftClickAction(action);
+				if (action == null) {
+					return;
+				}
+				
+				ParticleAction pa = (ParticleAction)action;
+				
+				targetHat.setLeftClickAction(pa);
 				EditorLore.updateSpecificActionDescription(getItem(11), targetHat, targetHat.getLeftClickAction(), targetHat.getLeftClickArgument());
-				menuBuilder.goBack();
+				
+				menuManager.closeCurrentMenu();
 			});
 			
-			menuBuilder.addMenu(editorActionMenu);
+			menuManager.addMenu(editorActionMenu);
 			editorActionMenu.open();
-			return EditorClickType.NEUTRAL;
+			
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Name
@@ -73,18 +79,17 @@ public class EditorPurchaseMainMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				menuBuilder.setOwnerState(MetaState.HAT_NAME);
+				purchaseManager.getOwnerState().setMetaState(MetaState.HAT_NAME);
 				core.prompt(owner, MetaState.HAT_NAME);
 				owner.closeInventory();
 			}
 			
-			else if (event.isRightClick())
+			else
 			{
 				targetHat.setName(Message.EDITOR_MISC_NEW_PARTICLE.getRawValue());
 				EditorLore.updateNameDescription(getItem(13), targetHat);
 			}
-			
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Description
@@ -93,8 +98,8 @@ public class EditorPurchaseMainMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				EditorDescriptionMenu editorDescriptionMenu = new EditorDescriptionMenu(core, owner, menuBuilder, true);
-				menuBuilder.addMenu(editorDescriptionMenu);
+				EditorDescriptionMenu editorDescriptionMenu = new EditorDescriptionMenu(core, purchaseManager, owner, true);
+				menuManager.addMenu(editorDescriptionMenu);
 				editorDescriptionMenu.open();
 			}
 			
@@ -105,33 +110,40 @@ public class EditorPurchaseMainMenu extends EditorMenu {
 					targetHat.getDescription().clear();
 					
 					Database database = core.getDatabase();
-					String menuName = menuBuilder.getEditingMenu().getName();
+					String menuName = purchaseManager.getMenuName();
 					database.saveMetaData(menuName, targetHat, DataType.DESCRIPTION, 0);
 					
 					EditorLore.updateDescriptionDescription(getItem(15), targetHat.getDescription());
 				}
 			}
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Slot
 		ItemStack slotItem = ItemUtil.createItem(Material.ITEM_FRAME, Message.EDITOR_MAIN_MENU_SET_SLOT, Message.EDITOR_MAIN_MENU_SLOT_DESCRIPTION);
 		setButton(19, slotItem, (event, slot) ->
 		{
-			EditorSlotMenu editorSlotMenu = new EditorSlotMenu(core, owner, menuBuilder, false);
-			menuBuilder.addMenu(editorSlotMenu);
+			EditorSlotMenu editorSlotMenu = new EditorSlotMenu(core, purchaseManager, owner, editorBaseMenu, false);
+			menuManager.addMenu(editorSlotMenu);
 			editorSlotMenu.open();
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Clone
 		ItemStack cloneItem = ItemUtil.createItem(CompatibleMaterial.PRISMARINE_SHARD, Message.EDITOR_MAIN_MENU_CLONE, Message.EDITOR_MAIN_MENU_CLONE_DESCRIPTION);
 		setButton(21, cloneItem, (event, slot) ->
 		{
-			EditorSlotMenu editorSlotMenu = new EditorSlotMenu(core, owner, menuBuilder, true);
-			menuBuilder.addMenu(editorSlotMenu);
+			if (targetHat.isModified())
+			{
+				int targetSlot = purchaseManager.getTargetSlot();
+				core.getDatabase().saveHat(editorBaseMenu.getMenuInventory().getName(), targetSlot, targetHat);
+				targetHat.clearPropertyChanges();
+			}
+			
+			EditorSlotMenu editorSlotMenu = new EditorSlotMenu(core, purchaseManager, owner, editorBaseMenu, true);
+			menuManager.addMenu(editorSlotMenu);
 			editorSlotMenu.open();
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Sound
@@ -141,22 +153,31 @@ public class EditorPurchaseMainMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				EditorSoundMenu editorSoundMenu = new EditorSoundMenu(core, owner, menuBuilder, (sound) ->
+				EditorSoundMenu editorSoundMenu = new EditorSoundMenu(core, purchaseManager, owner, (sound) ->
 				{
-					targetHat.setSound(sound);
+					menuManager.closeCurrentMenu();
+					
+					if (sound == null) {
+						return;
+					}
+					
+					Sound s = (Sound)sound;
+					
+					targetHat.setSound(s);
 					EditorLore.updateSoundItemDescription(getItem(23), targetHat);
-					menuBuilder.goBack();
 				});
-				menuBuilder.addMenu(editorSoundMenu);
+				
+				menuManager.addMenu(editorSoundMenu);
 				editorSoundMenu.open();
 			}
 			
-			else if (event.isShiftRightClick()) 
+			else if (event.isShiftRightClick())
 			{
 				targetHat.removeSound();
 				EditorLore.updateSoundItemDescription(getItem(23), targetHat);
 			}
-			return EditorClickType.NEUTRAL;
+			
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Icon
@@ -164,14 +185,36 @@ public class EditorPurchaseMainMenu extends EditorMenu {
 		ItemUtil.setNameAndDescription(iconItem, Message.EDITOR_MAIN_MENU_SET_ICON, Message.EDITOR_MAIN_MENU_ICON_DESCRIPTION);
 		setButton(25, iconItem, (event, slot) ->
 		{
-			EditorIconOverviewMenu editorIconOverviewMenu = new EditorIconOverviewMenu(core, owner, menuBuilder, (item) ->
+			EditorIconMenuOverview editorIconMenuOverview = new EditorIconMenuOverview(core, purchaseManager, owner, (mainItem) ->
 			{
+				if (mainItem == null) {
+					return;
+				}
+				
+				ItemStack item = (ItemStack)mainItem;
 				ItemUtil.setItemType(getItem(25), item);
 			});
-			menuBuilder.addMenu(editorIconOverviewMenu);
-			editorIconOverviewMenu.open();
-			return EditorClickType.NEUTRAL;
+			
+			menuManager.addMenu(editorIconMenuOverview);
+			editorIconMenuOverview.open();
+			
+			return MenuClickResult.NEUTRAL;
 		});
 	}
+
+	@Override
+	public void onClose(boolean forced) {}
+	
+	@Override
+	public void open ()
+	{
+		EditorLore.updateNameDescription(getItem(13), targetHat);
+		EditorLore.updateDescriptionDescription(getItem(15), targetHat.getDescription());
+		
+		super.open();
+	}
+
+	@Override
+	public void onTick(int ticks) {}
 
 }
