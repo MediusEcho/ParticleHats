@@ -21,6 +21,7 @@ public class ManageCitizenCommand extends Command {
 		{
 			PlayerState playerState = (PlayerState)entityState;
 			playerState.setMetaState(MetaState.NPC_MANAGE);
+			core.prompt(sender.getPlayer(), MetaState.NPC_MANAGE);
 			
 			return true;
 		}
