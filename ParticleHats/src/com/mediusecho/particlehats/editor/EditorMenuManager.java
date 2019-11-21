@@ -9,6 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.editor.menus.EditorBaseMenu;
+import com.mediusecho.particlehats.editor.menus.EditorMainMenu;
+import com.mediusecho.particlehats.editor.menus.EditorSettingsMenu;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.AbstractMenu;
@@ -229,5 +231,25 @@ public class EditorMenuManager extends MenuManager {
 	 */
 	public EditorBaseMenu getEditingMenu () {
 		return editorBaseMenu;
+	}
+	
+	/**
+	 * Opens the editor main menu
+	 */
+	public void openMainMenu ()
+	{
+		EditorMainMenu editorMainMenu = new EditorMainMenu(core, this, owner);
+		addMenu(editorMainMenu);
+		editorMainMenu.open();
+	}
+	
+	/**
+	 * Opens the editor settings menu
+	 */
+	public void openSettingsMenu ()
+	{
+		EditorSettingsMenu editorSettingsMenu = new EditorSettingsMenu(core, this, owner, editorBaseMenu);
+		addMenu(editorSettingsMenu);
+		editorSettingsMenu.open();
 	}
 }
