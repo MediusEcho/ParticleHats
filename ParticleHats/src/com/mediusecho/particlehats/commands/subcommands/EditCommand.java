@@ -8,8 +8,8 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
-import com.mediusecho.particlehats.editor.MenuBuilder;
-import com.mediusecho.particlehats.editor.purchase.PurchaseMenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
+import com.mediusecho.particlehats.editor.purchase.PurchaseMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -59,24 +59,23 @@ public class EditCommand extends Command {
 		PlayerState playerState = core.getPlayerState(sender.getPlayer());	
 		Database database = core.getDatabase();
 		
-		if (playerState.isEditing()) 
+		if (playerState.hasEditorOpen()) 
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
 			return false;
 		}
 		
 		String menuName = (args.get(0).contains(".") ? args.get(0).split("\\.")[0] : args.get(0));	
+		
 		if (menuName.equalsIgnoreCase("purchase"))
 		{
 			MenuInventory inventory = database.getPurchaseMenu(playerState);
 			
 			if (inventory != null)
 			{
-				PurchaseMenuBuilder purchaseBuilder = new PurchaseMenuBuilder(core, sender.getPlayer(), playerState, inventory);
-				playerState.setMenuBuilder(purchaseBuilder);
-				
-				purchaseBuilder.startEditing();
-				return true;
+				PurchaseMenuManager purchaseManager = core.getMenuManagerFactory().getPurchaseMenuManager(playerState);
+				purchaseManager.setEditingMenu(inventory);
+				purchaseManager.open();
 			}
 			
 			return false;
@@ -88,21 +87,17 @@ public class EditCommand extends Command {
 			return false;
 		}
 		
-		MenuBuilder menuBuilder = playerState.getMenuBuilder();
 		MenuInventory inventory = database.loadInventory(menuName, playerState);
 		
 		if (inventory == null) {
 			return false;
 		}
 		
-		if (menuBuilder == null) 
-		{
-			menuBuilder = new MenuBuilder(core, sender.getPlayer(), playerState, inventory);
-			playerState.setMenuBuilder(menuBuilder);
-		}
+		EditorMenuManager editorManager = core.getMenuManagerFactory().getEditorMenuManager(playerState);
+		editorManager.setEditingMenu(inventory);
+		editorManager.open();
 		
-		menuBuilder.startEditing();
-		return false;
+		return true;
 	}
 
 	@Override
