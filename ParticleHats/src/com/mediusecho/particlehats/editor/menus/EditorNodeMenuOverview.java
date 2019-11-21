@@ -24,25 +24,28 @@ public class EditorNodeMenuOverview extends AbstractListMenu {
 	private final Hat targetHat;
 	private final String nodeTitle = Message.EDITOR_NODE_OVERVIEW_NODE_TITLE.getValue();
 	
+	private final ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_NODE_OVERVIEW_MENU_EMPTY);
+	
 	public EditorNodeMenuOverview(ParticleHats core, EditorMenuManager menuManager, Player owner) 
 	{
 		super(core, menuManager, owner, true);
 		
 		this.editorManager = menuManager;
 		this.targetHat = menuManager.getBaseHat();
+		this.totalPages = 1;
 		
 		setMenu(0, Bukkit.createInventory(null, 54, Message.EDITOR_NODE_OVERVIEW_MENU_TITLE.getValue()));
 		build();
 	}
 
 	@Override
-	public void insertEmptyItem() {
-		
+	public void insertEmptyItem () {
+		setButton(0, 22, emptyItem, emptyAction);
 	}
-
+	
 	@Override
-	public void removeEmptyItem() {
-		
+	public void removeEmptyItem () {
+		setButton(0, 22, null, emptyAction);
 	}
 
 	@Override
@@ -72,6 +75,7 @@ public class EditorNodeMenuOverview extends AbstractListMenu {
 			ItemStack item = ItemUtil.createItem(Material.LEATHER_HELMET, title, StringUtil.parseDescription(Message.EDITOR_NODE_OVERVIEW_MENU_NODE_DESCRIPTION.getValue()));
 		
 			setItem(0, getNormalIndex(size, 10, 2), item);
+			setEmpty(false);
 			
 			return MenuClickResult.NEUTRAL;
 		});
