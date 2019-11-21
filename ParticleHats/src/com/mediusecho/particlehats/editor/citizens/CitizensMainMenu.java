@@ -24,8 +24,6 @@ public class CitizensMainMenu extends AbstractListMenu {
 	
 	private final EntityState citizenState;
 	
-	private boolean isEmpty = false;
-	
 	private final MenuButton emptyHatButton = new MenuButton(ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.NPC_MAIN_MENU_NO_EQUIPPED_HATS), (event, slot) ->
 	{
 		owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -81,6 +79,16 @@ public class CitizensMainMenu extends AbstractListMenu {
 		
 		build();
 	}
+	
+	@Override
+	public void insertEmptyItem () {
+		setButton(0, 22, emptyHatButton);
+	}
+	
+	@Override
+	public void removeEmptyItem () {
+		setButton(0, 22, null, emptyAction);
+	}
 
 	@Override
 	protected void build() 
@@ -97,9 +105,7 @@ public class CitizensMainMenu extends AbstractListMenu {
 		{
 			citizenState.clearActiveHats();
 			clearContent();
-			
-			setButton(0, 22, emptyHatButton);
-			isEmpty = true;
+			setEmpty(true);
 			
 			return MenuClickResult.NEUTRAL;
 		});
@@ -154,10 +160,8 @@ public class CitizensMainMenu extends AbstractListMenu {
 	
 	private void refresh ()
 	{		
-		if (isEmpty && citizenState.getHatCount() > 0) 
-		{
-			setButton(0, 22, null, null);
-			isEmpty = false;
+		if (isEmpty && citizenState.getHatCount() > 0) {
+			setEmpty(false);
 		}
 		
 		int index = 0;
