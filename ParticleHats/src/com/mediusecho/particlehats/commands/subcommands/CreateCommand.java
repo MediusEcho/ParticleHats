@@ -18,7 +18,6 @@ public class CreateCommand extends Command {
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
-		// TODO: Rewrite create command
 		if (args.size() == 1)
 		{
 			PlayerState playerState = core.getPlayerState(sender.getPlayer());
