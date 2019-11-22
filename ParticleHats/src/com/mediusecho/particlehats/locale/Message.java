@@ -473,6 +473,7 @@ public enum Message {
 	 */
 	ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
 	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8� &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
+	ACTIVE_PARTICLES_EMPTY ("&cNo Equipped Particles :("),
 	
 	/**
 	 * Menu Editor Properties
@@ -623,6 +624,7 @@ public enum Message {
 	EDITOR_NODE_OVERVIEW_NODE_TITLE            ("&bNode #{1}"),
 	EDITOR_NODE_OVERVIEW_MENU_NODE_DESCRIPTION ("&3Left Click to Edit/n&cShift Right Click to Delete"),
 	EDITOR_NODE_OVERVIEW_MENU_ADD_NODE         ("&bCreate a new Node"),
+	EDITOR_NODE_OVERVIEW_MENU_EMPTY            ("&cNo Nodes"),
 	
 	// Icon Menu
 	EDITOR_ICON_OVERVIEW_MENU_TITLE               ("Add or Remove Items"),
@@ -639,6 +641,7 @@ public enum Message {
 	EDITOR_ICON_MENU_BLOCK_TITLE                  ("Select a Block"),
 	EDITOR_ICON_MENU_BLOCK_INFO                   ("&bSelect a Block"),
 	EDITOR_ICON_MENU_BLOCK_DESCRIPTION            ("&8Select a Block from your inventory"),
+	EDITOR_ICON_MENU_RECENTS_DESCRIPTION          ("&8Recently Used/n/n&3Click to Select"),
 	
 	EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION ("/n&7� &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
 	EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION     ("/n&8� {1}/n&7� &e{2}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
@@ -752,6 +755,7 @@ public enum Message {
 	EDITOR_TAG_OVERVIEW_MENU_TITLE           ("Edit Tags"),
 	EDITOR_TAG_OVERVIEW_MENU_ADD_TAG         ("&bAdd a Tag"),
 	EDITOR_TAG_OVERVIEW_MENU_TAG_TITLE       ("&b{1}"),
+	EDITOR_TAG_OVERVIEW_MENU_EMPTY           ("&cNo Tags"),
 	
 	EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION ("&cShift Right Click to Delete"),
 	EDITOR_TAG_OVERVIEW_MENU_INFO_TITLE      ("&bWhat are Tags?"),
