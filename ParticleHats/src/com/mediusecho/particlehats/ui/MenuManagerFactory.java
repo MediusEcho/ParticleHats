@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.ui;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.EditorMenuManager;
+import com.mediusecho.particlehats.editor.purchase.PurchaseMenuManager;
 import com.mediusecho.particlehats.player.PlayerState;
 
 public class MenuManagerFactory {
@@ -69,5 +70,34 @@ public class MenuManagerFactory {
 		}
 		
 		return (EditorMenuManager)menuManager;
+	}
+	
+	/**
+	 * Returns a new PurchaseMenuManager class, unregistering any existing menu manager classes
+	 * @param playerState
+	 * @return
+	 */
+	public PurchaseMenuManager getPurchaseMenuManager (PlayerState playerState)
+	{
+		MenuManager menuManager = playerState.getMenuManager();
+		if (menuManager == null)
+		{
+			PurchaseMenuManager purchaseManager = new PurchaseMenuManager(core, playerState.getOwner());
+			
+			playerState.setMenuManager(purchaseManager);
+			return purchaseManager;
+		}
+		
+		else if (!(menuManager instanceof PurchaseMenuManager))
+		{
+			menuManager.willUnregister();
+			
+			PurchaseMenuManager purchaseManager = new PurchaseMenuManager(core, playerState.getOwner());
+			
+			playerState.setMenuManager(purchaseManager);
+			return purchaseManager;
+		}
+		
+		return (PurchaseMenuManager)menuManager;
 	}
 }
