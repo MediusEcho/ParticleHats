@@ -184,10 +184,8 @@ public abstract class MenuManager {
 	 * Called any time an inventory is opened for this MenuManager
 	 * @param event
 	 */
-	public void onInventoryOpen (InventoryOpenEvent event)
-	{
+	public void onInventoryOpen (InventoryOpenEvent event) {
 		openingMenu = false;
-		ParticleHats.debug("inventory opened");
 	}
 	
 	/**
@@ -197,15 +195,11 @@ public abstract class MenuManager {
 	public void onInventoryClose (InventoryCloseEvent event)
 	{
 		// Unregister this menu manager since we're not opening another menu
-		if (canUnregister())
-		{
-			ParticleHats.debug("Unregistering menu manager since no other menu is being opened");
+		if (canUnregister()) {
 			willUnregister();
 		}
 		
 		openingMenu = false;
-		
-		ParticleHats.debug("inventory closed");
 	}
 	
 }
