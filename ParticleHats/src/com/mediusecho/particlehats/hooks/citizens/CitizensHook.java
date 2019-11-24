@@ -23,7 +23,6 @@ import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.util.StringUtil;
 
 import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.event.NPCDespawnEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.event.NPCSpawnEvent;
@@ -78,10 +77,6 @@ public class CitizensHook implements Listener {
 	public void onNPCDespawn (NPCDespawnEvent event)
 	{
 		Entity entity = event.getNPC().getEntity();
-		DespawnReason reason = event.getReason();
-		
-		ParticleHats.debug(reason.toString() + " id: " + event.getNPC().getId());
-		
 		core.removePlayerState(entity.getUniqueId());
 	}
 	
@@ -90,8 +85,6 @@ public class CitizensHook implements Listener {
 	{
 		NPC npc = event.getNPC();
 		int id = npc.getId();
-		
-		ParticleHats.debug("spawning npc: " + id);
 		
 		if (!npc.isSpawned()) {
 			return;

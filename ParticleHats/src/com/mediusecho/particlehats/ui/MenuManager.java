@@ -46,9 +46,7 @@ public abstract class MenuManager {
 		
 		final Inventory inventory = event.getInventory();
 		if (!menu.hasInventory(inventory)) 
-		{
-			ParticleHats.debug(owner.getName() + " is using a foreign menu, unregistering menu manager");
-			
+		{			
 			ownerState.setMenuManager(null);
 			return;
 		}
