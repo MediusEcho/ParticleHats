@@ -363,7 +363,7 @@ public class ParticleHats extends JavaPlugin {
 		return state;
 	}
 	
-	public EntityState getEntityState (Entity entity)
+	public EntityState getEntityState (Entity entity, int entityID)
 	{
 		UUID id = entity.getUniqueId();
 		
@@ -376,7 +376,7 @@ public class ParticleHats extends JavaPlugin {
 			EntityState eState;
 			
 			if (entity.hasMetadata("NPC")) {
-				eState = new EntityState(entity);
+				eState = new EntityState(entity, entityID);
 			} else {
 				eState = new PlayerState((Player)entity);
 			}
@@ -385,10 +385,14 @@ public class ParticleHats extends JavaPlugin {
 			return eState;
 		}
 		
-		EntityState eState = new EntityState(entity);
+		EntityState eState = new EntityState(entity, entityID);
 		
 		entityState.put(id, eState);
 		return eState;
+	}
+	
+	public EntityState getEntityState (Entity entity) {
+		return getEntityState(entity, -1);
 	}
 	
 	/**
