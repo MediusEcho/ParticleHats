@@ -106,60 +106,6 @@ public class ParticleTask extends BukkitRunnable {
 				}
 			}
 		}
-		
-		
-//		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
-//		if (onlinePlayers.size() > 0)
-//		{
-//			ticks++;
-//			
-//			for (Player player : onlinePlayers)
-//			{
-//				// Skip this world if it is disabled
-//				World world = player.getWorld();
-//				if (disabledWorlds.contains(world.getName())) {
-//					continue;
-//				}
-//				
-//				// Make sure the player has permission for this world
-//				if (checkWorldPermission && !player.hasPermission("particlehats.world." + world.getName())) {
-//					continue;
-//				}
-//				
-//				// Skip if the player has a potion of invisibility
-//				if (essentialsVanishFlag && player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-//					continue;
-//				}
-//				
-//				UUID id = player.getUniqueId();
-//				PlayerState playerState = core.getPlayerState(player);
-//				
-//				// Loop through each of this players active hats
-//				List<Hat> activeHats = playerState.getActiveHats();
-//				for (int i = 0; i < activeHats.size(); i++)
-//				{
-//					Hat hat = activeHats.get(i);
-//					
-//					// Skip hats that are vanished
-//					if (hat.isVanished() || hat.isHidden()) {
-//						continue;
-//					}
-//					
-//					if (!hat.isPermanent()) 
-//					{
-//						if (hat.onTick()) {
-//							playerState.removeHat(i);
-//						}
-//					}
-//					
-//					// Checks and updates the players mode (afk, combat, etc)
-//					checkMode(id, playerState, hat);
-//					
-//					// Checks the hat against the players mode
-//					checkHat(id, playerState, hat, true);
-//				}
-//			}
-//		}
 	}
 	
 	public void onReload ()
