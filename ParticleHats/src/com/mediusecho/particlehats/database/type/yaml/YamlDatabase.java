@@ -284,8 +284,23 @@ public class YamlDatabase implements Database {
 	}
 	
 	@Override
-	public void loadHat(String menuName, int slot, Hat hat) {
-		ParticleHats.debug("should we load a hat?");
+	public void loadHat(String menuName, int slot, Hat hat) 
+	{
+		if (!menuExists(menuName)) {
+			return;
+		}
+		
+		CustomConfig menuConfig = menus.get(menuName);
+		FileConfiguration config = menuConfig.getConfig();
+		String path = "items." + slot + ".";
+		
+		loadBaseHatData(config, hat, path);
+		loadEssentialHatData(config, hat, path, menuName, slot);
+		
+		ItemStack item = hat.getItem();
+		ItemUtil.setItemName(item, hat.getDisplayName());
+		
+		loadMetaData(config, hat, path, item);
 	}
 	
 	@Override
