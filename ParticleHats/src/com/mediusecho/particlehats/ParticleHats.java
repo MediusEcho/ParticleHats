@@ -100,7 +100,6 @@ public class ParticleHats extends JavaPlugin {
 	// Update en_US.lang version as well.
 	private final double LANG_VERSION = 1.3;
 	
-	private Map<UUID, PlayerState> playerState;
 	private Map<UUID, EntityState> entityState;
 	
 	// Lets us know we can use the BaseComponent class from the bungee api
@@ -199,7 +198,6 @@ public class ParticleHats extends JavaPlugin {
 			}
 			
 			// Initialize our player state map
-			playerState = new HashMap<UUID, PlayerState>();
 			entityState = new HashMap<UUID, EntityState>();
 			
 			log("");
@@ -404,7 +402,7 @@ public class ParticleHats extends JavaPlugin {
 	}
 	
 	public void removePlayerState (UUID id) {
-		playerState.remove(id);
+		entityState.remove(id);
 	}
 	
 	/**
