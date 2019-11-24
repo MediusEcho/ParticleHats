@@ -15,7 +15,6 @@ public class CitizensCommand extends Command {
 
 	public CitizensCommand ()
 	{
-		register(new ClearCitizenCommand());
 		register(new ManageCitizenCommand());
 	}
 	
