@@ -347,18 +347,8 @@ public class ParticleHats extends JavaPlugin {
 	 * @param id
 	 * @return
 	 */
-	public PlayerState getPlayerState (Player player)
-	{
-		UUID id = player.getUniqueId();
-		
-		if (playerState.containsKey(id)) {
-			return playerState.get(id);
-		}
-		
-		PlayerState state = new PlayerState(player);
-		playerState.put(id, state);
-		
-		return state;
+	public PlayerState getPlayerState (Player player) {
+		return (PlayerState)getEntityState(player);
 	}
 	
 	public EntityState getEntityState (Entity entity, int entityID)
