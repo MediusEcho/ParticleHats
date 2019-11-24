@@ -62,7 +62,15 @@ public class EntityState {
 	/**
 	 * Removes all active hats
 	 */
-	public void clearActiveHats () {
+	public void clearActiveHats () 
+	{
+		if (owner instanceof Player)
+		{
+			Player player = (Player)owner;
+			for (Hat hat : activeHats) {
+				hat.unequip(player);
+			}
+		}
 		activeHats.clear();
 	}
 	
@@ -78,24 +86,38 @@ public class EntityState {
 	 * Adds a hat this this players active hat list
 	 * @param hat
 	 */
-	public void addHat (Hat hat) {
+	public void addHat (Hat hat) 
+	{
 		activeHats.add(hat);
+		
+		if (owner instanceof Player) {
+			hat.equip((Player)owner);
+		}
 	}
 	
 	/**
 	 * Remove the hat at index
 	 * @param index
 	 */
-	public void removeHat (int index) {
-		activeHats.remove(index);
+	public void removeHat (int index) 
+	{
+		if (activeHats.get(index) == null) {
+			return;
+		}
+		removeHat(activeHats.get(index));
 	}
 	
 	/**
 	 * Removes this hat from the players active hats list
 	 * @param hat
 	 */
-	public void removeHat (Hat hat) {
+	public void removeHat (Hat hat) 
+	{
 		activeHats.remove(hat);
+		
+		if (owner instanceof Player) {
+			hat.unequip((Player)owner);
+		}
 	}
 	
 	/**

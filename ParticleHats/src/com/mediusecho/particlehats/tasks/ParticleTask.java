@@ -325,11 +325,11 @@ public class ParticleTask extends BukkitRunnable {
 			if (handleTags(player, hat, ticks))
 			{
 				hat.displayType(ticks, player);
-				
-				PotionEffect potion = hat.getPotion();
-				if (potion != null) {
-					player.addPotionEffect(potion, true);
-				}
+//				
+//				PotionEffect potion = hat.getPotion();
+//				if (potion != null && !player.hasPotionEffect(potion.getType())) {
+//					player.addPotionEffect(potion, false);
+//				}
 			}
 		}
 	}

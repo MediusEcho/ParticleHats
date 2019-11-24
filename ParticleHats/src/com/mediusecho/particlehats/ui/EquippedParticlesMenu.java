@@ -51,10 +51,16 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 				ItemStack item = menus.get(currentPage).getItem(slot);
 				EditorLore.updateActiveHatDescription(item, hat);
 				
-				if (hat.isHidden()) {
+				if (hat.isHidden()) 
+				{
 					ItemUtil.stripHighlight(item);
-				} else {
+					hat.unequip(owner);
+				} 
+				
+				else 
+				{
 					ItemUtil.highlightItem(item);
+					hat.equip(owner);
 				}
 			}
 			

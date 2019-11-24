@@ -64,6 +64,7 @@ public class Hat {
 	private boolean isLoaded    = false;
 	private boolean isDeleted   = false;
 	private boolean isLocked    = false;
+	private boolean canBeSaved  = true;
 	
 	private int updateFrequency     = 2;
 	private int price               = 0;
@@ -724,11 +725,6 @@ public class Hat {
 	public void setUpdateFrequency (int updateFrequency) 
 	{
 		this.updateFrequency = MathUtil.clamp(updateFrequency, 1, 100); // 5 seconds max delay
-		
-		// Update our potion timer
-		if (potion != null) {
-			setPotion(potion.getType(), potion.getAmplifier());
-		}
 		setProperty("update_frequency", Integer.toString(this.updateFrequency));
 	}
 	
@@ -1104,7 +1100,7 @@ public class Hat {
 	 * @param amplifier
 	 */
 	public void setPotion (PotionEffectType type, int amplifier) {
-		setPotion(new PotionEffect(type, updateFrequency, amplifier, false, false));
+		setPotion(new PotionEffect(type, Integer.MAX_VALUE, amplifier, false, false));
 	}
 	
 	/**
@@ -1704,6 +1700,28 @@ public class Hat {
 	 */
 	public Map<String, String> getPropertyChanges () {
 		return new HashMap<String, String>(modifiedProperties);
+	}
+	
+	/**
+	 * Handles any necessary actions that need to take place when this hat is equipped
+	 * @param player
+	 */
+	public void equip (Player player)
+	{
+		if (potion != null) {
+			player.addPotionEffect(potion, true);
+		}
+	}
+	
+	/**
+	 * Handles any necessary actions that need to take place when this hat is unequipped
+	 * @param player
+	 */
+	public void unequip (Player player)
+	{
+		if (this.potion != null) {
+			player.removePotionEffect(potion.getType());
+		}
 	}
 	
 	/**
