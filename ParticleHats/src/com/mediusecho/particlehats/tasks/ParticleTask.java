@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
@@ -56,6 +55,10 @@ public class ParticleTask extends BukkitRunnable {
 			{
 				Entity entity = entityState.getOwner();
 				
+				if (entity == null) {
+					continue;
+				}
+				
 				// Skip this entity if they don't have any hats
 				if (entityState.getHatCount() == 0) {
 					continue;
@@ -84,6 +87,8 @@ public class ParticleTask extends BukkitRunnable {
 					}
 				}
 				
+				UUID entityID = entity.getUniqueId();
+				
 				List<Hat> activeHats = entityState.getActiveHats();
 				for (int i = 0; i < activeHats.size(); i++)
 				{
@@ -97,12 +102,18 @@ public class ParticleTask extends BukkitRunnable {
 					// Update the hats demo count down
 					if (!hat.isPermanent())
 					{
-						if (hat.onTick()) {
+						if (hat.onTick()) 
+						{
 							entityState.removeHat(i);
+							continue;
 						}
 					}
 					
-					displayHat(entity, hat);
+					// Checks and updates the entities mode
+					checkMode(entityID, entityState, hat);
+					
+					// Checks the hats against the entities mode
+					checkHat(entityID, entityState, hat, true);
 				}
 			}
 		}
