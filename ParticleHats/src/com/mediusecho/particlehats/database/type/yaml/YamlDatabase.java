@@ -549,7 +549,12 @@ public class YamlDatabase implements Database {
 		List<String> equippedHats = playerConfig.getConfig().getStringList("equipped-hats");
 		equippedHats.clear();
 		
-		for (Hat hat : hats) {
+		for (Hat hat : hats) 
+		{
+			if (!hat.canBeSaved()) {
+				continue;
+			}
+			
 			equippedHats.add(hat.getMenu() + ":" + hat.getSlot() + ":" + hat.isHidden());
 		}
 		

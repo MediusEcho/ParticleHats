@@ -794,7 +794,7 @@ public class MySQLDatabase implements Database {
 					{
 						for (Hat hat : hats)
 						{
-							if (hat.isPermanent() && !hat.getMenu().equals(""))
+							if (hat.isPermanent() && hat.canBeSaved() && !hat.getMenu().equals(""))
 							{
 								insertStatement.setString(1, uid);
 								insertStatement.setString(2, hat.getMenu());

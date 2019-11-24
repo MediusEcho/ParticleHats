@@ -702,6 +702,22 @@ public class Hat {
 	}
 	
 	/**
+	 * Set whether this hat can be saved to file when the player leaves the server
+	 * @param canBeSaved
+	 */
+	public void setCanBeSaved (boolean canBeSaved) {
+		this.canBeSaved = canBeSaved;
+	}
+	
+	/**
+	 * Returns true if this hat can be saved to file
+	 * @return
+	 */
+	public boolean canBeSaved () {
+		return canBeSaved;
+	}
+	
+	/**
 	 * Set how often this hat displays particles
 	 * @param updateFrequency How often this hat displays particles, <B>1 = fastest</b>
 	 */

@@ -311,6 +311,7 @@ public class EditorMainMenu extends AbstractStaticMenu {
 				clone = editorManager.getBaseHat().equippableClone();
 			}
 			
+			clone.setCanBeSaved(false);
 			clone.setPermanent(false);
 			clone.setDuration(15);
 			clone.clearPropertyChanges();
