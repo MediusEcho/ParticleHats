@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.hooks.citizens.CitizensHook;
 import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
 import com.mediusecho.particlehats.util.MathUtil;
@@ -14,17 +16,19 @@ import com.mediusecho.particlehats.ui.MenuManager;
 
 public class CitizensMenuManager extends MenuManager {
 
+	private final EntityState citizenEntityState;
 	protected final Entity citizenEntity;
 	
 	private final Sound sound;
 	private final float soundVolume;
 	private final float soundPitch;
 	
-	public CitizensMenuManager(final ParticleHats core, final Player owner, final Entity citizenEntity) 
+	public CitizensMenuManager(final ParticleHats core, final Player owner, final EntityState citizenEntityState) 
 	{
 		super(core, owner);
 		
-		this.citizenEntity = citizenEntity;
+		this.citizenEntityState = citizenEntityState;
+		this.citizenEntity = citizenEntityState.getOwner();
 		
 		this.sound = SettingsManager.EDITOR_SOUND_ID.getSound();
 		this.soundVolume = (float) SettingsManager.EDITOR_SOUND_VOLUME.getDouble();
@@ -66,6 +70,19 @@ public class CitizensMenuManager extends MenuManager {
 				owner.playSound(owner.getLocation(), sound, soundVolume, p);
 			}
 		}	
+	}
+	
+	@Override
+	public void willUnregister ()
+	{
+		CitizensHook citizensHook = core.getHookManager().getCitizensHook();
+		if (citizensHook == null) {
+			return;
+		}
+		
+		citizensHook.saveCitizenData(citizenEntity, citizenEntityState);
+		
+		super.willUnregister();
 	}
 	
 }
