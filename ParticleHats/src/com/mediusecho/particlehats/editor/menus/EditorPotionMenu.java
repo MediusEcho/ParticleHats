@@ -111,7 +111,7 @@ public class EditorPotionMenu extends AbstractListMenu {
 		
 		MenuAction selectAction = (event, slot) ->
 		{
-			int index = getClampedIndex(slot, 10, 2);
+			int index = getClampedIndex(slot, 10, 2) + (currentPage * 28);
 			if (potions.containsKey(index))
 			{
 				targetHat.setPotion(potions.get(index), targetHat.getPotionAmplifier());
@@ -170,6 +170,7 @@ public class EditorPotionMenu extends AbstractListMenu {
 		String[] selectInfo = StringUtil.parseValue(potionSelected, "1");
 		String[] selectedInfo = StringUtil.parseValue(potionSelected, "2");	
 		
+		int globalIndex = 0;
 		int index = 0;
 		int page = 0;
 		
@@ -199,7 +200,7 @@ public class EditorPotionMenu extends AbstractListMenu {
 			}
 			
 			menus.get(page).setItem(getNormalIndex(index, 10, 2), item);
-			potions.put(index, potion);
+			potions.put(globalIndex++, potion);
 			
 			index++;
 			if (index % 28 == 0)
