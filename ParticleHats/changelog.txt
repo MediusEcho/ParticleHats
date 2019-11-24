@@ -1,6 +1,15 @@
 4.1.0
 - Fixed custom type menu not allowing you to go to the next page
 - Added Citizens npc support
+  - Added command /h npc manage
+    - particlehats.command.npc.manage
+    - Opens the Citizens Manager gui where you can equip hats from existing menus.
+  - Added new messages to en_US.lang for npc menus.
+- Tweaked potion handling
+  - potions are now applied with an "infinite" (Integer Max Value) timer instead of using a particles update frequency.
+    This fixes some potion (invisibility) flickering.
+- Fixed temporary particles equipped from the editor getting saved when a player would disconnect from a server
+- Rewrote how menus are handled. This will make future updates that rely on menus easier to implement.
 
 4.0.1
 - Added separate vanish flag for Essentials vanish
