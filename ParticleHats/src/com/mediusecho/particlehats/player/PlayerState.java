@@ -33,7 +33,7 @@ public class PlayerState extends EntityState {
 	
 	public PlayerState (final Player owner)
 	{
-		super(owner);
+		super(owner, -1);
 		
 		this.owner = owner;
 		purchasedHats = new ArrayList<HatReference>();

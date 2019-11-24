@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -16,6 +17,7 @@ public class EntityState {
 
 	private final Entity owner;
 	private final UUID ownerID;
+	private final int id;
 	
 	private AFKState afkState = AFKState.ACTIVE;
 	private PVPState pvpState = PVPState.PEACEFUL;
@@ -27,10 +29,11 @@ public class EntityState {
 	
 	protected List<Hat> activeHats;
 	
-	public EntityState (Entity entity)
+	public EntityState (Entity entity, int id)
 	{
 		owner = entity;
 		ownerID = entity.getUniqueId();
+		this.id = id;
 		
 		activeHats = new ArrayList<Hat>();
 	}
@@ -49,6 +52,10 @@ public class EntityState {
 	 */
 	public UUID getOwnerID () {
 		return ownerID;
+	}
+	
+	public int getID () {
+		return id;
 	}
 	
 	/**
