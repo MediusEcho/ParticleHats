@@ -249,13 +249,13 @@ command_import_error: "&cThere was an error importing this menu error: {1}"
 # NPC Command
 command_npc_support_error: "&cUnable to find Citizens plugin"
 
-// NPC Clear Command
+# NPC Clear Command
 command_npc_clear_description: "Clears all active hats for this NPC"
 command_npc_clear_usage: "/h npc clear <id>"
 command_npc_clear_error: "&cCould not find a NPC with an id of {1}"
 command_npc_clear_success: "&aCleared all hats for this NPC"
 
-// Manage NPC Command
+# Manage NPC Command
 command_manage_npc_description: "Manage this NPC's hats"
 command_manage_npc_usage: "/h npc manage"
 
@@ -1201,3 +1201,17 @@ editor_colour_menu_size_description: "/n&8Set the size of these particles/n/n&8Â
 # {1=}: Search query
 editor_search_menu_title: "Results for ({1=...}&r)"
 editor_search_menu_no_results: "&cNo Search Results"
+
+##########################
+#       NPC Editor       #
+##########################
+
+# Main Menu
+npc_main_menu_no_equipped_hats: "&cNo Hats Equipped"
+npc_main_menu_equip_hat: "&3Equip a Hat"
+npc_main_menu_clear_equipped_hats: "&cClear All Hats"
+
+# Hat Selection Menu
+#{1=}: String to include if the menu title goes past the inventory character limit
+npc_hat_selection_menu_title: "Selecting From ({1=...}&r)"
+npc_hat_selection_menu_description: "&3Left Click to Equip/n&cRight Click to Cancel"

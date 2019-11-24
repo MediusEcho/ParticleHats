@@ -79,8 +79,7 @@ public class CitizensHatSelectionMenu extends AbstractStaticMenu {
 				continue;
 			}
 			
-			// TOOD: Add Locale entries for this text
-			ItemUtil.setItemDescription(item, "&3Left Click to Equip", "&cRight Click to Cancel");
+			ItemUtil.setItemDescription(item, Message.NPC_HAT_SELECTION_MENU_DESCRIPTION);
 			setButton(i, item, hatAction);
 		}
 	}

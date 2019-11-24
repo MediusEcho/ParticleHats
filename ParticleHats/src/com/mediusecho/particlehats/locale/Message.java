@@ -836,6 +836,7 @@ public enum Message {
 	
 	// Hat Selection Menu
 	NPC_HAT_SELECTION_MENU_TITLE ("Selecting From ({1=...}&r)"),
+	NPC_HAT_SELECTION_MENU_DESCRIPTION ("&3Left Click to Equip/n&cRight Click to Cancel"),
 	
 	/**
 	 * Command Arguments
