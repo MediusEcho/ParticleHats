@@ -457,8 +457,13 @@ public class MySQLDatabase implements Database {
 				statement.setInt(1, slot);
 				
 				ResultSet set = statement.executeQuery();
-				while (set.next()) {
+				while (set.next()) 
+				{
 					loadHat(connection, set, hat, menuName);
+					
+					ItemStack item = hat.getItem();
+					ItemUtil.setItemName(item, hat.getDisplayName());
+					loadMetaData(connection, menuName, hat, item);
 				}
 			}
 		});
