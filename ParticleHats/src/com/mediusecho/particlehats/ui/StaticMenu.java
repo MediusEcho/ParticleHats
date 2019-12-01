@@ -35,7 +35,7 @@ public class StaticMenu extends AbstractStaticMenu {
 		
 		this.menuInventory = menuInventory;
 		this.ownerState = core.getPlayerState(owner);
-		this.inventory = Bukkit.createInventory(null, menuInventory.getSize(), menuInventory.getTitle());
+		this.inventory = Bukkit.createInventory(null, menuInventory.getSize(), menuInventory.getDisplayTitle());
 		
 		hatAction = (event, slot) ->
 		{

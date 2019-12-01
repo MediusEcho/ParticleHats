@@ -19,15 +19,17 @@ public class MenuInventory {
 	
 	private String name;
 	private String title;
+	private String displayTitle;
 	private String alias;
 	
 	public MenuInventory (String name, String title, int rows, String alias)
 	{
 		this.name = name;
 		this.title = title;
+		this.displayTitle = StringUtil.colorize(title);
 		this.alias = alias;
 		
-		inventory = Bukkit.createInventory(null, rows * 9, StringUtil.colorize(title));
+		inventory = Bukkit.createInventory(null, rows * 9, displayTitle);
 		hats = new HashMap<Integer, Hat>();
 	}
 	
@@ -82,6 +84,14 @@ public class MenuInventory {
 	 */
 	public void setTitle (String title) {
 		this.title = title;
+	}
+	
+	/**
+	 * Get this MenuInventory's title with color codes translated
+	 * @return
+	 */
+	public String getDisplayTitle () {
+		return displayTitle;
 	}
 	
 	/**
