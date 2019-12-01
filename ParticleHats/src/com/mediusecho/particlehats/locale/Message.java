@@ -444,7 +444,7 @@ public enum Message {
 	META_BLOCK_SEARCH_USAGE                     ("&6Use &f/h meta <block name> &6to search"),
 	META_BLOCK_SEARCH_DESCRIPTION               ("Type the &eBlock Name &finto chat, or '&6cancel&f' to return"),
 	META_BLOCK_SEARCH_SUGGESTION                ("block name..."),
-	
+	META_NPC_MANAGE_USAGE                       ("Right Click on a NPC to manage their hats"),
 	META_NPC_MANAGE_DESCRIPTION                 ("Right Click on a NPC to manage their hats"),
 	
 	/**

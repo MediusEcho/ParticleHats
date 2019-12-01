@@ -553,6 +553,8 @@ meta_new_menu_suggestion: "menu name..."
 meta_block_search_usage: "&6Use &f/h meta <block name> &6to search"
 meta_block_search_description: "Type the &eBlock Name &finto chat, or '&6cancel&f' to return"
 meta_block_search_suggestion: "block name..."
+meta_npc_manage_usage: "Right Click on a NPC to manage their hats"
+meta_npc_manage_description: "Right Click on a NPC to manage their hats"
 
 ##########################
 #    Tracking Methods    #
