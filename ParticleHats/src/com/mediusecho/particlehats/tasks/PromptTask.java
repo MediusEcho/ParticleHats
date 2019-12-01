@@ -41,7 +41,11 @@ public class PromptTask extends BukkitRunnable {
 				int time = playerState.getMetaStateTime();
 				if (time <= 0)
 				{
-					((EditorMenuManager)playerState.getMenuManager()).reopen();
+					if (playerState.hasMenuManager()) {
+						((EditorMenuManager)playerState.getMenuManager()).reopen();
+					} else {
+						playerState.setMetaState(MetaState.NONE);
+					}
 					continue;
 				}
 				
