@@ -29,7 +29,7 @@ public abstract class AbstractStaticMenu extends AbstractMenu {
 	
 	@Override
 	public boolean hasInventory (Inventory inventory) {
-		return this.inventory == inventory;
+		return this.inventory.equals(inventory);
 	}
 	
 	@Override

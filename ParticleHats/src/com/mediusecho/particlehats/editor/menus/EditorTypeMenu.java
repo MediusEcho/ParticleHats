@@ -203,9 +203,9 @@ public class EditorTypeMenu extends AbstractStaticMenu {
 	public boolean hasInventory (Inventory inventory) 
 	{
 		if (selectingFromIncludedTypes) {
-			return includedTypeMenus.get(includedTypeCurrentPage) == inventory;
+			return includedTypeMenus.get(includedTypeCurrentPage).equals(inventory);
 		}
-		return customTypeMenus.get(customTypeCurrentPage) == inventory;
+		return customTypeMenus.get(customTypeCurrentPage).equals(inventory);
 	}
 	
 	private void generateIncludedTypeMenus ()
