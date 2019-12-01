@@ -97,7 +97,7 @@ public class EntityState {
 	{
 		activeHats.add(hat);
 		
-		if (owner instanceof Player) {
+		if (owner instanceof Player && !hat.isHidden()) {
 			hat.equip((Player)owner);
 		}
 	}
