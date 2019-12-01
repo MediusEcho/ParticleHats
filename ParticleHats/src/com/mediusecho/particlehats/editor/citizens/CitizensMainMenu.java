@@ -101,7 +101,7 @@ public class CitizensMainMenu extends AbstractListMenu {
 			return MenuClickResult.NEUTRAL;
 		});
 		
-		setButton(0, 47, ItemUtil.createItem(Material.FIRE_CHARGE, Message.NPC_MAIN_MENU_CLEAR_EQUIPPED_HATS), (event, slot) ->
+		setButton(0, 47, ItemUtil.createItem(CompatibleMaterial.FIRE_CHARGE, Message.NPC_MAIN_MENU_CLEAR_EQUIPPED_HATS), (event, slot) ->
 		{
 			citizenState.clearActiveHats();
 			clearContent();
