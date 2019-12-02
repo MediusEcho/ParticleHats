@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +35,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.particles.renderer.legacy.LegacyParticleRenderer;
 import com.mediusecho.particlehats.particles.renderer.spigot.SpigotParticleRenderer;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.prompt.BukkitPrompt;
 import com.mediusecho.particlehats.prompt.Prompt;
@@ -41,6 +44,7 @@ import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
 import com.mediusecho.particlehats.tasks.ParticleTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
+import com.mediusecho.particlehats.ui.MenuManagerFactory;
 import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.YamlUtil;
 
@@ -56,9 +60,12 @@ public class ParticleHats extends JavaPlugin {
 	// TODO: [?] Enjin economy support?
 	// TODO: [?] Head Database support?
 	// TODO: [?] Type texture support? Lets built-in types display custom images (eg. capes)
+	// TODO: [?] More flexible mode support?
+	// Similar to tags, Have a list of tags that will trigger particles displaying / disabling
+	// Display when: (running, walking, flying, etc)
+	// Disable when: (pvp, swimming, etc)
 	
 	// TODO: [Future] Add update notifier
-	// TODO: [Future] NPC Support (Citizens?)
 	// TODO: [Future] Allow adding custom types images as frames to an animation
 	// TODO: [Future] Re-implement text particle type
 	// TODO: [Future] Let particles be attached to blocks...
@@ -68,6 +75,8 @@ public class ParticleHats extends JavaPlugin {
 	public static int serverVersion;
 	private static Logger logger;
 	private static ParticleHatsAPI hatAPI;
+	
+	private MenuManagerFactory menuManagerFactory;
 	
 	private Database database;
 	private DatabaseType databaseType;
@@ -86,9 +95,9 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.2;
+	private final double LANG_VERSION = 1.3;
 	
-	private Map<UUID, PlayerState> playerState;
+	private Map<UUID, EntityState> entityState;
 	
 	// Lets us know we can use the BaseComponent class from the bungee api
 	private boolean supportsBaseComponent = true;
@@ -144,6 +153,9 @@ public class ParticleHats extends JavaPlugin {
 		log("Loading ParticleHats v" + getDescription().getVersion());
 		log("");
 		{		
+			// Create our menu manager factory
+			menuManagerFactory = new MenuManagerFactory(this);
+			
 			if (YamlUtil.checkConfigForUpdates(getConfig()))
 			{
 				if (SettingsManager.CONFIG_AUTO_UPDATE.getBoolean())
@@ -183,7 +195,7 @@ public class ParticleHats extends JavaPlugin {
 			}
 			
 			// Initialize our player state map
-			playerState = new HashMap<UUID, PlayerState>();
+			entityState = new HashMap<UUID, EntityState>();
 			
 			log("");
 			checkDefaultLang();
@@ -288,6 +300,14 @@ public class ParticleHats extends JavaPlugin {
 	}
 	
 	/**
+	 * Returns the MenuManagerFactory class
+	 * @return
+	 */
+	public MenuManagerFactory getMenuManagerFactory () {
+		return menuManagerFactory;
+	}
+	
+	/**
 	 * Get the ParticleRenderer for this server version
 	 * @return
 	 */
@@ -324,22 +344,52 @@ public class ParticleHats extends JavaPlugin {
 	 * @param id
 	 * @return
 	 */
-	public PlayerState getPlayerState (Player player)
+	public PlayerState getPlayerState (Player player) {
+		return (PlayerState)getEntityState(player);
+	}
+	
+	public EntityState getEntityState (Entity entity, int entityID)
 	{
-		UUID id = player.getUniqueId();
+		UUID id = entity.getUniqueId();
 		
-		if (playerState.containsKey(id)) {
-			return playerState.get(id);
+		if (entityState.containsKey(id)) {
+			return entityState.get(id);
 		}
 		
-		PlayerState state = new PlayerState(player);
-		playerState.put(id, state);
+		if (entity instanceof Player)
+		{
+			EntityState eState;
+			
+			if (entity.hasMetadata("NPC")) {
+				eState = new EntityState(entity, entityID);
+			} else {
+				eState = new PlayerState((Player)entity);
+			}
+			
+			entityState.put(id, eState);
+			return eState;
+		}
 		
-		return state;
+		EntityState eState = new EntityState(entity, entityID);
+		
+		entityState.put(id, eState);
+		return eState;
+	}
+	
+	public EntityState getEntityState (Entity entity) {
+		return getEntityState(entity, -1);
+	}
+	
+	/**
+	 * Returns all currently active player states
+	 * @return
+	 */
+	public Collection<EntityState> getEntityStates () {
+		return entityState.values();
 	}
 	
 	public void removePlayerState (UUID id) {
-		playerState.remove(id);
+		entityState.remove(id);
 	}
 	
 	/**

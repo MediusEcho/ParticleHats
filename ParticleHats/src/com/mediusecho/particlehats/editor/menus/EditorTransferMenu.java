@@ -8,27 +8,29 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorTransferMenu extends EditorMenu {
+public class EditorTransferMenu extends AbstractStaticMenu {
 
+	private final EditorMenuManager editorManager;
 	private final MenuInventory menuInventory;
 	private final ItemStack emptyItem = ItemUtil.createItem(CompatibleMaterial.LIGHT_GRAY_STAINED_GLASS_PANE, Message.EDITOR_MOVE_MENU_MOVE, Message.EDITOR_MOVE_MENU_MOVE_DESCRIPTION);
-	
+
 	private final String menuName;
 	
-	public EditorTransferMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, String menuName) 
+	public EditorTransferMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, String menuName) 
 	{
-		super(core, owner, menuBuilder);
-		this.menuName = menuName;
+		super(core, menuManager, owner);
 		
-		menuInventory = core.getDatabase().loadInventory(menuName, core.getPlayerState(owner));
-		inventory = Bukkit.createInventory(null, menuInventory.getSize(), EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_MOVE_MENU_TITLE));
+		this.editorManager = menuManager;
+		this.menuName = menuName;
+		this.menuInventory = core.getDatabase().loadInventory(menuName, core.getPlayerState(owner));
+		this.inventory = Bukkit.createInventory(null, menuInventory.getSize(), EditorLore.getTrimmedMenuTitle(menuInventory.getTitle(), Message.EDITOR_MOVE_MENU_TITLE));
 		
 		build();
 	}
@@ -36,34 +38,35 @@ public class EditorTransferMenu extends EditorMenu {
 	@Override
 	protected void build() 
 	{
-		final EditorAction moveAction = (event, slot) ->
+		final MenuAction moveAction = (event, slot) ->
 		{
-			if (event.isRightClick()) 
+			if (event.isRightClick())
 			{
-				menuBuilder.goBack();
-				return EditorClickType.NEUTRAL;
+				menuManager.closeCurrentMenu();
+				return MenuClickResult.NEUTRAL;
 			}
 			
-			int currentSlot = menuBuilder.getBaseHat().getSlot();
+			int currentSlot = editorManager.getBaseHat().getSlot();
 			
-			core.getDatabase().moveHat(null, menuBuilder.getBaseHat(), menuBuilder.getMenuName(), menuName, currentSlot, slot, false);
-			menuBuilder.getEditingMenu().removeButton(currentSlot);
-			menuBuilder.openEditingMenu();
+			core.getDatabase().moveHat(null, editorManager.getBaseHat(), editorManager.getMenuName(), menuName, currentSlot, slot, false);
+			editorManager.getEditingMenu().removeButton(currentSlot);
+			editorManager.returnToBaseMenu();
 			
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		};
 		
-		final EditorAction cancelAction = (event, slot) ->
+		final MenuAction cancelAction = (event, slot) ->
 		{
-			if (event.isRightClick()) {
-				menuBuilder.goBack();
-				return EditorClickType.NEUTRAL;
-			} 
+			if (event.isRightClick())
+			{
+				menuManager.closeCurrentMenu();
+				return MenuClickResult.NEUTRAL;
+			}
 			
-			else 
+			else
 			{
 				owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
-				return EditorClickType.NONE;
+				return MenuClickResult.NONE;
 			}
 		};
 		
@@ -82,5 +85,11 @@ public class EditorTransferMenu extends EditorMenu {
 			}
 		}
 	}
+
+	@Override
+	public void onClose(boolean forced) {}
+
+	@Override
+	public void onTick(int ticks) {}
 
 }

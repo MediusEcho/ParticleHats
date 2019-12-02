@@ -12,9 +12,9 @@ import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.GuiState;
-import com.mediusecho.particlehats.ui.Menu;
+import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
 import com.mediusecho.particlehats.ui.StaticMenu;
 
 public class OpenCommand extends Command {
@@ -78,21 +78,21 @@ public class OpenCommand extends Command {
 			
 			PlayerState playerState = core.getPlayerState(sender.getPlayer());
 			
-			if (playerState.isEditing()) 
+			if (playerState.hasEditorOpen())
 			{
 				sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
 				return false;
 			}
 			
-			Menu menu = getRequestedMenu(playerState, args.get(0), sender);
+			AbstractMenu menu = getRequestedMenu(playerState, args.get(0), sender);
 			if (menu == null) {
 				return false;
 			}
 			
-			playerState.setGuiState(GuiState.SWITCHING_MENU);
-			playerState.setOpenMenu(menu);
-			menu.open();
+			StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
+			staticManager.addMenu(menu);
 			
+			menu.open();
 			return true;
 		}
 		
@@ -207,7 +207,7 @@ public class OpenCommand extends Command {
 		return false;
 	}
 	
-	public Menu getRequestedMenu (PlayerState playerState, String requestedMenuName, Sender sender)
+	public AbstractMenu getRequestedMenu (PlayerState playerState, String requestedMenuName, Sender sender)
 	{
 		// Grab the name without any extensions
 		String menuName = (requestedMenuName.contains(".") ? requestedMenuName.split("\\.")[0] : requestedMenuName);
@@ -218,19 +218,21 @@ public class OpenCommand extends Command {
 			return null;
 		}
 		
-		Menu menu = playerState.getOpenMenu(menuName);
+		StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
+		AbstractMenu menu = staticManager.getMenuFromCache(menuName);
+		
 		if (menu == null)
 		{
 			ParticleHats.debug("cache didnt exist, loading menu " + menuName);
-			MenuInventory inventory = core.getDatabase().loadInventory(menuName, playerState);
+			MenuInventory menuInventory = core.getDatabase().loadInventory(menuName, playerState);
 			
-			if (inventory == null)
+			if (menuInventory == null)
 			{
 				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
 				return null;
 			}
 			
-			menu = new StaticMenu(core, playerState.getOwner(), inventory);
+			return new StaticMenu(core, staticManager, sender.getPlayer(), menuInventory);
 		}
 		
 		return menu;

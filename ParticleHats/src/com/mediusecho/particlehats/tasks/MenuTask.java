@@ -2,13 +2,11 @@ package com.mediusecho.particlehats.tasks;
 
 import java.util.Collection;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.GuiState;
 
 public class MenuTask extends BukkitRunnable {
 
@@ -23,25 +21,23 @@ public class MenuTask extends BukkitRunnable {
 	@Override
 	public void run() 
 	{
-		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
-		if (onlinePlayers.size() > 0)
+		Collection<EntityState> entityStates = core.getEntityStates();
+		if (entityStates.size() > 0)
 		{
 			ticks++;
-			for (Player player : onlinePlayers)
+			for (EntityState entityState : entityStates)
 			{
-				PlayerState playerState = core.getPlayerState(player);
-				GuiState guiState = playerState.getGuiState();
-				
-				// Skip this player if they don't have a menu open
-				if (guiState == GuiState.INNACTIVE) {
+				// Skip entities since they're not using menus
+				if (!(entityState instanceof PlayerState)) {
 					continue;
 				}
 				
-				guiState.onTick(playerState, ticks);
-			}
-			
-			if (ticks < 0) {
-				ticks = 0;
+				PlayerState playerState = (PlayerState)entityState;
+				if (!playerState.hasMenuManager()) {
+					continue;
+				}
+				
+				playerState.getMenuManager().onTick(ticks);
 			}
 		}
 	}

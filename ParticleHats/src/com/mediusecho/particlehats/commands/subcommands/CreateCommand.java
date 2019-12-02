@@ -6,7 +6,7 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.database.Database;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -22,7 +22,7 @@ public class CreateCommand extends Command {
 		{
 			PlayerState playerState = core.getPlayerState(sender.getPlayer());
 			
-			if (playerState.isEditing()) 
+			if (playerState.hasEditorOpen()) 
 			{
 				sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
 				return false;
@@ -37,7 +37,6 @@ public class CreateCommand extends Command {
 				return false;
 			}
 			
-			//String menuName = unfilteredMenuName.replaceAll("[^a-zA-Z0-9\\-\\_]", "");
 			Database database = core.getDatabase();
 			
 			// "purchase" is a reserved menu name, used for the plugin's purchase menu
@@ -54,17 +53,15 @@ public class CreateCommand extends Command {
 				return true;
 			}
 			
-			MenuBuilder menuBuilder = playerState.getMenuBuilder();
+			EditorMenuManager editorManager = core.getMenuManagerFactory().getEditorMenuManager(playerState);
 			MenuInventory inventory = new MenuInventory(menuName, menuName, 6, null);
 			
-			if (menuBuilder == null) 
-			{
-				menuBuilder = new MenuBuilder(core, sender.getPlayer(), playerState, inventory);
-				playerState.setMenuBuilder(menuBuilder);
-			}
+			editorManager.setEditingMenu(inventory);
+			editorManager.open();
 			
-			menuBuilder.startEditing();
+			return true;
 		}
+		
 		return false;
 	}
 

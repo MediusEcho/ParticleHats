@@ -10,74 +10,68 @@ import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorSlotMenu extends EditorMenu {
-	
-	private final boolean cloning;
-	
+public class EditorSlotMenu extends AbstractStaticMenu {
+
+	private final EditorMenuManager editorManager;
 	private final EditorBaseMenu editorBaseMenu;
+	private final boolean cloning;
 	private final int size;
 	
-	public EditorSlotMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, boolean cloning) 
+	public EditorSlotMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, EditorBaseMenu editorBaseMenu, boolean cloning) 
 	{
-		super(core, owner, menuBuilder);
+		super(core, menuManager, owner);
+		
+		this.editorManager = menuManager;
+		this.editorBaseMenu = editorBaseMenu;
 		this.cloning = cloning;
+		this.size = editorBaseMenu.getMenuInventory().getSize();
+		this.inventory = Bukkit.createInventory(null, size, Message.EDITOR_SLOT_MENU_TITlE.getValue());
 		
-		editorBaseMenu = menuBuilder.getEditingMenu();
-		size = editorBaseMenu.getInventory().getSize();
-		
-		inventory = Bukkit.createInventory(null, size, Message.EDITOR_SLOT_MENU_TITlE.getValue());
 		build();
 	}
 
 	@Override
 	protected void build() 
 	{
-		EditorBaseMenu editorBaseMenu = menuBuilder.getEditingMenu();
-		int targetSlot = menuBuilder.getTargetSlot();
-
-		final EditorAction cancelAction = (event, slot) ->
-		{
-			menuBuilder.goBack();
-			return EditorClickType.NEUTRAL;
-		};
+		int targetSlot = editorManager.getTargetSlot(); 
 		
-		final EditorAction selectAction = (event, slot) ->
+		final MenuAction selectAction = (event, slot) ->
 		{
 			if (cloning) 
 			{
 				editorBaseMenu.cloneHat(targetSlot, slot);
-				menuBuilder.openEditingMenu();
-				return EditorClickType.NEUTRAL;
+				editorManager.returnToBaseMenu();
+				return MenuClickResult.NEUTRAL;
 			}
 			
 			editorBaseMenu.changeSlots(targetSlot, slot, false);
-			menuBuilder.goBack();
-			return EditorClickType.NEUTRAL;
+			menuManager.closeCurrentMenu();
+			return MenuClickResult.NEUTRAL;
 		};
 		
-		final EditorAction swapAction = (event, slot) ->
+		final MenuAction swapAction = (event, slot) ->
 		{
 			editorBaseMenu.changeSlots(targetSlot, slot, true);
-			menuBuilder.goBack();
-			return EditorClickType.NEUTRAL;
+			editorManager.returnToBaseMenu();
+			return MenuClickResult.NEUTRAL;
 		};
 		
-		final EditorAction secretAction = (event, slot) ->
+		final MenuAction secretAction = (event, slot) ->
 		{
 			owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 1f);
-			return EditorClickType.NONE;
+			return MenuClickResult.NONE;
 		};
 		
 		for (int i = 0; i < size; i++)
 		{
 			ItemStack item;
-			Hat hat = editorBaseMenu.getHat(i);
+			Hat hat = editorBaseMenu.getMenuInventory().getHat(i);
 			
 			if (hat != null) {
 				item = hat.getItem().clone();
@@ -93,10 +87,10 @@ public class EditorSlotMenu extends EditorMenu {
 				ItemUtil.setItemType(item, Material.NETHER_STAR, 0);
 				
 				displayName = Message.EDITOR_SLOT_MENU_CANCEL.getValue();
-				setAction(i, cancelAction);
+				setAction(i, backButtonAction);
 			}
 			
-			else if (editorBaseMenu.getHat(i) != null)
+			else if (editorBaseMenu.getMenuInventory().getHat(i) != null)
 			{
 				if (!cloning)
 				{
@@ -121,5 +115,11 @@ public class EditorSlotMenu extends EditorMenu {
 			inventory.setItem(i, item);
 		}
 	}
+
+	@Override
+	public void onClose(boolean forced) {}
+
+	@Override
+	public void onTick(int ticks) {}
 
 }

@@ -5,6 +5,7 @@ import org.bukkit.plugin.PluginManager;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.hooks.CurrencyHook;
 import com.mediusecho.particlehats.hooks.VanishHook;
+import com.mediusecho.particlehats.hooks.citizens.CitizensHook;
 import com.mediusecho.particlehats.hooks.economy.PlayerPointsHook;
 import com.mediusecho.particlehats.hooks.economy.VaultHook;
 import com.mediusecho.particlehats.hooks.vanish.SuperVanishHook;
@@ -16,6 +17,7 @@ public class HookManager {
 	
 	private CurrencyHook currencyHook;
 	private VanishHook vanishHook;
+	private CitizensHook citizensHook;
 	
 	public HookManager (final ParticleHats core)
 	{
@@ -44,9 +46,22 @@ public class HookManager {
 		return vanishHook;
 	}
 	
+	/**
+	 * Get this plugin's CitizenHook
+	 * @return
+	 */
+	public CitizensHook getCitizensHook () {
+		return citizensHook;
+	}
+	
 	private void loadHooks ()
 	{
 		PluginManager pluginManager = core.getServer().getPluginManager();
+		
+		// Citizens Hook
+		if (pluginManager.isPluginEnabled("Citizens")) {
+			citizensHook = new CitizensHook(core);
+		}
 		
 		// Vault Hook
 		if (SettingsManager.FLAG_VAULT.getBoolean())

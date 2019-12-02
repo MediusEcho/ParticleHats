@@ -1,5 +1,4 @@
 package com.mediusecho.particlehats.editor.menus;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,19 +15,27 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorSoundMenu extends EditorMenu {
+public class EditorSoundMenu extends AbstractStaticMenu {
 
-	private Map<Integer, Inventory> menus;
+	private final Hat targetHat;
+	private final MenuObjectCallback callback;
+	private final ItemStack volumeItem;
+	private final ItemStack pitchItem;
+	
+	private final int miscPages;
+	private final int blockPages;
+	private final int entityPages;
+	
+	private Map<Integer, Inventory> miscMenus;
 	private Map<Integer, Inventory> blockMenus;
 	private Map<Integer, Inventory> entityMenus;
 	
@@ -36,18 +43,13 @@ public class EditorSoundMenu extends EditorMenu {
 	private List<Sound> blockSounds;
 	private List<Sound> entitySounds;
 	
-	private int currentMiscPage;
-	private int currentBlockPage;
-	private int currentEntityPage;
+	private int currentMiscPage = 0;
+	private int currentBlockPage = 0;
+	private int currentEntityPage = 0;
 	
-	private int currentFilter = 0;
 	private Sound currentPlayingSound;
-	private final Hat targetHat;
 	
-	private final ItemStack volumeItem;
-	private final ItemStack pitchItem;
-	
-	private final EditorAction setSoundAction;
+	private SoundFilter currentFilter = SoundFilter.MISC;
 	
 	// Disable sounds that are too long
 	private final List<String> blacklist = Arrays.asList(
@@ -93,151 +95,112 @@ public class EditorSoundMenu extends EditorMenu {
 		    "RECORD_WAIT",
 		    "RECORD_WARD");
 	
-	public EditorSoundMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorSoundCallback soundCallback)
+	public EditorSoundMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuObjectCallback callback) 
 	{
-		super(core, owner, menuBuilder);
-		this.targetHat = menuBuilder.getBaseHat();
+		super(core, menuManager, owner);
 		
-		menus = new HashMap<Integer, Inventory>();
-		blockMenus = new HashMap<Integer, Inventory>();
-		entityMenus = new HashMap<Integer, Inventory>();
+		this.targetHat = menuManager.getBaseHat();
+		this.callback = callback;
+		this.miscMenus = new HashMap<Integer, Inventory>();
+		this.blockMenus = new HashMap<Integer, Inventory>();
+		this.entityMenus = new HashMap<Integer, Inventory>();
+		this.miscSounds = new ArrayList<Sound>();
+		this.blockSounds = new ArrayList<Sound>();
+		this.entitySounds = new ArrayList<Sound>();
 		
-		volumeItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SOUND_MENU_SET_VOLUME);
+		this.volumeItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SOUND_MENU_SET_VOLUME);
 		EditorLore.updateDoubleDescription(volumeItem, targetHat.getSoundVolume(), Message.EDITOR_SOUND_MENU_PITCH_DESCRIPTION);
 		
-		pitchItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SOUND_MENU_SET_PITCH);
+		this.pitchItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SOUND_MENU_SET_PITCH);
 		EditorLore.updateDoubleDescription(pitchItem, targetHat.getSoundPitch(), Message.EDITOR_SOUND_MENU_PITCH_DESCRIPTION);
 		
-		setSoundAction = (event, slot) ->
+		boolean useBlacklist = SettingsManager.EDITOR_SHOW_BLACKLISTED_SOUNDS.getBoolean();
+		for (Sound sound : Sound.values())
 		{
-			final List<Sound> sounds = getCurrentFilterSounds();
-			final int currentPage = getCurrentFilterPage();
-			
-			int index = slot + (currentPage * 45);
-			Sound sound = sounds.get(index);
-			if (sound != null)
-			{
-				if (event.isLeftClick()) {
-					soundCallback.onSelect(sound);
-				}
-				
-				else if (event.isRightClick())
-				{
-					stopSound();
-					
-					currentPlayingSound = sound;
-					owner.playSound(owner.getLocation(), sound, (float) targetHat.getSoundVolume(), (float) targetHat.getSoundPitch());
-					return EditorClickType.NONE;
-				}
+			if (!useBlacklist && blacklist.contains(sound.toString())) {
+				continue;
 			}
 			
-			return EditorClickType.NEUTRAL;
-		};
-
+			String category = sound.toString().split("_")[0];
+			switch (category)
+			{
+			case "BLOCK":
+				blockSounds.add(sound);
+				break;
+			case "ENTITY":
+				entitySounds.add(sound);
+				break;
+			default:
+				miscSounds.add(sound);
+			}
+		}
+		
+		this.miscPages = MathUtil.calculatePageCount(miscSounds.size(), 45);
+		this.blockPages = MathUtil.calculatePageCount(blockSounds.size(), 45);
+		this.entityPages = MathUtil.calculatePageCount(entitySounds.size(), 45);
+		
 		build();
 	}
 	
 	@Override
-	public void onClose (boolean forced)
-	{
-		stopSound();
-	}
-	
-	@Override
 	public void open () {
-		openMenu(menus, currentMiscPage);
+		openMenu(miscMenus, currentMiscPage);
 	}
 	
 	public void openMenu (Map<Integer, Inventory> menus, int currentPage)
 	{
 		if (menus.containsKey(currentPage))
 		{
-			Inventory inv = menus.get(currentPage);
+			Inventory menu = menus.get(currentPage);
 			
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			//menuBuilder.setOwnerState(MenuState.SWITCHING);
-			inv.setItem(52, volumeItem);
-			inv.setItem(53, pitchItem);
-			owner.openInventory(inv);
+			menu.setItem(52, volumeItem);
+			menu.setItem(53, pitchItem);
+			
+			menuManager.isOpeningMenu(this);
+			owner.openInventory(menu);
 		}
 	}
 
 	@Override
 	protected void build() 
-	{		
-		blockSounds  = new ArrayList<Sound>();
-		entitySounds = new ArrayList<Sound>();
-		miscSounds   = new ArrayList<Sound>();
-		
-		boolean useBlacklist = !SettingsManager.EDITOR_SHOW_BLACKLISTED_SOUNDS.getBoolean();
-		
-		for (Sound s : Sound.values())
-		{
-			if (useBlacklist && blacklist.contains(s.toString())) {
-				continue;
-			}
-			
-			String category = s.toString().split("_")[0];
-			switch (category)
-			{
-			case "BLOCK":
-				blockSounds.add(s);
-				break;
-			case "ENTITY":
-				entitySounds.add(s);
-				break;
-			default:
-				miscSounds.add(s);
-				break;
-			}
-		}
-		
-		final int blockPages  = (int) Math.ceil((double) blockSounds.size() / 45D);
-		final int entityPages = (int) Math.ceil((double) entitySounds.size() / 45D);
-		final int miscPages   = (int) Math.ceil((double) miscSounds.size() / 45D);
-		
+	{
 		// Create our filter pages
-		generateSoundMenu(menus, miscPages, Message.EDITOR_SOUND_MENU_MISC_TITLE, 0);
+		generateSoundMenu(miscMenus, miscPages, Message.EDITOR_SOUND_MENU_MISC_TITLE, 0);
 		generateSoundMenu(blockMenus, blockPages, Message.EDITOR_SOUND_MENU_BLOCK_TITLE, 1);
 		generateSoundMenu(entityMenus, entityPages, Message.EDITOR_SOUND_MENU_ENTITY_TITLE, 2);
 		
-		// Fill our menus with sound
+		// Fill our menus sound
 		int blocksSize = blockSounds.size();
 		int entitiesSize = entitySounds.size();
 		
-		populateSoundMenu(miscSounds, menus, CompatibleMaterial.MUSIC_DISC_CAT, blocksSize, entitiesSize);
+		populateSoundMenu(miscSounds, miscMenus, CompatibleMaterial.MUSIC_DISC_CAT, blocksSize, entitiesSize);
 		populateSoundMenu(blockSounds, blockMenus, CompatibleMaterial.MUSIC_DISC_BLOCKS, blocksSize, entitiesSize);
 		populateSoundMenu(entitySounds, entityMenus, CompatibleMaterial.MUSIC_DISC_FAR, blocksSize, entitiesSize);
 		
-		// Setup buttons
-		setAction(49, (event, slot) ->
-		{
-			menuBuilder.goBack();
-			return EditorClickType.NEUTRAL;
-		});
+		setAction(49, backButtonAction);
 		
 		// Misc Filter
 		setAction(45, (event, slot) ->
 		{
-			currentFilter = 0;
-			openMenu(menus, currentMiscPage);
-			return EditorClickType.NEUTRAL;
+			currentFilter = SoundFilter.MISC;
+			openMenu(miscMenus, currentMiscPage);
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Block Filter
 		setAction(46, (event, slot) ->
 		{
-			currentFilter = 1;
+			currentFilter = SoundFilter.BLOCKS;
 			openMenu(blockMenus, currentBlockPage);
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Entity Filter
 		setAction(47, (event, slot) ->
 		{
-			currentFilter = 2;
+			currentFilter = SoundFilter.ENTITIES;
 			openMenu(entityMenus, currentEntityPage);
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Previous Page
@@ -248,7 +211,7 @@ public class EditorSoundMenu extends EditorMenu {
 			currentPage -= 1;
 			setCurrentFilterPage(currentPage);
 			openMenu(menus, currentPage);
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Next Page
@@ -259,13 +222,8 @@ public class EditorSoundMenu extends EditorMenu {
 			currentPage += 1;
 			setCurrentFilterPage(currentPage);
 			openMenu(menus, currentPage);
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
-		
-		// Fill in our main inventory
-		for (int i = 0; i < 45; i++) {
-			setAction(i, setSoundAction);
-		}
 		
 		// Volume
 		setAction(52, (event, slot) ->
@@ -276,7 +234,7 @@ public class EditorSoundMenu extends EditorMenu {
 			targetHat.setSoundVolume(volume);
 			EditorLore.updateDoubleDescription(volumeItem, volume, Message.EDITOR_SOUND_MENU_VOLUME_DESCRIPTION);
 			getOpenMenu().setItem(52, volumeItem);
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Pitch
@@ -288,10 +246,65 @@ public class EditorSoundMenu extends EditorMenu {
 			targetHat.setSoundPitch(pitch);
 			EditorLore.updateDoubleDescription(pitchItem, pitch, Message.EDITOR_SOUND_MENU_PITCH_DESCRIPTION);
 			getOpenMenu().setItem(53, pitchItem);
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
+		
+		MenuAction setSoundAction = (event, slot) ->
+		{
+			final List<Sound> sounds = getCurrentFilterSounds();
+			final int currentPage = getCurrentFilterPage();
+			
+			int index = slot + (currentPage * 45);
+			Sound sound = sounds.get(index);
+			if (sound != null)
+			{
+				if (event.isLeftClick()) {
+					callback.onSelect(sound);
+				}
+				
+				else if (event.isRightClick())
+				{
+					stopSound();
+					
+					currentPlayingSound = sound;
+					owner.playSound(owner.getLocation(), sound, (float) targetHat.getSoundVolume(), (float) targetHat.getSoundPitch());
+					return MenuClickResult.NONE;
+				}
+			}
+			
+			return MenuClickResult.NEUTRAL;
+		};
+		
+		for (int i = 0; i < 45; i++) {
+			setAction(i, setSoundAction);
+		}
 	}
 
+	@Override
+	public void onClose(boolean forced) 
+	{
+		stopSound();
+	}
+
+	@Override
+	public void onTick(int ticks) {}
+	
+	@Override
+	public boolean hasInventory (Inventory inventory) 
+	{
+		switch (currentFilter)
+		{
+		default:
+			return miscMenus.containsValue(inventory);
+			
+		case BLOCKS:
+			return blockMenus.containsValue(inventory);
+			
+		case ENTITIES:
+			return entityMenus.containsValue(inventory);
+		}
+	}
+	
 	private void generateSoundMenu (Map<Integer, Inventory> menus, int pages, Message startingTitle, int categoryIndex)
 	{
 		for (int i = 0; i < pages; i++)
@@ -306,7 +319,7 @@ public class EditorSoundMenu extends EditorMenu {
 			menu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_SOUND_MENU_ENTITY_FILTER));
 			
 			// Controls
-			menu.setItem(49, backButton);
+			menu.setItem(49, backButtonItem);
 			
 			switch (categoryIndex)
 			{
@@ -371,9 +384,14 @@ public class EditorSoundMenu extends EditorMenu {
 	{
 		switch (currentFilter)
 		{
-		default: return menus.get(currentMiscPage);
-		case 1: return blockMenus.get(currentBlockPage);
-		case 2: return entityMenus.get(currentEntityPage);
+		default:
+			return miscMenus.get(currentMiscPage);
+			
+		case BLOCKS:
+			return blockMenus.get(currentBlockPage);
+			
+		case ENTITIES:
+			return entityMenus.get(currentEntityPage);
 		}
 	}
 	
@@ -381,9 +399,14 @@ public class EditorSoundMenu extends EditorMenu {
 	{
 		switch (currentFilter)
 		{
-		default: return menus;
-		case 1: return blockMenus;
-		case 2: return entityMenus;
+		default:
+			return miscMenus;
+			
+		case BLOCKS:
+			return blockMenus;
+			
+		case ENTITIES:
+			return entityMenus;
 		}
 	}
 	
@@ -391,9 +414,14 @@ public class EditorSoundMenu extends EditorMenu {
 	{
 		switch (currentFilter)
 		{
-		default: return currentMiscPage;
-		case 1: return currentBlockPage;
-		case 2: return currentEntityPage;
+		default:
+			return currentMiscPage;
+			
+		case BLOCKS:
+			return currentBlockPage;
+			
+		case ENTITIES:
+			return currentEntityPage;
 		}
 	}
 	
@@ -401,9 +429,14 @@ public class EditorSoundMenu extends EditorMenu {
 	{
 		switch (currentFilter)
 		{
-		default: return miscSounds;
-		case 1: return blockSounds;
-		case 2: return entitySounds;
+		default:
+			return miscSounds;
+			
+		case BLOCKS:
+			return blockSounds;
+			
+		case ENTITIES:
+			return entitySounds;
 		}
 	}
 	
@@ -411,9 +444,17 @@ public class EditorSoundMenu extends EditorMenu {
 	{
 		switch (currentFilter)
 		{
-		case 0: currentMiscPage = page; break;
-		case 1: currentBlockPage = page; break;
-		case 2: currentEntityPage = page; break;
+		case MISC:
+			currentMiscPage = page;
+			break;
+			
+		case BLOCKS:
+			currentBlockPage = page;
+			break;
+			
+		case ENTITIES:
+			currentEntityPage = page;
+			break;
 		}
 	}
 	
@@ -426,4 +467,13 @@ public class EditorSoundMenu extends EditorMenu {
 			} catch (NoSuchMethodError e) {}
 		}
 	}
+	
+	private enum SoundFilter {
+		
+		MISC,
+		BLOCKS,
+		ENTITIES;
+		
+	}
+
 }

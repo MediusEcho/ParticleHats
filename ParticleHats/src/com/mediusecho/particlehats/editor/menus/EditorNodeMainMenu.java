@@ -4,31 +4,28 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 
 public class EditorNodeMainMenu extends EditorMainMenu {
 
-	public EditorNodeMainMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
+	public EditorNodeMainMenu(ParticleHats core, EditorMenuManager menuManager, Player owner) 
 	{
-		super(core, owner, menuBuilder);
-		
-		particleItemSlot = 13;
-		trackingItemSlot = 19;
-		countItemSlot    = 15;
-		equipItemSlot    = 42;
-		
-		inventory = Bukkit.createInventory(null, 45, Message.EDITOR_MAIN_MENU_TITLE.getValue());
-		build();
+		super(core, menuManager, owner);
 	}
-
+	
 	@Override
-	protected void build() 
+	public void build ()
 	{
+		this.inventory = Bukkit.createInventory(null, 45, Message.EDITOR_MAIN_MENU_TITLE.getValue());
+		this.particleButtonSlot = 13;
+		this.trackingButtonSlot = 19;
+		this.countButtonSlot = 15;
+		this.equipButtonSlot = 42;
+		
 		buildSection();
 		
-		setButton(38, backButton, backAction);
-		
-		// TODO: [Future] Add option to move a node to a different hat?
+		setButton(38, backButtonItem, backButtonAction);
 	}
+
 }

@@ -417,6 +417,15 @@ public class ItemUtil {
 	}
 	
 	/**
+	 * Set this item's description
+	 * @param item
+	 * @param description
+	 */
+	public static void setItemDescription (ItemStack item, Message description) {
+		setItemDescription(item, StringUtil.parseDescription(description.getValue()));
+	}
+	
+	/**
 	 * Sets this item's name
 	 * @param item
 	 * @param name

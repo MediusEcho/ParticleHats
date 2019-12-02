@@ -457,8 +457,13 @@ public class MySQLDatabase implements Database {
 				statement.setInt(1, slot);
 				
 				ResultSet set = statement.executeQuery();
-				while (set.next()) {
+				while (set.next()) 
+				{
 					loadHat(connection, set, hat, menuName);
+					
+					ItemStack item = hat.getItem();
+					ItemUtil.setItemName(item, hat.getDisplayName());
+					loadMetaData(connection, menuName, hat, item);
 				}
 			}
 		});
@@ -794,7 +799,7 @@ public class MySQLDatabase implements Database {
 					{
 						for (Hat hat : hats)
 						{
-							if (hat.isPermanent() && !hat.getMenu().equals(""))
+							if (hat.isPermanent() && hat.canBeSaved() && !hat.getMenu().equals(""))
 							{
 								insertStatement.setString(1, uid);
 								insertStatement.setString(2, hat.getMenu());

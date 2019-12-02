@@ -145,6 +145,19 @@ public enum Message {
 	COMMAND_IMPORT_SUCCESS     ("&aAdded '&3{1}&a' to the MySQL database"),
 	COMMAND_IMPORT_ERROR       ("&cThere was an error importing this menu error: {1}"),
 	
+	// NPC Command
+	COMMAND_NPC_SUPPORT_ERROR ("&cUnable to find Citizens plugin"),
+	
+	// NPC Clear Command
+	COMMAND_NPC_CLEAR_DESCRIPTION ("Clears all active hats for this NPC"),
+	COMMAND_NPC_CLEAR_USAGE ("/h npc clear <id>"),
+	COMMAND_NPC_CLEAR_ERROR ("&cCould not find a NPC with an id of {1}"),
+	COMMAND_NPC_CLEAR_SUCCESS ("&aCleared all hats for this NPC"),
+	
+	// Manage NPC Command
+	COMMAND_MANAGE_NPC_DESCRIPTION ("Manage this NPC's hats"),
+	COMMAND_MANAGE_NPC_USAGE ("/h npc manage"),
+	
 	/**
 	 * Purchase Menu
 	 */
@@ -431,6 +444,8 @@ public enum Message {
 	META_BLOCK_SEARCH_USAGE                     ("&6Use &f/h meta <block name> &6to search"),
 	META_BLOCK_SEARCH_DESCRIPTION               ("Type the &eBlock Name &finto chat, or '&6cancel&f' to return"),
 	META_BLOCK_SEARCH_SUGGESTION                ("block name..."),
+	META_NPC_MANAGE_USAGE                       ("Right Click on a NPC to manage their hats"),
+	META_NPC_MANAGE_DESCRIPTION                 ("Right Click on a NPC to manage their hats"),
 	
 	/**
 	 * Tracking
@@ -458,6 +473,7 @@ public enum Message {
 	 */
 	ACTIVE_PARTICLES_MENU_TITLE ("Equipped Particles"),
 	ACTIVE_PARTICLES_HAT_DESCRIPTION ("/n&8Status:/n&8� &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"),
+	ACTIVE_PARTICLES_EMPTY ("&cNo Equipped Particles :("),
 	
 	/**
 	 * Menu Editor Properties
@@ -608,6 +624,7 @@ public enum Message {
 	EDITOR_NODE_OVERVIEW_NODE_TITLE            ("&bNode #{1}"),
 	EDITOR_NODE_OVERVIEW_MENU_NODE_DESCRIPTION ("&3Left Click to Edit/n&cShift Right Click to Delete"),
 	EDITOR_NODE_OVERVIEW_MENU_ADD_NODE         ("&bCreate a new Node"),
+	EDITOR_NODE_OVERVIEW_MENU_EMPTY            ("&cNo Nodes"),
 	
 	// Icon Menu
 	EDITOR_ICON_OVERVIEW_MENU_TITLE               ("Add or Remove Items"),
@@ -624,6 +641,7 @@ public enum Message {
 	EDITOR_ICON_MENU_BLOCK_TITLE                  ("Select a Block"),
 	EDITOR_ICON_MENU_BLOCK_INFO                   ("&bSelect a Block"),
 	EDITOR_ICON_MENU_BLOCK_DESCRIPTION            ("&8Select a Block from your inventory"),
+	EDITOR_ICON_MENU_RECENTS_DESCRIPTION          ("&8Recently Used/n/n&3Click to Select"),
 	
 	EDITOR_ICON_MENU_UPDATE_FREQUENCY_DESCRIPTION ("/n&7� &8Updates every &e{1} &8tick{2=s}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
 	EDITOR_ICON_MENU_DISPLAY_MODE_DESCRIPTION     ("/n&8� {1}/n&7� &e{2}/n/n&3Left Click to Cycle Down/n&3Right Click to Cycle Up"),
@@ -737,6 +755,7 @@ public enum Message {
 	EDITOR_TAG_OVERVIEW_MENU_TITLE           ("Edit Tags"),
 	EDITOR_TAG_OVERVIEW_MENU_ADD_TAG         ("&bAdd a Tag"),
 	EDITOR_TAG_OVERVIEW_MENU_TAG_TITLE       ("&b{1}"),
+	EDITOR_TAG_OVERVIEW_MENU_EMPTY           ("&cNo Tags"),
 	
 	EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION ("&cShift Right Click to Delete"),
 	EDITOR_TAG_OVERVIEW_MENU_INFO_TITLE      ("&bWhat are Tags?"),
@@ -805,6 +824,19 @@ public enum Message {
 	// Search Menu
 	EDITOR_SEARCH_MENU_TITLE ("Results for ({1=...}&r)"),
 	EDITOR_SEARCH_MENU_NO_RESULTS ("&cNo Search Results"),
+	
+	/**
+	 * NPC Manager
+	 */
+	
+	// Main Menu
+	NPC_MAIN_MENU_NO_EQUIPPED_HATS ("&cNo Hats Equipped"),
+	NPC_MAIN_MENU_EQUIP_HAT ("&3Equip a Hat"),
+	NPC_MAIN_MENU_CLEAR_EQUIPPED_HATS ("&cClear All Hats"),
+	
+	// Hat Selection Menu
+	NPC_HAT_SELECTION_MENU_TITLE ("Selecting From ({1=...}&r)"),
+	NPC_HAT_SELECTION_MENU_DESCRIPTION ("&3Left Click to Equip/n&cRight Click to Cancel"),
 	
 	/**
 	 * Command Arguments

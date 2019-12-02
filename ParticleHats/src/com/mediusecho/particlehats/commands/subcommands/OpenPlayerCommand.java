@@ -13,8 +13,8 @@ import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.GuiState;
-import com.mediusecho.particlehats.ui.Menu;
+import com.mediusecho.particlehats.ui.AbstractMenu;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
 
 public class OpenPlayerCommand extends Command {
 	
@@ -48,21 +48,21 @@ public class OpenPlayerCommand extends Command {
 		}
 		
 		PlayerState playerState = core.getPlayerState(targetPlayer.getPlayer());
-		if (playerState.isEditing()) 
+		if (playerState.hasEditorOpen()) 
 		{
 			sender.sendMessage(Message.COMMAND_OPEN_PLAYER_EDITING.replace("{1}", targetPlayer.getName()));
 			return false;
 		}
 		
-		Menu menu = parent.getRequestedMenu(playerState, args.get(0), sender);
+		AbstractMenu menu = parent.getRequestedMenu(playerState, args.get(0), sender);
 		if (menu == null) {
 			return false;
 		}
 		
-		playerState.setGuiState(GuiState.SWITCHING_MENU);
-		playerState.setOpenMenu(menu);
-		menu.open();
+		StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
+		staticManager.addMenu(menu);
 		
+		menu.open();
 		return true;
 	}
 	

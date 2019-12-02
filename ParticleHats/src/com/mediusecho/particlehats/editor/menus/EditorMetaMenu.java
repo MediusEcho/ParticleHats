@@ -10,30 +10,29 @@ import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.Database.DataType;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorMetaMenu extends EditorMenu {
+public class EditorMetaMenu extends AbstractStaticMenu {
 
+	private final EditorMenuManager editorManager;
 	private final Hat targetHat;
 	
-	public EditorMetaMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder) 
+	public EditorMetaMenu(ParticleHats core, EditorMenuManager menuManager, Player owner) 
 	{
-		super(core, owner, menuBuilder);
+		super(core, menuManager, owner);
 		
-		targetHat = menuBuilder.getBaseHat();
-	
-		inventory = Bukkit.createInventory(null, 54, Message.EDITOR_META_MENU_TITLE.getValue());
+		this.editorManager = menuManager;
+		this.targetHat = menuManager.getBaseHat();
+		this.inventory = Bukkit.createInventory(null, 54, Message.EDITOR_META_MENU_TITLE.getValue());
+		
 		build();
 	}
 	
-	/**
-	 * Update all of our meta properties when they open the menu since these properties are changed outside the editor
-	 */
 	@Override
 	public void open ()
 	{
@@ -51,7 +50,7 @@ public class EditorMetaMenu extends EditorMenu {
 	@Override
 	protected void build() 
 	{
-		setButton(49, backButton, backAction);
+		setButton(49, backButtonItem, backButtonAction);
 		
 		// Name
 		ItemStack nameItem = ItemUtil.createItem(CompatibleMaterial.PLAYER_HEAD, Message.EDITOR_META_MENU_SET_NAME);
@@ -59,18 +58,17 @@ public class EditorMetaMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				menuBuilder.setOwnerState(MetaState.HAT_NAME);
+				editorManager.getOwnerState().setMetaState(MetaState.HAT_NAME);
 				core.prompt(owner, MetaState.HAT_NAME);
 				owner.closeInventory();
 			}
 			
-			else if (event.isRightClick())
+			else
 			{
 				targetHat.setName(Message.EDITOR_MISC_NEW_PARTICLE.getRawValue());
 				EditorLore.updateNameDescription(getItem(13), targetHat);
 			}
-			
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Description
@@ -79,8 +77,8 @@ public class EditorMetaMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				EditorDescriptionMenu editorDescriptionMenu = new EditorDescriptionMenu(core, owner, menuBuilder, true);
-				menuBuilder.addMenu(editorDescriptionMenu);
+				EditorDescriptionMenu editorDescriptionMenu = new EditorDescriptionMenu(core, editorManager, owner, true);
+				menuManager.addMenu(editorDescriptionMenu);
 				editorDescriptionMenu.open();
 			}
 			
@@ -91,13 +89,13 @@ public class EditorMetaMenu extends EditorMenu {
 					targetHat.getDescription().clear();
 					
 					Database database = core.getDatabase();
-					String menuName = menuBuilder.getEditingMenu().getName();
+					String menuName = editorManager.getMenuName();
 					database.saveMetaData(menuName, targetHat, DataType.DESCRIPTION, 0);
 					
 					EditorLore.updateDescriptionDescription(getItem(11), targetHat.getDescription());
 				}
 			}
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Permission Description
@@ -106,8 +104,8 @@ public class EditorMetaMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				EditorDescriptionMenu editorDescriptionMenu = new EditorDescriptionMenu(core, owner, menuBuilder, false);
-				menuBuilder.addMenu(editorDescriptionMenu);
+				EditorDescriptionMenu editorDescriptionMenu = new EditorDescriptionMenu(core, editorManager, owner, false);
+				menuManager.addMenu(editorDescriptionMenu);
 				editorDescriptionMenu.open();
 			}
 			
@@ -118,23 +116,23 @@ public class EditorMetaMenu extends EditorMenu {
 					targetHat.getPermissionDescription().clear();
 					
 					Database database = core.getDatabase();
-					String menuName = menuBuilder.getEditingMenu().getName();
+					String menuName = editorManager.getMenuName();
 					database.saveMetaData(menuName, targetHat, DataType.PERMISSION_DESCRIPTION, 0);
 					
 					EditorLore.updateDescriptionDescription(getItem(19), targetHat.getPermissionDescription());
 				}
 			}
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Permission
 		ItemStack permissionItem = ItemUtil.createItem(Material.PAPER, Message.EDITOR_META_MENU_SET_PERMISSION);
 		setButton(15, permissionItem, (event, slot) ->
 		{
-			menuBuilder.setOwnerState(MetaState.HAT_PERMISSION);
+			editorManager.getOwnerState().setMetaState(MetaState.HAT_PERMISSION);
 			core.prompt(owner, MetaState.HAT_PERMISSION);
 			owner.closeInventory();
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Label
@@ -143,7 +141,7 @@ public class EditorMetaMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				menuBuilder.setOwnerState(MetaState.HAT_LABEL);
+				editorManager.getOwnerState().setMetaState(MetaState.HAT_LABEL);
 				core.prompt(owner, MetaState.HAT_LABEL);
 				owner.closeInventory();
 			}
@@ -154,7 +152,8 @@ public class EditorMetaMenu extends EditorMenu {
 				targetHat.removeLabel();
 				EditorLore.updateLabelDescription(getItem(29), targetHat.getLabel());
 			}
-			return EditorClickType.NEUTRAL;
+			
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Equip
@@ -163,7 +162,7 @@ public class EditorMetaMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				menuBuilder.setOwnerState(MetaState.HAT_EQUIP_MESSAGE);
+				editorManager.getOwnerState().setMetaState(MetaState.HAT_EQUIP_MESSAGE);
 				core.prompt(owner, MetaState.HAT_EQUIP_MESSAGE);
 				owner.closeInventory();
 			}
@@ -173,7 +172,7 @@ public class EditorMetaMenu extends EditorMenu {
 				targetHat.removeEquipMessage();
 				EditorLore.updateEquipDescription(getItem(33), targetHat.getEquipDisplayMessage());
 			}
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Permission Denied
@@ -182,7 +181,7 @@ public class EditorMetaMenu extends EditorMenu {
 		{
 			if (event.isLeftClick())
 			{
-				menuBuilder.setOwnerState(MetaState.HAT_PERMISSION_MESSAGE);
+				editorManager.getOwnerState().setMetaState(MetaState.HAT_PERMISSION_MESSAGE);
 				core.prompt(owner, MetaState.HAT_PERMISSION_MESSAGE);
 				owner.closeInventory();
 			}
@@ -192,18 +191,24 @@ public class EditorMetaMenu extends EditorMenu {
 				targetHat.removePermissionDeniedMessage();
 				EditorLore.updatePermissionDeniedDescription(getItem(25), targetHat.getPermissionDeniedDisplayMessage());
 			}
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Tags
 		ItemStack tagItem = ItemUtil.createItem(Material.BOWL, Message.EDITOR_META_MENU_SET_TAG);
 		setButton(31, tagItem, (event, slot) ->
 		{
-			EditorTagOverviewMenu editorTagOverviewMenu = new EditorTagOverviewMenu(core, owner, menuBuilder);
-			menuBuilder.addMenu(editorTagOverviewMenu);
-			editorTagOverviewMenu.open();
-			return EditorClickType.NEUTRAL;
+			EditorTagMenuOverview editorTagMenuOverview = new EditorTagMenuOverview(core, editorManager, owner);
+			menuManager.addMenu(editorTagMenuOverview);
+			editorTagMenuOverview.open();
+			return MenuClickResult.NEUTRAL;
 		});
 	}
+
+	@Override
+	public void onClose(boolean forced) {}
+
+	@Override
+	public void onTick(int ticks) {}
 
 }

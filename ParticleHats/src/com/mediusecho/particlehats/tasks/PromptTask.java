@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.prompt.Prompt;
@@ -40,7 +41,11 @@ public class PromptTask extends BukkitRunnable {
 				int time = playerState.getMetaStateTime();
 				if (time <= 0)
 				{
-					metaState.reopenEditor(playerState.getMenuBuilder());
+					if (playerState.hasMenuManager()) {
+						((EditorMenuManager)playerState.getMenuManager()).reopen();
+					} else {
+						playerState.setMetaState(MetaState.NONE);
+					}
 					continue;
 				}
 				

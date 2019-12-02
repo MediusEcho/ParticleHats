@@ -8,8 +8,8 @@ import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
-import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.EquippedParticlesMenu;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
 
 public class ParticlesCommand extends Command {
 
@@ -18,18 +18,17 @@ public class ParticlesCommand extends Command {
 	{		
 		PlayerState playerState = core.getPlayerState(sender.getPlayer());
 		
-		if (playerState.isEditing()) 
+		if (playerState.hasEditorOpen()) 
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_ALREADY_EDITING);
 			return false;
 		}
 		
-		ActiveParticlesMenu activeParticlesMenu = new ActiveParticlesMenu(core, sender.getPlayer(), false);
+		StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
+		EquippedParticlesMenu particlesMenu = new EquippedParticlesMenu(core, staticManager, sender.getPlayer(), false);
 		
-		playerState.setOpenMenu(activeParticlesMenu, false);
-		playerState.setGuiState(GuiState.SWITCHING_MENU);
-		
-		activeParticlesMenu.open();
+		staticManager.addMenu(particlesMenu);
+		particlesMenu.open();
 		return true;
 	}
 

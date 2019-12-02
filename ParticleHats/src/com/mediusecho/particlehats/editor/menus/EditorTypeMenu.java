@@ -14,21 +14,22 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
-import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorTypeMenu extends EditorMenu {
 
+public class EditorTypeMenu extends AbstractStaticMenu {
+
+	private final EditorMenuManager editorManager;
 	private final Hat targetHat;
-	private final EditorGenericCallback callback;
-	private final EditorAction setTypeAction;
+	private final MenuAction setTypeAction;
+	private final MenuObjectCallback callback;
 	
 	private final String title = Message.EDITOR_TYPE_MENU_TITLE.getValue();
 	private final String typePrefix = Message.EDITOR_TYPE_MENU_TYPE_PREFIX.getValue();
@@ -50,12 +51,14 @@ public class EditorTypeMenu extends EditorMenu {
 	
 	private boolean selectingFromIncludedTypes = true;
 	
-	public EditorTypeMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, EditorGenericCallback callback)
+	public EditorTypeMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuObjectCallback callback) 
 	{
-		super(core, owner, menuBuilder);
-		this.callback = callback;
+		super(core, menuManager, owner);
 		
-		targetHat = menuBuilder.getTargetHat();
+		this.editorManager = menuManager;
+		this.targetHat = editorManager.getTargetHat();
+		this.callback = callback;
+		this.inventory = Bukkit.createInventory(null, 54, "");
 		
 		includedTypeMenus = new HashMap<Integer, Inventory>();
 		customTypeMenus = new HashMap<Integer, Inventory>();
@@ -72,18 +75,16 @@ public class EditorTypeMenu extends EditorMenu {
 		includedTypeCurrentPage = 0;
 		customTypeCurrentPage = 0;
 		
-		setTypeAction = (event, slot) ->
+		setTypeAction = (event, slot) -> 
 		{
 			int index = getClampedIndex(slot, 10, 2);
 			if (selectingFromIncludedTypes)
 			{
 				int typeIndex = index + (includedTypeCurrentPage * 28);
-				if (includedTypeData.containsKey(typeIndex))
+				if (includedTypeData.containsKey(typeIndex)) 
 				{
-					ParticleType type = includedTypeData.get(typeIndex);
-					targetHat.setType(type);
-					
-					menuBuilder.goBack();
+					targetHat.setType(includedTypeData.get(typeIndex));
+					menuManager.closeCurrentMenu();
 				}
 			}
 			
@@ -97,56 +98,85 @@ public class EditorTypeMenu extends EditorMenu {
 					
 					targetHat.setType(ParticleType.CUSTOM);
 					targetHat.setCustomType(new PixelEffect(image, name));
-					menuBuilder.goBack();
+					
+					menuManager.closeCurrentMenu();
 				}
 			}
-			return EditorClickType.NEUTRAL;
+			
+			return MenuClickResult.NEUTRAL;
 		};
 		
 		build();
 	}
 	
 	@Override
-	public void open ()
-	{
-		openMenu(includedTypeMenus, includedTypeCurrentPage);
-		logBuildTime();
+	public void open () {
+		open(includedTypeMenus.get(includedTypeCurrentPage));
 	}
 	
-	@Override
-	public void onClose (boolean forced)
+	private void open (Inventory inventory) 
 	{
-		if (!forced) {
-			callback.onExecute();
-		}
-	}
-	
-	private void openMenu (Map<Integer, Inventory> menus, int page)
-	{
-		menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-		owner.openInventory(menus.get(page));
+		menuManager.isOpeningMenu(this);
+		owner.openInventory(inventory);
 	}
 
 	@Override
 	protected void build() 
 	{
-		setAction(49, backAction);
+		// Main Menu
+		setAction(49, backButtonAction);
 		for (int i = 0; i < 28; i++) {
 			setAction(getNormalIndex(i, 10, 2), setTypeAction);
 		}
 		
+		// Previous Page
+		setAction(48, (event, slot) ->
+		{
+			if (selectingFromIncludedTypes)
+			{
+				includedTypeCurrentPage--;
+				open(includedTypeMenus.get(includedTypeCurrentPage));
+			}
+			
+			else
+			{
+				customTypeCurrentPage--;
+				open(customTypeMenus.get(customTypeCurrentPage));
+			}
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		// Next Page
+		setAction(50, (event, slot) ->
+		{
+			if (selectingFromIncludedTypes)
+			{
+				includedTypeCurrentPage++;
+				open(includedTypeMenus.get(includedTypeCurrentPage));
+			}
+			
+			else
+			{
+				customTypeCurrentPage++;
+				open(customTypeMenus.get(customTypeCurrentPage));
+			}
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		// Included Types Filter
 		setAction(46, (event, slot) ->
 		{
 			selectingFromIncludedTypes = true;
-			openMenu(includedTypeMenus, includedTypeCurrentPage);
-			return EditorClickType.NEUTRAL;
+			open(includedTypeMenus.get(includedTypeCurrentPage));
+			return MenuClickResult.NEUTRAL;
 		});
 		
+		// Custom Types Filter
 		setAction(47, (event, slot) ->
 		{
 			selectingFromIncludedTypes = false;
-			openMenu(customTypeMenus, customTypeCurrentPage);
-			return EditorClickType.NEUTRAL;
+			open(customTypeMenus.get(customTypeCurrentPage));
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Create our included type menus
@@ -156,6 +186,28 @@ public class EditorTypeMenu extends EditorMenu {
 		generateCustomTypeMenus();
 	}
 
+	@Override
+	public void onClose(boolean forced) 
+	{
+		if (!forced) {
+			callback.onSelect(null);
+		}
+	}
+
+	@Override
+	public void onTick(int ticks) {
+		
+	}
+	
+	@Override
+	public boolean hasInventory (Inventory inventory) 
+	{
+		if (selectingFromIncludedTypes) {
+			return includedTypeMenus.get(includedTypeCurrentPage).equals(inventory);
+		}
+		return customTypeMenus.get(customTypeCurrentPage).equals(inventory);
+	}
+	
 	private void generateIncludedTypeMenus ()
 	{		
 		generateMenus(includedTypeMenus, includedTypePages, 0);
@@ -268,7 +320,7 @@ public class EditorTypeMenu extends EditorMenu {
 			String menuTitle = title.replace("{1}", Integer.toString(i + 1)).replace("{2}", Integer.toString(pages));
 			Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
 			
-			menu.setItem(49, backButton);
+			menu.setItem(49, backButtonItem);
 			
 			// Next Page
 			if ((i + 1) < pages) {
@@ -295,4 +347,5 @@ public class EditorTypeMenu extends EditorMenu {
 			menus.put(i, menu);
 		}
 	}
+
 }

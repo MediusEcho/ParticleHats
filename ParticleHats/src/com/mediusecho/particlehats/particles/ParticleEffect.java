@@ -16,7 +16,7 @@ public enum ParticleEffect {
 
 	NONE                   (0,  0, -1, CompatibleMaterial.SCUTE),
 	BARRIER                (1,  35, 8, "barrier", CompatibleMaterial.BARRIER),
-	BLOCK_CRACK            (2,  37, -1, "blockcrack", Material.COBBLESTONE, ParticleProperty.BLOCK_DATA),
+	BLOCK_CRACK            (2,  37, -1, "blockcrack", Material.DIAMOND_PICKAXE, ParticleProperty.BLOCK_DATA),
 	BLOCK_DUST             (3,  38, 7, "blockdust", CompatibleMaterial.GUNPOWDER, ParticleProperty.BLOCK_DATA),
 	BUBBLE_COLUMN_UP       (4,  -1, 13, CompatibleMaterial.HORN_CORAL),
 	BUBBLE_POP             (5,  -1, 13, CompatibleMaterial.PURPLE_DYE),
@@ -71,7 +71,7 @@ public enum ParticleEffect {
 	ITEMSTACK              (54, -1, -1, Material.DIAMOND, ParticleProperty.ITEMSTACK_DATA),
 	CAMPFIRE_COSY_SMOKE    (55, -1, 14, CompatibleMaterial.CAMPFIRE),
 	CAMPFIRE_SIGNAL_SMOKE  (56, -1, 14, CompatibleMaterial.CAMPFIRE),
-	COMPOSTER              (57, -1, 14, CompatibleMaterial.PLAYER_HEAD),
+	COMPOSTER              (57, -1, 14, CompatibleMaterial.COMPOSTER),
 	FALLING_LAVA           (58, -1, 14, Material.LAVA_BUCKET),
 	FALLING_WATER          (59, -1, 14, Material.WATER_BUCKET),
 	FLASH                  (60, -1, 14, CompatibleMaterial.LANTERN),

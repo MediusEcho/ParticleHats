@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.2
+version: 1.3
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -245,6 +245,19 @@ command_import_success: "&aAdded '&3{1}&a' to the MySQL database"
 
 # {1}: The name of the menu
 command_import_error: "&cThere was an error importing this menu error: {1}"
+
+# NPC Command
+command_npc_support_error: "&cUnable to find Citizens plugin"
+
+# NPC Clear Command
+command_npc_clear_description: "Clears all active hats for this NPC"
+command_npc_clear_usage: "/h npc clear <id>"
+command_npc_clear_error: "&cCould not find a NPC with an id of {1}"
+command_npc_clear_success: "&aCleared all hats for this NPC"
+
+# Manage NPC Command
+command_manage_npc_description: "Manage this NPC's hats"
+command_manage_npc_usage: "/h npc manage"
 
 ##########################
 #     Purchase Menu      #
@@ -540,6 +553,8 @@ meta_new_menu_suggestion: "menu name..."
 meta_block_search_usage: "&6Use &f/h meta <block name> &6to search"
 meta_block_search_description: "Type the &eBlock Name &finto chat, or '&6cancel&f' to return"
 meta_block_search_suggestion: "block name..."
+meta_npc_manage_usage: "Right Click on a NPC to manage their hats"
+meta_npc_manage_description: "Right Click on a NPC to manage their hats"
 
 ##########################
 #    Tracking Methods    #
@@ -574,6 +589,8 @@ active_particles_menu_title: "Equipped Particles"
 # {1=}: Value used if the had is enabled
 # {2=}: Value used if the had is disabled
 active_particles_hat_description: "/n&8Status:/n&8Â» &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"
+
+active_particles_empty: "&cNo Equipped Particles :("
 
 ##########################
 #         Editor         #
@@ -860,6 +877,7 @@ editor_node_overview_node_title: "&bNode #{1}"
 
 editor_node_overview_menu_node_description: "&3Left Click to Edit/n&cShift Right Click to Delete"
 editor_node_overview_menu_add_node: "&bCreate a new Node"
+editor_node_overview_menu_empty: "&cNo Nodes"
 
 # Icon Menu
 editor_icon_overview_menu_title: "Add or Remove Items"
@@ -876,6 +894,7 @@ editor_icon_menu_item_description: "&8Select an Item from your inventory"
 editor_icon_menu_block_title: "Select a Block"
 editor_icon_menu_block_info: "&bSelect a Block"
 editor_icon_menu_block_description: "&8Select a Block from your inventory"
+editor_icon_menu_recents_description: "&8Recently Used/n/n&3Click to Select"
 
 # {1}: Update frequency
 # {2=}: Tick suffix
@@ -1091,6 +1110,8 @@ editor_tag_overview_menu_add_tag: "&bAdd a Tag"
 # {1}: Tag's name
 editor_tag_overview_menu_tag_title: "&b{1}"
 
+editor_tag_overview_menu_empty: "&cNo Tags"
+
 editor_tag_overview_menu_tag_description: "&cShift Right Click to Delete"
 editor_tag_overview_menu_info_title: "&bWhat are Tags?"
 editor_tag_overview_menu_info: "&8Tags are experimental features/n&8that may, or may not stay/n&8depending on their popularity"
@@ -1182,3 +1203,17 @@ editor_colour_menu_size_description: "/n&8Set the size of these particles/n/n&8Â
 # {1=}: Search query
 editor_search_menu_title: "Results for ({1=...}&r)"
 editor_search_menu_no_results: "&cNo Search Results"
+
+##########################
+#       NPC Editor       #
+##########################
+
+# Main Menu
+npc_main_menu_no_equipped_hats: "&cNo Hats Equipped"
+npc_main_menu_equip_hat: "&3Equip a Hat"
+npc_main_menu_clear_equipped_hats: "&cClear All Hats"
+
+# Hat Selection Menu
+#{1=}: String to include if the menu title goes past the inventory character limit
+npc_hat_selection_menu_title: "Selecting From ({1=...}&r)"
+npc_hat_selection_menu_description: "&3Left Click to Equip/n&cRight Click to Cancel"

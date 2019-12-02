@@ -7,6 +7,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
@@ -16,12 +17,12 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
-import com.mediusecho.particlehats.ui.GuiState;
-import com.mediusecho.particlehats.ui.Menu;
+import com.mediusecho.particlehats.ui.AbstractMenu;
+import com.mediusecho.particlehats.ui.EquippedParticlesMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
-import com.mediusecho.particlehats.ui.PurchaseMenu;
+import com.mediusecho.particlehats.ui.PendingPurchaseMenu;
 import com.mediusecho.particlehats.ui.StaticMenu;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
 import com.mediusecho.particlehats.util.ItemUtil;
 
 public enum ParticleAction {
@@ -142,7 +143,7 @@ public enum ParticleAction {
 	 * Perform this action
 	 */
 	@SuppressWarnings("incomplete-switch")
-	public void onClick (Player player, Hat hat, int slot, MenuInventory inventory, String argument)
+	public void onClick (Player player, Hat hat, int slot, Inventory inventory, String argument)
 	{
 		PlayerState playerState = core.getPlayerState(player);
 		boolean canClose = SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean();	
@@ -243,22 +244,21 @@ public enum ParticleAction {
 
 						else
 						{	
+							StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
+							//StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
 							playerState.setPendingPurchase(hat);
 							
 							MenuInventory purchaseInventory = core.getDatabase().getPurchaseMenu(playerState);
-							Menu purchaseMenu;
+							AbstractMenu pendingPurchaseMenu;
 							
 							if (purchaseInventory != null) {
-								purchaseMenu = new StaticMenu(core, player, purchaseInventory);
+								pendingPurchaseMenu = new StaticMenu(core, staticManager, player, purchaseInventory);
 							} else {
-								purchaseMenu = new PurchaseMenu(core, player);
+								pendingPurchaseMenu = new StaticMenu(core, staticManager, player, PendingPurchaseMenu.defaultPendingPurchaseInventory.clone());
 							}
 							
-							playerState.setPurchaseMenu(purchaseMenu);
-							playerState.setGuiState(GuiState.SWITCHING_MENU);
-							playerState.setOpenMenu(purchaseMenu);
-							
-							purchaseMenu.open();
+							staticManager.addMenu(pendingPurchaseMenu);
+							pendingPurchaseMenu.open();
 						}
 					}
 					
@@ -337,23 +337,30 @@ public enum ParticleAction {
 					break;
 				}
 				
-				Menu menu = playerState.getOpenMenu(argument);
+				StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
+				if (staticManager == null) {
+					return;
+				}
 				
-				if (menu == null)
+				AbstractMenu menu = staticManager.getMenuFromCache(argument);
+				if (menu != null) {
+					menu.open();
+				}
+				
+				else
 				{
-					MenuInventory inv = core.getDatabase().loadInventory(argument, playerState);
-					if (inv == null)
+					MenuInventory menuInventory = core.getDatabase().loadInventory(argument, playerState);
+					if (menuInventory == null)
 					{
 						player.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.getValue().replace("{1}", argument));
 						break;
 					}
 					
-					menu = new StaticMenu(core, player, inv);
+					StaticMenu staticMenu = new StaticMenu(core, staticManager, player, menuInventory);
+					staticManager.addMenu(staticMenu);
+					
+					staticMenu.open();
 				}
-				
-				playerState.setGuiState(GuiState.SWITCHING_MENU);
-				playerState.setOpenMenu(menu);
-				menu.open();
 				break;
 			}
 			
@@ -426,13 +433,12 @@ public enum ParticleAction {
 			}
 			
 			case ACTIVE_PARTICLES:
-			{
-				ActiveParticlesMenu activeParticlesMenu = new ActiveParticlesMenu(core, player, true);
+			{ 
+				StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
+				EquippedParticlesMenu particlesMenu = new EquippedParticlesMenu(core, staticManager, player, true);
 				
-				playerState.setOpenMenu(activeParticlesMenu, false);
-				playerState.setGuiState(GuiState.SWITCHING_MENU);
-				
-				activeParticlesMenu.open();
+				staticManager.addMenu(particlesMenu);
+				particlesMenu.open();
 				break;
 			}
 		}
@@ -471,16 +477,17 @@ public enum ParticleAction {
 	
 	private void gotoPreviousMenu (PlayerState playerState)
 	{
-		Menu menu = playerState.getPreviousOpenMenu();
+		StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
+		AbstractMenu menu = staticManager.getPreviousOpenMenu();
 		
-		playerState.setOpenMenu(menu);
-		playerState.setGuiState(GuiState.SWITCHING_MENU);
-		playerState.setPurchaseMenu(null);
+		if (menu == null) {
+			return;
+		}
 		
 		menu.open();
 	}
 	
-	private boolean checkAgainstEquippedHats (Hat hat, int slot, PlayerState playerState, MenuInventory inventory)
+	private boolean checkAgainstEquippedHats (Hat hat, int slot, PlayerState playerState, Inventory inventory)
 	{
 		List<Hat> equippedHats = playerState.getActiveHats();
 		if (equippedHats.contains(hat))

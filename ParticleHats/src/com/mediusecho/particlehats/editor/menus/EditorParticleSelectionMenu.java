@@ -12,77 +12,97 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
-import com.mediusecho.particlehats.editor.EditorMenu;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
-import com.mediusecho.particlehats.ui.GuiState;
+import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 
-public class EditorParticleSelectionMenu extends EditorMenu {
+public class EditorParticleSelectionMenu extends AbstractStaticMenu {
 
-	private final Map<Integer, Inventory> menus;
-	
-	private Inventory colorFilterMenu;
-	private Inventory dataFilterMenu;
-	private Inventory recentFilterMenu;
-	
-	private Map<Integer, ParticleEffect> particleData;
-	private final int colorStartingIndex = -45;
-	private final int dataStartingIndex = -90;
-	private final int recentStartingIndex = -135;
+	private final Hat targetHat;
+	private final int particleIndex;
+	private final MenuAction particleSelectionAction;
 	
 	private MenuType menuType = MenuType.PARTICLES;
 	
-	private final EditorAction particleSelectAction;
-	private final int particleIndex;
-	private final Hat targetHat;
+	private final Map<Integer, Inventory> particleMenus;
+	private final Map<Integer, Inventory> colorFilterMenus;
+	private final Map<Integer, Inventory> dataFilterMenus;
+	private final Inventory recentFilterMenu;
 	
-	private final int totalPages;
-	private int currentPage = 0;
+	private final Map<Integer, ParticleEffect> particles;
+	private final Map<Integer, ParticleEffect> colorParticles;
+	private final Map<Integer, ParticleEffect> dataParticles;
+	private final Map<Integer, ParticleEffect> recentParticles;
 	
-	public EditorParticleSelectionMenu(ParticleHats core, Player owner, MenuBuilder menuBuilder, int particleIndex, EditorParticleCallback callback) 
+	private final int particlePages;
+	private final int colorPages;
+	private final int dataPages;
+	
+	private int currentParticlePage = 0;
+	private int currentColorPage = 0;
+	private int currentDataPage = 0;
+	
+	public EditorParticleSelectionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, int particleIndex, MenuObjectCallback callback)
 	{
-		super(core, owner, menuBuilder);
+		super(core, menuManager, owner);
+		
+		this.targetHat = menuManager.getTargetHat();
 		this.particleIndex = particleIndex;
-		this.targetHat = menuBuilder.getTargetHat();
 		
-		menus = new HashMap<Integer, Inventory>();
-		particleData = new HashMap<Integer, ParticleEffect>();
+		this.particleMenus = new HashMap<Integer, Inventory>();
+		this.colorFilterMenus = new HashMap<Integer, Inventory>();
+		this.dataFilterMenus = new HashMap<Integer, Inventory>();
+		this.recentFilterMenu = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER_TITLE.getValue());
 		
-		totalPages = (int) Math.ceil((double) ParticleEffect.getParticlesSupported() / 45D);
+		this.particles = new HashMap<Integer, ParticleEffect>();
+		this.colorParticles = new HashMap<Integer, ParticleEffect>();
+		this.dataParticles = new HashMap<Integer, ParticleEffect>();
+		this.recentParticles = new HashMap<Integer, ParticleEffect>();
 		
-		particleSelectAction = (event, slot) ->
+		this.particlePages = MathUtil.calculatePageCount(getParticleCountWithTag(MenuType.PARTICLES), 45);
+		this.colorPages = MathUtil.calculatePageCount(getParticleCountWithTag(MenuType.COLOR), 45);
+		this.dataPages = MathUtil.calculatePageCount(getParticleCountWithTag(MenuType.DATA), 45);
+		
+		this.inventory = Bukkit.createInventory(null, 54, "");
+		
+		this.particleSelectionAction = (event, slot) ->
 		{
 			int index = slot;
 			switch (menuType)
 			{
-				case PARTICLES:
-					index = slot + (currentPage * 45);
-					break;
-					
-				case COLOR:
-					index = colorStartingIndex + slot;
-					break;
-					
-				case DATA:
-					index = dataStartingIndex + slot;
-					break;
-					
-				case RECENTS:
-					index = recentStartingIndex + getClampedIndex(slot, 10, 2);
+			case COLOR:
+				index = slot + (currentColorPage * 45);
+				if (colorParticles.containsKey(index)) {
+					callback.onSelect(colorParticles.get(index));
+				}
+				break;
+				
+			case DATA:
+				index = slot + (currentDataPage * 45);
+				if (dataParticles.containsKey(index)) {
+					callback.onSelect(dataParticles.get(index));
+				}
+				break;
+				
+			case RECENTS:
+				index = getClampedIndex(slot, 10, 2);
+				if (recentParticles.containsKey(index)) {
+					callback.onSelect(recentParticles.get(index));
+				}
+				break;
+				
+			default:
+				index = slot + (currentParticlePage * 45);
+				if (particles.containsKey(index)) {
+					callback.onSelect(particles.get(index));
+				}
 			}
-			
-			if (particleData.containsKey(index)) {
-				callback.onSelect(particleData.get(index));
-			}
-			return EditorClickType.NEUTRAL;
+			return MenuClickResult.NEUTRAL;
 		};
-		
-		colorFilterMenu  = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER_TITLE.getValue());
-		dataFilterMenu   = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_MENU_DATA_FILTER_TITLE.getValue());
-		recentFilterMenu = Bukkit.createInventory(null, 54, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER_TITLE.getValue());
 		
 		build();
 	}
@@ -90,137 +110,125 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 	@Override
 	public void open ()
 	{
-		if (menus.containsKey(currentPage))
-		{
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			owner.openInventory(menus.get(currentPage));
-		}
+		Inventory inventory = particleMenus.get(currentParticlePage);
+		open(inventory);
+	}
+	
+	private void open (Inventory inventory)
+	{
+		menuManager.isOpeningMenu(this);
+		owner.openInventory(inventory);
 	}
 
 	@Override
 	protected void build() 
-	{		
-		// Create our main menus
-		for (int i = 0; i < totalPages; i++)
-		{
-			String menuTitle = Message.EDITOR_PARTICLE_MENU_TITLE.getValue()
-					.replace("{1}", "" + (i + 1)).replace("{2}", "" + totalPages);
-			
-			Inventory menu = Bukkit.createInventory(null, 54, menuTitle);
-			
-			menu.setItem(49, backButton);
-			menu.setItem(45, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
-			menu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
-			menu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
-			menu.setItem(53, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
-			
-			if ((i + 1) < totalPages) {
-				menu.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
-			}
-			
-			if ((i + 1) > 1) {
-				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
-			}
-			
-			menus.put(i, menu);
-		}
+	{
+		// Build Particle Menus
+		generateMenus(particleMenus, Message.EDITOR_PARTICLE_MENU_TITLE, particlePages, MenuType.PARTICLES);
 		
-		// Populate our filter menus
-		colorFilterMenu.setItem(49, backButton);
-		colorFilterMenu.setItem(45, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
-		colorFilterMenu.setItem(46, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
-		colorFilterMenu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
-		colorFilterMenu.setItem(53, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
+		// Color Filter
+		generateMenus(colorFilterMenus, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER_TITLE, colorPages, MenuType.COLOR);
 		
-		dataFilterMenu.setItem(49, backButton);
-		dataFilterMenu.setItem(45, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
-		dataFilterMenu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
-		dataFilterMenu.setItem(47, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
-		dataFilterMenu.setItem(53, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
+		// Data Filter
+		generateMenus(dataFilterMenus, Message.EDITOR_PARTICLE_MENU_DATA_FILTER_TITLE, dataPages, MenuType.DATA);
 		
-		recentFilterMenu.setItem(49, backButton);
+		// Recents Filter
+		recentFilterMenu.setItem(49, backButtonItem);
 		recentFilterMenu.setItem(45, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
 		recentFilterMenu.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
 		recentFilterMenu.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
 		recentFilterMenu.setItem(53, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
 		
-		setAction(49, (clickEvent, slot) ->
-		{
-			menuBuilder.goBack();
-			return EditorClickType.NEUTRAL;
-		});
+		// Back Button
+		setAction(49, backButtonAction);
 		
-		// All Particles
-		setAction(45, (clickEvent, slot) ->
+		// All Particles Filter
+		setAction(45, (event, slot) ->
 		{
 			menuType = MenuType.PARTICLES;
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			//menuBuilder.setOwnerState(MenuState.SWITCHING);
-			owner.openInventory(menus.get(currentPage));
-			return EditorClickType.NEUTRAL;
+			open(particleMenus.get(currentParticlePage));
+			
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Color Filter
-		setAction(46, (clickEvent, slot) ->
+		setAction(46, (event, slot) ->
 		{
 			menuType = MenuType.COLOR;
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			//menuBuilder.setOwnerState(MenuState.SWITCHING);
-			owner.openInventory(colorFilterMenu);
-			return EditorClickType.NEUTRAL;
+			open(colorFilterMenus.get(currentColorPage));
+			
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Data Filter
-		setAction(47, (clickEvent, slot) ->
+		setAction(47, (event, slot) ->
 		{
 			menuType = MenuType.DATA;
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			//menuBuilder.setOwnerState(MenuState.SWITCHING);
-			owner.openInventory(dataFilterMenu);
-			return EditorClickType.NEUTRAL;
+			open(dataFilterMenus.get(currentDataPage));
+			
+			return MenuClickResult.NEUTRAL;
 		});
 		
-		// Recent Filter
-		setAction(53, (clickEvent, slot) ->
+		// Recents Filter
+		setAction(53, (event, slot) ->
 		{
 			menuType = MenuType.RECENTS;
-			menuBuilder.setOwnerState(GuiState.SWITCHING_EDITOR);
-			//menuBuilder.setOwnerState(MenuState.SWITCHING);
-			owner.openInventory(recentFilterMenu);
-			return EditorClickType.NEUTRAL;
+			open(recentFilterMenu);
+			
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Previous Page
-		setAction(48, (clickEvent, slot) ->
+		setAction(48, (event, slot) ->
 		{
-			currentPage--;
-			open();
-			return EditorClickType.NEUTRAL;
+			switch (menuType)
+			{
+			case COLOR:
+				open(colorFilterMenus.get(--currentColorPage));
+				break;
+			case DATA:
+				open(dataFilterMenus.get(--currentDataPage));
+				break;
+			default:
+				open(particleMenus.get(--currentParticlePage));
+			}
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Next Page
-		setAction(50, (clickEvent, slot) ->
+		setAction(50, (event, slot) ->
 		{
-			currentPage++;
-			open();
-			return EditorClickType.NEUTRAL;
+			switch (menuType)
+			{
+			case COLOR:
+				open(colorFilterMenus.get(++currentColorPage));
+				break;
+			case DATA:
+				open(dataFilterMenus.get(++currentDataPage));
+				break;
+			default:
+				open(particleMenus.get(++currentParticlePage));
+			}
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		for (int i = 0; i < 45; i++) {
-			setAction(i, particleSelectAction);
+			setAction(i, particleSelectionAction);
 		}
 		
-		// Add each particle that this server supports
-		int index = 0;
-		int page = 0;
-		int colorIndex = 0;
-		int dataIndex = 0;
-		
 		ParticleEffect currentEffect = targetHat.getParticle(particleIndex);
-
-		int defaultIndex = 0;
-		int colorFilterIndex = colorStartingIndex;
-		int dataFilterIndex = dataStartingIndex;
+			
+		int particlePage = 0;
+		int particleItemIndex = 0;
+		int particleParticleIndex = 0;
+		
+		int colorPage = 0;
+		int colorItemIndex = 0;
+		int colorParticleIndex = 0;
+		
+		int dataPage = 0;
+		int dataItemIndex = 0;
+		int dataParticleIndex = 0;
 		
 		for (ParticleEffect pe : ParticleEffect.values())
 		{
@@ -229,53 +237,58 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 			}
 			
 			ItemStack item = pe.getItem().clone();
-			//Material material = pe.getMaterial();
-			String name = pe.getDisplayName();
-			ItemUtil.setItemName(item, name);
-			//ItemStack item = ItemUtil.createItem(material, name);
+			ItemUtil.setItemName(item, pe.getDisplayName());
 			
-			boolean selected = false;
+			boolean isSelected = false;
 			if (pe.equals(currentEffect)) 
 			{
 				ItemUtil.highlightItem(item);
-				selected = true;
+				isSelected = true;
 			}
 			
-			EditorLore.updateParticleItemDescription(item, pe, selected);
+			EditorLore.updateParticleItemDescription(item, pe, isSelected);
 			
-			if (pe.hasColorData()) 
+			if (pe.hasColorData())
 			{
-				colorFilterMenu.setItem(colorIndex++, item);
-				particleData.put(colorFilterIndex++, pe);
+				colorFilterMenus.get(colorPage).setItem(colorItemIndex++, item);
+				colorParticles.put(colorParticleIndex++, pe);
 			}
 			
-			if (pe.hasData()) 
+			if (pe.hasData())
 			{
-				dataFilterMenu.setItem(dataIndex++, item);
-				particleData.put(dataFilterIndex++, pe);
+				dataFilterMenus.get(dataPage).setItem(dataItemIndex++, item);
+				dataParticles.put(dataParticleIndex++, pe);
 			}
 			
-			menus.get(page).setItem(index, item);
-			particleData.put(defaultIndex++, pe);
-			index++;
+			particleMenus.get(particlePage).setItem(particleItemIndex++, item);
+			particles.put(particleParticleIndex++, pe);
 			
-			if (index % 45 == 0)
+			if (particleItemIndex % 45 == 0)
 			{
-				index = 0;
-				page++;
+				particleItemIndex = 0;
+				particlePage++;
+			}
+			
+			if (colorItemIndex > 0 && colorItemIndex % 45 == 0)
+			{
+				colorItemIndex = 0;
+				colorPage = 0;
+			}
+			
+			if (dataItemIndex > 0 && dataItemIndex % 45 == 0)
+			{
+				dataItemIndex = 0;
+				dataPage++;
 			}
 		}
 		
 		// Recently Used. Stored locally on each server
-		int recentIndex = recentStartingIndex;
-		index = 0;
+		int index = 0;
+		
 		for (ParticleEffect pe : core.getParticleManager().getRecentlyUsedParticles(ownerID))
 		{
 			ItemStack item = pe.getItem().clone();
-			//Material material = pe.getMaterial();
-			String name = pe.getDisplayName();
-			ItemUtil.setItemName(item, name);
-			//ItemStack item = ItemUtil.createItem(material, name);
+			ItemUtil.setItemName(item, pe.getDisplayName());
 			
 			boolean selected = false;
 			if (pe.equals(currentEffect)) 
@@ -286,11 +299,108 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 			
 			EditorLore.updateParticleItemDescription(item, pe, selected);
 			
-			particleData.put(recentIndex++, pe);
+			recentParticles.put(index, pe);
 			recentFilterMenu.setItem(getNormalIndex(index++, 10, 2), item);
 		}
 	}
+	
+	@Override
+	public void onClose(boolean forced) {
+		
+	}
 
+	@Override
+	public void onTick(int ticks) {}
+	
+	@Override
+	public boolean hasInventory (Inventory inventory) 
+	{
+		switch (menuType)
+		{
+		case COLOR:
+			return colorFilterMenus.containsValue(inventory);
+			
+		case DATA:
+			return dataFilterMenus.containsValue(inventory);
+			
+		case RECENTS:
+			return recentFilterMenu.equals(inventory);
+			
+		default:
+			return particleMenus.containsValue(inventory);
+		}
+	}
+	
+	private void generateMenus (Map<Integer, Inventory> pages, Message title, int totalPages, MenuType type)
+	{
+		for (int i = 0; i < totalPages; i++)
+		{
+			String menuTitle = title.replace("{1}", Integer.toString(i + 1)).replace("{2}", Integer.toString(totalPages));
+			Inventory inventory = Bukkit.createInventory(null, 54, menuTitle);
+			
+			inventory.setItem(49, backButtonItem);
+			inventory.setItem(45, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
+			inventory.setItem(46, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
+			inventory.setItem(47, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
+			inventory.setItem(53, ItemUtil.createItem(Material.BOWL, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
+			
+			if ((i + 1) < totalPages) {
+				inventory.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+			}
+			
+			if ((i + 1) > 1) {
+				inventory.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+			}
+			
+			switch (type)
+			{
+			case COLOR:
+				inventory.setItem(46, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_COLOUR_FILTER));
+				break;
+			
+			case DATA:
+				inventory.setItem(47, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_DATA_FILTER));
+				break;
+				
+			case RECENTS:
+				inventory.setItem(53, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_RECENT_FILTER));
+				break;
+			
+			default:
+				inventory.setItem(45, ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, Message.EDITOR_PARTICLE_MENU_NORMAL_FILTER));
+				break;
+			}
+			
+			pages.put(i, inventory);
+		}
+	}
+	
+	private int getParticleCountWithTag (MenuType type)
+	{
+		int count = 0;
+		for (ParticleEffect pe : ParticleEffect.values())
+		{
+			switch (type)
+			{
+			case COLOR:
+				if (pe.hasColorData()) {
+					count++;
+				}
+				break;
+				
+			case DATA:
+				if (pe.hasData()) {
+					count++;
+				}
+				break;
+				
+			default:
+				count++;
+			}
+		}
+		return count;
+	}
+	
 	private enum MenuType
 	{
 		PARTICLES,
@@ -298,4 +408,5 @@ public class EditorParticleSelectionMenu extends EditorMenu {
 		DATA,
 		RECENTS;
 	}
+
 }

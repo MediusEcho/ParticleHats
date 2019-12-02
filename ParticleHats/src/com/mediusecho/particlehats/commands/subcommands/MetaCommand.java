@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Sender;
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -22,9 +22,8 @@ public class MetaCommand extends EditCommand {
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
 		PlayerState playerState = core.getPlayerState(sender.getPlayer());
-		MenuBuilder menuBuilder = playerState.getMenuBuilder();
 		
-		if (menuBuilder == null)
+		if (!playerState.hasEditorOpen())
 		{
 			sender.sendMessage(Message.META_ERROR);
 			return false;
@@ -37,12 +36,13 @@ public class MetaCommand extends EditCommand {
 			return false;
 		}
 		
+		EditorMenuManager editorManager = core.getMenuManagerFactory().getEditorMenuManager(playerState);
 		MetaState metaState = playerState.getMetaState();
 		
 		if (args.size() == 1 && args.get(0).equalsIgnoreCase("cancel")) {
-			metaState.reopenEditor(menuBuilder);
+			editorManager.reopen();
 		} else {
-			metaState.onMetaSet(menuBuilder, sender.getPlayer(), args);
+			metaState.onMetaSet(editorManager, sender.getPlayer(), args);
 		}
 		
 		return true;

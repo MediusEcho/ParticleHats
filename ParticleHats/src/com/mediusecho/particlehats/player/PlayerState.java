@@ -1,69 +1,45 @@
 package com.mediusecho.particlehats.player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-import com.mediusecho.particlehats.editor.MenuBuilder;
+import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
-import com.mediusecho.particlehats.ui.ActiveParticlesMenu;
-import com.mediusecho.particlehats.ui.GuiState;
-import com.mediusecho.particlehats.ui.Menu;
+import com.mediusecho.particlehats.ui.MenuManager;
 
-public class PlayerState {
+public class PlayerState extends EntityState {
 	
 	private final Player owner;
-	private final UUID ownerID;
 	
-	private MenuBuilder menuBuilder;
-
-	private ActiveParticlesMenu activeParticlesMenu;
-	private Menu purchaseMenu;
-	
-	private Menu openMenu;
-	private Menu previousOpenMenu;
-	private Map<String, Menu> openMenuCache;
+	private MenuManager menuManager;
 	
 	private MetaState metaState = MetaState.NONE;
-	
-	private GuiState guiState = GuiState.INNACTIVE;
-	private GuiState previousGuiState = GuiState.NONE;
 	
 	private int metaStateTime = 15;
 	private int metaDescriptionLine = 0;
 	
-	private long lastMoveTime = 0L;
-	private long lastCombatTime = 0L;
-	
-	private AFKState afkState = AFKState.ACTIVE;
-	private PVPState pvpState = PVPState.PEACEFUL;
-	
-	private Location afkLocation;
-	
 	private Hat pendingPurchaseHat;
 	
-	private List<Hat> activeHats;
 	private List<HatReference> purchasedHats;
 	private List<String> legacyPurchasedHats;
 	
+	private List<ItemStack> recentItems;
+	
 	public PlayerState (final Player owner)
 	{
-		this.owner = owner;
-		this.ownerID = owner.getUniqueId();
+		super(owner, -1);
 		
-		activeHats = new ArrayList<Hat>();
+		this.owner = owner;
 		purchasedHats = new ArrayList<HatReference>();
 		legacyPurchasedHats = new ArrayList<String>();
 		
-		openMenuCache = new HashMap<String, Menu>();
+		recentItems = new ArrayList<ItemStack>();
 	}
 	
 	/**
@@ -75,152 +51,39 @@ public class PlayerState {
 	}
 	
 	/**
-	 * Get the owners UUID
+	 * Set this players MenuManager class
+	 * @param menuManager
+	 */
+	public void setMenuManager (MenuManager menuManager) {
+		this.menuManager = menuManager;
+	}
+	
+	/**
+	 * Returns this players MenuManager class
 	 * @return
 	 */
-	public UUID getOwnerID () {
-		return ownerID;
-	}
-
-	/**
-	 * Set this players menu builder class
-	 * @param menuBuidler
-	 */
-	public void setMenuBuilder (MenuBuilder menuBuilder) {
-		this.menuBuilder = menuBuilder;
+	public MenuManager getMenuManager () {
+		return menuManager;
 	}
 	
 	/**
-	 * Returns this players menu builder class
+	 * Returns true if this player has a MenuManager class
 	 * @return
 	 */
-	public MenuBuilder getMenuBuilder () {
-		return menuBuilder;
-	}
-	
-	public boolean isEditing () {
-		return menuBuilder != null;
+	public boolean hasMenuManager () {
+		return menuManager != null;
 	}
 	
 	/**
-	 * Set this players active particles menu
-	 * @param activeParticlesMenu
-	 */
-	public void setActiveParticlesMenu (ActiveParticlesMenu activeParticlesMenu) {
-		this.activeParticlesMenu = activeParticlesMenu;
-	}
-	
-	/**
-	 * Get this players active particles menu
+	 * Check to see if this player has the editor open
 	 * @return
 	 */
-	public ActiveParticlesMenu getActiveParticlesMenu () {
-		return activeParticlesMenu;
-	}
-	
-	/**
-	 * Sets this players active particle menu as null
-	 */
-	public void removeActiveParticlesMenu () {
-		activeParticlesMenu = null;
-	}
-	
-	/**
-	 * Set this players purchase menu
-	 * @param purchaseMenu
-	 */
-	public void setPurchaseMenu (Menu purchaseMenu) {
-		this.purchaseMenu = purchaseMenu;
-	}
-	
-	/**
-	 * Get this players purchase menu
-	 * @return
-	 */
-	public Menu getPurchaseMenu () {
-		return purchaseMenu;
-	}
-	
-	/**
-	 * Remove this players purchase menu
-	 */
-	public void removePurchaseMenu () {
-		purchaseMenu = null;
-	}
-	
-	public void setOpenMenu (Menu menu, boolean cacheMenu)
+	public boolean hasEditorOpen () 
 	{
-		if (menu != null)
-		{
-			previousOpenMenu = openMenu;
-			openMenu = menu;
-			
-			if (cacheMenu) 
-			{
-				if (!openMenuCache.containsKey(menu.getName())) {
-					openMenuCache.put(menu.getName(), menu);
-				}
-			}
+		if (hasMenuManager() && menuManager instanceof EditorMenuManager) {
+			return true;
 		}
-	}
-	
-	/**
-	 * Set the players current open menu
-	 * @param menu
-	 */
-	public void setOpenMenu (Menu menu) {
-		setOpenMenu(menu, true);
-	}
-	
-	/**
-	 * Gets the players current open menu
-	 * @return
-	 */
-	public Menu getOpenMenu () {
-		return openMenu;
-	}
-	
-	/**
-	 * Get the players previously open menu
-	 * @return
-	 */
-	public Menu getPreviousOpenMenu () {
-		return previousOpenMenu;
-	}
-	
-	/**
-	 * Gets a cached menu the player has recently opened
-	 * @param menuName
-	 * @return
-	 */
-	public Menu getOpenMenu (String menuName)
-	{
-		if (openMenuCache.containsKey(menuName)) {
-			return openMenuCache.get(menuName);
-		}
-		return null;
-	}
-	
-	/**
-	 * Resets the players current open menu
-	 */
-	public void closeOpenMenu () {
-		openMenu = null;
-	}
-	
-	/**
-	 * Clears the players menu cache
-	 */
-	public void clearMenuCache () {
-		openMenuCache.clear();
-	}
-	
-	/**
-	 * Checks to see if the player has a menu open
-	 * @return
-	 */
-	public boolean hasMenuOpen () {
-		return openMenu != null;
+		return false;
 	}
 	
 	/**
@@ -237,86 +100,6 @@ public class PlayerState {
 	 */
 	public int getMetaDescriptionLine () {
 		return metaDescriptionLine;
-	}
-	
-	/**
-	 * Set the time this player last moved
-	 * @param time
-	 */
-	public void setLastMoveTime (long time) {
-		lastMoveTime = time;
-	}
-	
-	/**
-	 * Get the time since this player has moved
-	 * @return
-	 */
-	public long getLastMoveTime () {
-		return lastMoveTime;
-	}
-	
-	/**
-	 * Set the time this player attacked
-	 * @param time
-	 */
-	public void setLastCombatTime (long time) {
-		lastCombatTime = time;
-	}
-	
-	/**
-	 * Get the time since this player has attacked
-	 * @return
-	 */
-	public long getLastCombatTime () {
-		return lastCombatTime;
-	}
-	
-	/**
-	 * Set the players AFKState
-	 * @param state
-	 */
-	public void setAFKState (AFKState state) {
-		afkState = state;
-	}
-	
-	/**
-	 * Get the players AFKState
-	 * @return
-	 */
-	public AFKState getAFKState () {
-		return afkState;
-	}
-	
-	/**
-	 * Set the players PVPState
-	 * @param state
-	 */
-	public void setPVPState (PVPState state) {
-		pvpState = state;
-	}
-	
-	/**
-	 * Get the players PVPState
-	 * @return
-	 */
-	public PVPState getPVPState () {
-		return pvpState;
-	}
-	
-	/**
-	 * Set the location this player is afk at
-	 * @param location
-	 */
-	public void setAFKLocation (Location location) {
-		afkLocation = location;
-	}
-	
-	/**
-	 * Get the location this player went afk at
-	 * @return
-	 */
-	public Location getAFKLocation () {
-		return afkLocation;
 	}
 	
 	/**
@@ -359,79 +142,6 @@ public class PlayerState {
 	 */
 	public int getMetaStateTime () {
 		return metaStateTime--;
-	}
-	
-	/**
-	 * Adds a hat this this players active hat list
-	 * @param hat
-	 */
-	public void addHat (Hat hat) {
-		activeHats.add(hat);
-	}
-	
-	/**
-	 * Gets all active hats
-	 * @return
-	 */
-	public List<Hat> getActiveHats () {
-		return activeHats;
-	}
-	
-	/**
-	 * Get how many hats this player has equipped
-	 * @return
-	 */
-	public int getHatCount () {
-		return activeHats.size();
-	}
-	
-	/**
-	 * Checks to see if the player can equip a hat
-	 * @return
-	 */
-	public boolean canEquip () {
-		return activeHats.size() < SettingsManager.MAXIMUM_HAT_LIMIT.getInt();
-	}
-	
-	 /**
-	  * Checks to see if the player has too many hats equipped
-	  * @return
-	  */
-	public boolean isEquipOverflowed () {
-		return activeHats.size() >= SettingsManager.MAXIMUM_HAT_LIMIT.getInt();
-	}
-	
-	/**
-	 * Removes all active hats
-	 */
-	public void clearActiveHats () {
-		activeHats.clear();
-	}
-	
-	/**
-	 * Remove the hat at index
-	 * @param index
-	 */
-	public void removeHat (int index) {
-		activeHats.remove(index);
-	}
-	
-	/**
-	 * Removes this hat from the players active hats list
-	 * @param hat
-	 */
-	public void removeHat (Hat hat) {
-		activeHats.remove(hat);
-	}
-	
-	/**
-	 * Removes the oldest equipped hat
-	 */
-	public void removeLastHat ()
-	{
-		if (activeHats.size() > 0) {
-			activeHats.remove(0);
-		}
 	}
 	
 	/**
@@ -499,27 +209,28 @@ public class PlayerState {
 	}
 	
 	/**
-	 * Set this players GuiState
-	 * @param guiState
+	 * Add this item to the players list of recent items
+	 * @param item
 	 */
-	public void setGuiState (GuiState guiState) {
-		this.guiState = guiState;
+	public void addRecentItem (ItemStack item)
+	{
+		if (recentItems.contains(item)) {
+			return;
+		}
+		
+		if (recentItems.size() >= 20) {
+			recentItems.remove(0);
+		}
+		
+		recentItems.add(item);
 	}
 	
 	/**
-	 * Get this players GuiState
+	 * Get a list of items the player recently used when editing
 	 * @return
 	 */
-	public GuiState getGuiState () {
-		return guiState;
-	}
-	
-	/**
-	 * Get this players previous GuiState
-	 * @return
-	 */
-	public GuiState getPreviousGuiState () {
-		return previousGuiState;
+	public List<ItemStack> getRecentItems () {
+		return recentItems;
 	}
 	
 	public enum AFKState

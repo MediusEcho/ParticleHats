@@ -64,6 +64,7 @@ public class Hat {
 	private boolean isLoaded    = false;
 	private boolean isDeleted   = false;
 	private boolean isLocked    = false;
+	private boolean canBeSaved  = true;
 	
 	private int updateFrequency     = 2;
 	private int price               = 0;
@@ -702,17 +703,28 @@ public class Hat {
 	}
 	
 	/**
+	 * Set whether this hat can be saved to file when the player leaves the server
+	 * @param canBeSaved
+	 */
+	public void setCanBeSaved (boolean canBeSaved) {
+		this.canBeSaved = canBeSaved;
+	}
+	
+	/**
+	 * Returns true if this hat can be saved to file
+	 * @return
+	 */
+	public boolean canBeSaved () {
+		return canBeSaved;
+	}
+	
+	/**
 	 * Set how often this hat displays particles
 	 * @param updateFrequency How often this hat displays particles, <B>1 = fastest</b>
 	 */
 	public void setUpdateFrequency (int updateFrequency) 
 	{
 		this.updateFrequency = MathUtil.clamp(updateFrequency, 1, 100); // 5 seconds max delay
-		
-		// Update our potion timer
-		if (potion != null) {
-			setPotion(potion.getType(), potion.getAmplifier());
-		}
 		setProperty("update_frequency", Integer.toString(this.updateFrequency));
 	}
 	
@@ -1088,7 +1100,7 @@ public class Hat {
 	 * @param amplifier
 	 */
 	public void setPotion (PotionEffectType type, int amplifier) {
-		setPotion(new PotionEffect(type, updateFrequency, amplifier, false, false));
+		setPotion(new PotionEffect(type, Integer.MAX_VALUE, amplifier, false, false));
 	}
 	
 	/**
@@ -1182,6 +1194,22 @@ public class Hat {
 	 */
 	public ParticleEffect getParticle (int index) {
 		return getParticleData(index).getParticle();
+	}
+	
+	/**
+	 * Gets the first displayable ParticleEffect this hat has, or NONE is nothing is found
+	 * @return
+	 */
+	public ParticleEffect getFirstAvailableParticle () 
+	{
+		for (int i = 0; i < type.getParticlesSupported(); i++) 
+		{
+			ParticleEffect pe = getParticle(i);
+			if (pe != ParticleEffect.NONE) {
+				return pe;
+			}
+		}
+		return ParticleEffect.NONE;
 	}
 	
 	/**
@@ -1596,6 +1624,31 @@ public class Hat {
 	}
 	
 	/**
+	 * Check to see if this Hat is equipable
+	 * @return
+	 */
+	public boolean isEquipable ()
+	{
+		boolean isEquipable = false;
+		
+		for (Entry<Integer, ParticleData> particles : particleData.entrySet())
+		{
+			ParticleData data = particles.getValue();
+			if (data == null) {
+				continue;
+			}
+			
+			if (data.getParticle() == ParticleEffect.NONE) {
+				continue;
+			}
+			
+			isEquipable = true;
+		}
+		
+		return isEquipable;
+	}
+	
+	/**
 	 * Get this Hat's legacy purchase path<br>
 	 * Used to check against a list of purchases the player has made
 	 * @return
@@ -1647,6 +1700,28 @@ public class Hat {
 	 */
 	public Map<String, String> getPropertyChanges () {
 		return new HashMap<String, String>(modifiedProperties);
+	}
+	
+	/**
+	 * Handles any necessary actions that need to take place when this hat is equipped
+	 * @param player
+	 */
+	public void equip (Player player)
+	{
+		if (potion != null) {
+			player.addPotionEffect(potion, true);
+		}
+	}
+	
+	/**
+	 * Handles any necessary actions that need to take place when this hat is unequipped
+	 * @param player
+	 */
+	public void unequip (Player player)
+	{
+		if (this.potion != null) {
+			player.removePotionEffect(potion.getType());
+		}
 	}
 	
 	/**

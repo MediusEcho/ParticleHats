@@ -74,6 +74,16 @@ public class MathUtil {
 	}
 	
 	/**
+	 * Calculates how many pages we'll need to display all content
+	 * @param totalCount
+	 * @param itemsPerPage
+	 * @return
+	 */
+	public static int calculatePageCount (double totalCount, int itemsPerPage) {
+		return (int) Math.max(Math.ceil((totalCount - 1) / itemsPerPage), 1);
+	}
+	
+	/**
 	 * Returns the Integer value of this String, or 0 if an Integer cannot be found
 	 * @param s
 	 * @return
