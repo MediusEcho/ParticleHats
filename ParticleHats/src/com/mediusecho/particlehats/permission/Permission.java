@@ -41,6 +41,7 @@ public enum Permission {
 	COMMAND_NPC           ("command.npc"),
 	COMMAND_NPC_CLEAR     ("command.npc.clear"),
 	COMMAND_NPC_MANAGE    ("command.npc.manage"),
+	COMMAND_NPC_SET       ("command.npc.set"),
 	
 	WORLD     ("world"),
 	WORLD_ALL ("world.all"),

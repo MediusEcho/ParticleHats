@@ -119,9 +119,16 @@ public class CitizensHook implements Listener {
 	public Entity getNPCEntity (int id)
 	{
 		NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+		
 		if (npc == null) {
 			return null;
 		}
+		
+		// Don't bother returning if the entity hasn't spawned yet
+		if (!npc.isSpawned()) {
+			return null;
+		}
+		
 		return npc.getEntity();
 	}
 	
