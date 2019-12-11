@@ -302,6 +302,14 @@ public enum Message {
 	PARTICLE_EMPTY_SPACE_DESCRIPTION       ("&8By default the particle &cNONE/n&8gets replaced by the first particle/n&8a hat has, this one does not/n/n&8Use it when you don't want/n&8a particle to display"),
 	PARTICLE_LANDING_LAVA_NAME             ("&bLanding Lava"),
 	PARTICLE_LANDING_LAVA_DESCRIPTION      ("&8Dripping lava particle after it hits/n&8the ground"),
+	PARTICLE_DRIPPING_HONEY_NAME           ("&bDripping Honey"),
+	PARTICLE_DRIPPING_HONEY_DESCRIPTION    ("&8Honey dripping from a beehive"),
+	PARTICLE_FALLING_HONEY_NAME            ("&bFalling Honey"),
+	PARTICLE_FALLING_HONEY_DESCRIPTION     ("&8Faster version of &bDripping Honey"),
+	PARTICLE_FALLING_NECTAR_NAME           ("&bFalling Nectar"),
+	PARTICLE_FALLING_NECTAR_DESCRIPTION    ("&8Nectar falling from a flower"),
+	PARTICLE_LANDING_HONEY_NAME            ("&bLanding Honey"),
+	PARTICLE_LANDING_HONEY_DESCRIPTION     ("&8Particle of &bDripping Honey &8after it has hit the ground"),
 	
 	/**
 	 * Location
@@ -963,6 +971,7 @@ public enum Message {
 		for (Message message : values())
 		{
 			String value = locale.getString(message.getKey());
+			
 			if (value != null) {
 				messages.put(message.getKey(), value);
 			}

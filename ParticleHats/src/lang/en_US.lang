@@ -401,6 +401,14 @@ particle_empty_space_name: "&bEmpty Space"
 particle_empty_space_description: "&8By default the particle &cNONE/n&8gets replaced by the first particle/n&8a hat has, this one does not/n/n&8Use it when you don't want/n&8a particle to display"
 particle_landing_lava_name: "&bLanding Lava"
 particle_landing_lava_description: "&8Dripping lava particle after it hits/n&8the ground"
+particle_dripping_honey_name: "&bDripping Honey"
+particle_dripping_honey_description: "&8Honey dripping from a beehive"
+particle_falling_honey_name: "&bFalling Honey"
+particle_falling_honey_description: "&8Faster version of &bDripping Honey"
+particle_falling_nectar_name: "&bFalling Nectar"
+particle_falling_nectar_description: "&8Nectar falling from a flower"
+particle_landing_honey_name: "&bLanding Honey"
+particle_landing_honey_description: "&8Particle of &bDripping Honey &8after it has hit the ground"
 
 ##########################
 #       Locations        #

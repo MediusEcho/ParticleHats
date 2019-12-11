@@ -78,7 +78,6 @@ public enum ParticleEffect {
 	SNEEZE                 (61, -1, 14, CompatibleMaterial.GRAY_DYE),
 	EMPTY_SPACE            (62, -1, -1, CompatibleMaterial.BARRIER),
 	LANDING_LAVA           (63, -1, 14, Material.MAGMA_CREAM),
-	
 	DRIPPING_HONEY         (64, -1, 15, CompatibleMaterial.HONEY_BOTTLE),
 	FALLING_HONEY          (65, -1, 15, CompatibleMaterial.HONEYCOMB),
 	FALLING_NECTAR         (66, -1, 15, CompatibleMaterial.DANDELION),
