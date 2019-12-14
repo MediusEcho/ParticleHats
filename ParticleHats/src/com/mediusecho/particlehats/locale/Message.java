@@ -159,8 +159,8 @@ public enum Message {
 	COMMAND_MANAGE_NPC_USAGE ("/h npc manage"),
 	
 	// NPC Set Command
-	COMMAND_NPC_SET_SUCCESS ("&2Gave NPC {1} the {2} &r&2hat"),
-	COMMAND_NPC_SET_ERROR ("&cUnable to find NPC with that id"),
+	COMMAND_NPC_SET_SUCCESS ("&aGave &3{1} &athe &3{2} &r&ahat"),
+	COMMAND_NPC_SET_ERROR ("&cUnable to find a NPC with that id"),
 	COMMAND_NPC_SET_DESCRIPTION ("Equip a hat to a NPC"),
 	COMMAND_NPC_SET_USAGE ("/h npc set <npc id> <label>"),
 	

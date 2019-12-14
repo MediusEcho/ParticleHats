@@ -259,6 +259,12 @@ command_npc_clear_success: "&aCleared all hats for this NPC"
 command_manage_npc_description: "Manage this NPC's hats"
 command_manage_npc_usage: "/h npc manage"
 
+# NPC Set Command
+command_npc_set_success: "&aGave &3{1} &athe &3{2} &r&ahat"
+command_npc_set_error: "&cUnable to find a NPC with that id"
+command_npc_set_description: "Equip a hat to a NPC"
+command_npc_set_usage: "/h npc set <npc id> <label>"
+
 ##########################
 #     Purchase Menu      #
 ##########################
