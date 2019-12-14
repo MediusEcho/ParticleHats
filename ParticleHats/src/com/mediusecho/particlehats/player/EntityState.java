@@ -82,6 +82,36 @@ public class EntityState {
 	}
 	
 	/**
+	 * Returns true if this hat is already equipped
+	 * @param hat
+	 * @return
+	 */
+	public boolean hasHatEquipped (Hat hat) {
+		return hasHatEquipped(hat.getLabel());
+	}
+	
+	/**
+	 * Returns true if a hat with this label is already equipped
+	 * @param fromLabel
+	 * @return
+	 */
+	public boolean hasHatEquipped (String fromLabel)
+	{
+		if (fromLabel == null) {
+			return false;
+		}
+		
+		for (Hat hat : activeHats)
+		{
+			if (hat.getLabel().equalsIgnoreCase(fromLabel)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Get how many hats this player has equipped
 	 * @return
 	 */
