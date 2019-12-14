@@ -47,6 +47,7 @@ public enum Message {
 	COMMAND_ERROR_TYPE_EXISTS    ("&7Type '&c{1}&7' already exists in the database"),
 	COMMAND_ERROR_UNKNOWN_TYPE   ("&cUnable to find type &7'{1}&c'"),
 	COMMAND_ERROR_ALREADY_EDITING ("&cYou cannot use this command while editing a menu"),
+	COMMAND_ERROR_UNKNOWN_NPC     ("&cUnable to find a NPC with that id"),
 	
 	// Main Command
 	COMMAND_MAIN_DESCRIPTION ("Main Command"),
@@ -151,8 +152,7 @@ public enum Message {
 	// NPC Clear Command
 	COMMAND_NPC_CLEAR_DESCRIPTION ("Clears all active hats for this NPC"),
 	COMMAND_NPC_CLEAR_USAGE ("/h npc clear <id>"),
-	COMMAND_NPC_CLEAR_ERROR ("&cCould not find a NPC with an id of {1}"),
-	COMMAND_NPC_CLEAR_SUCCESS ("&aCleared all hats for this NPC"),
+	COMMAND_NPC_CLEAR_SUCCESS ("&aCleared all hats for {1}"),
 	
 	// Manage NPC Command
 	COMMAND_MANAGE_NPC_DESCRIPTION ("Manage this NPC's hats"),
@@ -160,7 +160,6 @@ public enum Message {
 	
 	// NPC Set Command
 	COMMAND_NPC_SET_SUCCESS ("&aGave &3{1} &athe &3{2} &r&ahat"),
-	COMMAND_NPC_SET_ERROR ("&cUnable to find a NPC with that id"),
 	COMMAND_NPC_SET_DESCRIPTION ("Equip a hat to a NPC"),
 	COMMAND_NPC_SET_USAGE ("/h npc set <npc id> <label>"),
 	

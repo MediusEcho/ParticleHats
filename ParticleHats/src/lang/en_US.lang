@@ -250,9 +250,8 @@ command_import_error: "&cThere was an error importing this menu error: {1}"
 command_npc_support_error: "&cUnable to find Citizens plugin"
 
 # NPC Clear Command
-command_npc_clear_description: "Clears all active hats for this NPC"
+command_npc_clear_description: "Clears all active hats for this {1}"
 command_npc_clear_usage: "/h npc clear <id>"
-command_npc_clear_error: "&cCould not find a NPC with an id of {1}"
 command_npc_clear_success: "&aCleared all hats for this NPC"
 
 # Manage NPC Command

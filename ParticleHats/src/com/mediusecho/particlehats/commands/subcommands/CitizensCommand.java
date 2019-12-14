@@ -17,6 +17,7 @@ public class CitizensCommand extends Command {
 	{
 		register(new ManageCitizenCommand());
 		register(new SetCitizensCommand());
+		register(new ClearCitizensCommand());
 	}
 	
 	@Override
