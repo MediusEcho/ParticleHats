@@ -152,6 +152,21 @@ public class CitizensHook implements Listener {
 		
 		return npc.getFullName();
 	}
+	
+	public List<String> getNPCIds ()
+	{
+		List<String> ids = new ArrayList<String>();
+		Iterator<NPC> npcs = CitizensAPI.getNPCRegistry().iterator();
+		
+		while (npcs.hasNext())
+		{
+			NPC npc = npcs.next();
+			ids.add(Integer.toString(npc.getId()));
+		}
+		
+		return ids;
+	}
+	
 	public void saveCitizenData (Entity entity, EntityState entityState)
 	{
 		if (entityState.getID() == -1) {
