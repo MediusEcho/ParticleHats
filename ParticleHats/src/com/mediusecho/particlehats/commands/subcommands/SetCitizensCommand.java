@@ -1,6 +1,8 @@
 package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.entity.Entity;
 
@@ -11,6 +13,7 @@ import com.mediusecho.particlehats.hooks.citizens.CitizensHook;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.util.StringUtil;
 
 public class SetCitizensCommand extends Command {
@@ -28,17 +31,11 @@ public class SetCitizensCommand extends Command {
 		int citizenID = StringUtil.toInt(args.get(0), -1);
 		if (citizenID == -1) 
 		{
-			
+			sender.sendMessage(Message.COMMAND_NPC_SET_ERROR);
 			return false;
 		}
 		
 		String hatLabel = args.get(1);
-		Hat hat = core.getDatabase().getHatFromLabel(hatLabel);
-		if (hat == null)
-		{
-			sender.sendMessage(Message.COMMAND_SET_LABEL_ERROR.getValue().replace("{1}", hatLabel));
-			return false;
-		}
 		
 		CitizensHook citizensHook = core.getHookManager().getCitizensHook();
 		Entity npc = citizensHook.getNPCEntity(citizenID);
@@ -49,9 +46,44 @@ public class SetCitizensCommand extends Command {
 			return false;
 		}
 		
+		EntityState entityState = core.getEntityState(npc);
+		String npcName = citizensHook.getNPCName(citizenID);
 		
+		Hat hat = core.getDatabase().getHatFromLabel(hatLabel);
+		if (hat == null)
+		{
+			sender.sendMessage(Message.COMMAND_SET_LABEL_ERROR.getValue().replace("{1}", hatLabel));
+			return false;
+		}
 		
-		return false;
+		if (entityState.hasHatEquipped(hatLabel))
+		{
+			sender.sendMessage(Message.COMMAND_SET_ALREADY_SET.getValue().replace("{1}", npcName));
+			return false;
+		}
+		
+		entityState.addHat(hat);
+		
+		sender.sendMessage(Message.COMMAND_NPC_SET_SUCCESS.getValue().replace("{1}", npcName).replace("{2}", hat.getDisplayName()));
+		return true;
+	}
+	
+	@Override
+	public List<String> tabComplete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
+	{
+		switch (args.size())
+		{
+			case 1:
+			{
+				return core.getHookManager().getCitizensHook().getNPCIds();
+			}
+			
+			case 2:
+			{
+				return core.getDatabase().getLabels(false);
+			}
+		}
+		return Arrays.asList("");
 	}
 
 	@Override
