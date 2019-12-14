@@ -109,6 +109,8 @@ command_error_unknown_type: "&cUnable to find type &7'{1}&c'"
 
 command_error_already_editing: "&cYou cannot use this command while editing a menu"
 
+command_error_unknown_npc: "&cUnable to find a NPC with that id"
+
 ##########################
 #        Commands        #
 ##########################
@@ -260,7 +262,6 @@ command_manage_npc_usage: "/h npc manage"
 
 # NPC Set Command
 command_npc_set_success: "&aGave &3{1} &athe &3{2} &r&ahat"
-command_npc_set_error: "&cUnable to find a NPC with that id"
 command_npc_set_description: "Equip a hat to a NPC"
 command_npc_set_usage: "/h npc set <npc id> <label>"
 

@@ -31,7 +31,7 @@ public class SetCitizensCommand extends Command {
 		int citizenID = StringUtil.toInt(args.get(0), -1);
 		if (citizenID == -1) 
 		{
-			sender.sendMessage(Message.COMMAND_NPC_SET_ERROR);
+			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_NPC);
 			return false;
 		}
 		
@@ -42,7 +42,7 @@ public class SetCitizensCommand extends Command {
 		
 		if (npc == null)
 		{
-			sender.sendMessage(Message.COMMAND_NPC_SET_ERROR);
+			sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_NPC);
 			return false;
 		}
 		
@@ -63,6 +63,7 @@ public class SetCitizensCommand extends Command {
 		}
 		
 		entityState.addHat(hat);
+		citizensHook.saveCitizenData(npc, entityState);
 		
 		sender.sendMessage(Message.COMMAND_NPC_SET_SUCCESS.getValue().replace("{1}", npcName).replace("{2}", hat.getDisplayName()));
 		return true;
