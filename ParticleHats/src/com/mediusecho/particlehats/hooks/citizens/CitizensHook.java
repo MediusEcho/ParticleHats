@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.hooks.citizens;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCDespawnEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.event.NPCSpawnEvent;
+import net.citizensnpcs.api.event.SpawnReason;
 import net.citizensnpcs.api.npc.NPC;
 
 public class CitizensHook implements Listener {
@@ -181,6 +183,7 @@ public class CitizensHook implements Listener {
 		{
 			citizenHatStrings.remove(id);
 			config.set(path, null);
+			
 			citizenConfig.save();
 			citizenConfig.reload();
 			
@@ -195,6 +198,8 @@ public class CitizensHook implements Listener {
 		}
 		
 		config.set(path, hatStrings);
+		citizenHatStrings.put(id, hatStrings);
+		
 		citizenConfig.save();
 		citizenConfig.reload();
 	}
