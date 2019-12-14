@@ -90,6 +90,11 @@ public class CitizensHook implements Listener {
 			return;
 		}
 		
+		// There shouldn't be particle data for a newly created NPC
+		if (event.getReason().equals(SpawnReason.CREATE)) {
+			return;
+		}
+		
 		if (!citizenHatStrings.containsKey(id)) {
 			return;
 		}
