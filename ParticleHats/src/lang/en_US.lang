@@ -141,6 +141,20 @@ command_clear_player_usage: "/h clear <player>"
 # {1}: The name of the player
 command_clear_player_success: "&aAll particles cleared for {1}"
 
+# Toggle Command
+command_toggle_description: "Toggles all particles on / off"
+command_toggle_usage: "/h toggle <on/off>"
+command_toggle_on: "&aToggled all particles &2On"
+command_toggle_off: "&aToggled all particles &cOff"
+
+# Toggle Player Command
+command_toggle_player_description: "Toggles all particles on / off for the given player"
+command_toggle_player_usage: "/h toggle <on/off> <player>"
+
+# {1}: The name of the player
+command_toggle_player_on: "&aToggled all particles &2On &afor {1}"
+command_toggle_player_off: "&aToggled all particles &cOff &afor {1}"
+
 # Create command
 command_create_description: "Creates a new menu with the given name"
 command_create_usage: "/h create <menu name>"

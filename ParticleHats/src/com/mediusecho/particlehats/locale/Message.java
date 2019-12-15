@@ -72,6 +72,16 @@ public enum Message {
 	COMMAND_CLEAR_PLAYER_USAGE       ("/h clear <player>"),
 	COMMAND_CLEAR_PLAYER_SUCCESS     ("&aAll particles cleared for &3{1}"),
 	
+	// Toggle Command
+	COMMAND_TOGGLE_DESCRIPTION ("Toggles all particles on / off"),
+	COMMAND_TOGGLE_USAGE ("/h toggle <on/off>"),
+	COMMAND_TOGGLE_ON ("&aToggled all particles &2On"),
+	COMMAND_TOGGLE_OFF ("&aToggled all particles &cOff"),
+	COMMAND_TOGGLE_PLAYER_DESCRIPTION ("Toggles all particles on / off for the given player"),
+	COMMAND_TOGGLE_PLAYER_USAGE ("/h toggle <on/off> <player>"),
+	COMMAND_TOGGLE_PLAYER_ON ("&aToggled all particles &2On &afor {1}"),
+	COMMAND_TOGGLE_PLAYER_OFF ("&aToggled all particles &cOff &afor {1}"),
+	
 	// Create Command
 	COMMAND_CREATE_DESCRIPTION ("Creates a new menu with the given name"),
 	COMMAND_CREATE_USAGE       ("/h create <menu name>"),

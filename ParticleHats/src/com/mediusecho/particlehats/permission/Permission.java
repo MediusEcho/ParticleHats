@@ -21,6 +21,8 @@ public enum Permission {
 	COMMAND_CLEAR         ("command.clear"),
 	COMMAND_CLEAR_PLAYER  ("command.clear.player"),
 	COMMAND_CLEAR_ALL     ("command.clear.*"),
+	COMMAND_TOGGLE        ("command.toggle"),
+	COMMAND_TOGGLE_PLAYER ("command.toggle.player"),
 	COMMAND_SET           ("command.set"),
 	COMMAND_OPEN          ("command.open"),
 	COMMAND_OPEN_PLAYER   ("command.open.player"),
