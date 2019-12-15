@@ -1,3 +1,21 @@
+4.2.0
+- Fixed an issue that would prevent particles from loading when an NPC respawned.
+- Fixed when_moving, when_afk, & when_peaceful modes not working on a NPC.
+- Tweaked movement/afk timer to only check players that have equipped particles.
+- Commands:
+  - Added /h npc set <id> <label>
+    - Lets you equip particles without going through the citizens manager.
+    - permission: particlehats.command.npc.set
+  - Added /h npc clear <id>
+    - Clears all equipped particles for a NPC.
+    - permission: particlehats.command.npc.clear
+  - Added /h toggle <on/off>
+    - Allows players to toggle all equipped particles on/off.
+    - permission: particlehats.command.toggle
+  - Added /h toggle <on/off> <player>
+    - Lets you toggle a players equipped particles on/off.
+    - permission: particlehats.command.toggle.player
+
 4.1.0
 - Fixed custom type menu not allowing you to go to the next page
 - Added Citizens npc support
