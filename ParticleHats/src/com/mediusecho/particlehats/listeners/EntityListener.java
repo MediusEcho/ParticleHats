@@ -17,7 +17,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.managers.SettingsManager;
-import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.player.PlayerState.PVPState;
 
 public class EntityListener implements Listener {
@@ -60,35 +60,30 @@ public class EntityListener implements Listener {
 		Entity attacker = event.getDamager();
 		Entity victim = event.getEntity();
 		
-		if (victim instanceof Player && !victim.hasMetadata("NPC"))
-		{
-			if (checkCombat(attacker)) 
-			{
-				handleCombat((Player)victim);
-				return;
-			}
+		if (checkCombat(victim)) {
+			handleCombat(attacker);
 		}
 		
-		if (attacker instanceof Player  && !attacker.hasMetadata("NPC"))
-		{
-			if (checkCombat(victim))
-			{
-				handleCombat((Player)attacker);
-				return;
-			}
+		if (checkCombat(attacker)) {
+			handleCombat(victim);
 		}
 		
-		else if (attacker instanceof Arrow)
+		if (attacker instanceof Arrow) 
 		{
 			Arrow arrow = (Arrow)attacker;
 			if (arrow.getShooter() != null)
 			{
-				ProjectileSource shooter = arrow.getShooter();
-				if (shooter instanceof Player)
+				ProjectileSource pShooter = arrow.getShooter();
+				if (pShooter instanceof Entity) 
 				{
-					Player p = (Player)shooter;
+					Entity shooter = (Entity)pShooter;
+					
 					if (checkCombat(victim)) {
-						handleCombat(p);
+						handleCombat((Entity)shooter);
+					}
+					
+					if (checkCombat(shooter)) {
+						handleCombat(victim);
 					}
 				}
 			}
@@ -109,18 +104,23 @@ public class EntityListener implements Listener {
 			return true;
 		}
 		
-		if (checkNPC && e instanceof NPC) {
+		if (checkNPC && (e instanceof NPC || e.hasMetadata("NPC"))) {
 			return true;
 		}
 		
 		return false;
 	}
 	
-	private void handleCombat (Player player)
+	private void handleCombat (Entity entity)
 	{
-		PlayerState playerState = core.getPlayerState(player);
+		// We don't want to create a new EntityState if one doesn't exist for this entity
+		if (!core.hasEntityState(entity)) {
+			return;
+		}
 		
-		playerState.setLastCombatTime(System.currentTimeMillis());
-		playerState.setPVPState(PVPState.ENGAGED);
+		EntityState entityState = core.getEntityState(entity);
+		
+		entityState.setLastCombatTime(System.currentTimeMillis());
+		entityState.setPVPState(PVPState.ENGAGED);
 	}
 }
