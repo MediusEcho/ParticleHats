@@ -266,15 +266,20 @@ command_import_error: "&cThere was an error importing this menu error: {1}"
 command_npc_support_error: "&cUnable to find Citizens plugin"
 
 # NPC Clear Command
-command_npc_clear_description: "Clears all active hats for this {1}"
+command_npc_clear_description: "Clears all active hats for this NPC"
 command_npc_clear_usage: "/h npc clear <id>"
-command_npc_clear_success: "&aCleared all hats for this NPC"
+
+# {1}: The name of the NPC
+command_npc_clear_success: "&aCleared all hats for {1}"
 
 # Manage NPC Command
 command_manage_npc_description: "Manage this NPC's hats"
 command_manage_npc_usage: "/h npc manage"
 
 # NPC Set Command
+
+# {1}: The name of the NPC
+# {2}: The name of the hat
 command_npc_set_success: "&aGave &3{1} &athe &3{2} &r&ahat"
 command_npc_set_description: "Equip a hat to a NPC"
 command_npc_set_usage: "/h npc set <npc id> <label>"
