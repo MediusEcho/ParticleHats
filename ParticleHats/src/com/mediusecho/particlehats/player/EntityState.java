@@ -23,6 +23,7 @@ public class EntityState {
 	private PVPState pvpState = PVPState.PEACEFUL;
 	
 	private Location afkLocation;
+	private Location lastLocation;
 	
 	private long lastMoveTime = 0L;
 	private long lastCombatTime = 0L;
@@ -229,6 +230,22 @@ public class EntityState {
 	 */
 	public Location getAFKLocation () {
 		return afkLocation;
+	}
+	
+	/**
+	 * Set this entity's last known location
+	 * @param location
+	 */
+	public void setLastKnownLocation (Location location) {
+		lastLocation = location;
+	}
+	
+	/**
+	 * Returns this entity's last known location
+	 * @return
+	 */
+	public Location getLastKnownLocation () {
+		return lastLocation;
 	}
 	
 	/**

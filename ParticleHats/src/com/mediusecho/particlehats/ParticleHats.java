@@ -381,6 +381,15 @@ public class ParticleHats extends JavaPlugin {
 	}
 	
 	/**
+	 * Checks to see if this entity has an EntityState object loaded
+	 * @param entity
+	 * @return
+	 */
+	public boolean hasEntityState (Entity entity) {
+		return entityState.containsKey(entity.getUniqueId());
+	}
+	
+	/**
 	 * Returns all currently active player states
 	 * @return
 	 */
