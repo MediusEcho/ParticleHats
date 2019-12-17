@@ -56,7 +56,11 @@ public class EntityListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDamage (EntityDamageByEntityEvent event)
-	{
+	{		
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		Entity attacker = event.getDamager();
 		Entity victim = event.getEntity();
 		
