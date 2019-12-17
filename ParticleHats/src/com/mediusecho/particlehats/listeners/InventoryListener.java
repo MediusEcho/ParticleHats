@@ -51,6 +51,10 @@ public class InventoryListener implements Listener {
 		}
 		
 		Player player = (Player)event.getPlayer();
+		if (player.hasMetadata("NPC")) {
+			return;
+		}
+		
 		PlayerState playerState = core.getPlayerState(player);
 		
 		if (playerState.hasMenuManager()) {
