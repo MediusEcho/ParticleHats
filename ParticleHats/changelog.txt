@@ -2,6 +2,7 @@
 - Fixed an issue that would prevent particles from loading when an NPC respawned.
 - Fixed when_moving, when_afk, & when_peaceful modes not working on a NPC.
 - Tweaked movement/afk timer to only check players that have equipped particles.
+- Fixed ClassCastException that would occur when killing a NPC on 1.8
 - Commands:
   - Added /h npc set <id> <label>
     - Lets you equip particles without going through the citizens manager.
