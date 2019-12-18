@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mediusecho</groupId>
   <artifactId>ParticleHats</artifactId>
-  <version>4.1.0</version>
+  <version>4.2.0</version>
   <build>
     <finalName>ParticleHats</finalName>
     <plugins>
@@ -60,6 +60,12 @@
         <id>everything</id>
         <url>https://repo.citizensnpcs.co/</url>
     </repository>
+    
+    <!-- VaultAPI -->
+    <repository>
+    	<id>jitpack.io</id>
+    	<url>https://jitpack.io</url>
+    </repository>
 	
   </repositories>
   <dependencies>
@@ -100,6 +106,18 @@
         <scope>provided</scope>
     </dependency>
 
+	<dependency>
+		<groupId>com.github.MilkBowl</groupId>
+        <artifactId>VaultAPI</artifactId>
+        <version>1.7</version>
+        <scope>provided</scope>
+        <exclusions>
+        	<exclusion>
+        		<groupId>org.bukkit</groupId>
+        		<artifactId>bukkit</artifactId>
+        	</exclusion>
+        </exclusions>
+	</dependency>
 
   </dependencies>
 </project>

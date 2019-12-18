@@ -47,6 +47,7 @@ public enum Message {
 	COMMAND_ERROR_TYPE_EXISTS    ("&7Type '&c{1}&7' already exists in the database"),
 	COMMAND_ERROR_UNKNOWN_TYPE   ("&cUnable to find type &7'{1}&c'"),
 	COMMAND_ERROR_ALREADY_EDITING ("&cYou cannot use this command while editing a menu"),
+	COMMAND_ERROR_UNKNOWN_NPC     ("&cUnable to find a NPC with that id"),
 	
 	// Main Command
 	COMMAND_MAIN_DESCRIPTION ("Main Command"),
@@ -70,6 +71,16 @@ public enum Message {
 	COMMAND_CLEAR_PLAYER_DESCRIPTION ("Removes all particles for the target player"),
 	COMMAND_CLEAR_PLAYER_USAGE       ("/h clear <player>"),
 	COMMAND_CLEAR_PLAYER_SUCCESS     ("&aAll particles cleared for &3{1}"),
+	
+	// Toggle Command
+	COMMAND_TOGGLE_DESCRIPTION ("Toggles all particles on / off"),
+	COMMAND_TOGGLE_USAGE ("/h toggle <on/off>"),
+	COMMAND_TOGGLE_ON ("&aToggled all particles &2On"),
+	COMMAND_TOGGLE_OFF ("&aToggled all particles &cOff"),
+	COMMAND_TOGGLE_PLAYER_DESCRIPTION ("Toggles all particles on / off for the given player"),
+	COMMAND_TOGGLE_PLAYER_USAGE ("/h toggle <on/off> <player>"),
+	COMMAND_TOGGLE_PLAYER_ON ("&aToggled all particles &2On &afor {1}"),
+	COMMAND_TOGGLE_PLAYER_OFF ("&aToggled all particles &cOff &afor {1}"),
 	
 	// Create Command
 	COMMAND_CREATE_DESCRIPTION ("Creates a new menu with the given name"),
@@ -151,12 +162,16 @@ public enum Message {
 	// NPC Clear Command
 	COMMAND_NPC_CLEAR_DESCRIPTION ("Clears all active hats for this NPC"),
 	COMMAND_NPC_CLEAR_USAGE ("/h npc clear <id>"),
-	COMMAND_NPC_CLEAR_ERROR ("&cCould not find a NPC with an id of {1}"),
-	COMMAND_NPC_CLEAR_SUCCESS ("&aCleared all hats for this NPC"),
+	COMMAND_NPC_CLEAR_SUCCESS ("&aCleared all hats for {1}"),
 	
 	// Manage NPC Command
 	COMMAND_MANAGE_NPC_DESCRIPTION ("Manage this NPC's hats"),
 	COMMAND_MANAGE_NPC_USAGE ("/h npc manage"),
+	
+	// NPC Set Command
+	COMMAND_NPC_SET_SUCCESS ("&aGave &3{1} &athe &3{2} &r&ahat"),
+	COMMAND_NPC_SET_DESCRIPTION ("Equip a hat to a NPC"),
+	COMMAND_NPC_SET_USAGE ("/h npc set <npc id> <label>"),
 	
 	/**
 	 * Purchase Menu
@@ -296,6 +311,14 @@ public enum Message {
 	PARTICLE_EMPTY_SPACE_DESCRIPTION       ("&8By default the particle &cNONE/n&8gets replaced by the first particle/n&8a hat has, this one does not/n/n&8Use it when you don't want/n&8a particle to display"),
 	PARTICLE_LANDING_LAVA_NAME             ("&bLanding Lava"),
 	PARTICLE_LANDING_LAVA_DESCRIPTION      ("&8Dripping lava particle after it hits/n&8the ground"),
+	PARTICLE_DRIPPING_HONEY_NAME           ("&bDripping Honey"),
+	PARTICLE_DRIPPING_HONEY_DESCRIPTION    ("&8Honey dripping from a beehive"),
+	PARTICLE_FALLING_HONEY_NAME            ("&bFalling Honey"),
+	PARTICLE_FALLING_HONEY_DESCRIPTION     ("&8Faster version of &bDripping Honey"),
+	PARTICLE_FALLING_NECTAR_NAME           ("&bFalling Nectar"),
+	PARTICLE_FALLING_NECTAR_DESCRIPTION    ("&8Nectar falling from a flower"),
+	PARTICLE_LANDING_HONEY_NAME            ("&bLanding Honey"),
+	PARTICLE_LANDING_HONEY_DESCRIPTION     ("&8Particle of &bDripping Honey &8after it has hit the ground"),
 	
 	/**
 	 * Location
@@ -957,6 +980,7 @@ public enum Message {
 		for (Message message : values())
 		{
 			String value = locale.getString(message.getKey());
+			
 			if (value != null) {
 				messages.put(message.getKey(), value);
 			}

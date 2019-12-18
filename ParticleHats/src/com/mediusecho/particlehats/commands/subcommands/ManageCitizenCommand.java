@@ -16,11 +16,11 @@ public class ManageCitizenCommand extends Command {
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{
-		if (core.getHookManager().getCitizensHook() == null)
-		{
-			sender.sendMessage(Message.COMMAND_NPC_SUPPORT_ERROR);
-			return false;
-		}
+//		if (core.getHookManager().getCitizensHook() == null)
+//		{
+//			sender.sendMessage(Message.COMMAND_NPC_SUPPORT_ERROR);
+//			return false;
+//		}
 		
 		EntityState entityState = core.getEntityState(sender.getPlayer());
 		if (entityState instanceof PlayerState)

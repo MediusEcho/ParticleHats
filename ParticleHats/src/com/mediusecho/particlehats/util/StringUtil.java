@@ -346,4 +346,27 @@ public class StringUtil {
 	public static String sanitizeString (String s) {
 		return s.replaceAll(sanitizeRegex, "");
 	}
+	
+	/**
+	 * Attempts to interpret the bollean value of the argument  
+	 * Acceptable strings include... (yes, no, on, off, 1, 0, true, false)
+	 * @param arg
+	 * @return
+	 */
+	public static boolean getToggleValue (String arg)
+	{
+		switch (arg.toLowerCase())
+		{
+		case "yes": return true;
+		case "no": return false;
+		case "on": return true;
+		case "off": return false;
+		case "1": return true;
+		case "0": return false;
+		case "true": return true;
+		case "false": return false;
+		}
+		
+		return false;
+	}
 }

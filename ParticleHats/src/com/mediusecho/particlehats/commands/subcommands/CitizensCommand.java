@@ -16,6 +16,8 @@ public class CitizensCommand extends Command {
 	public CitizensCommand ()
 	{
 		register(new ManageCitizenCommand());
+		register(new SetCitizensCommand());
+		register(new ClearCitizensCommand());
 	}
 	
 	@Override
@@ -23,6 +25,12 @@ public class CitizensCommand extends Command {
 	{
 		if (args.size() > 0)
 		{	
+			if (core.getHookManager().getCitizensHook() == null)
+			{
+				sender.sendMessage(Message.COMMAND_NPC_SUPPORT_ERROR);
+				return false;
+			}
+			
 			String argument = args.get(0);
 			if (subCommands.containsKey(argument))
 			{				

@@ -29,6 +29,7 @@ import com.mediusecho.particlehats.commands.subcommands.ParticlesCommand;
 import com.mediusecho.particlehats.commands.subcommands.ReloadCommand;
 import com.mediusecho.particlehats.commands.subcommands.SetCommand;
 import com.mediusecho.particlehats.commands.subcommands.SpigotHelpCommand;
+import com.mediusecho.particlehats.commands.subcommands.ToggleCommand;
 import com.mediusecho.particlehats.commands.subcommands.TypeCommand;
 
 public class CommandManager implements CommandExecutor, TabCompleter {
@@ -48,6 +49,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		mainCommand.register(new CreateCommand());
 		mainCommand.register(new ClearCommand());
 		mainCommand.register(new SetCommand());
+		mainCommand.register(new ToggleCommand());
 		mainCommand.register(new ParticlesCommand());
 		mainCommand.register(new GroupsCommand());
 		mainCommand.register(new TypeCommand());

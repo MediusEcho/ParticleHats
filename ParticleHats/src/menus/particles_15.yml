@@ -1,0 +1,338 @@
+version: 4.0
+settings:
+  title: Pick a particle, any particle
+  size: 6
+items:
+  '10':
+    name: '&6Colourful Redstone Halo'
+    id: REDSTONE
+    action:
+      left-click:
+        id: override
+    type: halo
+    animated: animated
+    particles:
+      '1':
+        particle: REDSTONE
+        color: random
+  '11':
+    name: '&6Sparkling Cape'
+    id: SHIELD
+    action:
+      left-click:
+        id: override
+    type: cape
+    location: chest
+    particles:
+      '1':
+        particle: CRIT
+  '12':
+    name: '&aPlumbob'
+    id: EMERALD
+    action:
+      left-click:
+        id: override
+    type: crystal
+    location: feet
+    particles:
+      '1':
+        particle: REDSTONE
+        color: 12582656
+  '13':
+    name: '&6Creeper Face'
+    id: CREEPER_HEAD
+    action:
+      left-click:
+        id: override
+    type: creeper_hat
+    location: feet
+    offset:
+      y: 1.0
+    tracking: track_head_movement
+    particles:
+      '1':
+        particle: REDSTONE
+        color: 65280
+  '14':
+    name: '&bAngel Wings'
+    id: ELYTRA
+    action:
+      left-click:
+        id: override
+    type: angel_wings
+    location: chest
+    offset:
+      z: -0.4
+    tracking: track_body_rotation
+    particles:
+      '1':
+        particle: REDSTONE
+        color: 16777215
+  '15':
+    name: '&4r&6a&ei&2n&9b&1o&bw'
+    id: RED_WOOL
+    action:
+      left-click:
+        id: override
+    type: arch
+    location: feet
+    particles:
+      '1':
+        particle: REDSTONE
+        color: 16711680
+      '2':
+        particle: REDSTONE
+        color: 16753920
+      '3':
+        particle: REDSTONE
+        color: 16776960
+      '4':
+        particle: REDSTONE
+        color: 32768
+      '5':
+        particle: REDSTONE
+        color: 255
+  '16':
+    name: '&4&lThief!'
+    id: DIAMOND
+    description:
+    - '&7Drops precious items'
+    - '&7as the player runs'
+    action:
+      left-click:
+        id: override
+    display-mode: display_randomly
+    type: trail
+    location: feet
+    mode: when_sprinting
+    particles:
+      '1':
+        particle: ITEMSTACK
+        items:
+        - GOLD_INGOT
+        - IRON_INGOT
+        - EMERALD
+        - DIAMOND
+        - GOLD_NUGGET
+        - IRON_NUGGET
+        - NETHER_STAR
+  '19':
+    name: '&fRocket Trail'
+    id: FIREWORK_ROCKET
+    action:
+      left-click:
+        id: override
+    type: trail
+    location: feet
+    mode: when_gliding
+    update-frequency: 1
+    particles:
+      '1':
+        particle: REDSTONE
+        color: 16777215
+        size: 6.0
+  '20':
+    name: '&5Magic Aura'
+    id: ENCHANTED_BOOK
+    action:
+      left-click:
+        id: override
+    type: trail
+    location: feet
+    count: 5
+    random-offset:
+      x: 0.5
+      z: 0.5
+    update-frequency: 1
+    particles:
+      '1':
+        particle: SPELL_WITCH
+  '22':
+    name: '&3Tornado'
+    id: HOPPER
+    description:
+    - '&7A small tornado under'
+    - '&7the player''s feet while'
+    - '&7they''re flying'
+    action:
+      left-click:
+        id: override
+    type: tornado
+    location: feet
+    mode: when_flying
+    animated: animated
+    update-frequency: 1
+    particles:
+      '1':
+        particle: FIREWORKS_SPARK
+      '2':
+        particle: FIREWORKS_SPARK
+  '37':
+    name: '&4Arrows'
+    tags:
+    - arrows
+    id: BOW
+    description:
+    - '&7Particles follow the'
+    - '&7arrows you shoot'
+    action:
+      left-click:
+        id: override
+    type: single_particle
+    location: feet
+    update-frequency: 1
+    particles:
+      '1':
+        particle: BARRIER
+  '40':
+    name: '&aShow Equipped Particles'
+    id: PLAYER_HEAD
+    action:
+      left-click:
+        id: active_particles
+  '23':
+    name: '&5Witches Sphere'
+    id: BLAZE_POWDER
+    action:
+      left-click:
+        id: override
+    type: sphere
+    location: feet
+    animated: animated
+    scale: 0.8
+    offset:
+      y: -0.5
+    update-frequency: 1
+    tracking: track_body_rotation
+    particles:
+      '1':
+        particle: SPELL_WITCH
+      '2':
+        particle: EMPTY_SPACE
+      '3':
+        particle: SPELL_WITCH
+      '4':
+        particle: EMPTY_SPACE
+      '5':
+        particle: SPELL_WITCH
+      '6':
+        particle: EMPTY_SPACE
+      '7':
+        particle: SPELL_WITCH
+      '8':
+        particle: EMPTY_SPACE
+      '9':
+        particle: SPELL_WITCH
+      '10':
+        particle: EMPTY_SPACE
+    nodes:
+      '1':
+        type: sphere
+        location: feet
+        animated: animated
+        offset:
+          y: -0.5
+        angle:
+          y: 45.0
+        update-frequency: 1
+        particles:
+          '1':
+            particle: EMPTY_SPACE
+          '2':
+            particle: SPELL_WITCH
+          '3':
+            particle: EMPTY_SPACE
+          '4':
+            particle: SPELL_WITCH
+          '5':
+            particle: EMPTY_SPACE
+          '6':
+            particle: SPELL_WITCH
+          '7':
+            particle: EMPTY_SPACE
+          '8':
+            particle: SPELL_WITCH
+          '9':
+            particle: EMPTY_SPACE
+          '10':
+            particle: SPELL_WITCH
+  '43':
+    name: '&3Animating Icons'
+    id: ORANGE_DYE
+    action:
+      left-click:
+        id: dummy
+    icon-update-frequency: 2
+    icons:
+    - PURPLE_DYE
+    - CYAN_DYE
+    - LIME_DYE
+    - GRAY_DYE
+    - LIGHT_GRAY_DYE
+    - CYAN_DYE
+    - RED_DYE
+    - LAPIS_LAZULI
+    - GREEN_DYE
+  '21':
+    name: '&2Notes'
+    id: NOTE_BLOCK
+    action:
+      left-click:
+        id: override
+    type: hoop
+    location: feet
+    animated: animated
+    speed: 1
+    scale: 0.8
+    offset:
+      y: 1.0
+    update-frequency: 1
+    tracking: track_head_movement
+    particles:
+      '1':
+        particle: NOTE
+  '25':
+    name: '&aWalking Billboard'
+    id: RED_DYE
+    action:
+      left-click:
+        id: override
+    type: particlehats
+    location: feet
+    scale: 0.2
+    offset:
+      y: 0.6
+    angle:
+      y: 180.0
+    update-frequency: 1
+    tracking: track_head_movement
+    particles:
+      '1':
+        particle: REDSTONE
+        color: 16777215
+        size: 0.3
+  '24':
+    name: '&bBubble Wings'
+    id: CYAN_DYE
+    action:
+      left-click:
+        id: override
+    type: wings
+    location: chest
+    offset:
+      z: -0.3
+    update-frequency: 1
+    tracking: track_body_rotation
+    particles:
+      '1':
+        particle: CURRENT_DOWN
+  '42':
+    name: '&fCustom Sounds'
+    id: MUSIC_DISC_MELLOHI
+    description:
+    - '&7Click me'
+    action:
+      left-click:
+        id: dummy
+    sound:
+      id: ENTITY_VILLAGER_YES

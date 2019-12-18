@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.hooks.citizens;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCDespawnEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.event.NPCSpawnEvent;
+import net.citizensnpcs.api.event.SpawnReason;
 import net.citizensnpcs.api.npc.NPC;
 
 public class CitizensHook implements Listener {
@@ -90,6 +92,11 @@ public class CitizensHook implements Listener {
 			return;
 		}
 		
+		// There shouldn't be particle data for a newly created NPC
+		if (event.getReason().equals(SpawnReason.CREATE)) {
+			return;
+		}
+		
 		if (!citizenHatStrings.containsKey(id)) {
 			return;
 		}
@@ -119,10 +126,47 @@ public class CitizensHook implements Listener {
 	public Entity getNPCEntity (int id)
 	{
 		NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+		
 		if (npc == null) {
 			return null;
 		}
+		
+		// Don't bother returning if the entity hasn't spawned yet
+		if (!npc.isSpawned()) {
+			return null;
+		}
+		
 		return npc.getEntity();
+	}
+	
+	public String getNPCName (int id)
+	{
+		NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+		
+		if (npc == null) {
+			return null;
+		}
+		
+		// Don't bother returning if the entity hasn't spawned yet
+		if (!npc.isSpawned()) {
+			return null;
+		}
+		
+		return npc.getFullName();
+	}
+	
+	public List<String> getNPCIds ()
+	{
+		List<String> ids = new ArrayList<String>();
+		Iterator<NPC> npcs = CitizensAPI.getNPCRegistry().iterator();
+		
+		while (npcs.hasNext())
+		{
+			NPC npc = npcs.next();
+			ids.add(Integer.toString(npc.getId()));
+		}
+		
+		return ids;
 	}
 	
 	public void saveCitizenData (Entity entity, EntityState entityState)
@@ -139,6 +183,7 @@ public class CitizensHook implements Listener {
 		{
 			citizenHatStrings.remove(id);
 			config.set(path, null);
+			
 			citizenConfig.save();
 			citizenConfig.reload();
 			
@@ -153,6 +198,8 @@ public class CitizensHook implements Listener {
 		}
 		
 		config.set(path, hatStrings);
+		citizenHatStrings.put(id, hatStrings);
+		
 		citizenConfig.save();
 		citizenConfig.reload();
 	}

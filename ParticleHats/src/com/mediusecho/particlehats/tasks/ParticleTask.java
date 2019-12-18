@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
@@ -89,6 +90,9 @@ public class ParticleTask extends BukkitRunnable {
 				
 				UUID entityID = entity.getUniqueId();
 				
+				// Checks and updates the entities mode
+				checkMode(entityID, entityState);
+				
 				List<Hat> activeHats = entityState.getActiveHats();
 				for (int i = 0; i < activeHats.size(); i++)
 				{
@@ -109,9 +113,6 @@ public class ParticleTask extends BukkitRunnable {
 						}
 					}
 					
-					// Checks and updates the entities mode
-					checkMode(entityID, entityState, hat);
-					
 					// Checks the hats against the entities mode
 					checkHat(entityID, entityState, hat, true);
 				}
@@ -131,11 +132,48 @@ public class ParticleTask extends BukkitRunnable {
 		essentialsVanishFlag = SettingsManager.FLAG_ESSENTIALS_VANISH.getBoolean();
 	}
 	
-	private void checkMode (UUID id, EntityState entityState, Hat hat)
+	private void checkMode (UUID id, EntityState entityState)
 	{
 		Entity entity = entityState.getOwner();
 		AFKState afkState = entityState.getAFKState();
 		PVPState pvpState = entityState.getPVPState();
+		
+		Location lastKnownLocation = entityState.getLastKnownLocation();
+		Location currentLocation = entity.getLocation();
+		
+		// Make sure there is always a last known location
+		if (lastKnownLocation == null || !(lastKnownLocation.getWorld().equals(currentLocation.getWorld()))) 
+		{
+			lastKnownLocation = currentLocation;
+			entityState.setLastKnownLocation(lastKnownLocation);
+		}
+		
+		// Update our last move time if the 2 locations are more than a block from each other
+		double activeDistance = lastKnownLocation.distanceSquared(currentLocation);
+		if (activeDistance >= 1) 
+		{
+			entityState.setLastMoveTime(System.currentTimeMillis());
+			entityState.setLastKnownLocation(currentLocation);
+		}
+		
+		if (afkState == AFKState.AFK)
+		{
+			Location afkLocation = entityState.getAFKLocation();
+			if (afkLocation != null)
+			{
+				double distance = 7;
+				if (afkLocation.getWorld().equals(currentLocation.getWorld())) {
+					distance = afkLocation.distanceSquared(currentLocation);
+				}
+				
+				if (distance > 6) 
+				{
+					entityState.setAFKState(AFKState.ACTIVE);
+					entityState.setLastKnownLocation(currentLocation);
+					entityState.setLastMoveTime(System.currentTimeMillis());
+				}
+			}
+		}
 		
 		if (afkState == AFKState.ACTIVE)
 		{
@@ -143,9 +181,11 @@ public class ParticleTask extends BukkitRunnable {
 			if (timeAFK > afkCooldown)
 			{
 				entityState.setAFKState(AFKState.AFK);
-				entityState.setAFKLocation(entity.getLocation());
+				entityState.setAFKLocation(currentLocation);
+				entityState.setLastKnownLocation(currentLocation);
 			}
 		}
+		
 		
 		if (pvpState == PVPState.ENGAGED)
 		{

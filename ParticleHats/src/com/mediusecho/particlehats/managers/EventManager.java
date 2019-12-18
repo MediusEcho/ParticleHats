@@ -7,7 +7,6 @@ import com.mediusecho.particlehats.listeners.ConnectionListener;
 import com.mediusecho.particlehats.listeners.EntityListener;
 import com.mediusecho.particlehats.listeners.InteractListener;
 import com.mediusecho.particlehats.listeners.InventoryListener;
-import com.mediusecho.particlehats.listeners.MovementListener;
 
 @SuppressWarnings("unused")
 public class EventManager {
@@ -17,7 +16,6 @@ public class EventManager {
 	// Events
 	private final InventoryListener  inventoryListener;
 	private final ChatListener       chatListener;
-	private final MovementListener   movementListener;
 	private final EntityListener     entityListener;
 	private final ConnectionListener connectionListener;
 	private final InteractListener   interactListener;
@@ -29,7 +27,6 @@ public class EventManager {
 		
 		inventoryListener  = new InventoryListener(core);
 		chatListener       = new ChatListener(core);
-		movementListener   = new MovementListener(core);
 		entityListener     = new EntityListener(core);
 		connectionListener = new ConnectionListener(core);
 		interactListener   = new InteractListener(core);

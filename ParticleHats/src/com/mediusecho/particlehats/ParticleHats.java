@@ -95,7 +95,7 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.3;
+	private final double LANG_VERSION = 1.4;
 	
 	private Map<UUID, EntityState> entityState;
 	
@@ -378,6 +378,15 @@ public class ParticleHats extends JavaPlugin {
 	
 	public EntityState getEntityState (Entity entity) {
 		return getEntityState(entity, -1);
+	}
+	
+	/**
+	 * Checks to see if this entity has an EntityState object loaded
+	 * @param entity
+	 * @return
+	 */
+	public boolean hasEntityState (Entity entity) {
+		return entityState.containsKey(entity.getUniqueId());
 	}
 	
 	/**
