@@ -54,11 +54,8 @@ public class ParticleHats extends JavaPlugin {
 	// [Future] Are features that i plan on adding.
 	// [?] Are ideas that may or may not get added.
 	
-	// TODO: [?] Ability to use particles that haven't been implemented yet by using their name.
-	// For when the plugin hasn't updated to support 1.x, but can still load the particles by name 
-	
 	// TODO: [?] Enjin economy support?
-	// TODO: [?] Head Database support?
+	// TODO: [?] Custom Player Head support? (Head Database, Heads Plugin)
 	// TODO: [?] Type texture support? Lets built-in types display custom images (eg. capes)
 	// TODO: [?] More flexible mode support?
 	// Similar to tags, Have a list of tags that will trigger particles displaying / disabling
