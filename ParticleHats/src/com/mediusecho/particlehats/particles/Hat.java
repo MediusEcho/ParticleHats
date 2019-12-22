@@ -74,6 +74,7 @@ public class Hat {
 	private int index               = -1;
 	private int demoDuration        = 200; // (10 Seconds in ticks)
 	private int editingAction       = -1;
+	private int animationDirection  = 1;
 	
 	private double scale = 1;
 	
@@ -906,6 +907,24 @@ public class Hat {
 	 */
 	public void setEditingAction (int editingAction) {
 		this.editingAction = editingAction;
+	}
+	
+	/**
+	 * Set the direction that animations will play for this hat.  
+	 * 1 = Forward, -1 = Reversed
+	 * @param animationDirection
+	 */
+	public void setAnimationDirection (int animationDirection) {
+		this.animationDirection = animationDirection;
+	}
+	
+	/**
+	 * Get the direction that animations will play for this hat.  
+	 * 1 = Forward, -1 = Reversed
+	 * @return
+	 */
+	public int getAnimationDirection () {
+		return animationDirection;
 	}
 	
 	/**
@@ -1748,6 +1767,7 @@ public class Hat {
 		clone.slot = slot;
 		clone.speed = speed;
 		clone.demoDuration = demoDuration;
+		clone.animationDirection = animationDirection;
 		clone.offset = offset.clone();
 		clone.randomOffset = randomOffset.clone();
 		clone.angle = angle.clone();
@@ -1813,6 +1833,7 @@ public class Hat {
 		clone.slot = slot;
 		clone.index = index;
 		clone.demoDuration = demoDuration;
+		clone.animationDirection = animationDirection;
 		clone.scale = scale;
 		clone.normalDescription = new ArrayList<String>(normalDescription);
 		clone.permissionDescription = new ArrayList<String>(permissionDescription);
@@ -1863,6 +1884,7 @@ public class Hat {
 		if (!hat.getOffset().equals(offset)) return false;
 		if (!hat.getRandomOffset().equals(randomOffset)) return false;
 		if (!hat.getAngle().equals(angle)) return false; 
+		if (hat.getAnimationDirection() != animationDirection) return false;
 		
 		if (hat.getCustomEffect() != null) {
 			if (!hat.getCustomEffect().equals(customEffect)) return false;

@@ -172,7 +172,7 @@ public abstract class Effect {
 					
 					clone.add(getTrackingPosition(hat, target, location, cos, sin));
 					displayParticle(clone, hat, particleIndex);
-					hat.setAnimationIndex(frameIndex, MathUtil.wrap(index + 1, size, 0));
+					hat.setAnimationIndex(frameIndex, MathUtil.wrap(index + hat.getAnimationDirection(), size, 0));
 				}
 				
 				// Display statically
