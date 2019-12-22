@@ -108,7 +108,7 @@ public class ParticleHats extends JavaPlugin {
 	private boolean enabled = false;
 	
 	// Debugging
-	public static final boolean debugging = false;
+	public static final boolean debugging = true;
 	
 	@Override
 	public void onEnable ()
