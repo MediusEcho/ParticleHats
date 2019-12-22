@@ -328,34 +328,48 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		{
 			if (!event.isShiftClick())
 			{
-				EditorTypeMenu editorTypeMenu = new EditorTypeMenu(core, editorManager, owner, (obj) ->
+				if (event.isLeftClick())
 				{
-					ParticleType type = targetHat.getType();
-					
-					// Reset animation if new type doesn't support it
-					if (!type.supportsAnimation() && targetHat.getAnimation() == ParticleAnimation.ANIMATED) {
-						targetHat.setAnimation(ParticleAnimation.STATIC);
-					}
-					
-					EditorLore.updateTrackingDescription(getItem(trackingButtonSlot), targetHat);
-					EditorLore.updateTypeDescription(getItem(10), targetHat);
-					
-					setButton(particleButtonSlot, getParticleItem(), getParticleAction());
-					
-					if (targetHat.getEffect().getParticlesSupported() == 1) {
-						EditorLore.updateParticleDescription(getItem(particleButtonSlot), targetHat, 0);
-					}
-					
-					else 
+					EditorTypeMenu editorTypeMenu = new EditorTypeMenu(core, editorManager, owner, (obj) ->
 					{
-						if (targetHat.getParticleData(0).hasPropertyChanges()) {
-							core.getDatabase().saveParticleData(editorBaseMenu.getMenuInventory().getName(), targetHat, 0);
+						ParticleType type = targetHat.getType();
+						
+						// Reset animation if new type doesn't support it
+						if (!type.supportsAnimation() && targetHat.getAnimation() == ParticleAnimation.ANIMATED) {
+							targetHat.setAnimation(ParticleAnimation.STATIC);
 						}
-					}
-				});
+						
+						EditorLore.updateTrackingDescription(getItem(trackingButtonSlot), targetHat);
+						EditorLore.updateTypeDescription(getItem(10), targetHat);
+						
+						setButton(particleButtonSlot, getParticleItem(), getParticleAction());
+						
+						if (targetHat.getEffect().getParticlesSupported() == 1) {
+							EditorLore.updateParticleDescription(getItem(particleButtonSlot), targetHat, 0);
+						}
+						
+						else 
+						{
+							if (targetHat.getParticleData(0).hasPropertyChanges()) {
+								core.getDatabase().saveParticleData(editorBaseMenu.getMenuInventory().getName(), targetHat, 0);
+							}
+						}
+					});
 				
-				menuManager.addMenu(editorTypeMenu);
-				editorTypeMenu.open();
+					menuManager.addMenu(editorTypeMenu);
+					editorTypeMenu.open();
+				}
+				
+				else if (event.isRightClick() && targetHat.getType().supportsAnimation())
+				{
+					EditorTypePropertiesMenu editorTypePropertiesMenu = new EditorTypePropertiesMenu(core, editorManager, owner, () ->
+					{
+						
+					});
+					
+					menuManager.addMenu(editorTypePropertiesMenu);
+					editorTypePropertiesMenu.open();
+				}
 			}
 			
 			else
