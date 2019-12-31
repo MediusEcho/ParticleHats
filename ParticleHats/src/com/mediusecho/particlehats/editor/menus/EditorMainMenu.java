@@ -1,5 +1,6 @@
 package com.mediusecho.particlehats.editor.menus;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -315,6 +316,8 @@ public class EditorMainMenu extends AbstractStaticMenu {
 			clone.setPermanent(false);
 			clone.setDuration(15);
 			clone.clearPropertyChanges();
+			
+			ownerState.clearActiveHats();
 			
 			core.getParticleManager().equipHat(owner, clone, false);
 			owner.closeInventory();
