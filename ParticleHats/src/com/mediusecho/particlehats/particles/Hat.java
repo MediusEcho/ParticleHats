@@ -56,7 +56,7 @@ public class Hat {
 	private ParticleAnimation animation     = ParticleAnimation.STATIC;
 	private ParticleTracking trackingMethod = ParticleTracking.TRACK_NOTHING;
 	
-	private PixelEffect customEffect;
+	private SkinnableEffect customEffect;
 	
 	private boolean isVanished  = false;
 	private boolean isHidden    = false;
@@ -561,7 +561,7 @@ public class Hat {
 	 * Set this hats custom effect
 	 * @param customEffect
 	 */
-	public void setCustomType (PixelEffect customEffect)
+	public void setCustomType (SkinnableEffect customEffect)
 	{
 		if (customEffect != null)
 		{
@@ -574,7 +574,7 @@ public class Hat {
 	 * Get this hats custom effect, null if nothing is set
 	 * @return
 	 */
-	public PixelEffect getCustomEffect () {
+	public SkinnableEffect getCustomEffect () {
 		return customEffect;
 	}
 	

@@ -33,6 +33,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.particles.ParticleEffect;
+import com.mediusecho.particlehats.particles.SkinnableEffect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.ColorData;
 import com.mediusecho.particlehats.particles.properties.IconData;
@@ -1270,7 +1271,7 @@ public class YamlDatabase implements Database {
 			{
 				config.set(path + "type.id", type.getName());
 				
-				PixelEffect effect = hat.getCustomEffect();
+				SkinnableEffect effect = hat.getCustomEffect();
 				if (effect != null) {
 					config.set(path + "type.name", effect.getImageNameWithoutExtension());
 				}

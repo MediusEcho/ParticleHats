@@ -22,7 +22,7 @@ public abstract class CommunityEffect extends PixelEffect {
 	
 	@Override
 	public String getName() {
-		return name;
+		return displayName;
 	}
 
 	@Override

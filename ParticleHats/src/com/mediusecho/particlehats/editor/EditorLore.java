@@ -16,6 +16,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.ParticleEffect.ParticleProperty;
+import com.mediusecho.particlehats.particles.SkinnableEffect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
 import com.mediusecho.particlehats.particles.properties.ItemStackData;
@@ -66,7 +67,7 @@ public class EditorLore {
 		
 		if (type.isCustom())
 		{
-			PixelEffect customEffect = hat.getCustomEffect();
+			SkinnableEffect customEffect = hat.getCustomEffect();
 			if (customEffect != null) {
 				custom = typeInfo[1] + Message.EDITOR_TYPE_MENU_TYPE_PREFIX.getValue().replace("{1}", StringUtil.capitalizeFirstLetter(customEffect.getImageName().toLowerCase()));
 			}
@@ -761,8 +762,9 @@ public class EditorLore {
 		
 		if (hat.getLeftClickAction() == ParticleAction.EQUIP || hat.getRightClickAction() == ParticleAction.EQUIP)
 		{
+			// TODO: Check back on the image display name for custom effect
 			String typeDesc = Message.EDITOR_HAT_TYPE_DESCRIPTION.getValue();
-			String type = hat.getType().isCustom() ? hat.getCustomEffect().getImageDisplayName() : hat.getType().getStrippedName();
+			String type = hat.getType().isCustom() ? hat.getCustomEffect().getDisplayName() : hat.getType().getStrippedName();
 			description.add(typeDesc.replace("{1}", type));
 			
 			String locationDesc = Message.EDITOR_HAT_LOCATION_DESCRIPTION.getValue();

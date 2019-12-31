@@ -17,6 +17,7 @@ import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.SkinnableEffect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.ui.AbstractStaticMenu;
@@ -270,7 +271,7 @@ public class EditorTypeMenu extends AbstractStaticMenu {
 			String currentEffectName = "";
 			if (targetHat.getType().isCustom())
 			{
-				PixelEffect customEffect = targetHat.getCustomEffect();
+				SkinnableEffect customEffect = targetHat.getCustomEffect();
 				if (customEffect != null) {
 					currentEffectName = customEffect.getImageName();
 				}
