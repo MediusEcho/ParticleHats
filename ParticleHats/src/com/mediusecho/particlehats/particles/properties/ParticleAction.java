@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.events.HatEquipEvent;
@@ -23,7 +22,6 @@ import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.PendingPurchaseMenu;
 import com.mediusecho.particlehats.ui.StaticMenu;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
-import com.mediusecho.particlehats.util.ItemUtil;
 
 public enum ParticleAction {
 
@@ -493,10 +491,6 @@ public enum ParticleAction {
 		if (equippedHats.contains(hat))
 		{
 			playerState.removeHat(hat);
-			ItemStack item = inventory.getItem(slot);
-			
-			ItemUtil.stripHighlight(item);
-			ItemUtil.setItemDescription(item, hat.getCachedDescription());
 			return true;
 		}
 		return false;

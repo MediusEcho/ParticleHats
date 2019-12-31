@@ -74,6 +74,60 @@ public class StaticMenu extends AbstractStaticMenu {
 		build();
 	}
 	
+	@Override
+	public void onItemSelected (ItemPointer pointer)
+	{
+		super.onItemSelected(pointer);
+		
+		ItemStack item = menuInventory.getItem(pointer.getSlot());
+		if (item == null) {
+			return;
+		}
+		
+		ItemUtil.highlightItem(item);
+		
+		ItemMeta itemMeta = item.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		
+		if (lore == null) {
+			lore = new ArrayList<String>();
+		}
+		
+		String equippedLore = Message.HAT_EQUIPPED_DESCRIPTION.getValue();
+		String[] lineInfo = StringUtil.parseValue(equippedLore, "1");
+		
+		if (lore.size() > 0) {
+			equippedLore = equippedLore.replace(lineInfo[0], lineInfo[1]);
+		} else {
+			equippedLore = equippedLore.replace(lineInfo[0], "");
+		}
+		
+		lore.addAll(StringUtil.parseDescription(equippedLore));
+		itemMeta.setLore(lore);
+		
+		item.setItemMeta(itemMeta);
+		inventory.setItem(pointer.getSlot(), item);
+	}
+	
+	@Override
+	public void onItemUnselected (ItemPointer pointer)
+	{
+		super.onItemUnselected(pointer);
+		
+		int slot = pointer.getSlot();
+		ItemStack item = menuInventory.getItem(slot);
+		if (item == null) {
+			return;
+		}
+		
+		Hat hat = menuInventory.getHat(slot);
+		
+		ItemUtil.stripHighlight(item);
+		ItemUtil.setItemDescription(item, hat.getCachedDescription());
+		
+		inventory.setItem(slot, item);
+	}
+	
 //	@Override
 //	public void open () 
 //	{
@@ -112,28 +166,8 @@ public class StaticMenu extends AbstractStaticMenu {
 			// Highlight our equipped hats
 			if (equippedHats.contains(hat))
 			{
-				ItemUtil.highlightItem(item);
-				
-				ItemMeta itemMeta = item.getItemMeta();
-				List<String> lore = itemMeta.getLore();
-				
-				if (lore == null) {
-					lore = new ArrayList<String>();
-				}
-				
-				String equippedLore = Message.HAT_EQUIPPED_DESCRIPTION.getValue();
-				String[] lineInfo = StringUtil.parseValue(equippedLore, "1");
-				
-				if (lore.size() > 0) {
-					equippedLore = equippedLore.replace(lineInfo[0], lineInfo[1]);
-				} else {
-					equippedLore = equippedLore.replace(lineInfo[0], "");
-				}
-				
-				lore.addAll(StringUtil.parseDescription(equippedLore));
-				itemMeta.setLore(lore);
-				
-				item.setItemMeta(itemMeta);
+				ItemPointer pointer = new ItemPointer(i, 0);
+				onItemSelected(pointer);
 			}
 			
 			// Lock hats that aren't equipped if we can

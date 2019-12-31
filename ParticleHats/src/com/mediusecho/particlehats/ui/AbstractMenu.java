@@ -1,6 +1,8 @@
 package com.mediusecho.particlehats.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,6 +32,8 @@ public abstract class AbstractMenu {
 	protected final Player owner;
 	protected final UUID ownerID;
 	
+	protected final List<ItemPointer> selectedItems;
+	
 	protected final Map<Integer, MenuAction> actions;
 	protected final static MenuAction emptyAction = (event, slot) -> { return MenuClickResult.NONE; };
 	
@@ -54,6 +58,7 @@ public abstract class AbstractMenu {
 			return MenuClickResult.NEUTRAL;
 		};
 		
+		selectedItems = new ArrayList<ItemPointer>();
 		actions = new HashMap<Integer, MenuAction>();
 	}
 	
@@ -153,6 +158,30 @@ public abstract class AbstractMenu {
 	 */
 	protected int getNormalIndex (int slot, int startingIndex, int offset) {
 		return (slot + ((slot / (9 - offset)) * offset) + startingIndex);
+	}
+	
+	/**
+	 * Called when an item is selected
+	 */
+	public void onItemSelected (ItemPointer pointer) 
+	{
+		if (selectedItems.contains(pointer)) {
+			return;
+		}
+		
+		selectedItems.add(pointer);
+	}
+	
+	/**
+	 * Called when an item is no longer selected
+	 */
+	public void onItemUnselected (ItemPointer pointer) 
+	{
+		if (!selectedItems.contains(pointer)) {
+			return;
+		}
+		
+		selectedItems.remove(pointer);
 	}
 	
 	

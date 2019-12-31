@@ -11,7 +11,10 @@ import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
+import com.mediusecho.particlehats.ui.AbstractMenu;
+import com.mediusecho.particlehats.ui.ItemPointer;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
 
 public class PlayerState extends EntityState {
 	
@@ -231,6 +234,41 @@ public class PlayerState extends EntityState {
 	 */
 	public List<ItemStack> getRecentItems () {
 		return recentItems;
+	}
+	
+	@Override
+	public void addHat (Hat hat)
+	{
+		super.addHat(hat);
+		
+		AbstractMenu menu = getStaticMenuFromCache(hat.getMenu());
+		if (menu != null) {
+			menu.onItemSelected(new ItemPointer(hat.getSlot(), 0));
+		}
+	}
+	
+	@Override
+	public void removeHat (Hat hat)
+	{
+		super.removeHat(hat);
+		
+		AbstractMenu menu = getStaticMenuFromCache(hat.getMenu());
+		if (menu != null) {
+			menu.onItemUnselected(new ItemPointer(hat.getSlot(), 0));
+		}
+	}
+	
+	private AbstractMenu getStaticMenuFromCache (String menu)
+	{
+		if (menuManager == null) {
+			return null;
+		}
+		
+		if (!(menuManager instanceof StaticMenuManager)) {
+			return null;
+		}
+		
+		return ((StaticMenuManager)menuManager).getMenuFromCache(menu);
 	}
 	
 	public enum AFKState
