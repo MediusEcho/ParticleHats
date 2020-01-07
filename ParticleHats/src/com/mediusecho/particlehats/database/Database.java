@@ -293,7 +293,8 @@ public interface Database {
 		PERMISSION_DESCRIPTION (2),
 		ICON (3),
 		TAGS (4),
-		ITEMSTACK (5);
+		ITEMSTACK (5),
+		POTION (6);
 		
 		private static Map<Integer, DataType> dataID = new HashMap<Integer, DataType>();
 		static 
