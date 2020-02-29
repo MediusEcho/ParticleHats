@@ -87,7 +87,10 @@ public enum ParticleEffect {
 	ASH                    (68, -1, 16, CompatibleMaterial.SOUL_SOIL),
 	CRIMSON_SPORE          (69, -1, 16, CompatibleMaterial.CRIMSON_FUNGI),
 	SOUL_FIRE_FLAME        (70, -1, 16, CompatibleMaterial.SOUL_FIRE_LANTERN),
-	WARPED_SPORE           (71, -1, 16, CompatibleMaterial.WARPED_FUNGI);
+	WARPED_SPORE           (71, -1, 16, CompatibleMaterial.WARPED_FUNGI),
+	DRIPPING_OBSIDIAN_TEAR (72, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	FALLING_OBSIDIAN_TEAR  (73, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	LANDING_OBSIDIAN_TEAR  (74, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN);
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
