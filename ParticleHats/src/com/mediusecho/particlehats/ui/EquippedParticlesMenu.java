@@ -35,13 +35,11 @@ public class EquippedParticlesMenu extends ListMenu {
 		
 		this.fromMenu = fromMenu;
 		this.playerState = core.getPlayerState(owner);
-		this.setInventory(0, Bukkit.createInventory(null, 54, Message.ACTIVE_PARTICLES_MENU_TITLE.getValue()));
 		
 		hatAction = (event, slot) -> 
 		{	
 			int index = (currentPage * contentRegion.getTotalSlots()) + contentRegion.getClampedIndex(slot);
 			
-			//int index = getClampedIndex(slot, 10, 2);
 			if (index >= playerState.getHatCount()) {
 				return MenuClickResult.NONE;
 			}
