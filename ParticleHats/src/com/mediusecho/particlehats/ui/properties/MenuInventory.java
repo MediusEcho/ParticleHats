@@ -1,4 +1,4 @@
-package com.mediusecho.particlehats.ui;
+package com.mediusecho.particlehats.ui.properties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.StringUtil;
 
+/**
+ * Represents a menus viewable content
+ * @author MediusEcho
+ *
+ */
 public class MenuInventory {
 
 	private Map<Integer, Hat> hats;
