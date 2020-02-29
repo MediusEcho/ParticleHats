@@ -24,6 +24,7 @@ import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ColorData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleModes;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.util.ItemUtil;
@@ -700,6 +701,36 @@ public class EditorLore {
 				.replace(selectInfo[0], select)
 				.replace(selectedInfo[0], selected)
 				.replace(descriptionInfo[0], desc);
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
+	}
+	
+	public static void updateModeItemDescription (ItemStack item, ParticleModes mode, boolean isSelected)
+	{
+		String description = Message.EDITOR_MODE_MENU_ITEM_DESCRIPTION.getValue();
+		String[] descriptionInfo = StringUtil.parseValue(description, "1");
+		String[] selectInfo = StringUtil.parseValue(description, "2");
+		String[] selectedInfo = StringUtil.parseValue(description, "3");
+		
+		String desc = mode.getDescription().equals("") ? "" : mode.getDescription() + descriptionInfo[1];
+		String select = isSelected ? "" : selectInfo[1];
+		String selected = isSelected ? selectedInfo[1] : "";
+		
+		description = description
+				.replace(selectInfo[0], select)
+				.replace(selectedInfo[0], selected)
+				.replace(descriptionInfo[0], desc);
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
+	}
+	
+	public static void updateModeItemDescription (ItemStack item, ParticleModes mode)
+	{
+		String description = Message.EDITOR_MODE_OVERVIEW_MENU_ITEM_DESCRIPTION.getValue();
+		String[] descriptionInfo = StringUtil.parseValue(description, "1");
+		
+		String desc = mode.getDescription().equals("") ? "" : mode.getDescription() + descriptionInfo[1];
+		description = description.replace(descriptionInfo[0], desc);
 		
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 	}
