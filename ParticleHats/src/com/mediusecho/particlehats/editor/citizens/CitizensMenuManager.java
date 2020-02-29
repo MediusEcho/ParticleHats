@@ -13,6 +13,7 @@ import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 
 public class CitizensMenuManager extends MenuManager {
 

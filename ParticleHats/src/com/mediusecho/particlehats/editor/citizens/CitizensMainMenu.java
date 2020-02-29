@@ -16,8 +16,10 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.ui.AbstractListMenu;
-import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.properties.MenuButton;
+import com.mediusecho.particlehats.ui.properties.MenuClickResult;
+import com.mediusecho.particlehats.ui.properties.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
 
 public class CitizensMainMenu extends AbstractListMenu {

@@ -12,6 +12,8 @@ import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.ui.AbstractStaticMenu;
+import com.mediusecho.particlehats.ui.properties.MenuClickEvent;
+import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 import com.mediusecho.particlehats.util.ItemUtil;
 
 public class EditorOffsetMenu extends AbstractStaticMenu {
