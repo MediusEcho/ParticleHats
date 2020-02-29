@@ -89,7 +89,7 @@ public class EditorModeMenu extends AbstractListMenu {
 				continue;
 			}
 			
-			ItemStack item = ItemUtil.createItem(CompatibleMaterial.ROSE_RED, pm.getDisplayName());
+			ItemStack item = ItemUtil.createItem(pm.getMode().getMenuItem(), pm.getDisplayName());
 			
 			boolean isSelected = activeModes.contains(pm);
 			if (isSelected) {
