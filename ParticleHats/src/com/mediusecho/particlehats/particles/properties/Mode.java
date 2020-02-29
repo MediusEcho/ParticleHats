@@ -1,5 +1,7 @@
 package com.mediusecho.particlehats.particles.properties;
 
+import org.bukkit.Material;
+
 import com.mediusecho.particlehats.player.EntityState;
 
 public interface Mode {
@@ -10,4 +12,6 @@ public interface Mode {
 	 * @return
 	 */
 	boolean isValid (EntityState entityState);
+	
+	Material getMenuItem ();
 }
