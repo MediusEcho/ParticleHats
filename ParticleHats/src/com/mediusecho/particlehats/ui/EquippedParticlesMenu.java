@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
@@ -13,9 +14,14 @@ import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.ui.menus.ListMenu;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.MenuClickResult;
+import com.mediusecho.particlehats.ui.properties.MenuContentRegion;
 
-public class EquippedParticlesMenu extends AbstractListMenu {
+public class EquippedParticlesMenu extends ListMenu {
 
 	final boolean fromMenu;
 	final PlayerState playerState;
@@ -25,16 +31,17 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 	
 	public EquippedParticlesMenu(ParticleHats core, MenuManager menuManager, Player owner, boolean fromMenu) 
 	{
-		super(core, menuManager, owner, true);
+		super(core, menuManager, owner, new MenuContentRegion(10, 43));
 		
 		this.fromMenu = fromMenu;
 		this.playerState = core.getPlayerState(owner);
-		this.totalPages = 1;
-		this.setMenu(0, Bukkit.createInventory(null, 54, Message.ACTIVE_PARTICLES_MENU_TITLE.getValue()));
+		this.setInventory(0, Bukkit.createInventory(null, 54, Message.ACTIVE_PARTICLES_MENU_TITLE.getValue()));
 		
 		hatAction = (event, slot) -> 
 		{	
-			int index = getClampedIndex(slot, 10, 2);
+			int index = (currentPage * contentRegion.getTotalSlots()) + contentRegion.getClampedIndex(slot);
+			
+			//int index = getClampedIndex(slot, 10, 2);
 			if (index >= playerState.getHatCount()) {
 				return MenuClickResult.NONE;
 			}
@@ -48,7 +55,7 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 			{
 				hat.setHidden(!hat.isHidden());
 				
-				ItemStack item = menus.get(currentPage).getItem(slot);
+				ItemStack item = getInventory(currentPage).getItem(slot);//menus.get(currentPage).getItem(slot);
 				EditorLore.updateActiveHatDescription(item, hat);
 				
 				if (hat.isHidden()) 
@@ -67,7 +74,7 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 			else if (event.isShiftRightClick()) 
 			{
 				playerState.removeHat(index);
-				deleteSlot(currentPage, slot);
+				deleteItem(currentPage, slot);
 			}
 			
 			return MenuClickResult.NEUTRAL;
@@ -87,38 +94,64 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 	}
 
 	@Override
-	protected void build() 
-	{				
-		for (int i = 0; i < 28; i++) {
-			setAction(getNormalIndex(i, 10, 2), hatAction);
-		}
-		
-		if (fromMenu)
+	public void build() 
+	{		
+		setAction(49, (event, slot) ->
 		{
-			setButton(0, 49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_GO_BACK), (event, slot) -> 
+			if (fromMenu)
 			{
-				StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
-				if (staticManager == null) {
-					return MenuClickResult.NONE;
-				}
+				StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
+				Menu previousMenu = staticManager.getPreviousOpenMenu();
 				
-				AbstractMenu previousMenu = staticManager.getPreviousOpenMenu();
 				if (previousMenu == null) {
 					return MenuClickResult.NONE;
 				}
 				
 				previousMenu.open();
-				return MenuClickResult.NEUTRAL;
-			});
+			}
+			
+			else {
+				owner.closeInventory();
+			}
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		setAction(50, (event, slot) ->
+		{
+			currentPage++;
+			open();
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		setAction(48, (event, slot) ->
+		{
+			currentPage--;
+			open();
+			return MenuClickResult.NEUTRAL;
+		});
+		
+		for (int i = 0; i < contentRegion.getTotalSlots(); i++) {
+			setAction(contentRegion.getNextSlot(i), hatAction);
 		}
 		
-		else
+		Message backButtonTitle = fromMenu ? Message.EDITOR_MISC_GO_BACK : Message.EDITOR_MISC_CLOSE;
+		int totalPages = MathUtil.calculatePageCount(playerState.getHatCount(), contentRegion.getTotalSlots());
+		
+		for (int i = 0; i < totalPages; i++)
 		{
-			setButton(0, 49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_CLOSE), (event, slot) ->
-			{
-				owner.closeInventory();
-				return MenuClickResult.NEUTRAL;
-			});
+			Inventory inventory = Bukkit.createInventory(null, 54, Message.ACTIVE_PARTICLES_MENU_TITLE.getValue());
+			
+			inventory.setItem(49, ItemUtil.createItem(Material.NETHER_STAR, backButtonTitle));
+			
+			if ((i + 1) < totalPages) {
+				inventory.setItem(50, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_NEXT_PAGE));
+			}
+			
+			if ((i + 1) > 1) {
+				inventory.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
+			}
+			
+			setInventory(i, inventory);
 		}
 		
 		List<Hat> equippedHats = playerState.getActiveHats();
@@ -128,19 +161,23 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 			return;
 		}
 		
-		int index = 0;
-		for (Hat hat : equippedHats)
+		for (int i = 0; i < equippedHats.size(); i++)
 		{
+			Hat hat = equippedHats.get(i);
 			ItemStack item = hat.getItem();
+			
 			EditorLore.updateActiveHatDescription(item, hat);
 			
-			if (!hat.isHidden()) {
-				ItemUtil.highlightItem(item);
-			} else {
+			if (hat.isHidden()) {
 				ItemUtil.stripHighlight(item);
+			} else {
+				ItemUtil.highlightItem(item);
 			}
 			
-			setItem(0, getNormalIndex(index++, 10, 2), item);
+			int page = contentRegion.getPage(i);
+			int slot = contentRegion.getNextSlot(i);
+			
+			setItem(page, slot, item);
 		}
 	}
 
@@ -156,9 +193,9 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 	}
 	
 	@Override
-	public void deleteSlot(int page, int slot)
+	public void deleteItem(int page, int slot)
 	{
-		super.deleteSlot(page, slot);
+		super.deleteItem(page, slot);
 		
 		if (playerState.getActiveHats().size() == 0) {
 			setEmpty(true);
