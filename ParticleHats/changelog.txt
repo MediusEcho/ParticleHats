@@ -1,3 +1,11 @@
+4.2.1
+- Fixes:
+  - Fixed hat descriptions not being updated in menus if close-menu-on-equip is set to false
+  - Fixed toggle action not saving toggle status when a player left the server
+  
+- Changes:
+  - Temporarily equipping particles from the editor will now clear all active particles before equipping. 
+
 4.2.0
 - Fixed an issue that would prevent particles from loading when an NPC respawned.
 - Fixed when_moving, when_afk, & when_peaceful modes not working on a NPC.
