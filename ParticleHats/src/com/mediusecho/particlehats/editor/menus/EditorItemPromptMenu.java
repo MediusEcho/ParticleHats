@@ -13,12 +13,12 @@ import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.ui.AbstractStaticMenu;
+import com.mediusecho.particlehats.ui.menus.SingularMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorItemPromptMenu extends AbstractStaticMenu {
+public class EditorItemPromptMenu extends SingularMenu {
 
 	private final EditorMenuManager editorManager;
 	private final MenuObjectCallback callback;

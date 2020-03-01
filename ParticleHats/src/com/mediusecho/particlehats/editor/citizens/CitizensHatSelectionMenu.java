@@ -13,14 +13,14 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.IconData;
 import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
-import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.menus.SingularMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 import com.mediusecho.particlehats.ui.properties.MenuInventory;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class CitizensHatSelectionMenu extends AbstractStaticMenu {
+public class CitizensHatSelectionMenu extends SingularMenu {
 
 	private final MenuInventory menuInventory;
 	private final MenuAction hatAction;

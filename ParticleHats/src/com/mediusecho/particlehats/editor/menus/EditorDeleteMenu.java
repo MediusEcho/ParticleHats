@@ -8,12 +8,12 @@ import org.bukkit.inventory.ItemStack;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.menus.SingularMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorDeleteMenu extends AbstractStaticMenu {
+public class EditorDeleteMenu extends SingularMenu {
 
 	private final EditorBaseMenu editorBaseMenu;
 	

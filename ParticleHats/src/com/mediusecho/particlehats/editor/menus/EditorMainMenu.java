@@ -24,12 +24,12 @@ import com.mediusecho.particlehats.particles.properties.ParticleModes;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractStaticMenu;
+import com.mediusecho.particlehats.ui.menus.SingularMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 
-public class EditorMainMenu extends AbstractStaticMenu {
+public class EditorMainMenu extends SingularMenu {
 
 	protected int particleButtonSlot = 39;
 	protected int trackingButtonSlot = 29;
