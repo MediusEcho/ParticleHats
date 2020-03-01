@@ -1,44 +1,47 @@
-package com.mediusecho.particlehats.ui;
+package com.mediusecho.particlehats.ui.menus;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.properties.MenuButton;
 
 /**
- * Menu that only has one inventory
+ * Represents a menu with only one inventory to interact with
  * @author MediusEcho
  *
  */
-public abstract class AbstractStaticMenu extends AbstractMenu {
+public abstract class SingularMenu extends MenuImpl {
 
 	protected Inventory inventory;
 	
-	public AbstractStaticMenu(ParticleHats core, MenuManager menuManager, Player owner) 
+	public SingularMenu(ParticleHats core, MenuManager menuManager, Player owner) 
 	{
 		super(core, menuManager, owner);
 	}
-	
+
 	@Override
-	public void open () 
+	public void open() 
 	{
 		menuManager.isOpeningMenu(this);
 		owner.openInventory(inventory);
 	}
-	
+
 	@Override
-	public boolean hasInventory (Inventory inventory) {
+	public boolean hasInventory(Inventory inventory) {
 		return this.inventory.equals(inventory);
 	}
 	
 	@Override
-	public String getName () {
-		return "";
-	}
+	public void onClose (boolean forced) {}
+	
+	@Override
+	public void onTick (int ticks) {}
 	
 	/**
-	 * Get the item at this slot
+	 * Returns the item stored at the given slot
 	 * @param slot
 	 * @return
 	 */
@@ -47,7 +50,7 @@ public abstract class AbstractStaticMenu extends AbstractMenu {
 	}
 	
 	/**
-	 * Place an item into this inventory
+	 * Sets the item stored at the given slot
 	 * @param slot
 	 * @param item
 	 */
@@ -71,10 +74,10 @@ public abstract class AbstractStaticMenu extends AbstractMenu {
 	 * Set the MenuButton for the given slot
 	 * @param button
 	 */
-	protected void setButton (int slot, MenuButton button)
+	protected void setButton (int slot, MenuButton button) 
 	{
 		setItem(slot, button.getItem());
-		setAction(slot, button.getAction());
+		setAction(slot, button.getAction());	
 	}
 
 }
