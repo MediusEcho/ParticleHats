@@ -13,11 +13,12 @@ import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
-import com.mediusecho.particlehats.ui.AbstractListMenu;
+import com.mediusecho.particlehats.ui.menus.ListMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
+import com.mediusecho.particlehats.ui.properties.MenuContentRegion;
 import com.mediusecho.particlehats.util.ItemUtil;
 
-public class EditorTagMenuOverview extends AbstractListMenu {
+public class EditorTagMenuOverview extends ListMenu {
 
 	private final EditorMenuManager editorManager;
 	private final Hat targetHat;
@@ -28,13 +29,12 @@ public class EditorTagMenuOverview extends AbstractListMenu {
 	
 	public EditorTagMenuOverview(ParticleHats core, EditorMenuManager menuManager, Player owner) 
 	{
-		super(core, menuManager, owner, true);
+		super(core, menuManager, owner, MenuContentRegion.defaultLayout);
 		
 		this.editorManager = menuManager;
 		this.targetHat = menuManager.getBaseHat();
-		this.totalPages = 1;
 		
-		setMenu(0, Bukkit.createInventory(null, 54, Message.EDITOR_TAG_OVERVIEW_MENU_TITLE.getValue()));
+		setInventory(0, Bukkit.createInventory(null, 54, Message.EDITOR_TAG_OVERVIEW_MENU_TITLE.getValue()));
 		
 		build();
 	}
@@ -101,15 +101,13 @@ public class EditorTagMenuOverview extends AbstractListMenu {
 		{
 			if (event.isShiftRightClick())
 			{
-				deleteSlot(0, slot);
+				deleteItem(0, slot);
 				return MenuClickResult.NEGATIVE;
 			}
 			return MenuClickResult.NONE;
 		};
 		
-		for (int i = 0; i < 28; i++) {
-			setAction(getNormalIndex(i, 10, 2), editAction);
-		}
+		contentRegion.fillRegion(this, editAction);
 		
 		// Tags
 		List<ParticleTag> tags = targetHat.getTags();
@@ -125,7 +123,7 @@ public class EditorTagMenuOverview extends AbstractListMenu {
 			ParticleTag tag = tags.get(i);
 			ItemStack tagItem = ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), Message.EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION);
 			
-			setItem(0, getNormalIndex(i, 10, 2), tagItem);
+			setItem(0, contentRegion.getNormalIndex(i), tagItem);
 		}
 	}
 
@@ -136,16 +134,13 @@ public class EditorTagMenuOverview extends AbstractListMenu {
 			core.getDatabase().saveMetaData(editorManager.getMenuName(), targetHat, DataType.TAGS, -1);
 		}
 	}
-
-	@Override
-	public void onTick(int ticks) {}
 	
 	@Override
-	public void deleteSlot (int page, int slot)
+	public void deleteItem (int page, int slot)
 	{
-		super.deleteSlot(page, slot);
+		super.deleteItem(page, slot);
 		
-		int clampedIndex = getClampedIndex(slot, 10, 2);
+		int clampedIndex = contentRegion.getClampedIndex(slot);
 		List<ParticleTag> tags = targetHat.getTags();
 		
 		tags.remove(clampedIndex);
