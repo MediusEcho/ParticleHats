@@ -1,5 +1,8 @@
 package com.mediusecho.particlehats.ui.properties;
 
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.menus.Menu.MenuAction;
+
 /**
  * Represents a region of dynamic content in a menu
  * @author MediusEcho
@@ -80,6 +83,18 @@ public class MenuContentRegion {
 	
 	public int getNextSlot (int size) {
 		return getNormalIndex(size % totalSlots);
+	}
+	
+	/**
+	 * Fills the content region with a given action
+	 * @param menu
+	 * @param action
+	 */
+	public void fillRegion (Menu menu, MenuAction action)
+	{
+		for (int i = 0; i < getTotalSlots(); i++) {
+			menu.setAction(getNormalIndex(i), action);
+		}
 	}
 	
 }
