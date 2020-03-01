@@ -1,6 +1,7 @@
 package com.mediusecho.particlehats.particles;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,12 @@ import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleModes;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
@@ -82,6 +85,8 @@ public class Hat {
 	private List<String> cachedDescription;
 	
 	private List<ParticleTag> tags;
+	private List<ParticleModes> whitelistedModes;
+	private List<ParticleModes> blacklistedModes;
 	private List<Hat> nodes;
 	private Hat parent;
 	
@@ -114,6 +119,8 @@ public class Hat {
 		permissionDescription = new ArrayList<String>();
 		cachedDescription     = new ArrayList<String>();
 		tags                  = new ArrayList<ParticleTag>();
+		whitelistedModes      = new ArrayList<ParticleModes>();
+		blacklistedModes      = new ArrayList<ParticleModes>();
 		nodes                 = new ArrayList<Hat>();
 		particleData          = new HashMap<Integer, ParticleData>();
 		animationIndex        = new HashMap<Integer, Integer>();
@@ -1011,6 +1018,78 @@ public class Hat {
 	}
 	
 	/**
+	 * Adds a mode to this hats whitelist
+	 * The whitelist contains modes that will allow this hat's particle to display
+	 * @param mode
+	 */
+	public boolean addWhitelistedMode (ParticleModes mode)
+	{
+		if (whitelistedModes.contains(mode)) {
+			return false;
+		}
+		whitelistedModes.add(mode);
+		return true;
+	}
+	
+	/**
+	 * Removes a previously whitelisted mode from this hat
+	 * @param mode
+	 */
+	public void removeWhitelistedMode (ParticleModes mode) {
+		whitelistedModes.remove(mode);
+	}
+	
+	public List<ParticleModes> getWhitelistedModes () {
+		return whitelistedModes;
+	}
+	
+	/**
+	 * Adds a mode to this hats blacklist
+	 * The blacklist contains modes that will prevent this hat's particle from displaying
+	 * @param mode
+	 */
+	public boolean addBlacklistedMode (ParticleModes mode)
+	{
+		if (blacklistedModes.contains(mode)) {
+			return false;
+		}
+		blacklistedModes.add(mode);
+		return true;
+	}
+	
+	public void removeBlacklistedMode (ParticleModes mode) {
+		blacklistedModes.remove(mode);
+	}
+	
+	public List<ParticleModes> getBlacklistedModes () {
+		return blacklistedModes;
+	}
+	
+	/**
+	 * Checks to see if this hat can be displayed based on the mode white/blacklist
+	 * @param playerState
+	 * @return
+	 */
+	public boolean canDisplay (EntityState playerState)
+	{		
+		for (ParticleModes pm : blacklistedModes)
+		{
+			if (pm.getMode().isValid(playerState)) {
+				return false;
+			}
+		}
+		
+		for (ParticleModes pm : whitelistedModes)
+		{
+			if (pm.getMode().isValid(playerState)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Adds a node to this hats node list
 	 * @param node
 	 */
@@ -1758,6 +1837,14 @@ public class Hat {
 			clone.setParticleData(i, getParticleData(i).clone());
 		}
 		
+		for (ParticleModes mode : whitelistedModes) {
+			clone.addWhitelistedMode(mode);
+		}
+		
+		for (ParticleModes mode : blacklistedModes) {
+			clone.addBlacklistedMode(mode);
+		}
+		
 		for (Hat node : nodes) {
 			clone.addNode(node.equippableClone());
 		}
@@ -1889,6 +1976,8 @@ public class Hat {
 			if (!hat.getParticleData(i).equals(getParticleData(i))) return false;
 		}
 		
+		if (hat.getWhitelistedModes().size() != getWhitelistedModes().size()) return false;
+		if (hat.getBlacklistedModes().size() != getBlacklistedModes().size()) return false;
 		for (int i = 0; i < nodes.size(); i++) 
 		{
 			Hat node = hat.getNode(i);
