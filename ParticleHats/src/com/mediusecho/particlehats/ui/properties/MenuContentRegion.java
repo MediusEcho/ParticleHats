@@ -84,6 +84,11 @@ public class MenuContentRegion {
 		return Math.floorDiv(size, totalSlots);
 	}
 	
+	/**
+	 * Returns the next inventory slot based on the size provided
+	 * @param size
+	 * @return
+	 */
 	public int getNextSlot (int size) {
 		return getNormalIndex(size % totalSlots);
 	}
