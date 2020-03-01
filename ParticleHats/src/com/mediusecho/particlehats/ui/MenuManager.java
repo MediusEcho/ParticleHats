@@ -13,7 +13,8 @@ import org.bukkit.inventory.Inventory;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 
 public abstract class MenuManager {
 
@@ -23,7 +24,7 @@ public abstract class MenuManager {
 	protected final UUID ownerID;
 	protected final PlayerState ownerState;
 	
-	protected Deque<AbstractMenu> openMenus;
+	protected Deque<Menu> openMenus;
 	
 	protected boolean openingMenu = false;
 	
@@ -35,10 +36,10 @@ public abstract class MenuManager {
 		this.ownerID = owner.getUniqueId();
 		this.ownerState = core.getPlayerState(owner);
 		
-		openMenus = new ArrayDeque<AbstractMenu>();
+		openMenus = new ArrayDeque<Menu>();
 	}
 	
-	protected void onClick (InventoryClickEvent event, boolean inMenu, AbstractMenu menu)
+	protected void onClick (InventoryClickEvent event, boolean inMenu, Menu menu)
 	{
 		if (menu == null) {
 			return;
@@ -46,7 +47,7 @@ public abstract class MenuManager {
 		
 		final Inventory inventory = event.getInventory();
 		if (!menu.hasInventory(inventory)) 
-		{			
+		{
 			ownerState.setMenuManager(null);
 			return;
 		}
@@ -73,7 +74,7 @@ public abstract class MenuManager {
 	 * Notifies the manager that this menu will be opened
 	 * @param menu
 	 */
-	public void isOpeningMenu (AbstractMenu menu) {
+	public void isOpeningMenu (Menu menu) {
 		openingMenu = true;
 	}
 	
@@ -81,7 +82,7 @@ public abstract class MenuManager {
 	 * Add a new menu to the stack
 	 * @param menu
 	 */
-	public void addMenu (AbstractMenu menu) {
+	public void addMenu (Menu menu) {
 		openMenus.add(menu);
 	}
 	
@@ -89,7 +90,7 @@ public abstract class MenuManager {
 	 * Returns the menu currently being viewed
 	 * @return
 	 */
-	public AbstractMenu getCurrentMenu () {
+	public Menu getCurrentMenu () {
 		return openMenus.getLast();
 	}
 	
@@ -146,7 +147,7 @@ public abstract class MenuManager {
 	 */
 	public void willUnregister ()
 	{
-		for (AbstractMenu menu : openMenus) {
+		for (Menu menu : openMenus) {
 			menu.onClose(true);
 		}
 		unregister();

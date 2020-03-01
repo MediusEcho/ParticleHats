@@ -10,10 +10,10 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu;
-import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.MenuInventory;
 
 public class MainCommand extends Command {
 
@@ -64,7 +64,7 @@ public class MainCommand extends Command {
 			}
 			
 			StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
-			AbstractMenu menu = new StaticMenu(core, staticManager, sender.getPlayer(), inventory);
+			Menu menu = new StaticMenu(core, staticManager, sender.getPlayer(), inventory);
 			
 			staticManager.addMenu(menu);
 			menu.open();

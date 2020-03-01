@@ -9,10 +9,9 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.hooks.citizens.CitizensHook;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.EntityState;
-import com.mediusecho.particlehats.ui.AbstractMenu;
-import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.menus.Menu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 
 public class CitizensMenuManager extends MenuManager {
@@ -52,7 +51,7 @@ public class CitizensMenuManager extends MenuManager {
 	@Override
 	public void onTick (int ticks) 
 	{
-		AbstractMenu menu = getCurrentMenu();
+		Menu menu = getCurrentMenu();
 		if (menu == null) {
 			return;
 		}

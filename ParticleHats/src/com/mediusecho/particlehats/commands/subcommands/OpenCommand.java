@@ -12,9 +12,9 @@ import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu;
-import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
 
 public class OpenCommand extends Command {
@@ -84,7 +84,7 @@ public class OpenCommand extends Command {
 				return false;
 			}
 			
-			AbstractMenu menu = getRequestedMenu(playerState, args.get(0), sender);
+			Menu menu = getRequestedMenu(playerState, args.get(0), sender);
 			if (menu == null) {
 				return false;
 			}
@@ -207,7 +207,7 @@ public class OpenCommand extends Command {
 		return false;
 	}
 	
-	public AbstractMenu getRequestedMenu (PlayerState playerState, String requestedMenuName, Sender sender)
+	public Menu getRequestedMenu (PlayerState playerState, String requestedMenuName, Sender sender)
 	{
 		// Grab the name without any extensions
 		String menuName = (requestedMenuName.contains(".") ? requestedMenuName.split("\\.")[0] : requestedMenuName);
@@ -219,7 +219,7 @@ public class OpenCommand extends Command {
 		}
 		
 		StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
-		AbstractMenu menu = staticManager.getMenuFromCache(menuName);
+		Menu menu = staticManager.getMenuFromCache(menuName);
 		
 		if (menu == null)
 		{

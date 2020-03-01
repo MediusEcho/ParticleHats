@@ -9,14 +9,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.managers.SettingsManager;
-import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.MenuClickResult;
 import com.mediusecho.particlehats.util.MathUtil;
 
 public class StaticMenuManager extends MenuManager {
 
-	private Map<String, AbstractMenu> menuCache;
-	private AbstractMenu currentOpenMenu;
-	private AbstractMenu previousOpenMenu;
+	private Map<String, Menu> menuCache;
+	private Menu currentOpenMenu;
+	private Menu previousOpenMenu;
 	
 	private final Sound sound;
 	private final float soundVolume;
@@ -26,7 +27,7 @@ public class StaticMenuManager extends MenuManager {
 	{
 		super(core, owner);
 		
-		this.menuCache = new HashMap<String, AbstractMenu>(); 
+		this.menuCache = new HashMap<String, Menu>(); 
 		this.sound = SettingsManager.MENU_SOUND_ID.getSound();
 		this.soundVolume = (float) SettingsManager.MENU_SOUND_VOLUME.getDouble();
 		this.soundPitch = (float) SettingsManager.MENU_SOUND_PITCH.getDouble();
@@ -38,7 +39,7 @@ public class StaticMenuManager extends MenuManager {
 	}
 	
 	@Override
-	public void addMenu (AbstractMenu menu) {
+	public void addMenu (Menu menu) {
 		menuCache.put(menu.getName(), menu);
 	}
 
@@ -46,7 +47,7 @@ public class StaticMenuManager extends MenuManager {
 	public void open() { }
 	
 	@Override
-	public void isOpeningMenu (AbstractMenu menu)
+	public void isOpeningMenu (Menu menu)
 	{
 		previousOpenMenu = currentOpenMenu;
 		currentOpenMenu = menu;
@@ -79,7 +80,7 @@ public class StaticMenuManager extends MenuManager {
 	 * @param name
 	 * @return
 	 */
-	public AbstractMenu getMenuFromCache (String name)
+	public Menu getMenuFromCache (String name)
 	{
 		if (menuCache.containsKey(name)) {
 			return menuCache.get(name);
@@ -91,7 +92,7 @@ public class StaticMenuManager extends MenuManager {
 	 * Get the previously opened AbstractMenu
 	 * @return
 	 */
-	public AbstractMenu getPreviousOpenMenu () {
+	public Menu getPreviousOpenMenu () {
 		return previousOpenMenu;
 	}
 }

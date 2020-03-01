@@ -11,10 +11,10 @@ import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
-import com.mediusecho.particlehats.ui.AbstractMenu;
-import com.mediusecho.particlehats.ui.ItemPointer;
 import com.mediusecho.particlehats.ui.MenuManager;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.ItemPointer;
 
 public class PlayerState extends EntityState {
 	
@@ -241,9 +241,9 @@ public class PlayerState extends EntityState {
 	{
 		super.addHat(hat);
 		
-		AbstractMenu menu = getStaticMenuFromCache(hat.getMenu());
+		Menu menu = getStaticMenuFromCache(hat.getMenu());
 		if (menu != null) {
-			menu.onItemSelected(new ItemPointer(hat.getSlot(), 0));
+			menu.selectItem(new ItemPointer(hat.getSlot(), 0));
 		}
 	}
 	
@@ -252,13 +252,13 @@ public class PlayerState extends EntityState {
 	{
 		super.removeHat(hat);
 		
-		AbstractMenu menu = getStaticMenuFromCache(hat.getMenu());
+		Menu menu = getStaticMenuFromCache(hat.getMenu());
 		if (menu != null) {
-			menu.onItemUnselected(new ItemPointer(hat.getSlot(), 0));
+			menu.unselectItem(new ItemPointer(hat.getSlot(), 0));
 		}
 	}
 	
-	private AbstractMenu getStaticMenuFromCache (String menu)
+	private Menu getStaticMenuFromCache (String menu)
 	{
 		if (menuManager == null) {
 			return null;

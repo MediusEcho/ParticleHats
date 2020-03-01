@@ -13,8 +13,8 @@ import com.mediusecho.particlehats.commands.Sender;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.ui.menus.Menu;
 
 public class OpenPlayerCommand extends Command {
 	
@@ -54,7 +54,7 @@ public class OpenPlayerCommand extends Command {
 			return false;
 		}
 		
-		AbstractMenu menu = parent.getRequestedMenu(playerState, args.get(0), sender);
+		Menu menu = parent.getRequestedMenu(playerState, args.get(0), sender);
 		if (menu == null) {
 			return false;
 		}

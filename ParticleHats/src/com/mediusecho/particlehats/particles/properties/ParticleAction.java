@@ -16,12 +16,12 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.EquippedParticlesMenu;
-import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.PendingPurchaseMenu;
 import com.mediusecho.particlehats.ui.StaticMenu;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.MenuInventory;
 
 public enum ParticleAction {
 
@@ -247,7 +247,7 @@ public enum ParticleAction {
 							playerState.setPendingPurchase(hat);
 							
 							MenuInventory purchaseInventory = core.getDatabase().getPurchaseMenu(playerState);
-							AbstractMenu pendingPurchaseMenu;
+							Menu pendingPurchaseMenu;
 							
 							if (purchaseInventory != null) {
 								pendingPurchaseMenu = new StaticMenu(core, staticManager, player, purchaseInventory);
@@ -340,7 +340,7 @@ public enum ParticleAction {
 					return;
 				}
 				
-				AbstractMenu menu = staticManager.getMenuFromCache(argument);
+				Menu menu = staticManager.getMenuFromCache(argument);
 				if (menu != null) {
 					menu.open();
 				}
@@ -476,7 +476,7 @@ public enum ParticleAction {
 	private void gotoPreviousMenu (PlayerState playerState)
 	{
 		StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
-		AbstractMenu menu = staticManager.getPreviousOpenMenu();
+		Menu menu = staticManager.getPreviousOpenMenu();
 		
 		if (menu == null) {
 			return;

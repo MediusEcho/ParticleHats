@@ -10,10 +10,10 @@ import com.mediusecho.particlehats.editor.MetaState;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu;
-import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.ui.menus.Menu;
+import com.mediusecho.particlehats.ui.properties.MenuInventory;
 
 public class CommandListener implements Listener {
 
@@ -57,7 +57,7 @@ public class CommandListener implements Listener {
 				event.setCancelled(true);
 				
 				StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
-				AbstractMenu menu = new StaticMenu(core, staticManager, player, inventory);
+				Menu menu = new StaticMenu(core, staticManager, player, inventory);
 				
 				staticManager.addMenu(menu);
 				menu.open();
