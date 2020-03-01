@@ -80,7 +80,7 @@ public class MathUtil {
 	 * @return
 	 */
 	public static int calculatePageCount (double totalCount, int itemsPerPage) {
-		return (int) Math.max(Math.ceil((totalCount - 1) / itemsPerPage), 1);
+		return (int) Math.max(Math.ceil((double) totalCount / (double) itemsPerPage), 1);
 	}
 	
 	/**
