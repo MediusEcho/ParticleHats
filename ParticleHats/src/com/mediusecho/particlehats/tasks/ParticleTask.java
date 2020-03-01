@@ -186,7 +186,6 @@ public class ParticleTask extends BukkitRunnable {
 			}
 		}
 		
-		
 		if (pvpState == PVPState.ENGAGED)
 		{
 			final long timeEngaged = System.currentTimeMillis() - entityState.getLastCombatTime();
@@ -198,89 +197,8 @@ public class ParticleTask extends BukkitRunnable {
 	
 	private void checkHat (UUID id, EntityState entityState, Hat hat, boolean checkNode)
 	{
-		Entity entity = entityState.getOwner();
-		AFKState afkState = entityState.getAFKState();
-		PVPState pvpState = entityState.getPVPState();
-		
-		switch (hat.getMode())
-		{
-			case ACTIVE:
-			{
-				displayHat(entity, hat);
-				break;
-			}
-			
-			case WHEN_MOVING:
-			{
-				if (afkState == AFKState.ACTIVE) {
-					displayHat(entity, hat);
-				}
-				break;
-			}
-			
-			case WHEN_AFK:
-			{
-				if (afkState == AFKState.AFK) {
-					displayHat(entity, hat);
-				}
-				break;
-			}
-			
-			case WHEN_PEACEFUL:
-			{
-				if (pvpState == PVPState.PEACEFUL) {
-					displayHat(entity, hat);
-				}
-				break;
-			}
-			
-			case WHEN_GLIDING:
-			{
-				if (entity instanceof Player)
-				{
-					Player player = (Player)entity;
-					if (player.isGliding()) {
-						displayHat(player, hat);
-					}
-				}
-				break;
-			}
-			
-			case WHEN_SPRINTING:
-			{
-				if (entity instanceof Player)
-				{
-					Player player = (Player)entity;
-					if (player.isSprinting()) {
-						displayHat(entity, hat);
-					}
-				}
-				break;
-			}
-			
-			case WHEN_SWIMMING:
-			{
-				if (entity instanceof Player)
-				{
-					Player player = (Player)entity;
-					if (player.isSwimming()) {
-						displayHat(entity, hat);
-					}
-				}
-				break;
-			}
-			
-			case WHEN_FLYING:
-			{
-				if (entity instanceof Player)
-				{
-					Player player = (Player)entity;
-					if (player.isFlying()) {
-						displayHat(entity, hat);
-					}
-				}
-				break;
-			}
+		if (hat.canDisplay(entityState)) {
+			displayHat(entityState.getOwner(), hat);
 		}
 		
 		// Loop through and check each node hat
@@ -306,27 +224,8 @@ public class ParticleTask extends BukkitRunnable {
 		
 		if (entity instanceof Player)
 		{
-			PotionEffect potion = hat.getPotion();
-			if (potion != null) {
-				((Player)entity).addPotionEffect(potion);
-			}
-		}
-	}
-
-	private void displayHat (Player player, Hat hat)
-	{
-		ParticleType type = hat.getType();
-		if (type != ParticleType.NONE)
-		{
-			// Continue if we're displaying a node, or if we can't use a tag
-			if (handleTags(player, hat, ticks))
-			{
-				hat.displayType(ticks, player);
-//				
-//				PotionEffect potion = hat.getPotion();
-//				if (potion != null && !player.hasPotionEffect(potion.getType())) {
-//					player.addPotionEffect(potion, false);
-//				}
+			if (hat.hasPotionData()) {
+				hat.applyPotions((Player) entity);
 			}
 		}
 	}
