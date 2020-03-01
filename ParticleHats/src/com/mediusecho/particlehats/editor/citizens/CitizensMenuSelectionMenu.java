@@ -55,12 +55,6 @@ public class CitizensMenuSelectionMenu extends AbstractListMenu {
 		
 		build();
 	}
-	
-	@Override
-	public void insertEmptyItem () {}
-	
-	@Override
-	public void removeEmptyItem () {}
 
 	@Override
 	protected void build() 

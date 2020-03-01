@@ -59,12 +59,6 @@ public class EditorMenuSelectionMenu extends AbstractListMenu {
 	}
 
 	@Override
-	public void insertEmptyItem() {}
-
-	@Override
-	public void removeEmptyItem() {}
-
-	@Override
 	protected void build()
 	{
 		setAction(49, backButtonAction);

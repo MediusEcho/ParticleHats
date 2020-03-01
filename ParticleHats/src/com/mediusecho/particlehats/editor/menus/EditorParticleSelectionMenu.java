@@ -306,14 +306,6 @@ public class EditorParticleSelectionMenu extends SingularMenu {
 	}
 	
 	@Override
-	public void onClose(boolean forced) {
-		
-	}
-
-	@Override
-	public void onTick(int ticks) {}
-	
-	@Override
 	public boolean hasInventory (Inventory inventory) 
 	{
 		switch (menuType)

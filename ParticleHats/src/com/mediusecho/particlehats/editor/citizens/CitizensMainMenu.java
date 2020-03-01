@@ -153,12 +153,6 @@ public class CitizensMainMenu extends AbstractListMenu {
 		
 		refresh();
 	}
-
-	@Override
-	public void onClose(boolean forced) {}
-
-	@Override
-	public void onTick(int ticks) {}
 	
 	private void refresh ()
 	{		

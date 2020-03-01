@@ -50,16 +50,6 @@ public class EditorIconMenuOverview extends AbstractListMenu {
 	}
 
 	@Override
-	public void insertEmptyItem() {
-		
-	}
-
-	@Override
-	public void removeEmptyItem() {
-		
-	}
-
-	@Override
 	protected void build() 
 	{
 		setButton(0, 46, backButtonItem, backButtonAction);

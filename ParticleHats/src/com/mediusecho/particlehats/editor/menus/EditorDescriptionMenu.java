@@ -194,9 +194,6 @@ public class EditorDescriptionMenu extends AbstractListMenu {
 			database.saveMetaData(menuName, targetHat, type, 0);
 		}
 	}
-
-	@Override
-	public void onTick(int ticks) {}
 	
 	@Override
 	public void deleteSlot (int page, int slot)

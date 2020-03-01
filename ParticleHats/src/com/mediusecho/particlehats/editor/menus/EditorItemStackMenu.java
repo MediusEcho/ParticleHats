@@ -218,9 +218,6 @@ public class EditorItemStackMenu extends AbstractListMenu {
 			callback.onCallback();
 		}
 	}
-
-	@Override
-	public void onTick(int ticks) {}
 	
 	private void addItem (int slot, ItemStack item)
 	{

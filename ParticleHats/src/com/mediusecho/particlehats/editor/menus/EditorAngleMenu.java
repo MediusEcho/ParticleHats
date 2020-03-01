@@ -73,9 +73,6 @@ public class EditorAngleMenu extends SingularMenu {
 			callback.onCallback();
 		}
 	}
-
-	@Override
-	public void onTick(int ticks) {}
 	
 	private MenuClickResult updateAngle (MenuClickEvent event, Hat hat, VectorAxis axis)
 	{
