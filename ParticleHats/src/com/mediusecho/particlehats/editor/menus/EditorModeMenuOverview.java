@@ -27,6 +27,7 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 
 	private final Hat targetHat;
 	private final EditorMenuManager editorManager;
+	private final MenuCallback callback;
 	
 	private final ItemStack emptyWhitelistItem = ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_MODE_OVERVIEW_MENU_WHITELIST_EMPTY);
 	private final ItemStack emptyBlacklistItem = ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_MODE_OVERVIEW_MENU_BLACKLIST_EMPTY);
@@ -40,16 +41,27 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 	private boolean isEditingWhitelist = true;
 	
 	public EditorModeMenuOverview(ParticleHats core, EditorMenuManager editorManager, Player owner) 
+	public EditorModeMenuOverview(ParticleHats core, EditorMenuManager editorManager, Player owner, MenuCallback callback) 
 	{
 		super(core, editorManager, owner, new MenuContentRegion(10, 43));
 		
 		this.editorManager = editorManager;
 		this.targetHat = editorManager.getTargetHat();
+		this.callback = callback;
 		this.setInventory(0, Bukkit.createInventory(null, 54, Message.EDITOR_MODE_OVERVIEW_MENU_TITLE.getValue()));
 		this.whitelistMenus = new HashMap<Integer, Inventory>();
 		this.blacklistMenus = new HashMap<Integer, Inventory>();
 		
 		build();
+	}
+	
+	@Override
+	public void onClose (boolean forced)
+	{
+		
+		if (!forced) {
+			callback.onCallback();
+		}
 	}
 	
 	@Override
