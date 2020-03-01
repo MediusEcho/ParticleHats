@@ -14,13 +14,14 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.ui.AbstractListMenu;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.menus.ListMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
+import com.mediusecho.particlehats.ui.properties.MenuContentRegion;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 
-public class EditorSearchMenu extends AbstractListMenu {
+public class EditorSearchMenu extends ListMenu {
 
 	private final List<Material> matchingResults;
 	private final List<Material> blacklist = Arrays.asList(Material.AIR);
@@ -31,7 +32,7 @@ public class EditorSearchMenu extends AbstractListMenu {
 	
 	public EditorSearchMenu(ParticleHats core, MenuManager menuManager, Player owner, String searchQuery, MenuObjectCallback callback) 
 	{
-		super(core, menuManager, owner, false);
+		super(core, menuManager, owner, MenuContentRegion.extendedLayout);
 		
 		String query = searchQuery.toLowerCase();
 		String[] queries = query.split(",");
@@ -58,7 +59,6 @@ public class EditorSearchMenu extends AbstractListMenu {
 			}
 		}
 		
-		this.totalPages = MathUtil.calculatePageCount(matchingResults.size(), 45);
 		this.selectAction = (event, slot) ->
 		{
 			int index = slot + (currentPage * 45);
@@ -101,10 +101,9 @@ public class EditorSearchMenu extends AbstractListMenu {
 			return MenuClickResult.NEUTRAL;
 		});
 		
-		for (int i = 0; i < 45; i++) {
-			setAction(i, selectAction);
-		}
+		contentRegion.fillRegion(this, selectAction);
 		
+		int totalPages = MathUtil.calculatePageCount(matchingResults.size(), 45);
 		for (int i = 0; i < totalPages; i++)
 		{
 			Inventory inventory = Bukkit.createInventory(null, 54, menuTitle);
@@ -119,7 +118,7 @@ public class EditorSearchMenu extends AbstractListMenu {
 				inventory.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
-			setMenu(i, inventory);
+			setInventory(i, inventory);
 		}
 		
 		if (matchingResults.isEmpty())
@@ -128,23 +127,13 @@ public class EditorSearchMenu extends AbstractListMenu {
 			return;
 		}
 		
-		int index = 0;
-		int page = 0;
-		for (Material material : matchingResults)
+		for (int i = 0; i < matchingResults.size(); i++)
 		{
-			menus.get(page).setItem(index++, ItemUtil.createItem(material, 1));
-			if (index % 45 == 0)
-			{
-				index = 0;
-				page++;
-			}
+			int page = contentRegion.getPage(i);
+			int slot = contentRegion.getNextSlot(i);
+			
+			getInventory(page).setItem(slot, ItemUtil.createItem(matchingResults.get(i), 1));
 		}
 	}
-
-	@Override
-	public void onClose(boolean forced) {}
-
-	@Override
-	public void onTick(int ticks) {}
 
 }
