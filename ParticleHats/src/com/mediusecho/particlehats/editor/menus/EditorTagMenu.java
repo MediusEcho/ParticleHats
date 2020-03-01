@@ -12,14 +12,15 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
-import com.mediusecho.particlehats.ui.AbstractListMenu;
 import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.menus.ListMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
+import com.mediusecho.particlehats.ui.properties.MenuContentRegion;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorTagMenu extends AbstractListMenu {
+public class EditorTagMenu extends ListMenu {
 	
 	private final String tagTitle = Message.EDITOR_TAG_MENU_TAG_TITLE.getValue();
 	private final MenuAction selectAction;
@@ -28,11 +29,9 @@ public class EditorTagMenu extends AbstractListMenu {
 	
 	public EditorTagMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuObjectCallback callback) 
 	{
-		super(core, menuManager, owner, false);
+		super(core, menuManager, owner, MenuContentRegion.defaultLayout);
 		
-		this.storedTags = new HashMap<Integer, ParticleTag>();
-		this.totalPages = MathUtil.calculatePageCount(ParticleTag.values().length, 28);
-		
+		this.storedTags = new HashMap<Integer, ParticleTag>();		
 		this.selectAction = (event, slot) ->
 		{
 			int index = getClampedIndex(slot, 10, 2);
@@ -50,19 +49,10 @@ public class EditorTagMenu extends AbstractListMenu {
 	}
 
 	@Override
-	public void insertEmptyItem() {
-		
-	}
-
-	@Override
-	public void removeEmptyItem() {
-		
-	}
-
-	@Override
 	protected void build() 
 	{
 		String title = Message.EDITOR_TAG_MENU_TITLE.getValue();
+		int totalPages = MathUtil.calculatePageCount(ParticleTag.values().length, 28);
 		
 		for (int i = 0; i < totalPages; i++)
 		{
@@ -80,14 +70,12 @@ public class EditorTagMenu extends AbstractListMenu {
 				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
-			setMenu(i, menu);
+			setInventory(i, menu);
 		}
 		
 		setAction(49, backButtonAction);
 		
 		int index = 0;
-		int page = 0;
-		
 		for (ParticleTag tag : ParticleTag.values())
 		{
 			if (tag == ParticleTag.NONE || tag == ParticleTag.CUSTOM) {
@@ -95,30 +83,14 @@ public class EditorTagMenu extends AbstractListMenu {
 			}
 			
 			ItemStack tagItem = ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), StringUtil.parseDescription(tag.getDescription()));			
-			setItem(page, getNormalIndex(index, 10, 2), tagItem);
+			getInventory(contentRegion.getPage(index)).setItem(contentRegion.getNextSlot(index), tagItem);
 			
 			storedTags.put(index++, tag);
-			
-			if (index % 28 == 0)
-			{
-				index = 0;
-				page++;
-			}
 		}
 		
-		for (int i = 0; i < 28; i++) {
-			setAction(getNormalIndex(i, 10, 2), selectAction);
+		for (int i = 0; i < contentRegion.getTotalSlots(); i++) {
+			setAction(contentRegion.getNormalIndex(i), selectAction);
 		}
-	}
-
-	@Override
-	public void onClose(boolean forced) {
-		
-	}
-
-	@Override
-	public void onTick(int ticks) {
-		
 	}
 
 }
