@@ -14,6 +14,9 @@ public class MenuContentRegion {
 	private final int offset;
 	private final int totalSlots;
 	
+	public static final MenuContentRegion defaultLayout = new MenuContentRegion(10, 43);
+	public static final MenuContentRegion extendedLayout = new MenuContentRegion(0, 44);
+	
 	public MenuContentRegion (int startingSlot, int endingSlot)
 	{
 		this.startingSlot = startingSlot;
