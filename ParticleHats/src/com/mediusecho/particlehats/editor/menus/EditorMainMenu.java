@@ -20,7 +20,7 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
-import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleModes;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.player.PlayerState;
@@ -418,19 +418,16 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		
 		// Mode
 		ItemStack modeItem = ItemUtil.createItem(CompatibleMaterial.ROSE_RED, Message.EDITOR_MAIN_MENU_SET_MODE);
-		EditorLore.updateModeDescription(modeItem, targetHat.getMode(), Message.EDITOR_MAIN_MENU_MODE_DESCRIPTION);
+		EditorLore.updateModeDescription(modeItem, targetHat);
 		setButton(20, modeItem, (event, slot) ->
 		{
-			List<ParticleMode> modes = ParticleMode.getSupportedModes();
-			
-			final int increment = event.isLeftClick() ? 1 : -1;
-			final int size = modes.size();
-			final int index = MathUtil.wrap(modes.indexOf(targetHat.getMode()) + increment, size, 0);
-			final ParticleMode mode = modes.get(index);
-			
-			targetHat.setMode(mode);
-			EditorLore.updateModeDescription(getItem(20), mode, Message.EDITOR_MAIN_MENU_MODE_DESCRIPTION);
-			return event.isLeftClick() ? MenuClickResult.POSITIVE : MenuClickResult.NEGATIVE;
+			EditorModeMenuOverview editorModeMenuOverview = new EditorModeMenuOverview(core, editorManager, owner, () ->
+			{
+				EditorLore.updateModeDescription(getItem(20), targetHat);
+			});
+			menuManager.addMenu(editorModeMenuOverview);
+			editorModeMenuOverview.open(); 
+			return MenuClickResult.NEUTRAL;
 		});
 		
 		// Frequency

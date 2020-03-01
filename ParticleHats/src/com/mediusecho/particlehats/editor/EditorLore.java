@@ -23,7 +23,6 @@ import com.mediusecho.particlehats.particles.properties.ParticleAction;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ColorData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
-import com.mediusecho.particlehats.particles.properties.ParticleMode;
 import com.mediusecho.particlehats.particles.properties.ParticleModes;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
@@ -131,18 +130,44 @@ public class EditorLore {
 	 * @param mode
 	 * @param description
 	 */
-	public static void updateModeDescription (ItemStack item, ParticleMode mode, Message description)
+	public static void updateModeDescription (ItemStack item, Hat hat)
 	{
-		List<ParticleMode> modes = ParticleMode.getSupportedModes();
-		int index = modes.indexOf(mode);
-		int size = modes.size();
+		String description = Message.EDITOR_MAIN_MENU_MODE_DESCRIPTION.getValue();
+		String[] whitelistColor = StringUtil.parseValue(description, "1");
+		String[] whitelistInfo = StringUtil.parseValue(description, "2");
+		String[] blacklistColor = StringUtil.parseValue(description, "3");
+		String[] blacklistInfo = StringUtil.parseValue(description, "4");
 		
-		String s = description.getValue()
-				.replace("{1}", modes.get(MathUtil.wrap(index - 1, size, 0)).getDisplayName())
-				.replace("{2}", mode.getDisplayName())
-				.replace("{3}", modes.get(MathUtil.wrap(index + 1, size, 0)).getDisplayName())
-				.replace("{4}", mode.getDescription());
-		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));		
+		StringBuilder sb = new StringBuilder();
+		for (ParticleModes m : hat.getWhitelistedModes()) {
+			sb.append(whitelistColor[1]).append(m.getStrippedDisplayName()).append("/n");
+		}
+		String whitelist = sb.length() == 0 ? whitelistInfo[1] : sb.toString();
+		sb.setLength(0);
+		
+		for (ParticleModes m : hat.getBlacklistedModes()) {
+			sb.append(blacklistColor[1]).append(m.getStrippedDisplayName()).append("/n");
+		}
+		String blacklist = sb.length() == 0 ? blacklistInfo[1] : sb.toString();
+		
+		description = description
+				.replace(whitelistInfo[0], whitelist)
+				.replace(blacklistInfo[0], blacklist)
+				.replace(whitelistColor[0], "")
+				.replace(blacklistColor[0], "");
+		
+		ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
+		
+//		List<ParticleMode> modes = ParticleMode.getSupportedModes();
+//		int index = modes.indexOf(mode);
+//		int size = modes.size();
+//		
+//		String s = description.getValue()
+//				.replace("{1}", modes.get(MathUtil.wrap(index - 1, size, 0)).getDisplayName())
+//				.replace("{2}", mode.getDisplayName())
+//				.replace("{3}", modes.get(MathUtil.wrap(index + 1, size, 0)).getDisplayName())
+//				.replace("{4}", mode.getDescription());
+//		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));		
 	}
 
 	/**
