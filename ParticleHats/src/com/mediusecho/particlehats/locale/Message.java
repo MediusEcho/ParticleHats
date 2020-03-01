@@ -733,6 +733,24 @@ public enum Message {
 	EDITOR_ACTION_MENU_DEMO_DESCRIPTION            ("&8� &e{1}/n&8� &7{2}"),
 	EDITOR_ACTION_MENU_ACTION_DESCRIPTION          ("{1}{2=/n/n&3Selected}{3=/n/n&3Click to Select}"),
 	
+	// Mode Menu
+	EDITOR_MODE_OVERVIEW_MENU_TITLE             ("Edit Modes"),
+	EDITOR_MODE_OVERVIEW_MENU_WHITELIST_TITLE   ("Editing Mode Whitelist"),
+	EDITOR_MODE_OVERVIEW_MENU_BLACKLIST_TITLE   ("Editing Mode Blacklist"),
+	EDITOR_MODE_OVERVIEW_MENU_EDIT_WHITELIST    ("&bEdit Mode Whitelist"),
+	EDITOR_MODE_OVERVIEW_MENU_EDIT_BLACKLIST    ("&bEdit Mode Blacklist"),
+	EDITOR_MODE_OVERVIEW_MENU_ADD_WHITELIST     ("&bAdd Whitelisted Mode"),
+	EDITOR_MODE_OVERVIEW_MENU_ADD_BLACKLIST     ("&bAdd Blacklisted Mode"),
+	EDITOR_MODE_OVERVIEW_MENU_INFO_TITLE        ("&bInfo"),
+	EDITOR_MODE_OVERVIEW_MENU_WHITELIST_INFO    ("&8Use this list to add modes that/n&8will let this particle display in-game"),//("&8Specifies a list of modes that/n&8are required in order for this/n&8particle to display"),
+	EDITOR_MODE_OVERVIEW_MENU_BLACKLIST_INFO    ("&8Use this list to add modes that will prevent/n&8this particle from displaying in-game"),//("&8Specifies a list of modes that/n&8are not allowed"),
+	EDITOR_MODE_OVERVIEW_MENU_WHITELIST_EMPTY   ("&cNo Whitelisted Modes"),
+	EDITOR_MODE_OVERVIEW_MENU_BLACKLIST_EMPTY   ("&cNo Blacklisted Modes"),
+	EDITOR_MODE_OVERVIEW_MENU_ITEM_DESCRIPTION  ("{1=/n/n}&cShift Right Click to Remove"),
+	
+	EDITOR_MODE_MENU_TITLE ("Available Modes"),
+	EDITOR_MODE_MENU_ITEM_DESCRIPTION ("{1=/n/n}{2=&3Click to Add}{3=&cAlready Added}"),
+	
 	// Slot Menu
 	EDITOR_SLOT_MENU_TITlE    ("Choose a new Slot"),
 	EDITOR_SLOT_MENU_OCCUPIED ("&cOccupied"),
