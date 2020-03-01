@@ -15,12 +15,13 @@ import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.properties.ParticleModes;
-import com.mediusecho.particlehats.ui.AbstractListMenu;
+import com.mediusecho.particlehats.ui.menus.ListMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
+import com.mediusecho.particlehats.ui.properties.MenuContentRegion;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 
-public class EditorModeMenu extends AbstractListMenu {
+public class EditorModeMenu extends ListMenu {
 
 	private final MenuAction selectAction;
 	private final List<ParticleModes> activeModes;
@@ -29,9 +30,8 @@ public class EditorModeMenu extends AbstractListMenu {
 	
 	public EditorModeMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isEditingWhitelist, MenuObjectCallback callback) 
 	{
-		super(core, menuManager, owner, false);
+		super(core, menuManager, owner, MenuContentRegion.defaultLayout);
 		
-		this.totalPages = MathUtil.calculatePageCount(ParticleModes.values().length, 27);
 		this.modes = new HashMap<Integer, ParticleModes>();
 		this.activeModes = isEditingWhitelist ? menuManager.getTargetHat().getWhitelistedModes() : menuManager.getTargetHat().getBlacklistedModes();
 		
@@ -48,12 +48,6 @@ public class EditorModeMenu extends AbstractListMenu {
 	}
 
 	@Override
-	public void insertEmptyItem() {}
-
-	@Override
-	public void removeEmptyItem() {}
-
-	@Override
 	protected void build() 
 	{
 		setAction(49, backButtonAction);
@@ -62,6 +56,7 @@ public class EditorModeMenu extends AbstractListMenu {
 			setAction(getNormalIndex(i, 10, 2), selectAction);
 		}
 		
+		int totalPages = MathUtil.calculatePageCount(ParticleModes.values().length, 27);
 		for (int i = 0; i < totalPages; i++)
 		{
 			Inventory inventory = Bukkit.createInventory(null, 54, Message.EDITOR_MODE_MENU_TITLE.getValue());
@@ -76,12 +71,11 @@ public class EditorModeMenu extends AbstractListMenu {
 				inventory.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
-			setMenu(i, inventory);
+			setInventory(i, inventory);
 		}
 		
 		
 		int index = 0;
-		int page = 0;
 		int globalIndex = 0;
 		
 		for (ParticleModes pm : ParticleModes.values())
@@ -99,21 +93,9 @@ public class EditorModeMenu extends AbstractListMenu {
 			
 			EditorLore.updateModeItemDescription(item, pm, isSelected);
 			
-			menus.get(page).setItem(getNormalIndex(index++, 10, 2), item);
+			getInventory(contentRegion.getPage(index)).setItem(contentRegion.getNextSlot(index++), item);
 			modes.put(globalIndex++, pm);
-			
-			if (index % 45 == 0) 
-			{
-				page++;
-				index = 0;
-			}
 		}
 	}
-
-	@Override
-	public void onClose(boolean forced) {}
-
-	@Override
-	public void onTick(int ticks) {}
 
 }
