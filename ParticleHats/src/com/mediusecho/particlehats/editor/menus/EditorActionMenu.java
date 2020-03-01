@@ -14,13 +14,14 @@ import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleAction;
-import com.mediusecho.particlehats.ui.AbstractListMenu;
+import com.mediusecho.particlehats.ui.menus.ListMenu;
 import com.mediusecho.particlehats.ui.properties.MenuClickResult;
+import com.mediusecho.particlehats.ui.properties.MenuContentRegion;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 
-public class EditorActionMenu extends AbstractListMenu {
+public class EditorActionMenu extends ListMenu {
 
 	private final boolean isLeftClickAction;
 	private final boolean showHiddenActions;
@@ -31,13 +32,12 @@ public class EditorActionMenu extends AbstractListMenu {
 	
 	public EditorActionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isLeftClickAction, boolean showHiddenActions, MenuObjectCallback callback) 
 	{
-		super(core, menuManager, owner, false);
+		super(core, menuManager, owner, MenuContentRegion.defaultLayout);
 		
 		this.isLeftClickAction = isLeftClickAction;
 		this.showHiddenActions = showHiddenActions;
 		this.actions = new ArrayList<ParticleAction>();
 		this.targetHat = menuManager.getBaseHat();
-		this.totalPages = MathUtil.calculatePageCount(ParticleAction.values().length, 28);
 		
 		this.selectAction = (event, slot) ->
 		{
@@ -59,12 +59,6 @@ public class EditorActionMenu extends AbstractListMenu {
 	{
 		this(core, menuManager, owner, isLeftClickAction, false, callback);
 	}
-
-	@Override
-	public void insertEmptyItem() {}
-
-	@Override
-	public void removeEmptyItem() {}
 
 	@Override
 	protected void build() 
@@ -99,6 +93,7 @@ public class EditorActionMenu extends AbstractListMenu {
 		String leftClick = isLeftClickAction ? leftClickInfo[1] : "";
 		String rightClick = !isLeftClickAction ? rightClickInfo[1] : "";
 		
+		int totalPages = MathUtil.calculatePageCount(ParticleAction.values().length, 28);
 		for (int i = 0; i < totalPages; i++)
 		{
 			String title = menuTitle
@@ -121,13 +116,11 @@ public class EditorActionMenu extends AbstractListMenu {
 				menu.setItem(48, ItemUtil.createItem(CompatibleMaterial.LIME_DYE, Message.EDITOR_MISC_PREVIOUS_PAGE));
 			}
 			
-			setMenu(i, menu);
+			setInventory(i, menu);
 		}
 		
 		// Insert our actions
 		int index = 0;
-		int page = 0;
-		
 		for (ParticleAction action : ParticleAction.values())
 		{
 			// Skip the mimic action if we're selecting a left click action
@@ -169,21 +162,9 @@ public class EditorActionMenu extends AbstractListMenu {
 			description = description.replace("{1}", action.getDescription());
 			ItemUtil.setItemDescription(item, StringUtil.parseDescription(description));
 			
-			setItem(page, getNormalIndex(index++, 10, 2), item);
+			getInventory(contentRegion.getPage(index)).setItem(contentRegion.getNextSlot(index++), item);
 			actions.add(action);
-			
-			if (index % 28 == 0)
-			{
-				index = 0;
-				page++;
-			}
 		}
 	}
-
-	@Override
-	public void onClose(boolean forced) {}
-
-	@Override
-	public void onTick(int ticks) {}
 
 }
