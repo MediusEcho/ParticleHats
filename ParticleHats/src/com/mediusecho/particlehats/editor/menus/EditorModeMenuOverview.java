@@ -39,8 +39,9 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 	private int currentBlacklistPage = 0;
 	
 	private boolean isEditingWhitelist = true;
+	private boolean whitelistModified = false;
+	private boolean blacklistModified = false;
 	
-	public EditorModeMenuOverview(ParticleHats core, EditorMenuManager editorManager, Player owner) 
 	public EditorModeMenuOverview(ParticleHats core, EditorMenuManager editorManager, Player owner, MenuCallback callback) 
 	{
 		super(core, editorManager, owner, new MenuContentRegion(10, 43));
@@ -58,6 +59,19 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 	@Override
 	public void onClose (boolean forced)
 	{
+		if (whitelistModified || blacklistModified)
+		{
+			String menuName = editorManager.getMenuName();
+			Database database = core.getDatabase();
+			
+			if (whitelistModified) {
+				database.saveMetaData(menuName, targetHat, DataType.MODE_WHITELIST, 0);
+			}
+			
+			if (blacklistModified) {
+				database.saveMetaData(menuName, targetHat, DataType.MODE_BLACKLIST, 0);
+			}
+		}
 		
 		if (!forced) {
 			callback.onCallback();
@@ -135,6 +149,12 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 		modes.remove(clampedSlot);
 		if (modes.isEmpty()) {
 			setEmpty(true);
+		}
+		
+		if (isEditingWhitelist) {
+			whitelistModified = true;
+		} else {
+			blacklistModified = true;
 		}
 	}
 
@@ -274,6 +294,7 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 		
 		setEmpty(false);
 		whitelistMenus.get(page).setItem(index, item);
+		whitelistModified = true;
 	}
 	
 	private void generateBlacklistMenus ()
@@ -316,6 +337,7 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 		
 		setEmpty(false);
 		blacklistMenus.get(page).setItem(index, item);
+		blacklistModified = true;
 	}
 	
 	private void generateMenus (List<ParticleModes> modes, Map<Integer, Inventory> menus, String title, boolean whitelist)
