@@ -511,6 +511,27 @@ public class YamlDatabase implements Database {
 					}
 					break;
 				}
+				case MODE_WHITELIST:
+				{
+					String modePath = path + getNodePath(hat) + "modes";
+					List<String> whitelist = new ArrayList<String>();
+					for (ParticleModes m : hat.getWhitelistedModes()) {
+						whitelist.add(m.toString().toUpperCase());
+					}
+					config.set(modePath + ".whitelist", whitelist);
+					break;
+				}
+				
+				case MODE_BLACKLIST:
+				{
+					String modePath = path + getNodePath(hat) + "modes";
+					List<String> blacklist = new ArrayList<String>();
+					for (ParticleModes m : hat.getBlacklistedModes()) {
+						blacklist.add(m.toString().toUpperCase());
+					}
+					config.set(modePath + ".blacklist", blacklist);
+					break;
+				}
 			}
 		}
 		
@@ -1138,6 +1159,23 @@ public class YamlDatabase implements Database {
 			itemMeta.setLore(description);
 			item.setItemMeta(itemMeta);
 		}
+		
+		if (config.contains(path + "modes"))
+		{
+			List<String> whitelistedModes = config.getStringList(path + "modes.whitelist");
+			for (String mode : whitelistedModes) {
+				hat.addWhitelistedMode(ParticleModes.fromName(mode));
+			}
+			
+			List<String> blacklistedModes = config.getStringList(path + "modes.blacklist");
+			for (String mode : blacklistedModes) {
+				hat.addBlacklistedMode(ParticleModes.fromName(mode));
+			}
+		} 
+		
+		else {
+			hat.addWhitelistedMode(ParticleModes.fromLegacyName(config.getString(path + "mode")));
+		}
 	}
 	
 	/**
@@ -1283,6 +1321,22 @@ public class YamlDatabase implements Database {
 		
 		if (hat.getMode() != ParticleMode.ACTIVE) {
 			config.set(path + "mode", hat.getMode().getName());
+		if (hat.getWhitelistedModes().size() > 0) 
+		{
+			List<String> whitelist = new ArrayList<String>();
+			for (ParticleModes m : hat.getWhitelistedModes()) {
+				whitelist.add(m.toString().toUpperCase());
+			}
+			config.set(path + "modes.whitelist", whitelist);
+		}
+		
+		if (hat.getBlacklistedModes().size() > 0)
+		{
+			List<String> blacklist = new ArrayList<String>();
+			for (ParticleModes m : hat.getBlacklistedModes()) {
+				blacklist.add(m.toString().toUpperCase());
+			}
+			config.set(path + "modes.blacklist", blacklist);
 		}
 		
 		if (hat.getAnimation() == ParticleAnimation.ANIMATED) {
