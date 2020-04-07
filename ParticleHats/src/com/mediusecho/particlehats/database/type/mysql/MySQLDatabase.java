@@ -51,6 +51,7 @@ import com.mediusecho.particlehats.particles.properties.ColorData;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleMode;
+import com.mediusecho.particlehats.particles.properties.ParticleModes;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
@@ -702,6 +703,45 @@ public class MySQLDatabase implements Database {
 								insertStatement.setInt(4, index);
 								insertStatement.setInt(5, hat.getIndex());
 								insertStatement.setString(6, item.getType().toString());
+								insertStatement.addBatch();
+							}
+							
+							insertStatement.executeBatch();
+							break;
+						}
+						case MODE_WHITELIST:
+						{
+							ParticleHats.debug("saving mode metadata to mysql database for menu: " + menuName);
+							
+							int index_num = 1;
+							
+							for (ParticleModes mode : hat.getWhitelistedModes())
+							{
+								insertStatement.setInt(1, slot);
+								insertStatement.setInt(2, type.getID());
+								insertStatement.setInt(3, index_num++);
+								insertStatement.setInt(4, index);
+								insertStatement.setInt(5, hat.getIndex());
+								insertStatement.setString(6, mode.toString().toUpperCase());
+								insertStatement.addBatch();
+							}
+							
+							insertStatement.executeBatch();
+							break;
+						}
+						
+						case MODE_BLACKLIST:
+						{
+							int index_num = 1;
+							
+							for (ParticleModes mode : hat.getBlacklistedModes())
+							{
+								insertStatement.setInt(1, slot);
+								insertStatement.setInt(2, type.getID());
+								insertStatement.setInt(3, index_num++);
+								insertStatement.setInt(4, index);
+								insertStatement.setInt(5, hat.getIndex());
+								insertStatement.setString(6, mode.toString().toUpperCase());
 								insertStatement.addBatch();
 							}
 							
@@ -1533,7 +1573,7 @@ public class MySQLDatabase implements Database {
 		hat.setPermissionDeniedMessage(getString(set, "permission_denied", ""));
 		hat.setType(ParticleType.fromID(set.getInt("type")));
 		hat.setLocation(ParticleLocation.fromId(set.getInt("location")));
-		hat.setMode(ParticleMode.fromId(set.getInt("mode")));
+		//hat.setMode(ParticleMode.fromId(set.getInt("mode")));
 		hat.setAnimation(ParticleAnimation.fromID(set.getInt("animation")));
 		hat.setTrackingMethod(ParticleTracking.fromID(set.getInt("tracking")));
 		hat.setLabel(getString(set, "label", ""));
@@ -1631,7 +1671,7 @@ public class MySQLDatabase implements Database {
 	@SuppressWarnings("incomplete-switch")
 	private void loadMetaData (Connection connection, String menuName, Hat hat, ItemStack item) throws SQLException
 	{
-		String query = "SELECT type, value FROM " + Table.META.format(menuName) + " WHERE slot = ? ORDER BY line ASC";
+		String query = "SELECT type,node_index,value FROM " + Table.META.format(menuName) + " WHERE slot = ? ORDER BY line ASC";
 		try (PreparedStatement descriptionStatement = connection.prepareStatement(query))
 		{
 			descriptionStatement.setInt(1, hat.getSlot());
@@ -1687,6 +1727,31 @@ public class MySQLDatabase implements Database {
 						}
 						break;
 					}
+					case MODE_WHITELIST:
+					{
+						int nodeIndex = set.getInt("node_index");
+						Hat h = nodeIndex == -1 ? hat : hat.getNodeAtIndex(nodeIndex);
+						if (h == null) {
+							break;
+						}
+						
+						ParticleModes mode = ParticleModes.fromName(set.getString("value"));
+						h.addWhitelistedMode(mode);
+						break;
+					}
+					
+					case MODE_BLACKLIST:
+					{
+						int nodeIndex = set.getInt("node_index");
+						Hat h = nodeIndex == -1 ? hat : hat.getNodeAtIndex(nodeIndex);
+						if (h == null) {
+							break;
+						}
+						
+						ParticleModes mode = ParticleModes.fromName(set.getString("value"));
+						h.addBlacklistedMode(mode);
+						break;
+					}
 				}
 			}
 			
@@ -1729,7 +1794,7 @@ public class MySQLDatabase implements Database {
 				node.setIndex(set.getInt("node_index"));
 				node.setType(ParticleType.fromID(set.getInt("type")));
 				node.setLocation(ParticleLocation.fromId(set.getInt("location")));
-				node.setMode(ParticleMode.fromId(set.getInt("mode")));
+				//node.setMode(ParticleMode.fromId(set.getInt("mode")));
 				node.setAnimation(ParticleAnimation.fromID(set.getInt("animation")));
 				node.setTrackingMethod(ParticleTracking.fromID(set.getInt("tracking")));
 				node.setOffset(set.getDouble("offset_x"), set.getDouble("offset_y"), set.getDouble("offset_z"));

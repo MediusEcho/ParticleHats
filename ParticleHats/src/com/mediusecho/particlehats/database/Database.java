@@ -295,6 +295,8 @@ public interface Database {
 		TAGS (4),
 		ITEMSTACK (5),
 		POTION (6);
+		MODE_WHITELIST (7),
+		MODE_BLACKLIST (8);
 		
 		private static Map<Integer, DataType> dataID = new HashMap<Integer, DataType>();
 		static 
