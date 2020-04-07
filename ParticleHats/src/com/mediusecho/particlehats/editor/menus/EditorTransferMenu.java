@@ -87,10 +87,4 @@ public class EditorTransferMenu extends SingularMenu {
 		}
 	}
 
-	@Override
-	public void onClose(boolean forced) {}
-
-	@Override
-	public void onTick(int ticks) {}
-
 }
