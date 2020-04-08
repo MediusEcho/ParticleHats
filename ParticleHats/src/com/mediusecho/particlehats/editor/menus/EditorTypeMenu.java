@@ -30,7 +30,7 @@ public class EditorTypeMenu extends SingularMenu {
 	private final EditorMenuManager editorManager;
 	private final Hat targetHat;
 	private final MenuAction setTypeAction;
-	private final MenuObjectCallback callback;
+	private final MenuCallback callback;
 	
 	private final String title = Message.EDITOR_TYPE_MENU_TITLE.getValue();
 	private final String typePrefix = Message.EDITOR_TYPE_MENU_TYPE_PREFIX.getValue();
@@ -52,7 +52,7 @@ public class EditorTypeMenu extends SingularMenu {
 	
 	private boolean selectingFromIncludedTypes = true;
 	
-	public EditorTypeMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuObjectCallback callback) 
+	public EditorTypeMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuCallback callback) 
 	{
 		super(core, menuManager, owner);
 		
@@ -191,7 +191,7 @@ public class EditorTypeMenu extends SingularMenu {
 	public void onClose(boolean forced) 
 	{
 		if (!forced) {
-			callback.onSelect(null);
+			callback.onCallback();
 		}
 	}
 
