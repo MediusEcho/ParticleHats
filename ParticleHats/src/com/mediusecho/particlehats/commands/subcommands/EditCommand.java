@@ -13,7 +13,7 @@ import com.mediusecho.particlehats.editor.purchase.PurchaseMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.MenuInventory;
+import com.mediusecho.particlehats.ui.properties.MenuInventory;
 
 public class EditCommand extends Command {
 
