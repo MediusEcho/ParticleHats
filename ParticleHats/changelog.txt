@@ -4,7 +4,18 @@
   - Fixed toggle action not saving toggle status when a player left the server
   
 - Changes:
-  - Temporarily equipping particles from the editor will now clear all active particles before equipping. 
+  - Temporarily equipping particles from the editor will now clear all active particles before equipping.
+  - Removed equipped hats limit.
+  - Equipped hats menu now supports multiple pages
+  - Split mode into whitelist/blacklist allowing more control of when particles should display
+  
+- Additions
+  - Modes:
+    - Added PVP check
+    - Added survival gamemode check
+    - Added adventure gamemode check
+    - Added creative gamemode check
+    - Added spectator gamemode check
 
 4.2.0
 - Fixed an issue that would prevent particles from loading when an NPC respawned.
