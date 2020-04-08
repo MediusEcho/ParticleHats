@@ -130,8 +130,8 @@ public interface Menu {
 	 *
 	 */
 	@FunctionalInterface
-	interface MenuObjectCallback {
-		public void onSelect (Object obj);
+	interface MenuObjectCallback<T> {
+		public void onSelect (T object);
 	}
 	
 	/**
