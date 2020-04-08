@@ -123,7 +123,7 @@ public class EditorTagMenuOverview extends ListMenu {
 			ParticleTag tag = tags.get(i);
 			ItemStack tagItem = ItemUtil.createItem(CompatibleMaterial.MUSHROOM_STEW, tagTitle.replace("{1}", tag.getDisplayName()), Message.EDITOR_TAG_OVERVIEW_MENU_TAG_DESCRIPTION);
 			
-			setItem(0, contentRegion.getNormalIndex(i), tagItem);
+			setItem(0, contentRegion.getInventorySlot(i), tagItem);
 		}
 	}
 
@@ -140,7 +140,7 @@ public class EditorTagMenuOverview extends ListMenu {
 	{
 		super.deleteItem(page, slot);
 		
-		int clampedIndex = contentRegion.getClampedIndex(slot);
+		int clampedIndex = contentRegion.getListIndex(slot);
 		List<ParticleTag> tags = targetHat.getTags();
 		
 		tags.remove(clampedIndex);

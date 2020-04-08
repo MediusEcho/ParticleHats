@@ -142,7 +142,7 @@ public class EditorNodeMenuOverview extends AbstractListMenu {
 	{
 		super.deleteSlot(page, slot);
 		
-		int index = getClampedIndex(slot, 10, 2);
+		int index = contentRegion.getInclusiveIndex(page, slot); //getClampedIndex(slot, 10, 2);
 		Hat node = targetHat.getNodes().remove(index);
 		
 		core.getDatabase().deleteNode(editorManager.getMenuName(), node.getSlot(), node.getIndex());

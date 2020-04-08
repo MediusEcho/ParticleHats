@@ -89,7 +89,7 @@ public class EditorTagMenu extends ListMenu {
 		}
 		
 		for (int i = 0; i < contentRegion.getTotalSlots(); i++) {
-			setAction(contentRegion.getNormalIndex(i), selectAction);
+			setAction(contentRegion.getInventorySlot(i), selectAction);
 		}
 	}
 

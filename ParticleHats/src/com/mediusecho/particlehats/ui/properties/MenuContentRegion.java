@@ -58,21 +58,31 @@ public class MenuContentRegion {
 	}
 	
 	/**
-	 * Returns an inventory slot relative to 0 starting at the starting slot<br>
+	 * Returns an index that can be used in a array/list based on the visible content region
 	 * @param slot
 	 * @return
 	 */
-	public int getClampedIndex (int slot) {
+	public int getListIndex (int slot) {
 		return Math.max((slot - (((slot / 9) - 1) * offset) - startingSlot), 0);
 	}
 
 	/**
-	 * Returns an inventory slot relative to the starting slot starting at 0
+	 * Returns an inventory slot based on the visible content region from the provided index (starting at 0)
+	 * @param slot 
+	 * @return
+	 */
+	public int getInventorySlot (int index) {
+		return (index + ((index / (9 - offset)) * offset) + startingSlot);
+	}
+	
+	/**
+	 * Combines page count + slot and returns an index that can be used in arrays/lists
+	 * @param page
 	 * @param slot
 	 * @return
 	 */
-	public int getNormalIndex (int slot) {
-		return (slot + ((slot / (9 - offset)) * offset) + startingSlot);
+	public int getInclusiveIndex (int page, int slot) {
+		return (page * totalSlots) + getListIndex(slot);
 	}
 	
 	/**
@@ -90,7 +100,7 @@ public class MenuContentRegion {
 	 * @return
 	 */
 	public int getNextSlot (int size) {
-		return getNormalIndex(size % totalSlots);
+		return getInventorySlot(size % totalSlots);
 	}
 	
 	/**
@@ -101,7 +111,7 @@ public class MenuContentRegion {
 	public void fillRegion (Menu menu, MenuAction action)
 	{
 		for (int i = 0; i < getTotalSlots(); i++) {
-			menu.setAction(getNormalIndex(i), action);
+			menu.setAction(getInventorySlot(i), action);
 		}
 	}
 	

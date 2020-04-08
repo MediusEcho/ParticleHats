@@ -178,7 +178,7 @@ public class EditorDescriptionMenu extends AbstractListMenu {
 			String line = description.get(i);
 			
 			setLineDescription(lineItem, line);
-			setItem(0, getNormalIndex(i, 10, 2), lineItem);
+			setItem(0, contentRegion.getInventorySlot(i), lineItem);
 		}
 	}
 

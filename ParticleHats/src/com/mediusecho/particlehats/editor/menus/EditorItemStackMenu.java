@@ -199,7 +199,7 @@ public class EditorItemStackMenu extends AbstractListMenu {
 			String displayName = Message.EDITOR_ICON_MENU_ITEM_PREFIX.getValue() + StringUtil.getMaterialName(item.getType());
 			
 			ItemUtil.setNameAndDescription(item, displayName, StringUtil.parseDescription(Message.EDITOR_ICON_MENU_ICON_DESCRIPTION.getValue()));
-			setItem(0, getNormalIndex(i, 10, 2), item);
+			setItem(0, contentRegion.getInventorySlot(i), item);
 		}
 	}
 

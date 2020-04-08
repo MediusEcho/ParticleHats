@@ -144,7 +144,7 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 		super.deleteItem(page, slot);
 		
 		List<ParticleModes> modes = isEditingWhitelist ? targetHat.getWhitelistedModes() : targetHat.getBlacklistedModes();
-		int clampedSlot = contentRegion.getClampedIndex(slot) + (page * contentRegion.getTotalSlots());
+		int clampedSlot = contentRegion.getListIndex(slot) + (page * contentRegion.getTotalSlots());
 		
 		modes.remove(clampedSlot);
 		if (modes.isEmpty()) {
@@ -210,7 +210,7 @@ public class EditorModeMenuOverview extends ListMenuImpl {
 		};
 		
 		for (int i = 0; i < contentRegion.getTotalSlots(); i++) {
-			setAction(contentRegion.getNormalIndex(i), editAction);
+			setAction(contentRegion.getInventorySlot(i), editAction);
 		}
 		
 		setAction(53, (event, slot) ->
