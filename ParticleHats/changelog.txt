@@ -6,6 +6,7 @@
 - Changes:
   - Temporarily equipping particles from the editor will now clear all active particles before equipping.
   - Removed equipped hats limit.
+  - Removed node limit.
   - Equipped hats menu now supports multiple pages
   - Split mode into whitelist/blacklist allowing more control of when particles should display
   
