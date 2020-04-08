@@ -34,7 +34,7 @@ public class EditorMenuSelectionMenu extends AbstractListMenu {
 	
 	private boolean isAddingMenu = false;
 	
-	public EditorMenuSelectionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean transferringHat, MenuObjectCallback callback) 
+	public EditorMenuSelectionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean transferringHat, MenuObjectCallback<String> callback) 
 	{
 		super(core, menuManager, owner, false);
 		

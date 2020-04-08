@@ -30,7 +30,7 @@ public class EditorActionMenu extends ListMenu {
 	
 	private final List<ParticleAction> actions;
 	
-	public EditorActionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isLeftClickAction, boolean showHiddenActions, MenuObjectCallback callback) 
+	public EditorActionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isLeftClickAction, boolean showHiddenActions, MenuObjectCallback<ParticleAction> callback) 
 	{
 		super(core, menuManager, owner, MenuContentRegion.defaultLayout);
 		
@@ -55,7 +55,7 @@ public class EditorActionMenu extends ListMenu {
 		build();
 	}
 	
-	public EditorActionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isLeftClickAction, MenuObjectCallback callback)
+	public EditorActionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isLeftClickAction, MenuObjectCallback<ParticleAction> callback)
 	{
 		this(core, menuManager, owner, isLeftClickAction, false, callback);
 	}

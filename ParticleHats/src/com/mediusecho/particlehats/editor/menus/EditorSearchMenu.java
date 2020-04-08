@@ -30,7 +30,7 @@ public class EditorSearchMenu extends ListMenu {
 	
 	private final String menuTitle;
 	
-	public EditorSearchMenu(ParticleHats core, MenuManager menuManager, Player owner, String searchQuery, MenuObjectCallback callback) 
+	public EditorSearchMenu(ParticleHats core, MenuManager menuManager, Player owner, String searchQuery, MenuObjectCallback<ItemStack> callback) 
 	{
 		super(core, menuManager, owner, MenuContentRegion.extendedLayout);
 		

@@ -28,7 +28,7 @@ public class EditorModeMenu extends ListMenu {
 	
 	private Map<Integer, ParticleModes> modes;
 	
-	public EditorModeMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isEditingWhitelist, MenuObjectCallback callback) 
+	public EditorModeMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, boolean isEditingWhitelist, MenuObjectCallback<ParticleModes> callback) 
 	{
 		super(core, menuManager, owner, MenuContentRegion.defaultLayout);
 		

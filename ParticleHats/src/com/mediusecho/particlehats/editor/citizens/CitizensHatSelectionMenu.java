@@ -25,7 +25,7 @@ public class CitizensHatSelectionMenu extends SingularMenu {
 	private final MenuInventory menuInventory;
 	private final MenuAction hatAction;
 	
-	public CitizensHatSelectionMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuInventory inventory, MenuObjectCallback callback)
+	public CitizensHatSelectionMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuInventory inventory, MenuObjectCallback<Hat> callback)
 	{
 		super(core, menuManager, owner);
 		

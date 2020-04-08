@@ -36,7 +36,7 @@ public class EditorIconMenuOverview extends AbstractListMenu {
 	private final Message iconName = Message.EDITOR_ICON_MENU_ITEM_INFO;
 	private final Message iconDescription = Message.EDITOR_ICON_MENU_ITEM_DESCRIPTION;
 	
-	public EditorIconMenuOverview(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuObjectCallback callback) 
+	public EditorIconMenuOverview(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuObjectCallback<ItemStack> callback) 
 	{
 		super(core, menuManager, owner, true);
 		

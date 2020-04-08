@@ -27,7 +27,7 @@ public class EditorTagMenu extends ListMenu {
 	
 	private Map<Integer, ParticleTag> storedTags;
 	
-	public EditorTagMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuObjectCallback callback) 
+	public EditorTagMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuObjectCallback<ParticleTag> callback) 
 	{
 		super(core, menuManager, owner, MenuContentRegion.defaultLayout);
 		

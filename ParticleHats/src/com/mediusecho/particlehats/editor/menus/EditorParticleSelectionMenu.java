@@ -47,7 +47,7 @@ public class EditorParticleSelectionMenu extends SingularMenu {
 	private int currentColorPage = 0;
 	private int currentDataPage = 0;
 	
-	public EditorParticleSelectionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, int particleIndex, MenuObjectCallback callback)
+	public EditorParticleSelectionMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, int particleIndex, MenuObjectCallback<ParticleEffect> callback)
 	{
 		super(core, menuManager, owner);
 		

@@ -28,7 +28,7 @@ import com.mediusecho.particlehats.util.StringUtil;
 public class EditorSoundMenu extends SingularMenu {
 
 	private final Hat targetHat;
-	private final MenuObjectCallback callback;
+	private final MenuObjectCallback<Sound> callback;
 	private final ItemStack volumeItem;
 	private final ItemStack pitchItem;
 	
@@ -96,7 +96,7 @@ public class EditorSoundMenu extends SingularMenu {
 		    "RECORD_WAIT",
 		    "RECORD_WARD");
 	
-	public EditorSoundMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuObjectCallback callback) 
+	public EditorSoundMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, MenuObjectCallback<Sound> callback) 
 	{
 		super(core, menuManager, owner);
 		

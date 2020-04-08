@@ -21,13 +21,13 @@ import com.mediusecho.particlehats.util.StringUtil;
 public class EditorItemPromptMenu extends SingularMenu {
 
 	private final EditorMenuManager editorManager;
-	private final MenuObjectCallback callback;
+	private final MenuObjectCallback<ItemStack> callback;
 	private final Message itemName;
 	private final Message itemDescription;
 	
 	private boolean isSearching = false;
 	
-	public EditorItemPromptMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, Message title, Message itemName, Message itemDescription, MenuObjectCallback callback)
+	public EditorItemPromptMenu(ParticleHats core, EditorMenuManager menuManager, Player owner, Message title, Message itemName, Message itemDescription, MenuObjectCallback<ItemStack> callback)
 	{
 		super(core, menuManager, owner);
 		

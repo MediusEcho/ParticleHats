@@ -34,7 +34,7 @@ public class CitizensMenuSelectionMenu extends AbstractListMenu {
 		return MenuClickResult.NONE;
 	});
 	
-	public CitizensMenuSelectionMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuObjectCallback callback) 
+	public CitizensMenuSelectionMenu(ParticleHats core, MenuManager menuManager, Player owner, MenuObjectCallback<String> callback) 
 	{
 		super(core, menuManager, owner, false);
 		
