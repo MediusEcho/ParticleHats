@@ -1,3 +1,9 @@
+4.2.1 (Quick Fix)
+- Fixed an issue that caused player files to be created every time a player joined the server.
+  - Player files that don't contain any saved data will be deleted when a player disconnects from the server.
+- Fixed toggle action not using the correct toggle method. This would prevent a hat's toggle value from being saved when a player disconnects.
+- Fixed single particle effect not supporting all tracking methods.
+
 4.2.0
 - Fixed an issue that would prevent particles from loading when an NPC respawned.
 - Fixed when_moving, when_afk, & when_peaceful modes not working on a NPC.
