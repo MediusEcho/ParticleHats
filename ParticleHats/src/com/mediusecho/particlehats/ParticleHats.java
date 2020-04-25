@@ -442,6 +442,20 @@ public class ParticleHats extends JavaPlugin {
 	}
 	
 	/**
+	 * Checks to see if a file exists with this name in the given folder
+	 * @param folderName
+	 * @param fileName
+	 * @return
+	 */
+	public boolean fileExists (String folderName, String fileName)
+	{
+		String directory = getDataFolder() + File.separator + folderName + File.separator + fileName;
+		File file = new File(directory);
+		
+		return file.exists();
+	}
+	
+	/**
 	 * Logs a message to the server console
 	 * @param obj
 	 */
