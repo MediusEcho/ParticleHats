@@ -54,7 +54,7 @@ public class OpenPlayerCommand extends Command {
 			return false;
 		}
 		
-		AbstractMenu menu = parent.getRequestedMenu(playerState, args.get(0), sender);
+		AbstractMenu menu = parent.getRequestedMenu(playerState, args.get(0), targetPlayer);
 		if (menu == null) {
 			return false;
 		}

@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.entity.Player;
+
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
@@ -84,7 +86,7 @@ public class OpenCommand extends Command {
 				return false;
 			}
 			
-			AbstractMenu menu = getRequestedMenu(playerState, args.get(0), sender);
+			AbstractMenu menu = getRequestedMenu(playerState, args.get(0), sender.getPlayer());
 			if (menu == null) {
 				return false;
 			}
@@ -207,14 +209,14 @@ public class OpenCommand extends Command {
 		return false;
 	}
 	
-	public AbstractMenu getRequestedMenu (PlayerState playerState, String requestedMenuName, Sender sender)
+	public AbstractMenu getRequestedMenu (PlayerState playerState, String requestedMenuName, Player player)
 	{
 		// Grab the name without any extensions
 		String menuName = (requestedMenuName.contains(".") ? requestedMenuName.split("\\.")[0] : requestedMenuName);
 		
 		if (menuName.equals("purchase")) 
 		{
-			sender.sendMessage(Message.COMMAND_OPEN_ERROR.replace("{1}", menuName));
+			player.sendMessage(Message.COMMAND_OPEN_ERROR.replace("{1}", menuName));
 			return null;
 		}
 		
@@ -228,11 +230,11 @@ public class OpenCommand extends Command {
 			
 			if (menuInventory == null)
 			{
-				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
+				player.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
 				return null;
 			}
 			
-			return new StaticMenu(core, staticManager, sender.getPlayer(), menuInventory);
+			return new StaticMenu(core, staticManager, player, menuInventory);
 		}
 		
 		return menu;

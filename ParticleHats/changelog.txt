@@ -1,3 +1,6 @@
+4.2.2
+- Fixed a NullPointerException when using /h open [menu] [player] from the console.
+
 4.2.1 (Quick Fix)
 - Fixed an issue that caused player files to be created every time a player joined the server.
   - Player files that don't contain any saved data will be deleted when a player disconnects from the server.
