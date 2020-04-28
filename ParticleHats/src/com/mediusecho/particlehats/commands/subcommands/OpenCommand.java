@@ -86,7 +86,7 @@ public class OpenCommand extends Command {
 				return false;
 			}
 			
-			AbstractMenu menu = getRequestedMenu(playerState, args.get(0), sender.getPlayer());
+			AbstractMenu menu = getRequestedMenu(playerState, args.get(0), sender, sender.getPlayer());
 			if (menu == null) {
 				return false;
 			}
@@ -209,14 +209,14 @@ public class OpenCommand extends Command {
 		return false;
 	}
 	
-	public AbstractMenu getRequestedMenu (PlayerState playerState, String requestedMenuName, Player player)
+	public AbstractMenu getRequestedMenu (PlayerState playerState, String requestedMenuName, Sender sender, Player player)
 	{
 		// Grab the name without any extensions
 		String menuName = (requestedMenuName.contains(".") ? requestedMenuName.split("\\.")[0] : requestedMenuName);
 		
 		if (menuName.equals("purchase")) 
 		{
-			player.sendMessage(Message.COMMAND_OPEN_ERROR.replace("{1}", menuName));
+			sender.sendMessage(Message.COMMAND_OPEN_ERROR.replace("{1}", menuName));
 			return null;
 		}
 		
@@ -230,7 +230,7 @@ public class OpenCommand extends Command {
 			
 			if (menuInventory == null)
 			{
-				player.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
+				sender.sendMessage(Message.COMMAND_ERROR_UNKNOWN_MENU.replace("{1}", menuName));
 				return null;
 			}
 			
