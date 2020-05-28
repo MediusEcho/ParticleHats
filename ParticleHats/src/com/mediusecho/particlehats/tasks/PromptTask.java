@@ -2,13 +2,14 @@ package com.mediusecho.particlehats.tasks;
 
 import java.util.Collection;
 
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.editor.MetaState;
+import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.prompt.Prompt;
 
@@ -25,13 +26,22 @@ public class PromptTask extends BukkitRunnable {
 	@Override
 	public void run() 
 	{
-		Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
-		if (onlinePlayers.size() > 0)
+		Collection<EntityState> entityStates = core.getEntityStates();
+		if (entityStates.size() > 0)
 		{
 			passes++;
-			for (Player player : onlinePlayers)
+			for (EntityState entityState : entityStates)
 			{
-				PlayerState playerState = core.getPlayerState(player);
+				Entity entity = entityState.getOwner();
+				if (!(entity instanceof Player)) {
+					continue;
+				}
+				
+				if (!(entityState instanceof PlayerState)) {
+					continue;
+				}
+				
+				PlayerState playerState = (PlayerState)entityState;
 				MetaState metaState = playerState.getMetaState();
 				
 				if (metaState == MetaState.NONE) {
@@ -51,7 +61,7 @@ public class PromptTask extends BukkitRunnable {
 				
 				Prompt prompt = core.getPrompt();
 				if (prompt.canPrompt(passes)) {
-					prompt.prompt(player, metaState);
+					prompt.prompt((Player)entity, metaState);
 				}
 			}
 		}
