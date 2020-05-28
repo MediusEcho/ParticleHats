@@ -345,6 +345,14 @@ public class ParticleHats extends JavaPlugin {
 		return (PlayerState)getEntityState(player);
 	}
 	
+	public PlayerState getNewPlayerState (Player player)
+	{
+		UUID id = player.getUniqueId();
+		removePlayerState(id);
+		
+		return (PlayerState)getEntityState(player);
+	}
+	
 	public EntityState getEntityState (Entity entity, int entityID)
 	{
 		UUID id = entity.getUniqueId();
