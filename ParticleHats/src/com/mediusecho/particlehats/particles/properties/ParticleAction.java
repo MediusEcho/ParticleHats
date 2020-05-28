@@ -285,9 +285,9 @@ public enum ParticleAction {
 				
 				if (hats.size() > 0)
 				{
-					boolean initialToggle = hats.get(0).isVanished();
+					boolean initialToggle = hats.get(0).isHidden();
 					for (Hat h : hats) {
-						h.setVanished(!initialToggle);
+						h.setHidden(!initialToggle);
 					}
 				}
 				break;

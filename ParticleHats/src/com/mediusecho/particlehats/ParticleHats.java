@@ -345,6 +345,14 @@ public class ParticleHats extends JavaPlugin {
 		return (PlayerState)getEntityState(player);
 	}
 	
+	public PlayerState getNewPlayerState (Player player)
+	{
+		UUID id = player.getUniqueId();
+		removePlayerState(id);
+		
+		return (PlayerState)getEntityState(player);
+	}
+	
 	public EntityState getEntityState (Entity entity, int entityID)
 	{
 		UUID id = entity.getUniqueId();
@@ -439,6 +447,20 @@ public class ParticleHats extends JavaPlugin {
 	
 	public Prompt getPrompt () {
 		return prompt;
+	}
+	
+	/**
+	 * Checks to see if a file exists with this name in the given folder
+	 * @param folderName
+	 * @param fileName
+	 * @return
+	 */
+	public boolean fileExists (String folderName, String fileName)
+	{
+		String directory = getDataFolder() + File.separator + folderName + File.separator + fileName;
+		File file = new File(directory);
+		
+		return file.exists();
 	}
 	
 	/**

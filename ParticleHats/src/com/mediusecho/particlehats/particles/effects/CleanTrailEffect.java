@@ -1,14 +1,13 @@
 package com.mediusecho.particlehats.particles.effects;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
 
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
-import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 
@@ -41,7 +40,7 @@ public class CleanTrailEffect extends Effect {
 
 	@Override
 	public List<ParticleTracking> getSupportedTrackingMethods() {
-		return Arrays.asList(ParticleTracking.TRACK_NOTHING);
+		return Arrays.asList(ParticleTracking.values());
 	}
 
 	@Override
@@ -60,20 +59,15 @@ public class CleanTrailEffect extends Effect {
 	}
 
 	@Override
-	public void build() {
-		// Nothing to do :o
-	}
-	
-	@Override
-	public void display (int ticks, Entity entity, Hat hat)
+	public void build() 
 	{
-		if (hat.canDisplay(ticks))
-		{
-			Location location = entity.getLocation();
-			location.add(hat.getTotalOffset());
-			
-			displayParticle(location, hat, 0);
-		}
+		List<Vector> l = new ArrayList<Vector>();
+		l.add(new Vector(0, 0, 0));
+		
+		List<List<Vector>> frames = createEmptyFrames();
+		frames.add(l);
+		
+		setFrames(frames);
 	}
 
 }

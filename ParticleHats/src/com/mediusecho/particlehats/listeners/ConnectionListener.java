@@ -33,7 +33,7 @@ public class ConnectionListener implements Listener {
 	{
 		Player player = event.getPlayer();
 		UUID id = event.getPlayer().getUniqueId();
-		PlayerState playerState = core.getPlayerState(player);
+		PlayerState playerState = core.getNewPlayerState(player);
 		
 		// Load equipped hats
 		core.getDatabase().loadPlayerEquippedHats(id, (loadedHats) ->

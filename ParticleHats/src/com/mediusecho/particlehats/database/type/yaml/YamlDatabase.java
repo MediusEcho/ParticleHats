@@ -558,8 +558,20 @@ public class YamlDatabase implements Database {
 	
 	@Override
 	public void savePlayerEquippedHats(UUID id, List<Hat> hats) 
-	{
+	{	
 		CustomConfig playerConfig = getPlayerConfig(id);
+		if (hats.isEmpty()) 
+		{
+			// Returns true if the config was empty and deleted.
+			if (checkPlayerConfig(playerConfig, id)) {
+				return;
+			}
+		}
+		
+		// Create a player config since the player does not have one.
+		else if (playerConfig == null) {
+			playerConfig = getGuaranteedPlayerConfig(id);
+		}
 		
 		List<String> equippedHats = playerConfig.getConfig().getStringList("equipped-hats");
 		equippedHats.clear();
@@ -575,12 +587,17 @@ public class YamlDatabase implements Database {
 		
 		playerConfig.set("equipped-hats", equippedHats);
 		playerConfig.save();
+		
+		playerConfigs.remove(id);
 	}
 
 	@Override
 	public void loadPlayerEquippedHats(UUID id, DatabaseCallback callback) 
 	{
 		CustomConfig playerConfig = getPlayerConfig(id);
+		if (playerConfig == null) {
+			return;
+		}
 		
 		List<String> equippedHats = playerConfig.getConfig().getStringList("equipped-hats");
 		List<Hat> loadedHats = new ArrayList<Hat>();
@@ -620,7 +637,7 @@ public class YamlDatabase implements Database {
 	@Override
 	public void savePlayerPurchase(UUID id, Hat hat) 
 	{
-		CustomConfig playerConfig = getPlayerConfig(id);
+		CustomConfig playerConfig = getGuaranteedPlayerConfig(id);
 		
 		List<String> purchases = playerConfig.getConfig().getStringList("purchased-hats");
 		purchases.add(hat.getMenu() + ":" + hat.getSlot());
@@ -633,6 +650,9 @@ public class YamlDatabase implements Database {
 	public void loadPlayerPurchasedHats(UUID id, DatabaseCallback callback) 
 	{
 		CustomConfig playerConfig = getPlayerConfig(id);
+		if (playerConfig == null) {
+			return;
+		}
 		
 		List<HatReference> purchasedHats = new ArrayList<HatReference>();
 		List<String> purchases = playerConfig.getConfig().getStringList("purchased-hats");
@@ -649,6 +669,9 @@ public class YamlDatabase implements Database {
 	public void loadPlayerLegacyPurchasedHats (UUID id, DatabaseCallback callback)
 	{
 		CustomConfig playerConfig = getPlayerConfig(id);
+		if (playerConfig == null) {
+			return;
+		}
 		
 		List<String> legacyPurchasedHats = playerConfig.getConfig().getStringList("purchases");
 		callback.execute(legacyPurchasedHats);
@@ -817,6 +840,32 @@ public class YamlDatabase implements Database {
 			int weight = config.getInt(key + ".weight", 0);
 			groups.add(new Group(key, menuName, weight));
 		}
+	}
+	
+	/**
+	 * Verifies there is content inside this CustomConfig.<br>
+	 * Will delete the CustomConfig if there is no data saved.
+	 * @param config
+	 */
+	private boolean checkPlayerConfig (CustomConfig playerConfig, UUID id)
+	{
+		if (playerConfig == null) {
+			return true;
+		}
+		
+		FileConfiguration config = playerConfig.getConfig();
+		int purchases = config.getStringList("purchased-hats").size();
+		int legacyPurchases = playerConfig.getConfig().getStringList("purchases").size();
+		
+		if (purchases == 0 && legacyPurchases == 0) 
+		{
+			if (playerConfig.delete())
+			{
+				playerConfigs.remove(id);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private MenuInventory loadInventory (CustomConfig menuConfig, PlayerState playerState) 
@@ -1499,7 +1548,26 @@ public class YamlDatabase implements Database {
 	}
 	
 	/**
-	 * Get this players CustomConfig file
+	 * Returns a configuration file for the given UUID.<br>
+	 * A new configuration file is created if none are found.
+	 * @param id
+	 * @return
+	 */
+	private CustomConfig getGuaranteedPlayerConfig (UUID id)
+	{
+		if (playerConfigs.containsKey(id)) {
+			return playerConfigs.get(id);
+		}
+		
+		CustomConfig playerConfig = new CustomConfig(core, "players", id.toString(), false);
+		playerConfigs.put(id, playerConfig);
+		
+		return playerConfig;
+	}
+	
+	/**
+	 * Get this players CustomConfig file.<br>
+	 * Returns null if a .yml file does not exist
 	 * @param id
 	 * @return
 	 */
@@ -1507,6 +1575,10 @@ public class YamlDatabase implements Database {
 	{
 		if (playerConfigs.containsKey(id)) {
 			return playerConfigs.get(id);
+		}
+		
+		if (!core.fileExists("players", id.toString())) {
+			return null;
 		}
 		
 		CustomConfig playerConfig = new CustomConfig(core, "players", id.toString(), false);
