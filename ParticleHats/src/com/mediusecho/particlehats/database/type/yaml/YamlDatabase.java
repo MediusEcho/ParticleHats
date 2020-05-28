@@ -562,11 +562,13 @@ public class YamlDatabase implements Database {
 		CustomConfig playerConfig = getPlayerConfig(id);
 		if (hats.isEmpty()) 
 		{
+			// Returns true if the config was empty and deleted.
 			if (checkPlayerConfig(playerConfig, id)) {
 				return;
 			}
 		}
 		
+		// Create a player config since the player does not have one.
 		else if (playerConfig == null) {
 			playerConfig = getGuaranteedPlayerConfig(id);
 		}
