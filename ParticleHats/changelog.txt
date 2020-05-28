@@ -1,3 +1,7 @@
+4.2.3
+- Fixed an issue that would prevent particle effects from following a player when they rejoined a server.
+- Fixed a permission issue that would lock particle effects a player has permission to use.
+
 4.2.2
 - Fixed a NullPointerException when using /h open [menu] [player] from the console.
 
