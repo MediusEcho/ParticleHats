@@ -164,7 +164,7 @@ public class EntityState {
 	public void removeLastHat ()
 	{
 		if (activeHats.size() > 0) {
-			activeHats.remove(0);
+			removeHat(activeHats.get(0));
 		}
 	}
 	
