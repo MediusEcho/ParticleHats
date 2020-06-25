@@ -81,7 +81,18 @@ public enum ParticleEffect {
 	DRIPPING_HONEY         (64, -1, 15, CompatibleMaterial.HONEY_BOTTLE),
 	FALLING_HONEY          (65, -1, 15, CompatibleMaterial.HONEYCOMB),
 	FALLING_NECTAR         (66, -1, 15, CompatibleMaterial.DANDELION),
-	LANDING_HONEY          (67, -1, 15, CompatibleMaterial.HONEY_BOTTLE);
+	LANDING_HONEY          (67, -1, 15, CompatibleMaterial.HONEY_BOTTLE),
+	SOUL_FIRE_FLAME        (68, -1, 16, CompatibleMaterial.SOUL_CAMPFIRE),
+	ASH                    (69, -1, 16, CompatibleMaterial.BLACK_DYE),
+	CRIMSON_SPORE          (70, -1, 16, CompatibleMaterial.CRIMSON_FUNGUS),
+	WARPED_SPORE           (71, -1, 16, CompatibleMaterial.WARPED_FUNGUS),
+	SOUL                   (72, -1, 16, CompatibleMaterial.SOUL_LANTERN),
+	DRIPPING_OBSIDIAN_TEAR (73, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	FALLING_OBSIDIAN_TEAR  (74, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	LANDING_OBSIDIAN_TEAR  (75, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	REVERSE_PORTAL         (76, -1, 16, Material.OBSIDIAN),
+	WHITE_ASH              (77, -1, 16, CompatibleMaterial.WHITE_DYE);
+	
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();

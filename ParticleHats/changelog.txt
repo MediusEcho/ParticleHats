@@ -1,3 +1,23 @@
+4.2.5
+- Updated to 1.16
+- Added Particles:
+  - soul_fire_flame
+  - ash
+  - crimson_spore
+  - warped_spore
+  - soul
+  - dripping_obsidian_tear
+  - falling_obsidian_tear
+  - landing_obsidian_tear
+  - reverse_portal
+  - white_ash
+- Added name & descriptions for each particle in en_US.lang
+- Added nether music & ambient sounds to sound blacklist
+- Fixed particle selection menu showing incorrect amount of pages on older server versions.
+  
+4.2.4
+- Fixed an error that would prevent potion effects from being removed when unequip-overflow-hats is set to true.
+
 4.2.3
 - Fixed an issue that would prevent particle effects from following a player when they rejoined a server.
 - Fixed a permission issue that would lock particle effects a player has permission to use.

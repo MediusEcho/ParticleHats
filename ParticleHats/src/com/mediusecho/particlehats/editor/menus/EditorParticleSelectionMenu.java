@@ -380,6 +380,10 @@ public class EditorParticleSelectionMenu extends AbstractStaticMenu {
 		int count = 0;
 		for (ParticleEffect pe : ParticleEffect.values())
 		{
+			if (!pe.isSupported()) {
+				continue;
+			}
+			
 			switch (type)
 			{
 			case COLOR:
