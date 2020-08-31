@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mediusecho</groupId>
   <artifactId>ParticleHats</artifactId>
-  <version>4.2.4</version>
+  <version>4.2.7</version>
   <build>
     <finalName>ParticleHats</finalName>
     <plugins>

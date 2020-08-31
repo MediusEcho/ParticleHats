@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.entity.Entity;
@@ -55,11 +56,16 @@ public class ClearCitizensCommand extends Command {
 	@Override
 	public List<String> tabComplete (ParticleHats core, Sender sender, String label, ArrayList<String> args)
 	{
+		CitizensHook citizensHook = core.getHookManager().getCitizensHook();
+		if (citizensHook == null) {
+			return Collections.singletonList("");
+		}
+		
 		switch (args.size())
 		{
 			case 1:
 			{
-				return core.getHookManager().getCitizensHook().getNPCIds();
+				return citizensHook.getNPCIds();
 			}
 		}
 		return Arrays.asList("");

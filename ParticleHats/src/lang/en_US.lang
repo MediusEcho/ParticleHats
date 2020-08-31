@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.4
+version: 1.5
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -434,6 +434,26 @@ particle_falling_nectar_name: "&bFalling Nectar"
 particle_falling_nectar_description: "&8Nectar falling from a flower"
 particle_landing_honey_name: "&bLanding Honey"
 particle_landing_honey_description: "&8Particle of &bDripping Honey &8after it has hit the ground"
+particle_soul_fire_flame_name: "&bSoul Fire Flame"
+particle_soul_fire_flame_description: "&8Blue version of the &bFlame &8particle"
+particle_ash_name: "&bAsh"
+particle_ash_description: ""
+particle_crimson_spore_name: "&bCrimson Spore"
+particle_crimson_spore_description: ""
+particle_warped_spore_name: "&bWarped Spore"
+particle_warped_spore_description: ""
+particle_soul_name: "&bSoul"
+particle_soul_description: ""
+particle_dripping_obsidian_tear_name: "&bDripping Obsidian Tear"
+particle_dripping_obsidian_tear_description: ""
+particle_falling_obsidian_tear_name: "&bFalling Obsidian Tear"
+particle_falling_obsidian_tear_description: ""
+particle_landing_obsidian_tear_name: "&bLanding Obsidian Tear"
+particle_landing_obsidian_tear_description: ""
+particle_reverse_portal_name: "&bReverse Portal"
+particle_reverse_portal_description: ""
+particle_white_ash_name: "&bWhite Ash"
+particle_white_ash_description: ""
 
 ##########################
 #       Locations        #

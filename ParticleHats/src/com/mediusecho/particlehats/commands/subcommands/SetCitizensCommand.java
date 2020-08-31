@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.entity.Entity;
@@ -76,7 +77,12 @@ public class SetCitizensCommand extends Command {
 		{
 			case 1:
 			{
-				return core.getHookManager().getCitizensHook().getNPCIds();
+				CitizensHook citizensHook = core.getHookManager().getCitizensHook();
+				if (citizensHook == null) {
+					return Collections.singletonList("");
+				}
+				
+				return citizensHook.getNPCIds();
 			}
 			
 			case 2:

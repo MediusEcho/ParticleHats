@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,9 +93,9 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.4;
+	private final double LANG_VERSION = 1.5;
 	
-	private Map<UUID, EntityState> entityState;
+	private ConcurrentHashMap<UUID, EntityState> entityState;
 	
 	// Lets us know we can use the BaseComponent class from the bungee api
 	private boolean supportsBaseComponent = true;
@@ -192,7 +193,7 @@ public class ParticleHats extends JavaPlugin {
 			}
 			
 			// Initialize our player state map
-			entityState = new HashMap<UUID, EntityState>();
+			entityState = new ConcurrentHashMap<UUID, EntityState>();
 			
 			log("");
 			checkDefaultLang();
