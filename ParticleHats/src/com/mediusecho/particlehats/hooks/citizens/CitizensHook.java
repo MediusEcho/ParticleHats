@@ -79,7 +79,9 @@ public class CitizensHook implements Listener {
 	public void onNPCDespawn (NPCDespawnEvent event)
 	{
 		Entity entity = event.getNPC().getEntity();
-		core.removePlayerState(entity.getUniqueId());
+		if (entity != null) {
+			core.removePlayerState(entity.getUniqueId());
+		}
 	}
 	
 	@EventHandler
