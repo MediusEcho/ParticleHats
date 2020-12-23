@@ -1,3 +1,6 @@
+4.2.8
+- Fixed arrow tag being applied to every player in a 50x50x50 area.
+
 4.2.7
 - Fixed NullPointerException when a Citizens NPC despawned.
 - Fixed NullPointerException from /h npc set & /h npc clear when the Citizens plugin is not installed.

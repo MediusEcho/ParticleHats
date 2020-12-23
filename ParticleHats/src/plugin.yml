@@ -1,6 +1,6 @@
 name: ParticleHats
 main: com.mediusecho.particlehats.ParticleHats
-version: 4.2.7
+version: 4.2.8
 api-version: 1.13
 author: MediusEcho
 softdepend: [Vault, SuperVanish, PremiumVanish, VanishNoPacket, PlayerPoints, Citizens]
