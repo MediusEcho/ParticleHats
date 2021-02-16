@@ -1,3 +1,7 @@
+4.2.9
+- Fixed InventoryPickupItemEvent getting uncancelled and causing
+  issues with other plugins.
+
 4.2.8
 - Fixed arrow tag being applied to every player in a 50x50x50 area.
 
