@@ -51,7 +51,9 @@ public class EntityListener implements Listener {
 	public void onItemPickup (InventoryPickupItemEvent event)
 	{
 		Item item = event.getItem();
-		event.setCancelled(item.hasMetadata("PH_DroppedItem"));
+		if (item.hasMetadata("PH_DroppedItem")) {
+			event.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
