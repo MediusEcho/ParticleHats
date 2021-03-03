@@ -45,7 +45,7 @@ public class EditorSettingsMenu extends AbstractStaticMenu {
 		{
 			editorManager.getOwnerState().setMetaState(MetaState.MENU_TITLE);
 			core.prompt(owner, MetaState.MENU_TITLE);
-			owner.closeInventory();
+			menuManager.closeInventory();
 			return MenuClickResult.NEUTRAL;
 		});
 		
@@ -57,7 +57,7 @@ public class EditorSettingsMenu extends AbstractStaticMenu {
 			{
 				editorManager.getOwnerState().setMetaState(MetaState.MENU_ALIAS);
 				core.prompt(owner, MetaState.MENU_ALIAS);
-				owner.closeInventory();
+				menuManager.closeInventory();
 			}
 			
 			else if (event.isShiftRightClick())

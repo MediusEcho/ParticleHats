@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.UUID;
 
+import com.mediusecho.particlehats.util.PlayerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -104,6 +105,10 @@ public abstract class MenuManager {
 		}
 		openMenus.getLast().open();
 	}
+
+	public void closeInventory () {
+		PlayerUtil.closeInventory(owner);
+	}
 	
 	/**
 	 * Opens the most current menu
@@ -196,7 +201,7 @@ public abstract class MenuManager {
 		if (canUnregister()) {
 			willUnregister();
 		}
-		
+
 		openingMenu = false;
 	}
 	

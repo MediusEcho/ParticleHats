@@ -81,7 +81,7 @@ public class PurchaseEditorMainMenu extends AbstractStaticMenu {
 			{
 				purchaseManager.getOwnerState().setMetaState(MetaState.HAT_NAME);
 				core.prompt(owner, MetaState.HAT_NAME);
-				owner.closeInventory();
+				menuManager.closeInventory();
 			}
 			
 			else

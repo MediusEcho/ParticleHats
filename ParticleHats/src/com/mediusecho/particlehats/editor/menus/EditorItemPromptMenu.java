@@ -73,8 +73,7 @@ public class EditorItemPromptMenu extends AbstractStaticMenu {
 			isSearching = true;
 			core.getPlayerState(owner).setMetaState(MetaState.BLOCK_SEARCH);
 			core.prompt(owner, MetaState.BLOCK_SEARCH);
-			owner.closeInventory();
-			
+			menuManager.closeInventory();
 			return MenuClickResult.NEUTRAL;
 		});
 		
@@ -114,11 +113,11 @@ public class EditorItemPromptMenu extends AbstractStaticMenu {
 	public void open ()
 	{
 		super.open();
-		
+
 		if (isSearching)
 		{
 			isSearching = false;
-			
+
 			String searchQuery = editorManager.getMetaArgument();
 			if (!searchQuery.equals(""))
 			{
@@ -129,12 +128,12 @@ public class EditorItemPromptMenu extends AbstractStaticMenu {
 					if (i == null) {
 						return;
 					}
-					
+
 					menuManager.closeCurrentMenu();
 					editorManager.getOwnerState().addRecentItem(i);
 					callback.onSelect(i);
 				});
-				
+
 				menuManager.addMenu(editorSearchMenu);
 				editorSearchMenu.open();
 			}

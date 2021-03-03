@@ -153,8 +153,8 @@ public class EditorActionMenuOverview extends AbstractStaticMenu {
 			targetHat.setEditingAction(isLeftClick ? 1 : 2);
 			editorManager.getOwnerState().setMetaState(MetaState.HAT_COMMAND);
 			core.prompt(owner, MetaState.HAT_COMMAND);
-			
-			owner.closeInventory();
+
+			menuManager.closeInventory();
 		}
 		break;
 			

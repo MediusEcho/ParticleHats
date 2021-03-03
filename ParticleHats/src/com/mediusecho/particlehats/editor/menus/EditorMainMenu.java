@@ -317,7 +317,7 @@ public class EditorMainMenu extends AbstractStaticMenu {
 			clone.clearPropertyChanges();
 			
 			core.getParticleManager().equipHat(owner, clone, false);
-			owner.closeInventory();
+			menuManager.closeInventory();
 			return MenuClickResult.NEUTRAL;
 		});
 		

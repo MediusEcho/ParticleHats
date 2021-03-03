@@ -97,7 +97,7 @@ public class CitizensMainMenu extends AbstractListMenu {
 		
 		setButton(0, 49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_CLOSE), (event, slot) -> 
 		{
-			owner.closeInventory();
+			menuManager.closeInventory();
 			return MenuClickResult.NEUTRAL;
 		});
 		
