@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mediusecho</groupId>
   <artifactId>ParticleHats</artifactId>
-  <version>4.2.9</version>
+  <version>4.2.10</version>
   <build>
     <finalName>ParticleHats</finalName>
     <plugins>
@@ -118,6 +118,13 @@
         	</exclusion>
         </exclusions>
 	</dependency>
+
+    <dependency>
+        <groupId>org.jetbrains</groupId>
+        <artifactId>annotations</artifactId>
+        <version>16.0.2</version>
+        <scope>compile</scope>
+    </dependency>
 
   </dependencies>
 </project>

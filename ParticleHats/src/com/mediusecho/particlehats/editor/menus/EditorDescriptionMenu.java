@@ -144,7 +144,7 @@ public class EditorDescriptionMenu extends AbstractListMenu {
 				
 				editorManager.getOwnerState().setMetaState(metaState);
 				core.prompt(owner, metaState);
-				owner.closeInventory();
+				menuManager.closeInventory();
 				isModified = true;
 			}
 			

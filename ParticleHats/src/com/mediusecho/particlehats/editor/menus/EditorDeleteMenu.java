@@ -33,7 +33,7 @@ public class EditorDeleteMenu extends AbstractStaticMenu {
 		setButton(12, yesItem, (event, slot) ->
 		{
 			core.getDatabase().deleteMenu(editorBaseMenu.getMenuInventory().getName());
-			owner.closeInventory();
+			menuManager.closeInventory();
 			return MenuClickResult.NEUTRAL;
 		});
 		

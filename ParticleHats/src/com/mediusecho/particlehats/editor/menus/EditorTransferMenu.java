@@ -1,5 +1,6 @@
 package com.mediusecho.particlehats.editor.menus;
 
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -65,7 +66,7 @@ public class EditorTransferMenu extends AbstractStaticMenu {
 			
 			else
 			{
-				owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+				CompatibleSound.ENTITY_VILLAGER_NO.play(owner, 1.0f, 1.0f);
 				return MenuClickResult.NONE;
 			}
 		};

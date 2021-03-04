@@ -60,7 +60,7 @@ public class EditorMetaMenu extends AbstractStaticMenu {
 			{
 				editorManager.getOwnerState().setMetaState(MetaState.HAT_NAME);
 				core.prompt(owner, MetaState.HAT_NAME);
-				owner.closeInventory();
+				menuManager.closeInventory();
 			}
 			
 			else
@@ -131,7 +131,7 @@ public class EditorMetaMenu extends AbstractStaticMenu {
 		{
 			editorManager.getOwnerState().setMetaState(MetaState.HAT_PERMISSION);
 			core.prompt(owner, MetaState.HAT_PERMISSION);
-			owner.closeInventory();
+			menuManager.closeInventory();
 			return MenuClickResult.NEUTRAL;
 		});
 		
@@ -143,7 +143,7 @@ public class EditorMetaMenu extends AbstractStaticMenu {
 			{
 				editorManager.getOwnerState().setMetaState(MetaState.HAT_LABEL);
 				core.prompt(owner, MetaState.HAT_LABEL);
-				owner.closeInventory();
+				menuManager.closeInventory();
 			}
 			
 			else if (event.isShiftRightClick())
@@ -164,7 +164,7 @@ public class EditorMetaMenu extends AbstractStaticMenu {
 			{
 				editorManager.getOwnerState().setMetaState(MetaState.HAT_EQUIP_MESSAGE);
 				core.prompt(owner, MetaState.HAT_EQUIP_MESSAGE);
-				owner.closeInventory();
+				menuManager.closeInventory();
 			}
 			
 			else if (event.isShiftRightClick())
@@ -183,7 +183,7 @@ public class EditorMetaMenu extends AbstractStaticMenu {
 			{
 				editorManager.getOwnerState().setMetaState(MetaState.HAT_PERMISSION_MESSAGE);
 				core.prompt(owner, MetaState.HAT_PERMISSION_MESSAGE);
-				owner.closeInventory();
+				menuManager.closeInventory();
 			}
 			
 			else if (event.isShiftRightClick())

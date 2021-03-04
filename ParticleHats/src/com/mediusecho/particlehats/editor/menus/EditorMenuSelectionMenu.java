@@ -89,8 +89,8 @@ public class EditorMenuSelectionMenu extends AbstractListMenu {
 		{
 			editorManager.getOwnerState().setMetaState(MetaState.NEW_MENU);
 			core.prompt(owner, MetaState.HAT_NAME);
-			owner.closeInventory();
-			
+			menuManager.closeInventory();
+
 			isAddingMenu = true;
 			return MenuClickResult.NEUTRAL;
 		});

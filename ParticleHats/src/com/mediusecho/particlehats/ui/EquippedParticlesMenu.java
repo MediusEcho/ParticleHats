@@ -11,7 +11,8 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.Hat;
+
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.player.PlayerState;
 
@@ -116,7 +117,7 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 		{
 			setButton(0, 49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_CLOSE), (event, slot) ->
 			{
-				owner.closeInventory();
+				menuManager.closeInventory();
 				return MenuClickResult.NEUTRAL;
 			});
 		}

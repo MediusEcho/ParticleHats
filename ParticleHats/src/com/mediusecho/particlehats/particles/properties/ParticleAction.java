@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mediusecho.particlehats.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -168,7 +169,7 @@ public enum ParticleAction {
 						core.getParticleManager().equipHat(player, hat);
 						
 						if (canClose) {
-							player.closeInventory();
+							PlayerUtil.closeInventory(player);
 						}
 						
 						return;
@@ -194,7 +195,7 @@ public enum ParticleAction {
 								}
 								
 								if (canClose) {
-									player.closeInventory();
+									PlayerUtil.closeInventory(player);
 								}
 								
 								return;
@@ -207,7 +208,7 @@ public enum ParticleAction {
 							core.getParticleManager().equipHat(player, hat);
 							
 							if (canClose) {
-								player.closeInventory();
+								PlayerUtil.closeInventory(player);
 							}
 							
 							return;
@@ -236,7 +237,7 @@ public enum ParticleAction {
 							player.sendMessage(Message.INSUFFICIENT_FUNDS.getValue().replace("{1}", currency));
 							
 							if (canClose) {
-								player.closeInventory();
+								PlayerUtil.closeInventory(player);
 							}
 							
 							return;
@@ -245,7 +246,6 @@ public enum ParticleAction {
 						else
 						{	
 							StaticMenuManager staticManager = core.getMenuManagerFactory().getStaticMenuManager(playerState);
-							//StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
 							playerState.setPendingPurchase(hat);
 							
 							MenuInventory purchaseInventory = core.getDatabase().getPurchaseMenu(playerState);
@@ -269,7 +269,7 @@ public enum ParticleAction {
 						}
 						
 						if (canClose) {
-							player.closeInventory();
+							PlayerUtil.closeInventory(player);
 						}
 					}
 				}
@@ -295,7 +295,7 @@ public enum ParticleAction {
 			
 			case CLOSE:
 			{
-				player.closeInventory();
+				PlayerUtil.closeInventory(player);
 				break;
 			}
 			
@@ -308,7 +308,7 @@ public enum ParticleAction {
 				
 				core.getParticleManager().equipHat(player, hat);
 				if (canClose) {
-					player.closeInventory();
+					PlayerUtil.closeInventory(player);
 				}
 				break;
 			}
@@ -324,8 +324,11 @@ public enum ParticleAction {
 			{
 				if (!argument.equals("")) 
 				{
-					player.closeInventory();
-					player.performCommand(argument);
+					PlayerUtil.runNextTick(() ->
+					{
+						player.closeInventory();
+						player.performCommand(argument);
+					});
 				}
 				break;
 			}
@@ -404,7 +407,7 @@ public enum ParticleAction {
 					core.getParticleManager().equipHat(player, pendingHat);
 					
 					if (SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean()) {
-						player.closeInventory();
+						PlayerUtil.closeInventory(player);
 					} else {
 						gotoPreviousMenu(playerState);
 					}

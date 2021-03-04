@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor.citizens;
 
 import java.util.List;
 
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,7 +27,7 @@ public class CitizensMainMenu extends AbstractListMenu {
 	
 	private final MenuButton emptyHatButton = new MenuButton(ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.NPC_MAIN_MENU_NO_EQUIPPED_HATS), (event, slot) ->
 	{
-		owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+		CompatibleSound.ENTITY_VILLAGER_NO.play(owner, 1.0f, 1.0f);
 		return MenuClickResult.NONE;
 	});
 	
@@ -97,7 +98,7 @@ public class CitizensMainMenu extends AbstractListMenu {
 		
 		setButton(0, 49, ItemUtil.createItem(Material.NETHER_STAR, Message.EDITOR_MISC_CLOSE), (event, slot) -> 
 		{
-			owner.closeInventory();
+			menuManager.closeInventory();
 			return MenuClickResult.NEUTRAL;
 		});
 		
