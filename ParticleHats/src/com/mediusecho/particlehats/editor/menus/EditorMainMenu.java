@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor.menus;
 
 import java.util.List;
 
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -101,7 +102,7 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		
 		noParticle4U = (event, slot) ->
 		{
-			owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+			CompatibleSound.ENTITY_VILLAGER_NO.play(owner, 1.0f, 1.0f);
 			return MenuClickResult.NONE;
 		};
 		

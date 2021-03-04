@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -28,7 +29,7 @@ public class CitizensMenuSelectionMenu extends AbstractListMenu {
 	
 	protected final MenuButton emptyHatButton = new MenuButton(ItemUtil.createItem(CompatibleMaterial.BARRIER, Message.EDITOR_MISC_EMPTY_MENU), (event, slot) ->
 	{
-		owner.playSound(owner.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+		CompatibleSound.ENTITY_VILLAGER_NO.play(owner, 1.0f, 1.0f);
 		return MenuClickResult.NONE;
 	});
 	
