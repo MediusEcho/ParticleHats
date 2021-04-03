@@ -49,7 +49,12 @@ public class ParticleHats extends JavaPlugin {
 	
 	// [Future] Are features that i plan on adding.
 	// [?] Are ideas that may or may not get added.
-	
+
+	// TODO: #4 LuckPerms temp permission support.
+	// This one kinda works, but only for player specific
+	// temporary permissions. I'd like to get it working for
+	// groups as well.
+
 	// TODO: [?] Enjin economy support?
 	// TODO: [?] Custom Player Head support? (Head Database, Heads Plugin)
 	// TODO: [?] Type texture support? Lets built-in types display custom images (eg. capes)
