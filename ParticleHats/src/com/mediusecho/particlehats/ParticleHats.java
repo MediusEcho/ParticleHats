@@ -266,7 +266,8 @@ public class ParticleHats extends JavaPlugin {
 		} else {
 			prompt = new BukkitPrompt();
 		}
-		
+
+		eventManager.onReload();
 		database.onReload();
 		particleTask.onReload();
 		resourceManager.onReload();

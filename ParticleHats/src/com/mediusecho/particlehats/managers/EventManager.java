@@ -32,4 +32,9 @@ public class EventManager {
 		interactListener   = new InteractListener(core);
 		commandListener    = new CommandListener(core);
 	}
+
+	public void onReload ()
+	{
+		entityListener.onReload();
+	}
 }
