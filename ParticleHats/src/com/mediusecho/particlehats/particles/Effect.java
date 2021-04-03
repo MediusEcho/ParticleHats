@@ -3,6 +3,7 @@ package com.mediusecho.particlehats.particles;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -16,6 +17,7 @@ import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.util.MathUtil;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Effect {
 
@@ -244,7 +246,9 @@ public abstract class Effect {
 				
 				case ITEMSTACK_DATA:
 				{
-					hat.getParticleData(index).getItemStackData().dropItem(world, location, hat);
+					final int i = index;
+					Bukkit.getScheduler().runTask(ParticleHats.instance, () ->
+							hat.getParticleData(i).getItemStackData().dropItem(world, location, hat));
 					break;
 				}
 			}
