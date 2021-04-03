@@ -712,7 +712,7 @@ public class EditorMainMenu extends AbstractStaticMenu {
 			
 			case ITEMSTACK_DATA:
 			{
-				EditorItemStackMenu editorItemStackMenu = new EditorItemStackMenu(core, editorManager, owner, 0, () ->
+				EditorItemStackMenu editorItemStackMenu = new EditorItemStackMenu(core, editorManager, owner, particleIndex, () ->
 				{
 					EditorLore.updateParticleDescription(item, targetHat, particleIndex);
 				});
