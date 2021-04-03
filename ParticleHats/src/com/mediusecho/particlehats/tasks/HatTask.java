@@ -203,18 +203,6 @@ public class HatTask extends BukkitRunnable {
         hat.displayType(ticks, entity);
     }
 
-    private void displayHat (Player player, @NotNull Hat hat)
-    {
-        ParticleType type = hat.getType();
-        if (type != ParticleType.NONE)
-        {
-            // Continue if we're displaying a node, or if we can't use a tag
-            if (handleTags(player, hat)) {
-                hat.displayType(ticks, player);
-            }
-        }
-    }
-
     private boolean handleTags (Entity entity, @NotNull Hat hat)
     {
         List<ParticleTag> tags = hat.getTags();
