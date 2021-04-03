@@ -497,7 +497,7 @@ public enum ParticleAction {
 		{
 			playerState.removeHat(hat);
 			ItemStack item = inventory.getItem(slot);
-			
+
 			ItemUtil.stripHighlight(item);
 			ItemUtil.setItemDescription(item, hat.getCachedDescription());
 			return true;

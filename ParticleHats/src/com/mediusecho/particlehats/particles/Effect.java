@@ -130,51 +130,51 @@ public abstract class Effect {
 	{
 		int loops = 0;
 		int particleIndex = 0;
-		
+
 		if (ticks % hat.getUpdateFrequency() == 0)
 		{
 			Location location = entity.getLocation();
 			if (hat.getTrackingMethod() == ParticleTracking.TRACK_HEAD_MOVEMENT && entity instanceof Player) {
 				location = ((Player)entity).getEyeLocation();
 			}
-			
+
 			double yaw = Math.toRadians(location.getYaw());
 			double cos = Math.cos(yaw);
 			double sin = Math.sin(yaw);
-			
+
 			Vector offset = hat.getOffset();
 			double offsetX = ((offset.getX() * cos) - (offset.getZ() * sin));
 			double offsetZ = ((offset.getX() * sin) + (offset.getZ() * cos));
-			
+
 			Vector angle = hat.getAngle();
 			double angleXRad = Math.toRadians(angle.getX());
 			double angleYRad = Math.toRadians(angle.getY());
 			double angleZRad = Math.toRadians(angle.getZ());
-			
+
 			for (List<Vector> frame : frames)
 			{
 				particleIndex = loops++;
-				
+
 				// Display as an animation
 				if (supportsAnimation() && hat.getAnimation() == ParticleAnimation.ANIMATED)
-				{					
+				{
 					int size = frame.size();
 					int frameIndex = frames.indexOf(frame);
 					int index = MathUtil.clamp(hat.getAnimationIndex(frameIndex), 0, size);
-					
+
 					Location clone = location.clone();
 					Vector target = frame.get(index).clone();
-					
+
 					target.multiply(hat.getScale());
-					
+
 					target.add(new Vector(offsetX, 0, offsetZ));
 					target = getAngleVector(angleXRad, angleYRad, angleZRad, target);
-					
+
 					clone.add(getTrackingPosition(hat, target, location, cos, sin));
 					displayParticle(clone, hat, particleIndex);
 					hat.setAnimationIndex(frameIndex, MathUtil.wrap(index + 1, size, 0));
 				}
-				
+
 				// Display statically
 				else
 				{
@@ -183,9 +183,9 @@ public abstract class Effect {
 						Vector v = target.clone();
 						v.multiply(hat.getScale());
 						v = getAngleVector(angleXRad, angleYRad, angleZRad, v);
-						
-						Location clone = location.clone().add(offsetX, 0, offsetZ);		
-						
+
+						Location clone = location.clone().add(offsetX, 0, offsetZ);
+
 						clone.add(getTrackingPosition(hat, v, location, cos, sin));
 						displayParticle(clone, hat, particleIndex);
 					}

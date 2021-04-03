@@ -150,27 +150,27 @@ public class PixelEffect extends Effect {
 			if (hat.getTrackingMethod() == ParticleTracking.TRACK_HEAD_MOVEMENT && entity instanceof Player) {
 				location = ((Player)entity).getEyeLocation();
 			}
-			
+
 			double yaw = Math.toRadians(location.getYaw());
 			double cos = Math.cos(yaw);
 			double sin = Math.sin(yaw);
-			
+
 			Vector offset = hat.getOffset();
 			double offsetX = ((offset.getX() * cos) - (offset.getZ() * sin));
 			double offsetZ = ((offset.getX() * sin) + (offset.getZ() * cos));
-			
+
 			Vector angle = hat.getAngle();
 			double angleXRad = Math.toRadians(angle.getX());
 			double angleYRad = Math.toRadians(angle.getY());
 			double angleZRad = Math.toRadians(angle.getZ());
-			
+
 			for (PixelData pixelData : pixels)
 			{
 				Vector v = pixelData.getPosition().clone().multiply(hat.getScale());
 				v = getAngleVector(angleXRad, angleYRad, angleZRad, v);
-				
-				Location clone = location.clone().add(offsetX, 0, offsetZ);		
-				
+
+				Location clone = location.clone().add(offsetX, 0, offsetZ);
+
 				clone.add(getTrackingPosition(hat, v, location, cos, sin));
 				displayParticle(clone, hat, pixelData.getColor());
 			}
