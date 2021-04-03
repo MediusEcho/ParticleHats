@@ -43,7 +43,7 @@ import com.mediusecho.particlehats.prompt.Prompt;
 import com.mediusecho.particlehats.prompt.SpigotPrompt;
 import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
-import com.mediusecho.particlehats.tasks.ParticleTask;
+import com.mediusecho.particlehats.tasks.EntityTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
 import com.mediusecho.particlehats.ui.MenuManagerFactory;
 import com.mediusecho.particlehats.util.ResourceUtil;
@@ -104,7 +104,7 @@ public class ParticleHats extends JavaPlugin {
 	// Tasks
 	private MenuTask menuTask;
 	private PromptTask promptTask;
-	private ParticleTask particleTask;
+	private EntityTask entityTask;
 	
 	private boolean enabled = false;
 	
@@ -225,8 +225,8 @@ public class ParticleHats extends JavaPlugin {
 			promptTask.runTaskTimer(this, 0, 40);
 			
 			// Handles displaying particles
-			particleTask = new ParticleTask(this);
-			particleTask.runTaskTimer(this, 0, 1);
+			entityTask = new EntityTask(this);
+			entityTask.runTaskTimer(this, 0, 4);
 		}
 		log("");
 		log("Done :)");
@@ -243,7 +243,7 @@ public class ParticleHats extends JavaPlugin {
 			
 			menuTask.cancel();
 			promptTask.cancel();
-			particleTask.cancel();
+			entityTask.cancel();
 		}
 	}
 	
@@ -269,7 +269,7 @@ public class ParticleHats extends JavaPlugin {
 
 		eventManager.onReload();
 		database.onReload();
-		particleTask.onReload();
+		entityTask.onReload();
 		resourceManager.onReload();
 		hookManager.onReload();
 	}
