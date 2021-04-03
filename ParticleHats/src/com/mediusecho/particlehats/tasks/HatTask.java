@@ -111,9 +111,6 @@ public class HatTask extends BukkitRunnable {
 
     private void checkHat (@NotNull EntityState entityState, @NotNull Hat hat, boolean checkNode)
     {
-        PlayerState.AFKState afkState = entityState.getAFKState();
-        PlayerState.PVPState pvpState = entityState.getPVPState();
-
         switch (hat.getMode())
         {
             case ACTIVE:
@@ -121,19 +118,19 @@ public class HatTask extends BukkitRunnable {
                 break;
 
             case WHEN_MOVING:
-                if (afkState == PlayerState.AFKState.ACTIVE) {
+                if (entityState.getAFKState() == PlayerState.AFKState.ACTIVE) {
                     displayHat(entity, hat);
                 }
                 break;
 
             case WHEN_AFK:
-                if (afkState == PlayerState.AFKState.AFK) {
+                if (entityState.getAFKState() == PlayerState.AFKState.AFK) {
                     displayHat(entity, hat);
                 }
                 break;
 
             case WHEN_PEACEFUL:
-                if (pvpState == PlayerState.PVPState.PEACEFUL) {
+                if (entityState.getPVPState() == PlayerState.PVPState.PEACEFUL) {
                     displayHat(entity, hat);
                 }
                 break;
