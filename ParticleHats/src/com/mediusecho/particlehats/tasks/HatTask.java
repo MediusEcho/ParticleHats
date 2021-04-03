@@ -44,7 +44,6 @@ public class HatTask extends BukkitRunnable {
         essentialsVanishFlag = SettingsManager.FLAG_ESSENTIALS_VANISH.getBoolean();
 
         runTaskTimerAsynchronously(plugin, 0, 1L);
-        ParticleHats.log("Starting asynchronous particle task");
     }
 
     public Hat getHat () {
@@ -107,7 +106,6 @@ public class HatTask extends BukkitRunnable {
     {
         try {
             cancel();
-            ParticleHats.log("Stopping asynchronous particle task");
         } catch (Exception ignored) {}
     }
 
