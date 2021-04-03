@@ -272,6 +272,9 @@ public class ParticleHats extends JavaPlugin {
 		entityTask.onReload();
 		resourceManager.onReload();
 		hookManager.onReload();
+
+		// Reload each equipped hats async task
+		entityState.values().forEach(EntityState::reload);
 	}
 	
 	/**

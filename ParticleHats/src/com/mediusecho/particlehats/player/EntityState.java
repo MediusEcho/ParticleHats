@@ -67,6 +67,11 @@ public class EntityState {
 		return activeHats;
 	}
 	
+
+	public void reload () {
+		activeHats.forEach(HatTask::reload);
+	}
+
 	/**
 	 * Removes all active hats
 	 */
