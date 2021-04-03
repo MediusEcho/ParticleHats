@@ -402,8 +402,12 @@ public class ParticleHats extends JavaPlugin {
 		return entityState.values();
 	}
 	
-	public void removePlayerState (UUID id) {
-		entityState.remove(id);
+	public void removePlayerState (UUID id)
+	{
+		EntityState es = entityState.remove(id);
+		if (es != null) {
+			es.clearActiveHats();
+		}
 	}
 	
 	/**
