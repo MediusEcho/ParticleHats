@@ -6,15 +6,12 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mediusecho.particlehats.api.HatAPI;
 import com.mediusecho.particlehats.api.ParticleHatsAPI;
-import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.DatabaseType;
 import com.mediusecho.particlehats.editor.MetaState;
@@ -46,7 +42,6 @@ import com.mediusecho.particlehats.tasks.MenuTask;
 import com.mediusecho.particlehats.tasks.EntityTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
 import com.mediusecho.particlehats.ui.MenuManagerFactory;
-import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.YamlUtil;
 
 @SuppressWarnings("unused")
