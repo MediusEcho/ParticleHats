@@ -245,29 +245,29 @@ public class ItemStackData {
 			double rx = randomOffset.getX();
 			double ry = randomOffset.getY();
 			double rz = randomOffset.getZ();
-			
+
 			double x = (random.nextDouble() * (rx * 2)) - rx;
 			double y = (random.nextDouble() * (ry * 2)) - ry;
 			double z = (random.nextDouble() * (rz * 2)) - rz;
-			
+
 			Item item = world.dropItem(location.add(x, y, z), getRandomItem());
 			item.setPickupDelay(36000); // 30 Minutes
-			
+
 			if (ParticleHats.serverVersion >= 10) {
 				item.setGravity(hasGravity);
 			}
-			
+
 			// Give this item a unique metadata so we can cancel any pickup
 			item.setMetadata("PH_DroppedItem", new FixedMetadataValue(ParticleHats.instance, ""));
-			
+
 			Vector velocity = this.velocity;
 			item.setVelocity(velocity);
-			
+
 			Field itemField = item.getClass().getDeclaredField("item");
 			itemField.setAccessible(true);
-			
+
 			Object entityItem = itemField.get(item);
-			
+
 			Field ageField = entityItem.getClass().getDeclaredField("age");
 			ageField.setAccessible(true);
 			ageField.set(entityItem, getDurationLived());
