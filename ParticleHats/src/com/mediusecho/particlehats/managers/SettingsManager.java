@@ -62,7 +62,7 @@ public enum SettingsManager {
 	COMBAT_COOLDOWN ("combat.cooldown", Type.INT, 5),
 	COMBAT_CHECK_PLAYERS ("combat.check-players", Type.BOOLEAN, true),
 	COMBAT_CHECK_MONSTERS ("combat.check-monsters", Type.BOOLEAN, true),
-	COMBAT_CHECK_ANIMALSS ("combat.check-animals", Type.BOOLEAN, false),
+	COMBAT_CHECK_ANIMALS ("combat.check-animals", Type.BOOLEAN, false),
 	COMBAT_CHECK_NPC ("combat.check-npc", Type.BOOLEAN, false),
 	
 	/**
