@@ -260,12 +260,4 @@ public class HatTask extends BukkitRunnable {
             hat.displayType(ticks, nearest);
         }
     }
-
-//    private List<Entity> getNearbyEntities (Entity entity, double x, double y, double z)
-//    {
-//        Callable<List<Entity>> callable = new
-////        PlayerUtil.runNextTick(() -> {
-////            return entity.getNearbyEntities(x, y, z));
-////        };
-//    }
 }
