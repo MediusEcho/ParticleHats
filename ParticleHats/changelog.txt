@@ -3,7 +3,8 @@
 - Fixed the ItemStack particle effect data not being correct when more than one
 effect was added to a hat.
 - Potion effects are now only applied / removed when equipping / unequipping a hat.
-- Fixed combat flags not being updated when running /h reload
+- Fixed combat flags not being updated when running /h reload.
+- Fixed /h toggle & the Equipped Particles menu not removing potion effects when toggling a hat.
 
 4.2.10
 - Fixed shift click exploit that let players keep items if close-menu-on-equip was set to true.

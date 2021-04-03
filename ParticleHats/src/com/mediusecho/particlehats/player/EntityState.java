@@ -121,6 +121,27 @@ public class EntityState {
 	public int getHatCount () {
 		return activeHats.size();
 	}
+
+	public void toggleHats (boolean toggleState)
+	{
+		Player player = null;
+		if (owner instanceof Player) {
+			player = (Player)owner;
+		}
+
+		for (Hat hat : getActiveHats())
+		{
+			hat.setHidden(toggleState);
+			if (owner != null)
+			{
+				if (toggleState) {
+					hat.unequip(player);
+				} else {
+					hat.equip(player);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Adds a hat this this players active hat list
@@ -137,8 +158,13 @@ public class EntityState {
 
 	public void removeHat (int index)
 	{
-		if (activeHats.get(index) != null) {
-			activeHats.remove(index).stop();
+		HatTask hatTask = activeHats.remove(index);
+		if (hatTask != null)
+		{
+			if (owner instanceof Player) {
+				hatTask.getHat().unequip((Player)owner);
+			}
+			hatTask.stop();
 		}
 	}
 
@@ -148,6 +174,9 @@ public class EntityState {
 		if (hatTask != null)
 		{
 			activeHats.remove(hatTask);
+			if (owner instanceof Player) {
+				hatTask.getHat().unequip((Player)owner);
+			}
 			hatTask.stop();
 		}
 	}

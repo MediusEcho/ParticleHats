@@ -12,6 +12,7 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.util.StringUtil;
+import org.bukkit.entity.Player;
 
 public class ToggleCommand extends Command {
 
@@ -36,13 +37,9 @@ public class ToggleCommand extends Command {
 		if (args.size() > 1) {
 			return togglePlayerCommand.onCommand(core, sender, label, args);
 		}
-		
+
 		boolean toggleStatus = StringUtil.getToggleValue(args.get(0));
-		EntityState entityState = core.getPlayerState(sender.getPlayer());
-		
-		for (Hat hat : entityState.getActiveHats()) {
-			hat.setHidden(!toggleStatus);
-		}
+		core.getPlayerState(sender.getPlayer()).toggleHats(!toggleStatus);
 		
 		if (toggleStatus) {
 			sender.sendMessage(Message.COMMAND_TOGGLE_ON);

@@ -42,11 +42,7 @@ public class TogglePlayerCommand extends Command {
 		}
 		
 		boolean toggleStatus = StringUtil.getToggleValue(args.get(0));
-		EntityState entityState = core.getPlayerState(player);
-		
-		for (Hat hat : entityState.getActiveHats()) {
-			hat.setHidden(!toggleStatus);
-		}
+		core.getPlayerState(player).toggleHats(!toggleStatus);
 		
 		if (toggleStatus) {
 			sender.sendMessage(Message.COMMAND_TOGGLE_PLAYER_ON.getValue().replace("{1}", player.getName()));
