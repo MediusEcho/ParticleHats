@@ -272,9 +272,12 @@ public class ItemStackData {
 			ageField.setAccessible(true);
 			ageField.set(entityItem, getDurationLived());
 		}
-		
-		catch (Exception e) {
-			ParticleHats.debug(e.getStackTrace());
+
+		catch (Exception e)
+		{
+			if (ParticleHats.debugging) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
