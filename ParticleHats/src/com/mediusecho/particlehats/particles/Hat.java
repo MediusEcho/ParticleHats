@@ -293,7 +293,7 @@ public class Hat {
 	
 	/**
 	 * Set this hats right click argument
-	 * @param leftClickArgument
+	 * @param rightClickArgument
 	 */
 	public void setRightClickArgument (String rightClickArgument)
 	{
@@ -766,7 +766,7 @@ public class Hat {
 	/**
 	 * Set the scale particles are displayed at<br>
 	 * Only certain particles obey this value
-	 * @param particleScale
+	 * @param scale
 	 */
 	public void setParticleScale (int index, double scale) {
 		getParticleData(index).setScale(scale);
@@ -1374,8 +1374,8 @@ public class Hat {
 	}
 	
 	/**
-	 * Set the Material that will appear in menus
-	 * @param material
+	 * Set the Item that will appear in menus
+	 * @param item
 	 */
 	@SuppressWarnings("deprecation")
 	public void setItem (ItemStack item)
