@@ -492,8 +492,7 @@ public enum ParticleAction {
 	
 	private boolean checkAgainstEquippedHats (Hat hat, int slot, PlayerState playerState, Inventory inventory)
 	{
-		List<Hat> equippedHats = playerState.getActiveHats();
-		if (equippedHats.contains(hat))
+		if (playerState.isEquipped(hat))
 		{
 			playerState.removeHat(hat);
 			ItemStack item = inventory.getItem(slot);

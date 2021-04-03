@@ -1,9 +1,10 @@
 package com.mediusecho.particlehats.player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.tasks.HatTask;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState.AFKState;
 import com.mediusecho.particlehats.player.PlayerState.PVPState;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityState {
 
@@ -27,16 +29,16 @@ public class EntityState {
 	
 	private long lastMoveTime = 0L;
 	private long lastCombatTime = 0L;
+
+	protected List<HatTask> activeHats;
 	
-	protected List<Hat> activeHats;
-	
-	public EntityState (Entity entity, int id)
+	public EntityState (@NotNull Entity entity, int id)
 	{
 		owner = entity;
 		ownerID = entity.getUniqueId();
 		this.id = id;
-		
-		activeHats = new ArrayList<Hat>();
+
+		activeHats = new ArrayList<>();
 	}
 	
 	/**
@@ -64,9 +66,8 @@ public class EntityState {
 	 * @return
 	 */
 	public List<Hat> getActiveHats () {
-		return activeHats;
+		return activeHats.stream().map(HatTask::getHat).collect(Collectors.toList());
 	}
-	
 
 	public void reload () {
 		activeHats.forEach(HatTask::reload);
@@ -77,44 +78,40 @@ public class EntityState {
 	 */
 	public void clearActiveHats () 
 	{
-		if (owner instanceof Player)
-		{
-			Player player = (Player)owner;
-			for (Hat hat : activeHats) {
-				hat.unequip(player);
-			}
+		Player player = null;
+		if (owner instanceof Player) {
+			player = (Player)owner;
 		}
+
+		for (HatTask hatTask : activeHats)
+		{
+			if (player != null) {
+				hatTask.getHat().unequip(player);
+			}
+			hatTask.stop();
+		}
+
 		activeHats.clear();
 	}
-	
+
 	/**
-	 * Returns true if this hat is already equipped
-	 * @param hat
+	 * Checks to see if this hat is already equipped.
+	 *
 	 * @return
+	 * 		True if the hat is equipped.
 	 */
-	public boolean hasHatEquipped (Hat hat) {
-		return hasHatEquipped(hat.getLabel());
+	public boolean isEquipped (Hat hat) {
+		return activeHats.stream().anyMatch(hatTask -> hatTask.getHat().equals(hat));
 	}
-	
+
 	/**
-	 * Returns true if a hat with this label is already equipped
-	 * @param fromLabel
+	 * Checks to see if a hat is equipped that shares the given label.
+	 *
 	 * @return
+	 * 		True if a hat is equipped that has the given label.
 	 */
-	public boolean hasHatEquipped (String fromLabel)
-	{
-		if (fromLabel == null) {
-			return false;
-		}
-		
-		for (Hat hat : activeHats)
-		{
-			if (hat.getLabel().equalsIgnoreCase(fromLabel)) {
-				return true;
-			}
-		}
-		
-		return false;
+	public boolean isEquipped (String label) {
+		return activeHats.stream().anyMatch(hatTask -> hatTask.getHat().getLabel().equals(label));
 	}
 	
 	/**
@@ -131,35 +128,27 @@ public class EntityState {
 	 */
 	public void addHat (Hat hat) 
 	{
-		activeHats.add(hat);
+		activeHats.add(new HatTask(ParticleHats.instance, owner, hat));
 		
 		if (owner instanceof Player && !hat.isHidden()) {
 			hat.equip((Player)owner);
 		}
 	}
-	
-	/**
-	 * Remove the hat at index
-	 * @param index
-	 */
-	public void removeHat (int index) 
+
+	public void removeHat (int index)
 	{
-		if (activeHats.get(index) == null) {
-			return;
+		if (activeHats.get(index) != null) {
+			activeHats.remove(index).stop();
 		}
-		removeHat(activeHats.get(index));
 	}
-	
-	/**
-	 * Removes this hat from the players active hats list
-	 * @param hat
-	 */
-	public void removeHat (Hat hat) 
+
+	public void removeHat (Hat hat)
 	{
-		activeHats.remove(hat);
-		
-		if (owner instanceof Player) {
-			hat.unequip((Player)owner);
+		HatTask hatTask = activeHats.stream().filter(task -> task.getHat().equals(hat)).findAny().orElse(null);
+		if (hatTask != null)
+		{
+			activeHats.remove(hatTask);
+			hatTask.stop();
 		}
 	}
 	
@@ -169,7 +158,7 @@ public class EntityState {
 	public void removeLastHat ()
 	{
 		if (activeHats.size() > 0) {
-			removeHat(activeHats.get(0));
+			removeHat(0);
 		}
 	}
 	

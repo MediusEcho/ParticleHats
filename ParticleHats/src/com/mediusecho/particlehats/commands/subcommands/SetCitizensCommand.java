@@ -57,7 +57,7 @@ public class SetCitizensCommand extends Command {
 			return false;
 		}
 		
-		if (entityState.hasHatEquipped(hatLabel))
+		if (entityState.isEquipped(label))
 		{
 			sender.sendMessage(Message.COMMAND_SET_ALREADY_SET.getValue().replace("{1}", npcName));
 			return false;
