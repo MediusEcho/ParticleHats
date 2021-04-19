@@ -101,6 +101,9 @@ flags:
   #
   # Disable particle effects when a player has a potion of invisibility effect
   essentials-vanish: false
+  #
+  # Enable TokenManager economy
+  token-manager: false
 #
 afk:
   # Set how many seconds the plugin will wait before marking a player as AFK

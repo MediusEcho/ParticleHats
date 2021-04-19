@@ -50,6 +50,7 @@ public enum SettingsManager {
 	 */
 	FLAG_VAULT ("flags.vault", Type.BOOLEAN, false),
 	FLAG_PLAYERPOINTS ("flags.playerpoints", Type.BOOLEAN, false),
+	FLAG_TOKEN_MANAGER ("flags.token-manager", Type.BOOLEAN, false),
 	FLAG_EXPERIENCE ("flags.experience", Type.BOOLEAN, false),
 	FLAG_PERMISSION ("flags.permission", Type.BOOLEAN, true),
 	FLAG_VANISH ("flags.vanish", Type.BOOLEAN, false),

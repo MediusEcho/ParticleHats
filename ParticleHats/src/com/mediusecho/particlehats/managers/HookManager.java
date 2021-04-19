@@ -7,6 +7,7 @@ import com.mediusecho.particlehats.hooks.CurrencyHook;
 import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.hooks.citizens.CitizensHook;
 import com.mediusecho.particlehats.hooks.economy.PlayerPointsHook;
+import com.mediusecho.particlehats.hooks.economy.TokenManagerHook;
 import com.mediusecho.particlehats.hooks.economy.VaultHook;
 import com.mediusecho.particlehats.hooks.vanish.SuperVanishHook;
 import com.mediusecho.particlehats.hooks.vanish.VanishNoPacketHook;
@@ -101,6 +102,27 @@ public class HookManager {
 			{
 				ParticleHats.log("Could not find PlayerPoints, disabling economy support");
 				SettingsManager.FLAG_PLAYERPOINTS.addOverride(false);
+				currencyHook = null;
+			}
+		}
+
+		// TokenManager Hook
+		else if (SettingsManager.FLAG_TOKEN_MANAGER.getBoolean())
+		{
+			if (currencyHook != null && currencyHook instanceof TokenManagerHook) {
+				return;
+			}
+
+			if (pluginManager.isPluginEnabled("TokenManager"))
+			{
+				currencyHook = new TokenManagerHook();
+				ParticleHats.log("Hooking into TokenManager");
+			}
+
+			else
+			{
+				ParticleHats.log("Could not find TokenManager, disabling economy support");
+				SettingsManager.FLAG_TOKEN_MANAGER.addOverride(false);
 				currencyHook = null;
 			}
 		}
