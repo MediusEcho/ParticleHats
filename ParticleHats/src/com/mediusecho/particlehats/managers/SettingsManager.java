@@ -148,6 +148,13 @@ public enum SettingsManager {
 		}
 		return defaultData;
 	}
+
+	public static boolean isEconomyEnabled ()
+	{
+		return FLAG_VAULT.getBoolean() ||
+				FLAG_PLAYERPOINTS.getBoolean() ||
+				FLAG_TOKEN_MANAGER.getBoolean();
+	}
 	
 	/**
 	 * Override the current value
