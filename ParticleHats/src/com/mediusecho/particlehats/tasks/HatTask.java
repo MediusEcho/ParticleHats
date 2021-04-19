@@ -5,6 +5,7 @@ import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.properties.ParticleTag;
 import com.mediusecho.particlehats.particles.properties.ParticleType;
+import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.EntityState;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.util.PlayerUtil;
@@ -13,13 +14,11 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class HatTask extends BukkitRunnable {
 
@@ -75,8 +74,12 @@ public class HatTask extends BukkitRunnable {
             Player player = playerState.getOwner();
 
             // Make sure the player has permission for this world
-            if (checkWorldPermission && !player.hasPermission("particlehats.world." + world.getName())) {
-                return;
+            if (checkWorldPermission)
+            {
+                if (!player.hasPermission(Permission.WORLD_ALL.getPermission()) &&
+                        !player.hasPermission(Permission.WORLD.append(world.getName()))) {
+                    return;
+                }
             }
 
             // Skip if the player has a potion of invisibility
