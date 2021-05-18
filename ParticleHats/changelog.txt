@@ -5,6 +5,8 @@ effect was added to a hat.
 - Potion effects are now only applied / removed when equipping / unequipping a hat.
 - Fixed combat flags not being updated when running /h reload.
 - Fixed /h toggle & the Equipped Particles menu not removing potion effects when toggling a hat.
+- Fixed the 'particlehats.world.all' permission not getting checked when displaying particles.
+- Added TokenManager economy support
 
 4.2.10
 - Fixed shift click exploit that let players keep items if close-menu-on-equip was set to true.
