@@ -1,19 +1,20 @@
 package com.mediusecho.particlehats.player;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.tasks.HatTask;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState.AFKState;
 import com.mediusecho.particlehats.player.PlayerState.PVPState;
+import com.mediusecho.particlehats.tasks.HatTask;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class EntityState {
 
@@ -31,7 +32,7 @@ public class EntityState {
 	private long lastCombatTime = 0L;
 
 	protected List<HatTask> activeHats;
-	
+
 	public EntityState (@NotNull Entity entity, int id)
 	{
 		owner = entity;

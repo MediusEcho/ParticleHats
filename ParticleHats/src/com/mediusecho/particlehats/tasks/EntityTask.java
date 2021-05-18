@@ -1,28 +1,18 @@
 package com.mediusecho.particlehats.tasks;
 
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.player.EntityState;
+import com.mediusecho.particlehats.player.PlayerState.AFKState;
+import com.mediusecho.particlehats.player.PlayerState.PVPState;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.managers.SettingsManager;
-import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.particles.properties.ParticleTag;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
-import com.mediusecho.particlehats.player.EntityState;
-import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.player.PlayerState.AFKState;
-import com.mediusecho.particlehats.player.PlayerState.PVPState;
 
 public class EntityTask extends BukkitRunnable {
 
