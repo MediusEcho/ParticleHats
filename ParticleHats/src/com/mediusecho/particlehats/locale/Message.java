@@ -112,7 +112,7 @@ public enum Message {
 	
 	// Set Command
 	COMMAND_SET_DESCRIPTION ("Creates a new hat from the given label and equips it to the player"),
-	COMMAND_SET_USAGE       ("/h set <player> <label> <tellPlayer true|false>"),
+	COMMAND_SET_USAGE       ("/h set <player> <label> <demo true|false> <tellPlayer true|false>"),
 	COMMAND_SET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
 	COMMAND_SET_ALREADY_SET ("&c{1} is already wearing this hat"),
 	COMMAND_SET_SUCCESS     ("&aYou were given the {1} &ahat"),
