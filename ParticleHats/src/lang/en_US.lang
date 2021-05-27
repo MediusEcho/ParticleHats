@@ -107,8 +107,10 @@ command_error_type_exists: "&7Type '&c{1}&7' already exists in the database"
 # {1}: The name of the custom type
 command_error_unknown_type: "&cUnable to find type &7'{1}&c'"
 
+# Trying to run a command while the plugin is expecting input from the player.
 command_error_already_editing: "&cYou cannot use this command while editing a menu"
 
+# Inputting an incorrect NPC id
 command_error_unknown_npc: "&cUnable to find a NPC with that id"
 
 ##########################
@@ -639,8 +641,8 @@ display_mode_display_randomly_name: "Pick icons randomly"
 
 active_particles_menu_title: "Equipped Particles"
 
-# {1=}: Value used if the had is enabled
-# {2=}: Value used if the had is disabled
+# {1=}: Value used if the hat is enabled
+# {2=}: Value used if the hat is disabled
 active_particles_hat_description: "/n&8Status:/n&8» &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"
 
 active_particles_empty: "&cNo Equipped Particles :("
@@ -687,7 +689,7 @@ editor_particle_item_description: "/n&8Current:/n&8» &e{1}/n/n&8Item:/n&8» &e{
 editor_particle_itemstack_description: "/n&8Current:/n&8» &e{1}/n/n&8Items:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"
 
 # Base Menu
-# {1=}: Name of menu being edited + '...' if title goes past character limit
+# {1=}: Name of menu being edited + '...' if title goes past the 28 character limit
 editor_base_menu_title: "Editing ({1=...}&r)"
 
 editor_empty_slot_title: "&bEmpty Slot"
