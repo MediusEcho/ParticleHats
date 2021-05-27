@@ -195,7 +195,7 @@ public class ParticleHats extends JavaPlugin {
 			// Initialize our player state map
 			entityState = new ConcurrentHashMap<UUID, EntityState>();
 			
-			log("");
+			//log("");
 			checkDefaultLang();
 			loadLang();
 			
@@ -509,7 +509,7 @@ public class ParticleHats extends JavaPlugin {
 			targetLang = "en_US.lang";
 		}
 		
-		log("Using locale " + targetLang);
+		log("Loaded locale " + targetLang);
 		this.langFile = new File(getDataFolder() + File.separator + "lang" + File.separator + targetLang);
 		this.lang = YamlConfiguration.loadConfiguration(this.langFile);
 	}
