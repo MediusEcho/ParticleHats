@@ -133,7 +133,7 @@ public class EntityState {
 		for (Hat hat : getActiveHats())
 		{
 			hat.setHidden(toggleState);
-			if (owner != null)
+			if (owner != null && hat.isDisplaying())
 			{
 				if (toggleState) {
 					hat.unequip(player);
@@ -148,13 +148,8 @@ public class EntityState {
 	 * Adds a hat this this players active hat list
 	 * @param hat
 	 */
-	public void addHat (Hat hat) 
-	{
+	public void addHat (Hat hat) {
 		activeHats.add(new HatTask(ParticleHats.instance, owner, hat));
-		
-		if (owner instanceof Player && !hat.isHidden()) {
-			hat.equip((Player)owner);
-		}
 	}
 
 	public void removeHat (int index)

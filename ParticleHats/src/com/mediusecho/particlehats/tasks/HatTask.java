@@ -92,17 +92,15 @@ public class HatTask extends BukkitRunnable {
             return;
         }
 
-        if (!hat.isPermanent())
-        {
-            if (hat.onTick())
-            {
-                // Stop the task here and unequip
-                entityState.removeHat(hat);
-            }
-        }
+        checkHat(entityState, hat, true);
 
         ticks++;
-        checkHat(entityState, hat, true);
+        hat.onTick(ticks, entity);
+
+        // Unequip if this hat's demo duration has run out.
+        if (!hat.isDemoActive()) {
+            entityState.removeHat(hat);
+        }
     }
 
     public void stop ()

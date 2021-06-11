@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mediusecho.particlehats.util.PlayerUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -64,6 +65,7 @@ public class Hat {
 	private boolean isLoaded    = false;
 	private boolean isDeleted   = false;
 	private boolean isLocked    = false;
+	private boolean isDisplaying = false;
 	private boolean canBeSaved  = true;
 	
 	private int updateFrequency     = 2;
@@ -74,6 +76,8 @@ public class Hat {
 	private int index               = -1;
 	private int demoDuration        = 200; // (10 Seconds in ticks)
 	private int editingAction       = -1;
+
+	private long lastDisplayTick = 0L;
 	
 	private double scale = 1;
 	
@@ -118,15 +122,61 @@ public class Hat {
 		particleData          = new HashMap<Integer, ParticleData>();
 		animationIndex        = new HashMap<Integer, Integer>();
 	}
-	
-	public boolean onTick ()
+
+	public boolean isDemoActive ()
 	{
-		if (demoDuration > 0)
-		{
-			demoDuration--;
-			return false;
+		if (isPermanent) {
+			return true;
 		}
-		return true;
+		return demoDuration > 0;
+	}
+
+	public void onTick (int currentTick, Entity entity)
+	{
+		// Decrement the demo duration
+		if (!isPermanent && demoDuration > 0) {
+			demoDuration--;
+		}
+
+		// Handle checking when this hat is displaying particles
+		if (lastDisplayTick > 0)
+		{
+			long timeSinceLastDisplayTick = currentTick - lastDisplayTick;
+			if (!isDisplaying && timeSinceLastDisplayTick <= 1)
+			{
+				isDisplaying = true;
+				startedDisplayingParticles(entity);
+			}
+
+			else if (isDisplaying && timeSinceLastDisplayTick > 1)
+			{
+				isDisplaying = false;
+				lastDisplayTick = 0;
+				stoppedDisplayingParticles(entity);
+			}
+		}
+	}
+
+	/**
+	 * Called when this hat begins to display particles.
+	 * @param entity
+	 */
+	private void startedDisplayingParticles (Entity entity)
+	{
+		if (entity instanceof Player) {
+			PlayerUtil.runNextTick(() -> equip((Player)entity));
+		}
+	}
+
+	/**
+	 * Called when this hat stops displaying particles.
+	 * @param entity
+	 */
+	private void stoppedDisplayingParticles (Entity entity)
+	{
+		if (entity instanceof Player) {
+			PlayerUtil.runNextTick(() -> unequip((Player)entity));
+		}
 	}
 	
 	/**
@@ -495,6 +545,9 @@ public class Hat {
 	 */
 	public void displayType (int ticks, Entity e)
 	{
+		// Set the last tick that this hat displayed particles.
+		lastDisplayTick = ticks;
+
 		if (!type.equals(ParticleType.CUSTOM)) {
 			type.getEffect().display(ticks, e, this);
 		}
@@ -700,6 +753,13 @@ public class Hat {
 	 */
 	public boolean isLocked () {
 		return isLocked;
+	}
+
+	/**
+	 * Returns true if this Hat is currently displaying particles.
+	 */
+	public boolean isDisplaying () {
+		return isDisplaying;
 	}
 	
 	/**
@@ -907,7 +967,7 @@ public class Hat {
 	public void setEditingAction (int editingAction) {
 		this.editingAction = editingAction;
 	}
-	
+
 	/**
 	 * Get this hats scale
 	 * @return
