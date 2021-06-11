@@ -20,5 +20,5 @@ public interface ParticleRenderer {
 	
 	public void spawnParticleColor (World world, ParticleEffect particle, Location location, int count, 
 			double offsetX, double offsetY, double offsetZ, double extra, Color color, double scale);
-	
+
 }
