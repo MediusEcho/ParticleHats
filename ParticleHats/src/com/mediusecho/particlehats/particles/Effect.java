@@ -231,6 +231,11 @@ public abstract class Effect {
 					renderer.spawnParticleColor(world, particleEffect, location, count, rxo, ryo, rzo, speed, data.getColorData().getColor(), data.getScale());
 					break;
 				}
+
+				case COLOR_TRANSITION:
+				{
+
+				}
 				
 				case BLOCK_DATA:
 				{

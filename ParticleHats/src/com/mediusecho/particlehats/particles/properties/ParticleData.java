@@ -17,6 +17,7 @@ public class ParticleData {
 	
 	private ParticleEffect particle;
 	private ColorData color;
+	private ColorTransitionData colorTransitionData;
 	private ItemStack item;
 	private ItemStack block;
 	private double scale;

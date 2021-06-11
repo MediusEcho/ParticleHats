@@ -91,8 +91,27 @@ public enum ParticleEffect {
 	FALLING_OBSIDIAN_TEAR  (74, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN),
 	LANDING_OBSIDIAN_TEAR  (75, -1, 16, CompatibleMaterial.CRYING_OBSIDIAN),
 	REVERSE_PORTAL         (76, -1, 16, Material.OBSIDIAN),
-	WHITE_ASH              (77, -1, 16, CompatibleMaterial.WHITE_DYE);
-	
+	WHITE_ASH              (77, -1, 16, CompatibleMaterial.WHITE_DYE),
+	LIGHT (78, -1, 17, CompatibleMaterial.LIGHT),
+
+	// These will need to make use of the 1.17 API
+	//DUST_COLOR_TRANSITION (79, -1, 17, Material.REDSTONE, ParticleProperty.COLOR_TRANSITION),
+	//VIBRATION (80, -1, 17, Material.BEDROCK),
+
+	FALLING_SPORE_BLOSSOM (81, -1, 17, CompatibleMaterial.SPORE_BLOSSOM),
+	SPORE_BLOSSOM_AIR (82, -1, 17, CompatibleMaterial.SPORE_BLOSSOM),
+	SMALL_FLAME (83, -1, 17, CompatibleMaterial.CYAN_CANDLE),
+	SNOWFLAKE (84, -1, 17, CompatibleMaterial.POWDER_SNOW_BUCKET),
+	DRIPPING_DRIPSTONE_LAVA (85, -1, 17, CompatibleMaterial.POINTED_DRIPSTONE),
+	FALLING_DRIPSTONE_LAVA (86, -1, 17, CompatibleMaterial.DRIPSTONE_BLOCK),
+	DRIPPING_DRIPSTONE_WATER (87, -1, 17, CompatibleMaterial.POINTED_DRIPSTONE),
+	FALLING_DRIPSTONE_WATER (88, -1, 17, CompatibleMaterial.DRIPSTONE_BLOCK),
+	GLOW_SQUID_INK (89, -1, 17, CompatibleMaterial.GLOW_INK_SAC),
+	GLOW (90, -1, 17, CompatibleMaterial.GLOW_INK_SAC),
+	WAX_ON (91, -1, 17, CompatibleMaterial.COPPER_BLOCK),
+	WAX_OFF (92, -1, 17, CompatibleMaterial.WEATHERED_COPPER),
+	ELECTRIC_SPARK (93, -1, 17, CompatibleMaterial.LIGHTNING_ROD),
+	SCRAPE (94, -1, 17, CompatibleMaterial.OXIDIZED_COPPER);
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
@@ -162,7 +181,7 @@ public enum ParticleEffect {
 	 * @return True if this ParticleEffect uses color data
 	 */
 	public boolean hasColorData () {
-		return property.equals(ParticleProperty.COLOR);
+		return property.equals(ParticleProperty.COLOR) || property.equals(ParticleProperty.COLOR_TRANSITION);
 	}
 	
 	/**
@@ -372,6 +391,7 @@ public enum ParticleEffect {
 	{
 		NO_DATA,
 		COLOR,
+		COLOR_TRANSITION,
 		BLOCK_DATA,
 		ITEM_DATA,
 		ITEMSTACK_DATA;
