@@ -1,9 +1,11 @@
 package com.mediusecho.particlehats.particles;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -234,7 +236,9 @@ public abstract class Effect {
 
 				case COLOR_TRANSITION:
 				{
-
+					renderer.spawnParticleColorTransition(world, particleEffect, location, count, rxo, ryo, rzo, speed,
+							data.getColorData().getColor(), data.getColorData().getColor(), data.getScale());
+					break;
 				}
 				
 				case BLOCK_DATA:

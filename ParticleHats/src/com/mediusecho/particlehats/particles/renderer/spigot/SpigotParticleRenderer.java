@@ -3,11 +3,13 @@ package com.mediusecho.particlehats.particles.renderer.spigot;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mediusecho.particlehats.ParticleHats;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.DustTransition;
 
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
@@ -64,6 +66,22 @@ public class SpigotParticleRenderer implements ParticleRenderer {
 		{
 			DustOptions dustOptions = new DustOptions(color, (float) scale);
 			world.spawnParticle(particleCache.get(particle), location, count, offsetX, offsetY, offsetZ, extra, dustOptions);
+		}
+	}
+
+	@Override
+	public void spawnParticleColorTransition(World world, ParticleEffect particle, Location location, int count,
+											 double offsetX, double offsetY, double offsetZ, double extra,
+											 Color fromColor, Color toColor, double scale)
+	{
+		if (ParticleHats.serverVersion < 17) {
+			return;
+		}
+
+		if (particleCache.containsKey(particle))
+		{
+			DustTransition dustTransition = new DustTransition(fromColor, toColor, (float) scale);
+			world.spawnParticle(particleCache.get(particle), location, count, offsetX, offsetY, offsetZ, extra, dustTransition);
 		}
 	}
 }

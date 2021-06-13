@@ -94,8 +94,9 @@ public enum ParticleEffect {
 	WHITE_ASH              (77, -1, 16, CompatibleMaterial.WHITE_DYE),
 	LIGHT (78, -1, 17, CompatibleMaterial.LIGHT),
 
-	// These will need to make use of the 1.17 API
-	//DUST_COLOR_TRANSITION (79, -1, 17, Material.REDSTONE, ParticleProperty.COLOR_TRANSITION),
+	DUST_COLOR_TRANSITION (79, -1, 17, Material.REDSTONE, ParticleProperty.COLOR_TRANSITION),
+
+	// TODO: Implement way for storing vibration particle data
 	//VIBRATION (80, -1, 17, Material.BEDROCK),
 
 	FALLING_SPORE_BLOSSOM (81, -1, 17, CompatibleMaterial.SPORE_BLOSSOM),
