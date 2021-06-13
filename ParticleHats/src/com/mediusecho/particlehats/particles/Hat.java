@@ -668,8 +668,13 @@ public class Hat {
 	 * Set wheter this hat is hidden
 	 * @param hidden
 	 */
-	public void setHidden (boolean hidden) {
+	public void setHidden (boolean hidden)
+	{
 		isHidden = hidden;
+
+		if (isHidden) {
+			isDisplaying = false;
+		}
 	}
 	
 	/**

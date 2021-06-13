@@ -133,13 +133,8 @@ public class EntityState {
 		for (Hat hat : getActiveHats())
 		{
 			hat.setHidden(toggleState);
-			if (owner != null && hat.isDisplaying())
-			{
-				if (toggleState) {
-					hat.unequip(player);
-				} else {
-					hat.equip(player);
-				}
+			if (owner != null && hat.isHidden()) {
+				hat.unequip(player);
 			}
 		}
 	}
