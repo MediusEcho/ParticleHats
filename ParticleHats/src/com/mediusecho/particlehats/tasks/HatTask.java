@@ -83,7 +83,11 @@ public class HatTask extends BukkitRunnable {
             }
 
             // Skip if the player has a potion of invisibility
-            if (essentialsVanishFlag && player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            if (essentialsVanishFlag && player.hasPotionEffect(PotionEffectType.INVISIBILITY))
+            {
+                if (hat.isDisplaying()) {
+                    hat.setIsDisplaying(false, player);
+                }
                 return;
             }
         }

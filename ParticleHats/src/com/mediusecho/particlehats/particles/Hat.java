@@ -142,17 +142,14 @@ public class Hat {
 		if (lastDisplayTick > 0)
 		{
 			long timeSinceLastDisplayTick = currentTick - lastDisplayTick;
-			if (!isDisplaying && timeSinceLastDisplayTick <= 1)
-			{
-				isDisplaying = true;
-				startedDisplayingParticles(entity);
+			if (!isDisplaying && timeSinceLastDisplayTick <= 1) {
+				setIsDisplaying(true, entity);
 			}
 
 			else if (isDisplaying && timeSinceLastDisplayTick > 1)
 			{
-				isDisplaying = false;
+				setIsDisplaying(false, entity);
 				lastDisplayTick = 0;
-				stoppedDisplayingParticles(entity);
 			}
 		}
 	}
@@ -652,8 +649,13 @@ public class Hat {
 	 * Set whether this hat should display particles
 	 * @param isVanished
 	 */
-	public void setVanished (boolean isVanished) {
+	public void setVanished (boolean isVanished)
+	{
 		this.isVanished = isVanished;
+
+		if (isVanished) {
+			isDisplaying = false;
+		}
 	}
 	
 	/**
@@ -765,6 +767,22 @@ public class Hat {
 	 */
 	public boolean isDisplaying () {
 		return isDisplaying;
+	}
+
+	/**
+	 * Sets whether this hat is displaying particles or not.
+	 *
+	 * @param isDisplaying
+	 * @param entity
+	 */
+	public void setIsDisplaying (boolean isDisplaying, Entity entity)
+	{
+		this.isDisplaying = isDisplaying;
+		if (isDisplaying) {
+			startedDisplayingParticles(entity);
+		} else {
+			stoppedDisplayingParticles(entity);
+		}
 	}
 	
 	/**
