@@ -43,9 +43,10 @@ public class ResourceUtil {
 		try
 		{
 			InputStream stream = core.getResource("types/" + resourceName);
-			BufferedImage image = ImageIO.read(stream);
-			
-			return image;
+			if (stream == null) {
+				return null;
+			}
+			return ImageIO.read(stream);
 		}
 		
 		catch (Exception e) {
@@ -112,7 +113,7 @@ public class ResourceUtil {
 		
 		try {
 			Files.copy(stream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {}
+		} catch (IOException ignored) {}
 	}
 	
 	/**
