@@ -41,7 +41,7 @@
     </plugins>
   </build>
   <repositories>
-    
+
     <!-- SuperVanish repo -->
     <repository>
       <id>cubekrowd-repo</id>
