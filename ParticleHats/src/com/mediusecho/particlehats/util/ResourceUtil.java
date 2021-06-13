@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -19,7 +21,23 @@ import com.mediusecho.particlehats.ParticleHats;
 public class ResourceUtil {
 
 	private final static ParticleHats core = ParticleHats.instance;
-	
+
+	private static final Map<Integer, Integer> particleMenuCompatabilityMap = new HashMap<>();
+
+	static
+	{
+		particleMenuCompatabilityMap.put(8, 8);
+		particleMenuCompatabilityMap.put(9, 9);
+		particleMenuCompatabilityMap.put(10, 10);
+		particleMenuCompatabilityMap.put(11, 11);
+		particleMenuCompatabilityMap.put(12, 12);
+		particleMenuCompatabilityMap.put(13, 13);
+		particleMenuCompatabilityMap.put(14, 14);
+		particleMenuCompatabilityMap.put(15, 14);
+		particleMenuCompatabilityMap.put(16, 14);
+		particleMenuCompatabilityMap.put(17, 14);
+	}
+
 	public static BufferedImage getImage (String resourceName)
 	{
 		try
@@ -132,14 +150,7 @@ public class ResourceUtil {
 	
 	public static InputStream getMostCompatibleParticlesMenu ()
 	{
-		String menuName = "menus/particles_" + ParticleHats.serverVersion + ".yml";
-		InputStream particleStream = core.getResource(menuName);
-		
-		// Default to the most compatible menu
-		if (particleStream == null) {
-			particleStream = core.getResource("menus/particles_8.yml");
-		}
-		
-		return particleStream;
+		int menuVersion = particleMenuCompatabilityMap.getOrDefault(ParticleHats.serverVersion, 8);
+		return core.getResource("menus/particles_" + menuVersion + ".yml");
 	}
 }
