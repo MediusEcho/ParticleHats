@@ -43,7 +43,7 @@ public class PurchaseEditorSettingsMenu extends AbstractStaticMenu {
 		setButton(31, backButtonItem, backButtonAction);
 		
 		// Set Title
-		ItemStack titleItem = ItemUtil.createItem(Material.SIGN, Message.EDITOR_SETTINGS_MENU_SET_TITLE);
+		ItemStack titleItem = ItemUtil.createItem(CompatibleMaterial.SIGN, Message.EDITOR_SETTINGS_MENU_SET_TITLE);
 		setButton(10, titleItem, (event, slot) ->
 		{
 			purchaseManager.getOwnerState().setMetaState(MetaState.MENU_TITLE);

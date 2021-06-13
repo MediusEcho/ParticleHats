@@ -118,7 +118,7 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		setButton(46, mainMenuButtonItem, backButtonAction);
 		
 		// Meta
-		ItemStack metaItem = ItemUtil.createItem(Material.SIGN, Message.EDITOR_MAIN_MENU_SET_META);
+		ItemStack metaItem = ItemUtil.createItem(CompatibleMaterial.SIGN, Message.EDITOR_MAIN_MENU_SET_META);
 		EditorLore.updateGenericDescription(metaItem, Message.EDITOR_MAIN_MENU_META_DESCRIPTION);
 		setButton(13, metaItem, (event, slot) ->
 		{
@@ -642,7 +642,8 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		{
 			case NO_DATA:
 				break;
-				
+
+			case COLOR_TRANSITION:
 			case COLOR:
 			{
 				EditorColorMenu editorColorMenu = new EditorColorMenu(core, editorManager, owner, particleIndex, () ->
