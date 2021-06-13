@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.5
+version: 1.6
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -107,8 +107,10 @@ command_error_type_exists: "&7Type '&c{1}&7' already exists in the database"
 # {1}: The name of the custom type
 command_error_unknown_type: "&cUnable to find type &7'{1}&c'"
 
+# Trying to run a command while the plugin is expecting input from the player.
 command_error_already_editing: "&cYou cannot use this command while editing a menu"
 
+# Inputting an incorrect NPC id
 command_error_unknown_npc: "&cUnable to find a NPC with that id"
 
 ##########################
@@ -192,7 +194,7 @@ command_particle_usage: "/h particles"
 
 # Set Command
 command_set_description: "Creates a new hat from the given label and equips it to the player"
-command_set_usage: "/h set <player> <label> <tellPlayer true|false>"
+command_set_usage: "/h set <player> <label> <demo true|false> <tellPlayer true|false>"
 
 # {1}: The label being set
 command_set_label_error: "&cUnable to find label '&7{1}&c'"
@@ -454,6 +456,40 @@ particle_reverse_portal_name: "&bReverse Portal"
 particle_reverse_portal_description: ""
 particle_white_ash_name: "&bWhite Ash"
 particle_white_ash_description: ""
+particle_light_name: "&eLight"
+particle_light_description: "&8Particle emitted from the/n&8Light Block"
+particle_dust_color_transition_name: "&bRedstone Dust Color Transition"
+particle_dust_color_transition_description: "&8Redstone dust that transitions/n&8from one color to another./n/n&cOnly supports 1 color/n&cat the moment"
+particle_vibration_name: "&bVibration"
+particle_vibration_description: "&8Emits a particle that travels/n&8in a direction"
+particle_falling_spore_blossom_name: "&bFalling Spore Blossom"
+particle_falling_spore_blossom_description: ""
+particle_spore_blossom_air_name: "&bSpore Blossom Air"
+particle_spore_blossom_air_description: ""
+particle_small_flame_name: "&cSmall Flame"
+particle_small_flame_description: "&8Small fire particles that/n&8emit from a Candle"
+particle_snowflake_name: "&fSnowflake"
+particle_snowflake_description: "&8Particles that emit when/n&8sinking in Powdered Snow"
+particle_dripping_dripstone_lava_name: "&bDripping Dripstone Lava"
+particle_dripping_dripstone_lava_description: "&8Lava dripping from/n&8Pointed Dripstone"
+particle_falling_dripstone_lava_name: "&bFalling Dripstone Lava"
+particle_falling_dripstone_lava_description: ""
+particle_dripping_dripstone_water_name: "&bDripping Dripstone Water"
+particle_dripping_dripstone_water_description: "&8Water dripping from/n&8Pointed Dripstone"
+particle_falling_dripstone_water_name: "&bFalling Dripstone Water"
+particle_falling_dripstone_water_description: ""
+particle_glow_squid_ink_name: "&eGlow Squid Ink"
+particle_glow_squid_ink_description: ""
+particle_glow_name: "&eGlow"
+particle_glow_description: "&8Particle given off by/n&8the Glow Squid"
+particle_wax_on_name: "&bWax On"
+particle_wax_on_description: "&8Particles that emit when/n&8waxing a Block of Copper"
+particle_wax_off_name: "&bWax Off"
+particle_wax_off_description: "&8Particles that emit when/n&8removing wax from a/n&8Block of Copper"
+particle_electric_spark_name: "&bElectric Spark"
+particle_electric_spark_description: "&8Particles that emit when a/n&8Lightning Rod is struck/n&8by lightning"
+particle_scrape_name: "&bScrape"
+particle_scrape_description: "&8Particles that emit when/n&8scraping oxidation off of/n&8a Block of Copper"
 
 ##########################
 #       Locations        #
@@ -639,8 +675,8 @@ display_mode_display_randomly_name: "Pick icons randomly"
 
 active_particles_menu_title: "Equipped Particles"
 
-# {1=}: Value used if the had is enabled
-# {2=}: Value used if the had is disabled
+# {1=}: Value used if the hat is enabled
+# {2=}: Value used if the hat is disabled
 active_particles_hat_description: "/n&8Status:/n&8» &e{1=&aActive}{2=&cHidden}/n/n&3Left Click to Toggle/n&cShift Right Click to Remove"
 
 active_particles_empty: "&cNo Equipped Particles :("
@@ -687,7 +723,7 @@ editor_particle_item_description: "/n&8Current:/n&8» &e{1}/n/n&8Item:/n&8» &e{
 editor_particle_itemstack_description: "/n&8Current:/n&8» &e{1}/n/n&8Items:/n&8» &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"
 
 # Base Menu
-# {1=}: Name of menu being edited + '...' if title goes past character limit
+# {1=}: Name of menu being edited + '...' if title goes past the 28 character limit
 editor_base_menu_title: "Editing ({1=...}&r)"
 
 editor_empty_slot_title: "&bEmpty Slot"

@@ -232,7 +232,7 @@ public class PlayerState extends EntityState {
 	public List<ItemStack> getRecentItems () {
 		return recentItems;
 	}
-	
+
 	public enum AFKState
 	{
 		ACTIVE,

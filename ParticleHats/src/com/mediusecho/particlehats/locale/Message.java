@@ -3,6 +3,8 @@ package com.mediusecho.particlehats.locale;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -112,7 +114,7 @@ public enum Message {
 	
 	// Set Command
 	COMMAND_SET_DESCRIPTION ("Creates a new hat from the given label and equips it to the player"),
-	COMMAND_SET_USAGE       ("/h set <player> <label> <tellPlayer true|false>"),
+	COMMAND_SET_USAGE       ("/h set <player> <label> <demo true|false> <tellPlayer true|false>"),
 	COMMAND_SET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
 	COMMAND_SET_ALREADY_SET ("&c{1} is already wearing this hat"),
 	COMMAND_SET_SUCCESS     ("&aYou were given the {1} &ahat"),
@@ -339,6 +341,41 @@ public enum Message {
 	PARTICLE_REVERSE_PORTAL_DESCRIPTION    (""),
 	PARTICLE_WHITE_ASH_NAME                ("&bWhite Ash"),
 	PARTICLE_WHITE_ASH_DESCRIPTION         (""),
+
+	PARTICLE_LIGHT_NAME (""),
+	PARTICLE_LIGHT_DESCRIPTION (""),
+	PARTICLE_DUST_COLOR_TRANSITION_NAME (""),
+	PARTICLE_DUST_COLOR_TRANSITION_DESCRIPTION (""),
+	PARTICLE_VIBRATION_NAME (""),
+	PARTICLE_VIBRATION_DESCRIPTION (""),
+	PARTICLE_FALLING_SPORE_BLOSSOM_NAME (""),
+	PARTICLE_FALLING_SPORE_BLOSSOM_DESCRIPTION (""),
+	PARTICLE_SPORE_BLOSSOM_AIR_NAME (""),
+	PARTICLE_SPORE_BLOSSOM_AIR_DESCRIPTION (""),
+	PARTICLE_SMALL_FLAME_NAME (""),
+	PARTICLE_SMALL_FLAME_DESCRIPTION (""),
+	PARTICLE_SNOWFLAKE_NAME (""),
+	PARTICLE_SNOWFLAKE_DESCRIPTION (""),
+	PARTICLE_DRIPPING_DRIPSTONE_LAVA_NAME (""),
+	PARTICLE_DRIPPING_DRIPSTONE_LAVA_DESCRIPTION (""),
+	PARTICLE_FALLING_DRIPSTONE_LAVA_NAME (""),
+	PARTICLE_FALLING_DRIPSTONE_LAVA_DESCRIPTION (""),
+	PARTICLE_DRIPPING_DRIPSTONE_WATER_NAME (""),
+	PARTICLE_DRIPPING_DRIPSTONE_WATER_DESCRIPTION (""),
+	PARTICLE_FALLING_DRIPSTONE_WATER_NAME (""),
+	PARTICLE_FALLING_DRIPSTONE_WATER_DESCRIPTION (""),
+	PARTICLE_GLOW_SQUID_INK_NAME (""),
+	PARTICLE_GLOW_SQUID_INK_DESCRIPTION (""),
+	PARTICLE_GLOW_NAME (""),
+	PARTICLE_GLOW_DESCRIPTION (""),
+	PARTICLE_WAX_ON_NAME (""),
+	PARTICLE_WAX_ON_DESCRIPTION (""),
+	PARTICLE_WAX_OFF_NAME (""),
+	PARTICLE_WAX_OFF_DESCRIPTION (""),
+	PARTICLE_ELECTRIC_SPARK_NAME (""),
+	PARTICLE_ELECTRIC_SPARK_DESCRIPTION (""),
+	PARTICLE_SCRAPE_NAME (""),
+	PARTICLE_SCRAPE_DESCRIPTION (""),
 	
 	/**
 	 * Location

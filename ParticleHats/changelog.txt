@@ -1,3 +1,31 @@
+4.2.11
+- Added support for 1.17
+  - Added particles:
+    - light
+    - dust_color_transition
+    - falling_spore_blossom
+    - spore_blossom_air
+    - small_flame
+    - snowflake
+    - dripping_dripstone_lava
+    - falling_dripstone_lava
+    - dripping_dripstone_water
+    - falling_dripstone_water
+    - glow_squid_ink
+    - glow
+    - wax_on
+    - wax_off
+    - electric_spark
+    - scrape
+- Hats now display particles asynchronously.
+- Fixed the ItemStack particle effect data not being correct when more than one
+effect was added to a hat.
+- Potion effects are now only applied / removed when equipping / unequipping a hat.
+- Fixed combat flags not being updated when running /h reload.
+- Fixed /h toggle & the Equipped Particles menu not removing potion effects when toggling a hat.
+- Fixed the 'particlehats.world.all' permission not getting checked when displaying particles.
+- Added TokenManager economy support
+
 4.2.10
 - Fixed shift click exploit that let players keep items if close-menu-on-equip was set to true.
 - Fixed NoSuchFieldError for ENTITY_VILLAGER_NO sound on 1.8 servers.

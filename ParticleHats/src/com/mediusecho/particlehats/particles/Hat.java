@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mediusecho.particlehats.util.PlayerUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -64,6 +65,7 @@ public class Hat {
 	private boolean isLoaded    = false;
 	private boolean isDeleted   = false;
 	private boolean isLocked    = false;
+	private boolean isDisplaying = false;
 	private boolean canBeSaved  = true;
 	
 	private int updateFrequency     = 2;
@@ -74,6 +76,8 @@ public class Hat {
 	private int index               = -1;
 	private int demoDuration        = 200; // (10 Seconds in ticks)
 	private int editingAction       = -1;
+
+	private long lastDisplayTick = 0L;
 	
 	private double scale = 1;
 	
@@ -118,15 +122,58 @@ public class Hat {
 		particleData          = new HashMap<Integer, ParticleData>();
 		animationIndex        = new HashMap<Integer, Integer>();
 	}
-	
-	public boolean onTick ()
+
+	public boolean isDemoActive ()
 	{
-		if (demoDuration > 0)
-		{
-			demoDuration--;
-			return false;
+		if (isPermanent) {
+			return true;
 		}
-		return true;
+		return demoDuration > 0;
+	}
+
+	public void onTick (int currentTick, Entity entity)
+	{
+		// Decrement the demo duration
+		if (!isPermanent && demoDuration > 0) {
+			demoDuration--;
+		}
+
+		// Handle checking when this hat is displaying particles
+		if (lastDisplayTick > 0)
+		{
+			long timeSinceLastDisplayTick = currentTick - lastDisplayTick;
+			if (!isDisplaying && timeSinceLastDisplayTick <= 1) {
+				setIsDisplaying(true, entity);
+			}
+
+			else if (isDisplaying && timeSinceLastDisplayTick > 1)
+			{
+				setIsDisplaying(false, entity);
+				lastDisplayTick = 0;
+			}
+		}
+	}
+
+	/**
+	 * Called when this hat begins to display particles.
+	 * @param entity
+	 */
+	private void startedDisplayingParticles (Entity entity)
+	{
+		if (entity instanceof Player) {
+			PlayerUtil.runNextTick(() -> equip((Player)entity));
+		}
+	}
+
+	/**
+	 * Called when this hat stops displaying particles.
+	 * @param entity
+	 */
+	private void stoppedDisplayingParticles (Entity entity)
+	{
+		if (entity instanceof Player) {
+			PlayerUtil.runNextTick(() -> unequip((Player)entity));
+		}
 	}
 	
 	/**
@@ -293,7 +340,7 @@ public class Hat {
 	
 	/**
 	 * Set this hats right click argument
-	 * @param leftClickArgument
+	 * @param rightClickArgument
 	 */
 	public void setRightClickArgument (String rightClickArgument)
 	{
@@ -495,6 +542,9 @@ public class Hat {
 	 */
 	public void displayType (int ticks, Entity e)
 	{
+		// Set the last tick that this hat displayed particles.
+		lastDisplayTick = ticks;
+
 		if (!type.equals(ParticleType.CUSTOM)) {
 			type.getEffect().display(ticks, e, this);
 		}
@@ -599,8 +649,13 @@ public class Hat {
 	 * Set whether this hat should display particles
 	 * @param isVanished
 	 */
-	public void setVanished (boolean isVanished) {
+	public void setVanished (boolean isVanished)
+	{
 		this.isVanished = isVanished;
+
+		if (isVanished) {
+			isDisplaying = false;
+		}
 	}
 	
 	/**
@@ -615,8 +670,13 @@ public class Hat {
 	 * Set wheter this hat is hidden
 	 * @param hidden
 	 */
-	public void setHidden (boolean hidden) {
+	public void setHidden (boolean hidden)
+	{
 		isHidden = hidden;
+
+		if (isHidden) {
+			isDisplaying = false;
+		}
 	}
 	
 	/**
@@ -701,6 +761,29 @@ public class Hat {
 	public boolean isLocked () {
 		return isLocked;
 	}
+
+	/**
+	 * Returns true if this Hat is currently displaying particles.
+	 */
+	public boolean isDisplaying () {
+		return isDisplaying;
+	}
+
+	/**
+	 * Sets whether this hat is displaying particles or not.
+	 *
+	 * @param isDisplaying
+	 * @param entity
+	 */
+	public void setIsDisplaying (boolean isDisplaying, Entity entity)
+	{
+		this.isDisplaying = isDisplaying;
+		if (isDisplaying) {
+			startedDisplayingParticles(entity);
+		} else {
+			stoppedDisplayingParticles(entity);
+		}
+	}
 	
 	/**
 	 * Set whether this hat can be saved to file when the player leaves the server
@@ -766,7 +849,7 @@ public class Hat {
 	/**
 	 * Set the scale particles are displayed at<br>
 	 * Only certain particles obey this value
-	 * @param particleScale
+	 * @param scale
 	 */
 	public void setParticleScale (int index, double scale) {
 		getParticleData(index).setScale(scale);
@@ -907,7 +990,7 @@ public class Hat {
 	public void setEditingAction (int editingAction) {
 		this.editingAction = editingAction;
 	}
-	
+
 	/**
 	 * Get this hats scale
 	 * @return
@@ -1374,8 +1457,8 @@ public class Hat {
 	}
 	
 	/**
-	 * Set the Material that will appear in menus
-	 * @param material
+	 * Set the Item that will appear in menus
+	 * @param item
 	 */
 	@SuppressWarnings("deprecation")
 	public void setItem (ItemStack item)

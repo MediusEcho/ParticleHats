@@ -176,7 +176,7 @@ public enum ParticleAction {
 					}
 					
 					boolean canUsePermission = SettingsManager.FLAG_PERMISSION.getBoolean();
-					boolean canUseCurrency = SettingsManager.FLAG_VAULT.getBoolean() || SettingsManager.FLAG_PLAYERPOINTS.getBoolean();
+					boolean canUseCurrency = SettingsManager.isEconomyEnabled();
 					boolean canUseExp = SettingsManager.FLAG_EXPERIENCE.getBoolean();
 					
 					if (canUsePermission)
@@ -214,7 +214,7 @@ public enum ParticleAction {
 							return;
 						}
 					}
-					
+
 					double playerBalance = -1;
 					
 					if (canUseCurrency) 
@@ -228,7 +228,7 @@ public enum ParticleAction {
 					else if (canUseExp) {
 						playerBalance = player.getLevel();
 					}
-					
+
 					if (playerBalance > -1)
 					{
 						if (playerBalance < hat.getPrice())
@@ -379,7 +379,7 @@ public enum ParticleAction {
 				int price = pendingHat.getPrice();
 				boolean purchased = false;
 				
-				if (SettingsManager.FLAG_VAULT.getBoolean() || SettingsManager.FLAG_PLAYERPOINTS.getBoolean())
+				if (SettingsManager.isEconomyEnabled())
 				{
 					CurrencyHook currencyHook = core.getHookManager().getCurrencyHook();
 					if (currencyHook != null && currencyHook.isEnabled())
@@ -492,12 +492,11 @@ public enum ParticleAction {
 	
 	private boolean checkAgainstEquippedHats (Hat hat, int slot, PlayerState playerState, Inventory inventory)
 	{
-		List<Hat> equippedHats = playerState.getActiveHats();
-		if (equippedHats.contains(hat))
+		if (playerState.isEquipped(hat))
 		{
 			playerState.removeHat(hat);
 			ItemStack item = inventory.getItem(slot);
-			
+
 			ItemUtil.stripHighlight(item);
 			ItemUtil.setItemDescription(item, hat.getCachedDescription());
 			return true;

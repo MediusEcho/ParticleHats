@@ -68,7 +68,7 @@ public class EditorItemPromptMenu extends AbstractStaticMenu {
 		setButton(10, backButtonItem, backButtonAction);
 		
 		// Search Button
-		setButton(37, ItemUtil.createItem(Material.SIGN, Message.EDITOR_MISC_SEARCH), (event, slot) ->
+		setButton(37, ItemUtil.createItem(CompatibleMaterial.SIGN, Message.EDITOR_MISC_SEARCH), (event, slot) ->
 		{
 			isSearching = true;
 			core.getPlayerState(owner).setMetaState(MetaState.BLOCK_SEARCH);

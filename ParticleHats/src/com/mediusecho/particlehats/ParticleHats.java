@@ -6,15 +6,12 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mediusecho.particlehats.api.HatAPI;
 import com.mediusecho.particlehats.api.ParticleHatsAPI;
-import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.DatabaseType;
 import com.mediusecho.particlehats.editor.MetaState;
@@ -43,10 +39,9 @@ import com.mediusecho.particlehats.prompt.Prompt;
 import com.mediusecho.particlehats.prompt.SpigotPrompt;
 import com.mediusecho.particlehats.stats.Metrics;
 import com.mediusecho.particlehats.tasks.MenuTask;
-import com.mediusecho.particlehats.tasks.ParticleTask;
+import com.mediusecho.particlehats.tasks.EntityTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
 import com.mediusecho.particlehats.ui.MenuManagerFactory;
-import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.YamlUtil;
 
 @SuppressWarnings("unused")
@@ -54,7 +49,12 @@ public class ParticleHats extends JavaPlugin {
 	
 	// [Future] Are features that i plan on adding.
 	// [?] Are ideas that may or may not get added.
-	
+
+	// TODO: #4 LuckPerms temp permission support.
+	// This one kinda works, but only for player specific
+	// temporary permissions. I'd like to get it working for
+	// groups as well.
+
 	// TODO: [?] Enjin economy support?
 	// TODO: [?] Custom Player Head support? (Head Database, Heads Plugin)
 	// TODO: [?] Type texture support? Lets built-in types display custom images (eg. capes)
@@ -93,7 +93,7 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.5;
+	private final double LANG_VERSION = 1.6;
 	
 	private ConcurrentHashMap<UUID, EntityState> entityState;
 	
@@ -104,7 +104,7 @@ public class ParticleHats extends JavaPlugin {
 	// Tasks
 	private MenuTask menuTask;
 	private PromptTask promptTask;
-	private ParticleTask particleTask;
+	private EntityTask entityTask;
 	
 	private boolean enabled = false;
 	
@@ -195,7 +195,7 @@ public class ParticleHats extends JavaPlugin {
 			// Initialize our player state map
 			entityState = new ConcurrentHashMap<UUID, EntityState>();
 			
-			log("");
+			//log("");
 			checkDefaultLang();
 			loadLang();
 			
@@ -225,8 +225,8 @@ public class ParticleHats extends JavaPlugin {
 			promptTask.runTaskTimer(this, 0, 40);
 			
 			// Handles displaying particles
-			particleTask = new ParticleTask(this);
-			particleTask.runTaskTimer(this, 0, 1);
+			entityTask = new EntityTask(this);
+			entityTask.runTaskTimer(this, 0, 4);
 		}
 		log("");
 		log("Done :)");
@@ -243,7 +243,7 @@ public class ParticleHats extends JavaPlugin {
 			
 			menuTask.cancel();
 			promptTask.cancel();
-			particleTask.cancel();
+			entityTask.cancel();
 		}
 	}
 	
@@ -266,11 +266,15 @@ public class ParticleHats extends JavaPlugin {
 		} else {
 			prompt = new BukkitPrompt();
 		}
-		
+
+		eventManager.onReload();
 		database.onReload();
-		particleTask.onReload();
+		entityTask.onReload();
 		resourceManager.onReload();
 		hookManager.onReload();
+
+		// Reload each equipped hats async task
+		entityState.values().forEach(EntityState::reload);
 	}
 	
 	/**
@@ -403,8 +407,12 @@ public class ParticleHats extends JavaPlugin {
 		return entityState.values();
 	}
 	
-	public void removePlayerState (UUID id) {
-		entityState.remove(id);
+	public void removePlayerState (UUID id)
+	{
+		EntityState es = entityState.remove(id);
+		if (es != null) {
+			es.clearActiveHats();
+		}
 	}
 	
 	/**
@@ -501,7 +509,7 @@ public class ParticleHats extends JavaPlugin {
 			targetLang = "en_US.lang";
 		}
 		
-		log("Using locale " + targetLang);
+		log("Loaded locale " + targetLang);
 		this.langFile = new File(getDataFolder() + File.separator + "lang" + File.separator + targetLang);
 		this.lang = YamlConfiguration.loadConfiguration(this.langFile);
 	}

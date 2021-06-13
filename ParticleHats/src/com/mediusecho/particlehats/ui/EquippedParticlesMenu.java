@@ -58,10 +58,8 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 					hat.unequip(owner);
 				} 
 				
-				else 
-				{
+				else {
 					ItemUtil.highlightItem(item);
-					hat.equip(owner);
 				}
 			}
 			

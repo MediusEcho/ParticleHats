@@ -40,7 +40,7 @@ public class EditorSettingsMenu extends AbstractStaticMenu {
 		setButton(49, backButtonItem, backButtonAction);
 		
 		// Set Title
-		ItemStack titleItem = ItemUtil.createItem(Material.SIGN, Message.EDITOR_SETTINGS_MENU_SET_TITLE);
+		ItemStack titleItem = ItemUtil.createItem(CompatibleMaterial.SIGN, Message.EDITOR_SETTINGS_MENU_SET_TITLE);
 		setButton(11, titleItem, (event, slot) ->
 		{
 			editorManager.getOwnerState().setMetaState(MetaState.MENU_TITLE);

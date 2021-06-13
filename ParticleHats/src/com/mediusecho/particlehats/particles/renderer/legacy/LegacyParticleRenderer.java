@@ -79,7 +79,13 @@ public class LegacyParticleRenderer implements ParticleRenderer {
 			new ParticlePacket(particle, color, false).sendTo(location, 100);
 		}
 	}
-	
+
+	@Override
+	public void spawnParticleColorTransition(World world, ParticleEffect particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra, Color fromColor, Color toColor, double scale)
+	{
+		//
+	}
+
 	/**
 	 * Represents a particle effect packet with all attributes which is used for sending packets to the players
 	 * <p>

@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -19,15 +21,32 @@ import com.mediusecho.particlehats.ParticleHats;
 public class ResourceUtil {
 
 	private final static ParticleHats core = ParticleHats.instance;
-	
+
+	private static final Map<Integer, Integer> particleMenuCompatibilityMap = new HashMap<>();
+
+	static
+	{
+		particleMenuCompatibilityMap.put(8, 8);
+		particleMenuCompatibilityMap.put(9, 9);
+		particleMenuCompatibilityMap.put(10, 10);
+		particleMenuCompatibilityMap.put(11, 11);
+		particleMenuCompatibilityMap.put(12, 12);
+		particleMenuCompatibilityMap.put(13, 13);
+		particleMenuCompatibilityMap.put(14, 14);
+		particleMenuCompatibilityMap.put(15, 14);
+		particleMenuCompatibilityMap.put(16, 14);
+		particleMenuCompatibilityMap.put(17, 14);
+	}
+
 	public static BufferedImage getImage (String resourceName)
 	{
 		try
 		{
 			InputStream stream = core.getResource("types/" + resourceName);
-			BufferedImage image = ImageIO.read(stream);
-			
-			return image;
+			if (stream == null) {
+				return null;
+			}
+			return ImageIO.read(stream);
 		}
 		
 		catch (Exception e) {
@@ -94,7 +113,7 @@ public class ResourceUtil {
 		
 		try {
 			Files.copy(stream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {}
+		} catch (IOException ignored) {}
 	}
 	
 	/**
@@ -132,14 +151,7 @@ public class ResourceUtil {
 	
 	public static InputStream getMostCompatibleParticlesMenu ()
 	{
-		String menuName = "menus/particles_" + ParticleHats.serverVersion + ".yml";
-		InputStream particleStream = core.getResource(menuName);
-		
-		// Default to the most compatible menu
-		if (particleStream == null) {
-			particleStream = core.getResource("menus/particles_8.yml");
-		}
-		
-		return particleStream;
+		int menuVersion = particleMenuCompatibilityMap.getOrDefault(ParticleHats.serverVersion, 8);
+		return core.getResource("menus/particles_" + menuVersion + ".yml");
 	}
 }

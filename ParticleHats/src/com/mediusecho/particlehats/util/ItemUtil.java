@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemUtil {
 
@@ -66,6 +67,19 @@ public class ItemUtil {
 			return item;
 		}
 		return createItem(material, 1);
+	}
+
+	@SuppressWarnings("deprecation")
+	@NotNull
+	public static ItemStack createItem (Material material, short durability, int quantity)
+	{
+		ItemStack item = new ItemStack(material, quantity, durability);
+		ItemMeta itemMeta = item.getItemMeta();
+
+		addItemFlags(itemMeta);
+
+		item.setItemMeta(itemMeta);
+		return item;
 	}
 	
 	/**

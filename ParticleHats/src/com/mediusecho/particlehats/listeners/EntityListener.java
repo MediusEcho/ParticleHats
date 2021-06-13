@@ -1,13 +1,10 @@
 package com.mediusecho.particlehats.listeners;
 
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.NPC;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Slime;
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.player.EntityState;
+import com.mediusecho.particlehats.player.PlayerState.PVPState;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,30 +12,26 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
-import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.managers.SettingsManager;
-import com.mediusecho.particlehats.player.EntityState;
-import com.mediusecho.particlehats.player.PlayerState.PVPState;
-
 public class EntityListener implements Listener {
 
 	private final ParticleHats core;
 	
-	private boolean checkPlayers = SettingsManager.COMBAT_CHECK_PLAYERS.getBoolean();
-	private boolean checkAnimals = SettingsManager.COMBAT_CHECK_ANIMALSS.getBoolean();
-	private boolean checkMonsters = SettingsManager.COMBAT_CHECK_MONSTERS.getBoolean();
-	private boolean checkNPC = SettingsManager.COMBAT_CHECK_NPC.getBoolean();
+	private boolean checkPlayers = false;
+	private boolean checkAnimals = false;
+	private boolean checkMonsters = false;
+	private boolean checkNPC = false;
 	
 	public EntityListener (final ParticleHats core)
 	{
 		this.core = core;
 		core.getServer().getPluginManager().registerEvents(this, core);
+		onReload();
 	}
 	
 	public void onReload ()
 	{
 		checkPlayers = SettingsManager.COMBAT_CHECK_PLAYERS.getBoolean();
-		checkAnimals = SettingsManager.COMBAT_CHECK_ANIMALSS.getBoolean();
+		checkAnimals = SettingsManager.COMBAT_CHECK_ANIMALS.getBoolean();
 		checkMonsters = SettingsManager.COMBAT_CHECK_MONSTERS.getBoolean();
 		checkNPC = SettingsManager.COMBAT_CHECK_NPC.getBoolean();
 	}

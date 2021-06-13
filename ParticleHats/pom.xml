@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mediusecho</groupId>
   <artifactId>ParticleHats</artifactId>
-  <version>4.2.10</version>
+  <version>4.2.11</version>
   <build>
     <finalName>ParticleHats</finalName>
     <plugins>
@@ -41,7 +41,7 @@
     </plugins>
   </build>
   <repositories>
-    
+
     <!-- SuperVanish repo -->
     <repository>
       <id>cubekrowd-repo</id>
@@ -96,6 +96,20 @@
   		<version>2.1.3</version>
   		<scope>provided</scope>
 	</dependency>
+
+    <!-- TokenManager -->
+    <dependency>
+        <groupId>com.github.Realizedd</groupId>
+        <artifactId>TokenManager</artifactId>
+        <version>3.2.4</version>
+        <scope>provided</scope>
+        <exclusions>
+            <exclusion>
+                <groupId>*</groupId>
+                <artifactId>*</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
 	
 	<!-- Citizens NPC -->
     <dependency>

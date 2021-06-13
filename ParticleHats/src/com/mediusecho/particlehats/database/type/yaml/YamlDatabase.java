@@ -73,7 +73,7 @@ public class YamlDatabase implements Database {
 	
 	public YamlDatabase (ParticleHats core)
 	{
-		ParticleHats.log("Using yml database");
+		ParticleHats.log("Loaded yml database");
 		
 		this.core = core;
 		

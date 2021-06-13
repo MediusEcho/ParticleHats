@@ -44,8 +44,12 @@ public class VanishNoPacketHook implements VanishHook, Listener {
 		PlayerState playerState = core.getPlayerState(event.getPlayer());
 		boolean vanished = event.isVanishing();
 		
-		for (Hat hat : playerState.getActiveHats()) {
+		for (Hat hat : playerState.getActiveHats())
+		{
 			hat.setVanished(vanished);
+			if (hat.isVanished()) {
+				hat.unequip(event.getPlayer());
+			}
 		}
 	}
 }

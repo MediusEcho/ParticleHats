@@ -50,6 +50,7 @@ public enum SettingsManager {
 	 */
 	FLAG_VAULT ("flags.vault", Type.BOOLEAN, false),
 	FLAG_PLAYERPOINTS ("flags.playerpoints", Type.BOOLEAN, false),
+	FLAG_TOKEN_MANAGER ("flags.token-manager", Type.BOOLEAN, false),
 	FLAG_EXPERIENCE ("flags.experience", Type.BOOLEAN, false),
 	FLAG_PERMISSION ("flags.permission", Type.BOOLEAN, true),
 	FLAG_VANISH ("flags.vanish", Type.BOOLEAN, false),
@@ -62,7 +63,7 @@ public enum SettingsManager {
 	COMBAT_COOLDOWN ("combat.cooldown", Type.INT, 5),
 	COMBAT_CHECK_PLAYERS ("combat.check-players", Type.BOOLEAN, true),
 	COMBAT_CHECK_MONSTERS ("combat.check-monsters", Type.BOOLEAN, true),
-	COMBAT_CHECK_ANIMALSS ("combat.check-animals", Type.BOOLEAN, false),
+	COMBAT_CHECK_ANIMALS ("combat.check-animals", Type.BOOLEAN, false),
 	COMBAT_CHECK_NPC ("combat.check-npc", Type.BOOLEAN, false),
 	
 	/**
@@ -146,6 +147,13 @@ public enum SettingsManager {
 			return data.get(key);
 		}
 		return defaultData;
+	}
+
+	public static boolean isEconomyEnabled ()
+	{
+		return FLAG_VAULT.getBoolean() ||
+				FLAG_PLAYERPOINTS.getBoolean() ||
+				FLAG_TOKEN_MANAGER.getBoolean();
 	}
 	
 	/**

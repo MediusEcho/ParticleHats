@@ -54,8 +54,12 @@ public class SuperVanishHook implements Listener, VanishHook {
 		if (!event.isCancelled())
 		{
 			PlayerState playerState = core.getPlayerState(event.getPlayer());
-			for (Hat hat : playerState.getActiveHats()) {
+			for (Hat hat : playerState.getActiveHats())
+			{
 				hat.setVanished(false);
+				if (hat.isVanished()) {
+					hat.unequip(event.getPlayer());
+				}
 			}
 		}
 	}
