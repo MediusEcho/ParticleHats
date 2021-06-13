@@ -22,20 +22,20 @@ public class ResourceUtil {
 
 	private final static ParticleHats core = ParticleHats.instance;
 
-	private static final Map<Integer, Integer> particleMenuCompatabilityMap = new HashMap<>();
+	private static final Map<Integer, Integer> particleMenuCompatibilityMap = new HashMap<>();
 
 	static
 	{
-		particleMenuCompatabilityMap.put(8, 8);
-		particleMenuCompatabilityMap.put(9, 9);
-		particleMenuCompatabilityMap.put(10, 10);
-		particleMenuCompatabilityMap.put(11, 11);
-		particleMenuCompatabilityMap.put(12, 12);
-		particleMenuCompatabilityMap.put(13, 13);
-		particleMenuCompatabilityMap.put(14, 14);
-		particleMenuCompatabilityMap.put(15, 14);
-		particleMenuCompatabilityMap.put(16, 14);
-		particleMenuCompatabilityMap.put(17, 14);
+		particleMenuCompatibilityMap.put(8, 8);
+		particleMenuCompatibilityMap.put(9, 9);
+		particleMenuCompatibilityMap.put(10, 10);
+		particleMenuCompatibilityMap.put(11, 11);
+		particleMenuCompatibilityMap.put(12, 12);
+		particleMenuCompatibilityMap.put(13, 13);
+		particleMenuCompatibilityMap.put(14, 14);
+		particleMenuCompatibilityMap.put(15, 14);
+		particleMenuCompatibilityMap.put(16, 14);
+		particleMenuCompatibilityMap.put(17, 14);
 	}
 
 	public static BufferedImage getImage (String resourceName)
@@ -151,7 +151,7 @@ public class ResourceUtil {
 	
 	public static InputStream getMostCompatibleParticlesMenu ()
 	{
-		int menuVersion = particleMenuCompatabilityMap.getOrDefault(ParticleHats.serverVersion, 8);
+		int menuVersion = particleMenuCompatibilityMap.getOrDefault(ParticleHats.serverVersion, 8);
 		return core.getResource("menus/particles_" + menuVersion + ".yml");
 	}
 }
