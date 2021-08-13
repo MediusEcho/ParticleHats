@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,8 @@ import org.bukkit.util.Vector;
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.util.MathUtil;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemStackData {
 
@@ -268,7 +271,7 @@ public class ItemStackData {
 
 			Object entityItem = itemField.get(item);
 
-			Field ageField = entityItem.getClass().getDeclaredField("age");
+			Field ageField = entityItem.getClass().getDeclaredField(getAgeFieldName());
 			ageField.setAccessible(true);
 			ageField.set(entityItem, getDurationLived());
 		}
@@ -310,5 +313,18 @@ public class ItemStackData {
 		if (data.hasDirectionalVelocity != hasDirectionalVelocity) return false;
 		
 		return true;
+	}
+
+	/**
+	 * Returns the EntityItem's 'age' field name.
+	 */
+	@NotNull
+	@Contract(pure = true)
+	private String getAgeFieldName ()
+	{
+		if (ParticleHats.serverVersion >= 17) {
+			return "ao";
+		}
+		return "age";
 	}
 }

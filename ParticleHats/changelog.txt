@@ -1,3 +1,6 @@
+4.2.12
+- Fixed an error with the ItemStack particle that would not apply the 'age' property properly in 1.17+
+
 4.2.11
 - Added support for 1.17
   - Added particles:
