@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.6
+version: 1.7
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -490,6 +490,8 @@ particle_electric_spark_name: "&bElectric Spark"
 particle_electric_spark_description: "&8Particles that emit when a/n&8Lightning Rod is struck/n&8by lightning"
 particle_scrape_name: "&bScrape"
 particle_scrape_description: "&8Particles that emit when/n&8scraping oxidation off of/n&8a Block of Copper"
+particle_block_marker_name: "&bBlock Marker"
+particle_block_marker_description: "&8Similar to &7BARRIER &8& &7LIGHT&8. /n&8Displays a block's texture"
 
 ##########################
 #       Locations        #

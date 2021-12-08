@@ -1,3 +1,8 @@
+4.2.13
+- 1.18 Support
+- Added block_marker particle
+- Fixed page calculation error when showing search results in the editor
+
 4.2.12
 - Fixed an error with the ItemStack particle that would not apply the 'age' property properly in 1.17+
 

@@ -1,10 +1,10 @@
 package com.mediusecho.particlehats.util;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class MathUtil {
 
@@ -80,7 +80,7 @@ public class MathUtil {
 	 * @return
 	 */
 	public static int calculatePageCount (double totalCount, int itemsPerPage) {
-		return (int) Math.max(Math.ceil((totalCount - 1) / itemsPerPage), 1);
+		return (int) Math.ceil(totalCount / (float) itemsPerPage);
 	}
 	
 	/**

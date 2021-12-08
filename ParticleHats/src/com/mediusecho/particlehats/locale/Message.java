@@ -1,17 +1,14 @@
 package com.mediusecho.particlehats.locale;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
-import org.bukkit.Material;
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.commands.Sender;
+import com.mediusecho.particlehats.util.StringUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.commands.Sender;
-import com.mediusecho.particlehats.util.StringUtil;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum Message {
 	
@@ -376,6 +373,8 @@ public enum Message {
 	PARTICLE_ELECTRIC_SPARK_DESCRIPTION (""),
 	PARTICLE_SCRAPE_NAME (""),
 	PARTICLE_SCRAPE_DESCRIPTION (""),
+	PARTICLE_BLOCK_MARKER_NAME (""),
+	PARTICLE_BLOCK_MARKER_DESCRIPTION (""),
 	
 	/**
 	 * Location

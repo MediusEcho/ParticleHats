@@ -1,5 +1,33 @@
 package com.mediusecho.particlehats;
 
+import com.mediusecho.particlehats.api.HatAPI;
+import com.mediusecho.particlehats.api.ParticleHatsAPI;
+import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.type.DatabaseType;
+import com.mediusecho.particlehats.editor.MetaState;
+import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.managers.*;
+import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
+import com.mediusecho.particlehats.particles.renderer.legacy.LegacyParticleRenderer;
+import com.mediusecho.particlehats.particles.renderer.spigot.SpigotParticleRenderer;
+import com.mediusecho.particlehats.player.EntityState;
+import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.prompt.BukkitPrompt;
+import com.mediusecho.particlehats.prompt.Prompt;
+import com.mediusecho.particlehats.prompt.SpigotPrompt;
+import com.mediusecho.particlehats.tasks.EntityTask;
+import com.mediusecho.particlehats.tasks.MenuTask;
+import com.mediusecho.particlehats.tasks.PromptTask;
+import com.mediusecho.particlehats.ui.MenuManagerFactory;
+import com.mediusecho.particlehats.util.YamlUtil;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,39 +38,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import com.mediusecho.particlehats.api.HatAPI;
-import com.mediusecho.particlehats.api.ParticleHatsAPI;
-import com.mediusecho.particlehats.database.Database;
-import com.mediusecho.particlehats.database.type.DatabaseType;
-import com.mediusecho.particlehats.editor.MetaState;
-import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.managers.CommandManager;
-import com.mediusecho.particlehats.managers.EventManager;
-import com.mediusecho.particlehats.managers.HookManager;
-import com.mediusecho.particlehats.managers.ParticleManager;
-import com.mediusecho.particlehats.managers.ResourceManager;
-import com.mediusecho.particlehats.managers.SettingsManager;
-import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
-import com.mediusecho.particlehats.particles.renderer.legacy.LegacyParticleRenderer;
-import com.mediusecho.particlehats.particles.renderer.spigot.SpigotParticleRenderer;
-import com.mediusecho.particlehats.player.EntityState;
-import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.prompt.BukkitPrompt;
-import com.mediusecho.particlehats.prompt.Prompt;
-import com.mediusecho.particlehats.prompt.SpigotPrompt;
-import com.mediusecho.particlehats.stats.Metrics;
-import com.mediusecho.particlehats.tasks.MenuTask;
-import com.mediusecho.particlehats.tasks.EntityTask;
-import com.mediusecho.particlehats.tasks.PromptTask;
-import com.mediusecho.particlehats.ui.MenuManagerFactory;
-import com.mediusecho.particlehats.util.YamlUtil;
 
 @SuppressWarnings("unused")
 public class ParticleHats extends JavaPlugin {
@@ -93,7 +88,7 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.6;
+	private final double LANG_VERSION = 1.7;
 	
 	private ConcurrentHashMap<UUID, EntityState> entityState;
 	
@@ -207,8 +202,8 @@ public class ParticleHats extends JavaPlugin {
 			hookManager = new HookManager(this);
 			
 			// Enable Metrics
-			Metrics metrics = new Metrics(this);
-			metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> databaseType.toString().toLowerCase()));
+			Metrics metrics = new Metrics(this, 3214);
+			metrics.addCustomChart(new SimplePie("database_type", () -> databaseType.toString().toLowerCase()));
 			
 			if (SettingsManager.EDITOR_USE_ACTION_BAR.getBoolean() && supportsBaseComponent) {
 				prompt = new SpigotPrompt();
@@ -343,7 +338,6 @@ public class ParticleHats extends JavaPlugin {
 	
 	/**
 	 * Returns the PlayerState object that belongs to this player
-	 * @param id
 	 * @return
 	 */
 	public PlayerState getPlayerState (Player player) {

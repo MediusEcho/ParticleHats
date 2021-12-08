@@ -1,24 +1,20 @@
 package com.mediusecho.particlehats.particles.properties;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.util.MathUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.util.MathUtil;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ItemStackData {
 
@@ -165,12 +161,8 @@ public class ItemStackData {
 	 * Get a random item
 	 * @return
 	 */
-	public ItemStack getRandomItem ()
-	{
-		if (items.size() > 0) {
-			return items.get(random.nextInt(items.size()));
-		}
-		return defaultItem;
+	public ItemStack getRandomItem () {
+		return items.size() > 0 ? items.get(random.nextInt(items.size())) : defaultItem;
 	}
 	
 	public void setItems (List<ItemStack> items) {
@@ -181,10 +173,8 @@ public class ItemStackData {
 	 * Get all items
 	 * @return
 	 */
-	public List<ItemStack> getItems () 
-	{
-		final List<ItemStack> items = new ArrayList<ItemStack>(this.items);
-		return items;
+	public List<ItemStack> getItems () {
+		return new ArrayList<>(this.items);
 	}
 	
 	/**
@@ -242,45 +232,25 @@ public class ItemStackData {
 	 */
 	public void dropItem (World world, Location location, Hat hat)
 	{
-		try
-		{
-			Vector randomOffset = hat.getRandomOffset();
-			double rx = randomOffset.getX();
-			double ry = randomOffset.getY();
-			double rz = randomOffset.getZ();
+		Vector randomOffset = hat.getRandomOffset();
+		double rx = randomOffset.getX();
+		double ry = randomOffset.getY();
+		double rz = randomOffset.getZ();
 
-			double x = (random.nextDouble() * (rx * 2)) - rx;
-			double y = (random.nextDouble() * (ry * 2)) - ry;
-			double z = (random.nextDouble() * (rz * 2)) - rz;
+		double x = (random.nextDouble() * (rx * 2)) - rx;
+		double y = (random.nextDouble() * (ry * 2)) - ry;
+		double z = (random.nextDouble() * (rz * 2)) - rz;
 
-			Item item = world.dropItem(location.add(x, y, z), getRandomItem());
-			item.setPickupDelay(36000); // 30 Minutes
+		Item item = world.dropItem(location.add(x, y, z), getRandomItem());
 
-			if (ParticleHats.serverVersion >= 10) {
-				item.setGravity(hasGravity);
-			}
+		// Give this item a unique metadata so we can cancel any pickup
+		item.setMetadata("PH_DroppedItem", new FixedMetadataValue(ParticleHats.instance, ""));
+		item.setPickupDelay(36000); // 30 Minutes
+		item.setVelocity(this.velocity);
+		setItemTicksLived(item, getDurationLived());
 
-			// Give this item a unique metadata so we can cancel any pickup
-			item.setMetadata("PH_DroppedItem", new FixedMetadataValue(ParticleHats.instance, ""));
-
-			Vector velocity = this.velocity;
-			item.setVelocity(velocity);
-
-			Field itemField = item.getClass().getDeclaredField("item");
-			itemField.setAccessible(true);
-
-			Object entityItem = itemField.get(item);
-
-			Field ageField = entityItem.getClass().getDeclaredField(getAgeFieldName());
-			ageField.setAccessible(true);
-			ageField.set(entityItem, getDurationLived());
-		}
-
-		catch (Exception e)
-		{
-			if (ParticleHats.debugging) {
-				e.printStackTrace();
-			}
+		if (ParticleHats.serverVersion >= 10) {
+			item.setGravity(hasGravity);
 		}
 	}
 	
@@ -315,16 +285,33 @@ public class ItemStackData {
 		return true;
 	}
 
-	/**
-	 * Returns the EntityItem's 'age' field name.
-	 */
-	@NotNull
-	@Contract(pure = true)
-	private String getAgeFieldName ()
+	private void setItemTicksLived (Item item, int ticksLived)
 	{
-		if (ParticleHats.serverVersion >= 17) {
-			return "ao";
+		if (ParticleHats.serverVersion >= 13) {
+			item.setTicksLived(ticksLived);
 		}
-		return "age";
+
+		// The method #setTicksLived does not behave the same on versions older than 1.13
+		// so we have to set the 'age' field manually.
+		else
+		{
+			try
+			{
+				Field itemField = item.getClass().getDeclaredField("item");
+				itemField.setAccessible(true);
+
+				Object entityItem = itemField.get(item);
+				Field ageField = entityItem.getClass().getDeclaredField("age");
+				ageField.setAccessible(true);
+				ageField.set(entityItem, getDurationLived());
+			}
+
+			catch (NoSuchFieldException | IllegalAccessException exception)
+			{
+				if (ParticleHats.debugging) {
+					exception.printStackTrace();
+				}
+			}
+		}
 	}
 }

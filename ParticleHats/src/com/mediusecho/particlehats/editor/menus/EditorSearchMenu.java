@@ -1,15 +1,5 @@
 package com.mediusecho.particlehats.editor.menus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
@@ -18,6 +8,15 @@ import com.mediusecho.particlehats.ui.AbstractListMenu;
 import com.mediusecho.particlehats.ui.MenuManager;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class EditorSearchMenu extends AbstractListMenu {
 
@@ -103,7 +102,7 @@ public class EditorSearchMenu extends AbstractListMenu {
 		for (int i = 0; i < 45; i++) {
 			setAction(i, selectAction);
 		}
-		
+
 		for (int i = 0; i < totalPages; i++)
 		{
 			Inventory inventory = Bukkit.createInventory(null, 54, menuTitle);
