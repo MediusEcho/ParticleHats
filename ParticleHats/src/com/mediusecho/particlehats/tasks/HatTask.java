@@ -103,7 +103,7 @@ public class HatTask extends BukkitRunnable {
 
         // Unequip if this hat's demo duration has run out.
         if (!hat.isDemoActive()) {
-            entityState.removeHat(hat);
+            PlayerUtil.runNextTick(() -> entityState.removeHat(hat));
         }
     }
 

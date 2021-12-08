@@ -1,19 +1,16 @@
 package com.mediusecho.particlehats.particles.renderer.spigot;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.mediusecho.particlehats.ParticleHats;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
-import org.bukkit.Particle.DustOptions;
-import org.bukkit.Particle.DustTransition;
-
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
 import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
+import org.bukkit.*;
+import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.DustTransition;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SpigotParticleRenderer implements ParticleRenderer {
 
@@ -33,10 +30,18 @@ public class SpigotParticleRenderer implements ParticleRenderer {
 	
 	@Override
 	public void spawnParticle (World world, ParticleEffect particle, Location location, int count, 
-			double offsetX, double offsetY, double offsetZ, double extra) 
+			double offsetX, double offsetY, double offsetZ, double extra)
 	{
 		if (particleCache.containsKey(particle)) {
 			world.spawnParticle(particleCache.get(particle), location, count, offsetX, offsetY, offsetZ, extra);
+		}
+
+		else if (ParticleHats.serverVersion >= 18 &&
+				(particle == ParticleEffect.BARRIER || particle == ParticleEffect.LIGHT))
+		{
+			ParticleData data = new ParticleData();
+			data.setBlock(new ItemStack(particle == ParticleEffect.BARRIER ? Material.BARRIER : Material.LIGHT));
+			world.spawnParticle(particleCache.get(ParticleEffect.BLOCK_MARKER), location, count, offsetX, offsetY, offsetZ, extra, data.getBlockMaterial().createBlockData());
 		}
 	}
 	

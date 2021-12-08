@@ -1,22 +1,16 @@
 package com.mediusecho.particlehats.util;
 
+import com.mediusecho.particlehats.ParticleHats;
+import org.bukkit.Sound;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
-
-import org.bukkit.Sound;
-
-import com.mediusecho.particlehats.ParticleHats;
 
 public class ResourceUtil {
 
@@ -36,6 +30,7 @@ public class ResourceUtil {
 		particleMenuCompatibilityMap.put(15, 14);
 		particleMenuCompatibilityMap.put(16, 14);
 		particleMenuCompatibilityMap.put(17, 14);
+		particleMenuCompatibilityMap.put(18, 14);
 	}
 
 	public static BufferedImage getImage (String resourceName)

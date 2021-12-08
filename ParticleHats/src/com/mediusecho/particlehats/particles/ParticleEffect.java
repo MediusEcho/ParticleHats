@@ -1,16 +1,15 @@
 package com.mediusecho.particlehats.particles;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.util.ItemUtil;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public enum ParticleEffect {
 
@@ -112,7 +111,8 @@ public enum ParticleEffect {
 	WAX_ON (91, -1, 17, CompatibleMaterial.COPPER_BLOCK),
 	WAX_OFF (92, -1, 17, CompatibleMaterial.WEATHERED_COPPER),
 	ELECTRIC_SPARK (93, -1, 17, CompatibleMaterial.LIGHTNING_ROD),
-	SCRAPE (94, -1, 17, CompatibleMaterial.OXIDIZED_COPPER);
+	SCRAPE (94, -1, 17, CompatibleMaterial.OXIDIZED_COPPER),
+	BLOCK_MARKER (95, -1, 18, Material.ITEM_FRAME, ParticleProperty.BLOCK_DATA);
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
