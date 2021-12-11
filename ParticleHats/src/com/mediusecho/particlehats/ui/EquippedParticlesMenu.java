@@ -1,20 +1,18 @@
 package com.mediusecho.particlehats.ui;
 
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
-
-import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.util.ItemUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class EquippedParticlesMenu extends AbstractListMenu {
 
@@ -67,6 +65,21 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 			{
 				playerState.removeHat(index);
 				deleteSlot(currentPage, slot);
+
+				// Temporary solution until 5.0
+				// Removes the equipped item's tint & description from the menu.
+				if (fromMenu)
+				{
+					StaticMenuManager staticManager = (StaticMenuManager)playerState.getMenuManager();
+					if (staticManager == null) {
+						return MenuClickResult.NEUTRAL;
+					}
+
+					AbstractMenu menu = staticManager.getMenuFromCache(hat.getMenu());
+					if (menu instanceof StaticMenu) {
+						((StaticMenu)menu).unequipHat(hat);
+					}
+				}
 			}
 			
 			return MenuClickResult.NEUTRAL;
@@ -100,12 +113,12 @@ public class EquippedParticlesMenu extends AbstractListMenu {
 				if (staticManager == null) {
 					return MenuClickResult.NONE;
 				}
-				
+
 				AbstractMenu previousMenu = staticManager.getPreviousOpenMenu();
 				if (previousMenu == null) {
 					return MenuClickResult.NONE;
 				}
-				
+
 				previousMenu.open();
 				return MenuClickResult.NEUTRAL;
 			});

@@ -1,16 +1,15 @@
 package com.mediusecho.particlehats.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
 import com.mediusecho.particlehats.util.MathUtil;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StaticMenuManager extends MenuManager {
 
@@ -73,7 +72,12 @@ public class StaticMenuManager extends MenuManager {
 			}
 		}	
 	}
-	
+
+	@Override
+	public AbstractMenu getCurrentMenu() {
+		return currentOpenMenu;
+	}
+
 	/**
 	 * Get a AbstractMenu with the given name from the menu cache
 	 * @param name
