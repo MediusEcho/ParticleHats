@@ -1,16 +1,5 @@
 package com.mediusecho.particlehats.particles.properties;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.mediusecho.particlehats.util.PlayerUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.events.HatEquipEvent;
 import com.mediusecho.particlehats.hooks.CurrencyHook;
@@ -18,13 +7,18 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu;
-import com.mediusecho.particlehats.ui.EquippedParticlesMenu;
-import com.mediusecho.particlehats.ui.MenuInventory;
-import com.mediusecho.particlehats.ui.PendingPurchaseMenu;
-import com.mediusecho.particlehats.ui.StaticMenu;
-import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.ui.*;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.PlayerUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public enum ParticleAction {
 
@@ -147,7 +141,7 @@ public enum ParticleAction {
 	public void onClick (Player player, Hat hat, int slot, Inventory inventory, String argument)
 	{
 		PlayerState playerState = core.getPlayerState(player);
-		boolean canClose = SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean();	
+		boolean canClose = SettingsManager.CLOSE_MENU_ON_EQUIP.getBoolean();
 	
 		switch (this)
 		{
@@ -305,7 +299,7 @@ public enum ParticleAction {
 				if (checkAgainstEquippedHats(hat, slot, playerState, inventory)) {
 					return;
 				}
-				
+
 				core.getParticleManager().equipHat(player, hat);
 				if (canClose) {
 					PlayerUtil.closeInventory(player);

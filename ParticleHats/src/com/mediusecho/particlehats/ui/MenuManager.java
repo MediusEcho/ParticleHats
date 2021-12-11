@@ -1,9 +1,9 @@
 package com.mediusecho.particlehats.ui;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.UUID;
-
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.editor.MetaState;
+import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
 import com.mediusecho.particlehats.util.PlayerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,10 +11,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 
-import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.editor.MetaState;
-import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.ui.AbstractMenu.MenuClickResult;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.UUID;
 
 public abstract class MenuManager {
 

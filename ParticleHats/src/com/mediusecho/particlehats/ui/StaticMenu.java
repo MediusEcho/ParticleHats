@@ -1,26 +1,25 @@
 package com.mediusecho.particlehats.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.managers.SettingsManager;
+import com.mediusecho.particlehats.particles.Hat;
+import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
+import com.mediusecho.particlehats.particles.properties.ParticleAction;
+import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.managers.SettingsManager;
-import com.mediusecho.particlehats.particles.Hat;
-import com.mediusecho.particlehats.particles.properties.IconData;
-import com.mediusecho.particlehats.particles.properties.ParticleAction;
-import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
-import com.mediusecho.particlehats.player.PlayerState;
-import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.StringUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class StaticMenu extends AbstractStaticMenu {
 
@@ -191,4 +190,35 @@ public class StaticMenu extends AbstractStaticMenu {
 		return menuInventory.getHats();
 	}
 
+	public void equipHat (Hat hat)
+	{
+		ItemStack item = menuInventory.getItem(hat.getSlot());
+		ItemUtil.highlightItem(item);
+
+		ItemMeta itemMeta = item.getItemMeta();
+		List<String> lore = new ArrayList<>(hat.getCachedDescription());
+
+		String equippedLore = Message.HAT_EQUIPPED_DESCRIPTION.getValue();
+		String[] lineInfo = StringUtil.parseValue(equippedLore, "1");
+
+		if (lore.size() > 0) {
+			equippedLore = equippedLore.replace(lineInfo[0], lineInfo[1]);
+		} else {
+			equippedLore = equippedLore.replace(lineInfo[0], "");
+		}
+
+		lore.addAll(StringUtil.parseDescription(equippedLore));
+		itemMeta.setLore(lore);
+
+		item.setItemMeta(itemMeta);
+		inventory.setItem(hat.getSlot(), item);
+	}
+
+	public void unequipHat (Hat hat)
+	{
+		ItemStack item = menuInventory.getItem(hat.getSlot());
+		ItemUtil.stripHighlight(item);
+		ItemUtil.setItemDescription(item, hat.getCachedDescription());
+		inventory.setItem(hat.getSlot(), item);
+	}
 }

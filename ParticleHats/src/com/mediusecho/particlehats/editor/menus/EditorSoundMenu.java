@@ -1,17 +1,4 @@
 package com.mediusecho.particlehats.editor.menus;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.editor.EditorLore;
@@ -23,6 +10,14 @@ import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
 
 public class EditorSoundMenu extends AbstractStaticMenu {
 
@@ -104,6 +99,15 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 			"MUSIC_DISC_WAIT",
 			"MUSIC_DISC_WARD",
 			"MUSIC_DISC_PIGSTEP",
+		    "MUSIC_DISC_OTHERSIDE",
+		    "MUSIC_OVERWORLD_DRIPSTONE_CAVES",
+		    "MUSIC_OVERWORLD_FROZEN_PEAKS",
+		    "MUSIC_OVERWORLD_GROVE",
+		    "MUSIC_OVERWORLD_JAGGED_PEAKS",
+		    "MUSIC_OVERWORLD_LUSH_CAVES",
+		    "MUSIC_OVERWORLD_MEADOW",
+		    "MUSIC_OVERWORLD_SNOWY_SLOPES",
+		    "MUSIC_OVERWORLD_STONY_PEAKS",
 		    "RECORD_11",
 		    "RECORD_13",
 		    "RECORD_BLOCKS",

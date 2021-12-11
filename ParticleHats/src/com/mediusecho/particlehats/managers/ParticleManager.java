@@ -1,14 +1,5 @@
 package com.mediusecho.particlehats.managers;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.locale.Message;
@@ -16,6 +7,13 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
+import com.mediusecho.particlehats.ui.AbstractMenu;
+import com.mediusecho.particlehats.ui.MenuManager;
+import com.mediusecho.particlehats.ui.StaticMenu;
+import com.mediusecho.particlehats.ui.StaticMenuManager;
+import org.bukkit.entity.Player;
+
+import java.util.*;
 
 public class ParticleManager 
 {
@@ -69,8 +67,23 @@ public class ParticleManager
 		return emptyRecents;
 	}
 	
-	public boolean equipHat (Player player, Hat hat) {
-		return equipHat(player, hat, true);
+	public boolean equipHat (Player player, Hat hat)
+	{
+		if (equipHat(player, hat, true))
+		{
+			MenuManager menuManager = core.getPlayerState(player).getMenuManager();
+			if (menuManager instanceof StaticMenuManager)
+			{
+				StaticMenuManager staticMenuManager = (StaticMenuManager)menuManager;
+				AbstractMenu menu = staticMenuManager.getMenuFromCache(hat.getMenu());
+
+				if (menu instanceof StaticMenu) {
+					((StaticMenu)menu).equipHat(hat);
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean equipHat (Player player, Hat hat, boolean showEquipMessage)
