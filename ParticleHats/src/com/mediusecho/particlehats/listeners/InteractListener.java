@@ -1,14 +1,5 @@
 package com.mediusecho.particlehats.listeners;
 
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.properties.Group;
@@ -20,6 +11,15 @@ import com.mediusecho.particlehats.ui.AbstractMenu;
 import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.ui.StaticMenu;
 import com.mediusecho.particlehats.ui.StaticMenuManager;
+import com.mediusecho.particlehats.util.ResourceUtil;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class InteractListener implements Listener {
 
@@ -35,6 +35,10 @@ public class InteractListener implements Listener {
 	@EventHandler
 	public void onInteract (PlayerInteractEvent event)
 	{
+		if (!SettingsManager.MENU_OPEN_WITH_ITEM.getBoolean()) {
+			return;
+		}
+
 		ItemStack item = event.getItem();
 		if (item != null)
 		{
@@ -68,7 +72,8 @@ public class InteractListener implements Listener {
 				if (menuName.equals("")) {
 					return;
 				}
-				
+
+				menuName = ResourceUtil.removeExtension(menuName);
 				PlayerState playerState = core.getPlayerState(player);
 				MenuInventory inventory = database.loadInventory(menuName, playerState);
 				
