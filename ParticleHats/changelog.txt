@@ -1,3 +1,7 @@
+4.2.15
+- Fixed menu.open-menu-with-item.enabled not being checked.
+- Fixed unknown_menu error that would occur when right clicking with the menu.open-menu-with-item.id item in a players hand.
+
 4.2.14
 - Fixed missing .png images causing some included particle effects to display nothing.
 - Fixed an issue that prevented an items description from being updated when un-equipping hats from the Equipped Particles menu.
