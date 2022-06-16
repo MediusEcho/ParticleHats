@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.7
+version: 1.8
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -492,6 +492,16 @@ particle_scrape_name: "&bScrape"
 particle_scrape_description: "&8Particles that emit when/n&8scraping oxidation off of/n&8a Block of Copper"
 particle_block_marker_name: "&bBlock Marker"
 particle_block_marker_description: "&8Similar to &7BARRIER &8& &7LIGHT&8. /n&8Displays a block's texture"
+particle_sonic_boom_name: "&bSonic Boom"
+particle_sonic_boom_description: ""
+particle_sculk_soul_name: "&bSculk Soul"
+particle_sculk_soul_description: ""
+particle_sculk_charge_name: "&bSculk Charge"
+particle_sculk_charge_description: ""
+particle_sculk_charge_pop_name: "&bSculk Charge Pop"
+particle_sculk_charge_pop_description: ""
+particle_shriek_name: "&bShriek"
+particle_shriek_description: ""
 
 ##########################
 #       Locations        #

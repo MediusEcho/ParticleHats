@@ -89,4 +89,12 @@ public class SpigotParticleRenderer implements ParticleRenderer {
 			world.spawnParticle(particleCache.get(particle), location, count, offsetX, offsetY, offsetZ, extra, dustTransition);
 		}
 	}
+
+	@Override
+	public <T> void spawnParticle(World world, ParticleEffect particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra, T data)
+	{
+		if (particleCache.containsKey(particle)) {
+			world.spawnParticle(particleCache.get(particle),location,count, offsetX,offsetY, offsetZ, extra, data);
+		}
+	}
 }

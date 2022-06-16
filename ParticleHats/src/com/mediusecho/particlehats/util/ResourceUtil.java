@@ -27,10 +27,6 @@ public class ResourceUtil {
 		particleMenuCompatibilityMap.put(12, 12);
 		particleMenuCompatibilityMap.put(13, 13);
 		particleMenuCompatibilityMap.put(14, 14);
-		particleMenuCompatibilityMap.put(15, 14);
-		particleMenuCompatibilityMap.put(16, 14);
-		particleMenuCompatibilityMap.put(17, 14);
-		particleMenuCompatibilityMap.put(18, 14);
 	}
 
 	public static BufferedImage getImage (String resourceName)
@@ -146,7 +142,7 @@ public class ResourceUtil {
 	
 	public static InputStream getMostCompatibleParticlesMenu ()
 	{
-		int menuVersion = particleMenuCompatibilityMap.getOrDefault(ParticleHats.serverVersion, 8);
+		int menuVersion = particleMenuCompatibilityMap.getOrDefault(Math.min(ParticleHats.serverVersion, 14), 8);
 		return core.getResource("menus/particles_" + menuVersion + ".yml");
 	}
 }
