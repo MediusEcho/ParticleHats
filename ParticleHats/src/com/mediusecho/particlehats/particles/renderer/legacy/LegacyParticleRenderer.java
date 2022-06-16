@@ -1,10 +1,9 @@
 package com.mediusecho.particlehats.particles.renderer.legacy;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.List;
-
+import com.mediusecho.particlehats.particles.ParticleEffect;
+import com.mediusecho.particlehats.particles.properties.ParticleData;
+import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
+import com.mediusecho.particlehats.particles.renderer.legacy.ReflectionUtils.PackageType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -12,10 +11,10 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.particles.ParticleEffect;
-import com.mediusecho.particlehats.particles.properties.ParticleData;
-import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
-import com.mediusecho.particlehats.particles.renderer.legacy.ReflectionUtils.PackageType;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * <b>ParticleEffect Library</b>
@@ -85,6 +84,9 @@ public class LegacyParticleRenderer implements ParticleRenderer {
 	{
 		//
 	}
+
+	@Override
+	public <T> void spawnParticle(World world, ParticleEffect particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra, T data) { }
 
 	/**
 	 * Represents a particle effect packet with all attributes which is used for sending packets to the players

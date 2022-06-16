@@ -1,17 +1,5 @@
 package com.mediusecho.particlehats.particles;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
 import com.mediusecho.particlehats.particles.properties.ParticleData;
@@ -19,7 +7,15 @@ import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.util.MathUtil;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Effect {
 
@@ -223,35 +219,25 @@ public abstract class Effect {
 			switch (particleEffect.getProperty())
 			{
 				case NO_DATA:
-				{
 					renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed);
 					break;
-				}
 				
 				case COLOR:
-				{
 					renderer.spawnParticleColor(world, particleEffect, location, count, rxo, ryo, rzo, speed, data.getColorData().getColor(), data.getScale());
 					break;
-				}
 
 				case COLOR_TRANSITION:
-				{
 					renderer.spawnParticleColorTransition(world, particleEffect, location, count, rxo, ryo, rzo, speed,
 							data.getColorData().getColor(), data.getColorData().getColor(), data.getScale());
 					break;
-				}
 				
 				case BLOCK_DATA:
-				{
 					renderer.spawnParticleBlockData(world, particleEffect, location, count, rxo, ryo, rzo, speed, data);
 					break;
-				}
 				
 				case ITEM_DATA:
-				{
 					renderer.spawnParticleItemData(world, particleEffect, location, count, rxo, ryo, rzo, speed, data);
 					break;
-				}
 				
 				case ITEMSTACK_DATA:
 				{
@@ -260,6 +246,14 @@ public abstract class Effect {
 							hat.getParticleData(i).getItemStackData().dropItem(world, location, hat));
 					break;
 				}
+
+				case FLOAT:
+					renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed, 0f);
+					break;
+
+				case INTEGER:
+					renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed, 0);
+					break;
 			}
 		}
 	}

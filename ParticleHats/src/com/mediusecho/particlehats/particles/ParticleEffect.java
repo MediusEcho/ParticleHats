@@ -112,7 +112,12 @@ public enum ParticleEffect {
 	WAX_OFF (92, -1, 17, CompatibleMaterial.WEATHERED_COPPER),
 	ELECTRIC_SPARK (93, -1, 17, CompatibleMaterial.LIGHTNING_ROD),
 	SCRAPE (94, -1, 17, CompatibleMaterial.OXIDIZED_COPPER),
-	BLOCK_MARKER (95, -1, 18, Material.ITEM_FRAME, ParticleProperty.BLOCK_DATA);
+	BLOCK_MARKER (95, -1, 18, Material.ITEM_FRAME, ParticleProperty.BLOCK_DATA),
+	SONIC_BOOM (96, -1, 19, CompatibleMaterial.SCULK),
+	SCULK_SOUL (97, -1, 19, CompatibleMaterial.SCULK_CATALYST),
+	SCULK_CHARGE (98, -1, 19, CompatibleMaterial.SCULK_SENSOR, ParticleProperty.FLOAT),
+	SCULK_CHARGE_POP (99, -1, 19, CompatibleMaterial.SCULK_VEIN),
+	SHRIEK (100, -1, 19, CompatibleMaterial.SCULK_SHRIEKER, ParticleProperty.INTEGER);
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
@@ -395,6 +400,8 @@ public enum ParticleEffect {
 		COLOR_TRANSITION,
 		BLOCK_DATA,
 		ITEM_DATA,
-		ITEMSTACK_DATA;
+		ITEMSTACK_DATA,
+		INTEGER,
+		FLOAT
 	}
 }
