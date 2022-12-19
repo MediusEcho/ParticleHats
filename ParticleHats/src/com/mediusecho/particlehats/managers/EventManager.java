@@ -1,12 +1,7 @@
 package com.mediusecho.particlehats.managers;
 
 import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.listeners.ChatListener;
-import com.mediusecho.particlehats.listeners.CommandListener;
-import com.mediusecho.particlehats.listeners.ConnectionListener;
-import com.mediusecho.particlehats.listeners.EntityListener;
-import com.mediusecho.particlehats.listeners.InteractListener;
-import com.mediusecho.particlehats.listeners.InventoryListener;
+import com.mediusecho.particlehats.listeners.*;
 
 @SuppressWarnings("unused")
 public class EventManager {
@@ -20,6 +15,7 @@ public class EventManager {
 	private final ConnectionListener connectionListener;
 	private final InteractListener   interactListener;
 	private final CommandListener    commandListener;
+	private final PlayerListener     playerListener;
 	
 	public EventManager (final ParticleHats core)
 	{
@@ -31,6 +27,7 @@ public class EventManager {
 		connectionListener = new ConnectionListener(core);
 		interactListener   = new InteractListener(core);
 		commandListener    = new CommandListener(core);
+		playerListener     = new PlayerListener(core);
 	}
 
 	public void onReload ()
