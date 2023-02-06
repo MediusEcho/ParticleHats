@@ -1,3 +1,6 @@
+4.2.18
+- Fixed duplicate message error when calling #equipHatFromLabel() from the API
+
 4.2.17
 - Fixed particle effects still displaying after a player dies.
 - Fixed potion effects not being re-applied after a player respawns
