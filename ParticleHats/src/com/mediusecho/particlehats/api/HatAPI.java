@@ -1,15 +1,14 @@
 package com.mediusecho.particlehats.api;
 
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.api.exceptions.InvalidLabelException;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class HatAPI extends ParticleHatsAPI {
 	
@@ -42,7 +41,7 @@ public class HatAPI extends ParticleHatsAPI {
 		}
 		
 		hat.setPermanent(permanent);
-		core.getParticleManager().equipHat(player, hat);
+		core.getParticleManager().equipHat(player, hat, false);
 		
 		if (tellPlayer) {
 			player.sendMessage(Message.COMMAND_SET_SUCCESS.getValue().replace("{1}", hat.getDisplayName()));
