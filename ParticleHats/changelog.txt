@@ -1,3 +1,6 @@
+4.2.19
+- Fixed potion effects not being removed when toggling from the API
+
 4.2.18
 - Fixed duplicate message error when calling #equipHatFromLabel() from the API
 
