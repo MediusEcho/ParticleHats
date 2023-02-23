@@ -68,6 +68,7 @@ public class HatAPI extends ParticleHatsAPI {
 	{
 		Hat hat = core.getPlayerState(player).getActiveHats().get(index);
 		hat.setHidden(toggleStatus);
+		hat.setIsDisplaying(!toggleStatus, player);
 	}
 	
 	@Override
@@ -75,6 +76,7 @@ public class HatAPI extends ParticleHatsAPI {
 	{
 		for (Hat hat : core.getPlayerState(player).getActiveHats()) {
 			hat.setHidden(toggleStatus);
+			hat.setIsDisplaying(!toggleStatus, player);
 		}
 	}
 	
@@ -124,6 +126,7 @@ public class HatAPI extends ParticleHatsAPI {
 		{		
 			Hat hat = core.getPlayerState(player).getActiveHats().get(0);
 			hat.setHidden(!hat.isHidden());
+			hat.setIsDisplaying(!hat.isHidden(), player);
 		}
 	}
 	
