@@ -1,12 +1,16 @@
 package com.mediusecho.particlehats.particles;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.locale.Message;
+import com.mediusecho.particlehats.particles.effects.PixelEffect;
+import com.mediusecho.particlehats.particles.properties.*;
+import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
+import com.mediusecho.particlehats.permission.Permission;
+import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.PlayerUtil;
+import com.mediusecho.particlehats.util.StringUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,25 +19,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.mediusecho.particlehats.ParticleHats;
-import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
-import com.mediusecho.particlehats.locale.Message;
-import com.mediusecho.particlehats.particles.effects.PixelEffect;
-import com.mediusecho.particlehats.particles.properties.IconData;
-import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
-import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
-import com.mediusecho.particlehats.particles.properties.ParticleAction;
-import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
-import com.mediusecho.particlehats.particles.properties.ParticleData;
-import com.mediusecho.particlehats.particles.properties.ParticleLocation;
-import com.mediusecho.particlehats.particles.properties.ParticleMode;
-import com.mediusecho.particlehats.particles.properties.ParticleTag;
-import com.mediusecho.particlehats.particles.properties.ParticleTracking;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
-import com.mediusecho.particlehats.permission.Permission;
-import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.MathUtil;
-import com.mediusecho.particlehats.util.StringUtil;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class Hat {
 
@@ -70,7 +60,6 @@ public class Hat {
 	
 	private int updateFrequency     = 2;
 	private int price               = 0;
-	private int speed               = 0;
 	private int count               = 1;
 	private int slot                = -1;
 	private int index               = -1;
@@ -78,7 +67,8 @@ public class Hat {
 	private int editingAction       = -1;
 
 	private long lastDisplayTick = 0L;
-	
+
+	private double speed = 0;
 	private double scale = 1;
 	
 	private List<String> normalDescription;
@@ -886,17 +876,17 @@ public class Hat {
 	 * Anything higher than 1 will look weird
 	 * @param speed
 	 */
-	public void setSpeed (int speed)
+	public void setSpeed (double speed)
 	{
-		this.speed = MathUtil.clamp(speed, 0, 10);
-		setProperty("speed", Integer.toString(this.speed));
+		this.speed = MathUtil.clamp(speed, 0D, 10D);
+		setProperty("speed", Double.toString(this.speed));
 	}
 	
 	/**
 	 * Get how fast this hats particles should be
 	 * @return
 	 */
-	public int getSpeed () {
+	public double getSpeed () {
 		return speed;
 	}
 	

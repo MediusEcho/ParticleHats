@@ -117,7 +117,11 @@ public enum ParticleEffect {
 	SCULK_SOUL (97, -1, 19, CompatibleMaterial.SCULK_CATALYST),
 	SCULK_CHARGE (98, -1, 19, CompatibleMaterial.SCULK_SENSOR, ParticleProperty.FLOAT),
 	SCULK_CHARGE_POP (99, -1, 19, CompatibleMaterial.SCULK_VEIN),
-	SHRIEK (100, -1, 19, CompatibleMaterial.SCULK_SHRIEKER, ParticleProperty.INTEGER);
+	SHRIEK (100, -1, 19, CompatibleMaterial.SCULK_SHRIEKER, ParticleProperty.INTEGER),
+	DRIPPING_CHERRY_LEAVES(101, -1, 19.4, CompatibleMaterial.CHERRY_LEAVES),
+	FALLING_CHERRY_LEAVES(102, -1, 19.4, CompatibleMaterial.CHERRY_LOG),
+	LANDING_CHERRY_LEAVES(103, -1, 19.4, CompatibleMaterial.CHERRY_WOOD),
+	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
 	private static final Map<String, ParticleEffect> particleLegacyNames  = new HashMap<String, ParticleEffect>();
@@ -125,7 +129,7 @@ public enum ParticleEffect {
 	
 	private final int id;
 	private final int legacyID;
-	private final int version;
+	private final double version;
 	private final String legacyName;
 	private final ItemStack item;
 	private final ParticleProperty property;
@@ -140,7 +144,7 @@ public enum ParticleEffect {
 		}
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, String legacyName, final ItemStack item, final ParticleProperty property)
+	private ParticleEffect (final int id, final int legacyID, final double version, String legacyName, final ItemStack item, final ParticleProperty property)
 	{
 		this.id = id;
 		this.legacyID = legacyID;
@@ -150,35 +154,35 @@ public enum ParticleEffect {
 		this.property = property;
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, String legacyName, final Material material, final ParticleProperty property) {
+	private ParticleEffect (final int id, final int legacyID, final double version, String legacyName, final Material material, final ParticleProperty property) {
 		this(id, legacyID, version, legacyName, ItemUtil.createItem(material, 1), property);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final CompatibleMaterial material, final ParticleProperty property) {
+	private ParticleEffect (final int id, final int legacyID, final double version, final String legacyName, final CompatibleMaterial material, final ParticleProperty property) {
 		this(id, legacyID, version, legacyName, material.getItem(), property);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final Material material) {
+	private ParticleEffect (final int id, final int legacyID, final double version, final String legacyName, final Material material) {
 		this(id, legacyID, version, legacyName, ItemUtil.createItem(material, 1), ParticleProperty.NO_DATA);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, final String legacyName, final CompatibleMaterial material) {
+	private ParticleEffect (final int id, final int legacyID, final double version, final String legacyName, final CompatibleMaterial material) {
 		this(id, legacyID, version, legacyName, material.getItem(), ParticleProperty.NO_DATA);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, final CompatibleMaterial material, final ParticleProperty property) {
+	private ParticleEffect (final int id, final int legacyID, final double version, final CompatibleMaterial material, final ParticleProperty property) {
 		this(id, legacyID, version, "", material.getItem(), property);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, final Material material, final ParticleProperty property) {
+	private ParticleEffect (final int id, final int legacyID, final double version, final Material material, final ParticleProperty property) {
 		this(id, legacyID, version, "", ItemUtil.createItem(material, 1), property);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, final CompatibleMaterial material) {
+	private ParticleEffect (final int id, final int legacyID, final double version, final CompatibleMaterial material) {
 		this(id, legacyID, version, "", material.getItem(), ParticleProperty.NO_DATA);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final int version, final Material material) {
+	private ParticleEffect (final int id, final int legacyID, final double version, final Material material) {
 		this(id, legacyID, version, "", ItemUtil.createItem(material, 1), ParticleProperty.NO_DATA);
 	}
 	
@@ -234,7 +238,7 @@ public enum ParticleEffect {
 	 * Returns the server version required to use this particle (1.x)
 	 * @return
 	 */
-	public int getRequiredVersion () {
+	public double getRequiredVersion () {
 		return version;
 	}
 	

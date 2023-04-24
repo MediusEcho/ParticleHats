@@ -162,15 +162,13 @@ public abstract class Effect {
 					int frameIndex = frames.indexOf(frame);
 					int index = MathUtil.clamp(hat.getAnimationIndex(frameIndex), 0, size);
 
-					Location clone = location.clone();
-					Vector target = frame.get(index).clone();
+					Vector v = frame.get(index).clone();
+					v.multiply(hat.getScale());
+					v = getAngleVector(angleXRad, angleYRad, angleZRad, v);
 
-					target.multiply(hat.getScale());
+					Location clone = location.clone().add(offsetX, 0, offsetZ);
+					clone.add(getTrackingPosition(hat, v, location, cos, sin));
 
-					target.add(new Vector(offsetX, 0, offsetZ));
-					target = getAngleVector(angleXRad, angleYRad, angleZRad, target);
-
-					clone.add(getTrackingPosition(hat, target, location, cos, sin));
 					displayParticle(clone, hat, particleIndex);
 					hat.setAnimationIndex(frameIndex, MathUtil.wrap(index + 1, size, 0));
 				}
@@ -196,7 +194,7 @@ public abstract class Effect {
 	
 	public void displayParticle (Location location, Hat hat, int index)
 	{
-		int speed = hat.getSpeed();
+		double speed = hat.getSpeed();
 		int count = hat.getCount();
 		World world = location.getWorld();
 		

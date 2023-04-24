@@ -1,28 +1,5 @@
 package com.mediusecho.particlehats.database.type.yaml;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.configuration.CustomConfig;
@@ -34,27 +11,28 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
-import com.mediusecho.particlehats.particles.properties.ColorData;
-import com.mediusecho.particlehats.particles.properties.IconData;
+import com.mediusecho.particlehats.particles.properties.*;
 import com.mediusecho.particlehats.particles.properties.IconData.ItemStackTemplate;
-import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
-import com.mediusecho.particlehats.particles.properties.ItemStackData;
-import com.mediusecho.particlehats.particles.properties.ParticleAction;
-import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
-import com.mediusecho.particlehats.particles.properties.ParticleData;
-import com.mediusecho.particlehats.particles.properties.ParticleLocation;
-import com.mediusecho.particlehats.particles.properties.ParticleMode;
-import com.mediusecho.particlehats.particles.properties.ParticleTag;
-import com.mediusecho.particlehats.particles.properties.ParticleTracking;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.MenuInventory;
-import com.mediusecho.particlehats.util.ItemUtil;
-import com.mediusecho.particlehats.util.MathUtil;
-import com.mediusecho.particlehats.util.ResourceUtil;
-import com.mediusecho.particlehats.util.StringUtil;
-import com.mediusecho.particlehats.util.YamlUtil;
+import com.mediusecho.particlehats.util.*;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 public class YamlDatabase implements Database {
 
@@ -1346,7 +1324,7 @@ public class YamlDatabase implements Database {
 			config.set(path + "price", hat.getPrice());
 		}
 		
-		if (hat.getSpeed() > 0) {
+		if (hat.getSpeed() > 0D) {
 			config.set(path + "speed", hat.getSpeed());
 		}
 		
@@ -1459,7 +1437,7 @@ public class YamlDatabase implements Database {
 		hat.setRandomOffset(config.getDouble(path + "random-offset.x", 0), config.getDouble(path + "random-offset.y", 0), config.getDouble(path + "random-offset.z", 0));
 		hat.setAngle(config.getDouble(path + "angle.x"), config.getDouble(path + "angle.y"), config.getDouble(path + "angle.z"));
 		hat.setUpdateFrequency(config.getInt(path + "update-frequency", 2));
-		hat.setSpeed(config.getInt(path + "speed", 0));
+		hat.setSpeed(config.getDouble(path + "speed", 0D));
 		hat.setCount(config.getInt(path + "count", 1));
 		hat.setPrice(config.getInt(path + "price", 0));
 		hat.setDemoDuration(config.getInt(path + "duration", 200));

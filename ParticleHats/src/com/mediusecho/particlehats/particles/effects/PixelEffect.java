@@ -1,17 +1,5 @@
 package com.mediusecho.particlehats.particles.effects;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
-
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Effect;
 import com.mediusecho.particlehats.particles.Hat;
@@ -21,6 +9,17 @@ import com.mediusecho.particlehats.particles.properties.ParticleLocation;
 import com.mediusecho.particlehats.particles.properties.ParticleTracking;
 import com.mediusecho.particlehats.util.ResourceUtil;
 import com.mediusecho.particlehats.util.StringUtil;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PixelEffect extends Effect {
 
@@ -179,7 +178,7 @@ public class PixelEffect extends Effect {
 
 	private void displayParticle (Location location, Hat hat, Color color)
 	{
-		int speed = hat.getSpeed();
+		double speed = hat.getSpeed();
 		int count = hat.getCount();
 		World world = location.getWorld();
 		

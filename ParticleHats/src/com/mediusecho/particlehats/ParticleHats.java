@@ -65,7 +65,7 @@ public class ParticleHats extends JavaPlugin {
 	// Have a separate block menu that shows nearby particles for the player to edit.
 	
 	public static ParticleHats instance;
-	public static int serverVersion;
+	public static double serverVersion;
 	private static Logger logger;
 	private static ParticleHatsAPI hatAPI;
 	
@@ -88,7 +88,7 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.8;
+	private final double LANG_VERSION = 1.9;
 	
 	private ConcurrentHashMap<UUID, EntityState> entityState;
 	
@@ -421,10 +421,10 @@ public class ParticleHats extends JavaPlugin {
 	 * Gets the current server version
 	 * @return
 	 */
-	public int getServerVersion() 
+	public double getServerVersion()
 	{
-		String version = Bukkit.getServer().getClass().getPackage().getName().substring(23);
-		return Integer.parseInt(version.split("_")[1]);
+		String version = Bukkit.getBukkitVersion().split("-")[0].substring(2);
+		return Double.parseDouble(version);
 	}
 	
 	/**

@@ -1,3 +1,11 @@
+4.3.0
+- Added 1.19.4 Particles:
+ - DRIPPING_CHERRY_LEAVES
+ - FALLING_CHERRY_LEAVES
+ - LANDING_CHERRY_LEAVES
+- Changed 'speed' property from integer to double for yaml databases.
+- Fixed Offset values not being applied correctly when a particles type is animated.
+
 4.2.19
 - Fixed potion effects not being removed when toggling from the API
 
