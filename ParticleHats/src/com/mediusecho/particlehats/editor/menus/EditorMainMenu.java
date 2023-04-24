@@ -1,32 +1,28 @@
 package com.mediusecho.particlehats.editor.menus;
 
-import java.util.List;
-
-import com.mediusecho.particlehats.compatibility.CompatibleSound;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import com.mediusecho.particlehats.database.Database;
+import com.mediusecho.particlehats.database.type.DatabaseType;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
-import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
-import com.mediusecho.particlehats.particles.properties.ParticleLocation;
-import com.mediusecho.particlehats.particles.properties.ParticleMode;
-import com.mediusecho.particlehats.particles.properties.ParticleTracking;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
+import com.mediusecho.particlehats.particles.properties.*;
 import com.mediusecho.particlehats.player.PlayerState;
 import com.mediusecho.particlehats.ui.AbstractStaticMenu;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class EditorMainMenu extends AbstractStaticMenu {
 
@@ -386,16 +382,37 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		
 		// Speed
 		ItemStack speedItem = ItemUtil.createItem(Material.SUGAR, Message.EDITOR_MAIN_MENU_SET_SPEED);
-		EditorLore.updateIntegerDescription(speedItem, targetHat.getSpeed(), Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
-		setButton(16, speedItem, (event, slot) ->
+
+		// Temporary tweak until v5.0
+		if (core.getDatabaseType() == DatabaseType.YAML)
 		{
-			final int increment = event.isLeftClick() ? 1 : -1;
-			final int speed = targetHat.getSpeed() + increment;
-			
-			targetHat.setSpeed(speed);
-			EditorLore.updateIntegerDescription(getItem(16), targetHat.getSpeed(), Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
-			return event.isLeftClick() ? MenuClickResult.POSITIVE : MenuClickResult.NEGATIVE;
-		});
+			EditorLore.updateDoubleDescription(speedItem, targetHat.getSpeed(), Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
+			setButton(16, speedItem, (event, slot) ->
+			{
+				final double normalClick    = event.isLeftClick() ? 0.1D : -0.1D;
+				final double shiftClick     = event.isShiftClick() ? 10D : 1D;
+				final double modifier       = normalClick * shiftClick;
+				final double speed = event.isMiddleClick() ? 0D : targetHat.getSpeed() + modifier;
+
+				targetHat.setSpeed(speed);
+				EditorLore.updateDoubleDescription(getItem(16), targetHat.getSpeed(), Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
+				return event.isLeftClick() ? MenuClickResult.POSITIVE : MenuClickResult.NEGATIVE;
+			});
+		}
+
+		// Mysql
+		else {
+			EditorLore.updateIntegerDescription(speedItem, (int) targetHat.getSpeed(), Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
+			setButton(16, speedItem, (event, slot) ->
+			{
+				final int increment = event.isLeftClick() ? 1 : -1;
+				final int speed = (int) targetHat.getSpeed() + increment;
+
+				targetHat.setSpeed(speed);
+				EditorLore.updateIntegerDescription(getItem(16), (int) targetHat.getSpeed(), Message.EDITOR_MAIN_MENU_SPEED_DESCRIPTION);
+				return event.isLeftClick() ? MenuClickResult.POSITIVE : MenuClickResult.NEGATIVE;
+			});
+		}
 		
 		// Action
 		ItemStack actionItem = ItemUtil.createItem(CompatibleMaterial.GUNPOWDER, Message.EDITOR_MAIN_MENU_SET_ACTION);

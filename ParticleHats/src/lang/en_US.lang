@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.8
+version: 1.9
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -502,6 +502,12 @@ particle_sculk_charge_pop_name: "&bSculk Charge Pop"
 particle_sculk_charge_pop_description: ""
 particle_shriek_name: "&bShriek"
 particle_shriek_description: ""
+particle_dripping_cherry_leaves_name: "&bDripping Cherry Leaves"
+particle_dripping_cherry_leaves_description: ""
+particle_falling_cherry_leaves_name: "&bFalling Cherry Leaves"
+particle_falling_cherry_leaves_description: ""
+particle_landing_cherry_leaves_name: "&bLanding Cherry Leaves"
+particle_landing_cherry_leaves_description: ""
 
 ##########################
 #       Locations        #
