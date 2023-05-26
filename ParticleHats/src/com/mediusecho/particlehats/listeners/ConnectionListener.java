@@ -1,22 +1,23 @@
 package com.mediusecho.particlehats.listeners;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.database.type.DatabaseType;
 import com.mediusecho.particlehats.database.type.yaml.YamlDatabase;
+import com.mediusecho.particlehats.hooks.VanishHook;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.HatReference;
 import com.mediusecho.particlehats.player.PlayerState;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class ConnectionListener implements Listener {
 
@@ -28,7 +29,7 @@ public class ConnectionListener implements Listener {
 		core.getServer().getPluginManager().registerEvents(this, core);
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin (PlayerJoinEvent event)
 	{
 		Player player = event.getPlayer();
@@ -76,6 +77,15 @@ public class ConnectionListener implements Listener {
 					}
 				}
 			}); 
+		}
+
+		VanishHook vanishHook = core.getHookManager().getVanishHook();
+		if (vanishHook != null)
+		{
+			if (vanishHook.isVanished(player))
+			{
+				playerState.getActiveHats().forEach(hat -> hat.setVanished(true));
+			}
 		}
 	}
 	
