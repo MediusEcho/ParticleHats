@@ -1,12 +1,5 @@
 package com.mediusecho.particlehats.commands.subcommands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Command;
 import com.mediusecho.particlehats.commands.Sender;
@@ -15,13 +8,20 @@ import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.permission.Permission;
 import com.mediusecho.particlehats.player.PlayerState;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class SetCommand extends Command {
 
 	@Override
 	public boolean execute(ParticleHats core, Sender sender, String label, ArrayList<String> args) 
 	{		
-		if (args.size() < 2 || args.size() > 4)
+		if (args.size() < 2 || args.size() > 5)
 		{
 			sender.sendMessage(Message.COMMAND_ERROR_ARGUMENTS);
 			sender.sendMessage(Message.COMMAND_SET_USAGE);
@@ -50,10 +50,12 @@ public class SetCommand extends Command {
 		if (args.size() >= 4) {
 			tellPlayer = Boolean.valueOf(args.get(3));
 		}
-		
-		boolean logError = true;
+
+		int demoTime = 200;
 		if (args.size() >= 5) {
-			logError = Boolean.valueOf(args.get(4));
+			try {
+				demoTime = Integer.parseInt(args.get(4));
+			} catch (NumberFormatException ignored) { }
 		}
 		
 		String hatLabel = args.get(1);
@@ -64,9 +66,7 @@ public class SetCommand extends Command {
 		{
 			if (h.getLabel().equalsIgnoreCase(hatLabel))
 			{
-				if (logError) {
-					sender.sendMessage(Message.COMMAND_SET_ALREADY_SET.getValue().replace("{1}", player.getName()));
-				}
+				sender.sendMessage(Message.COMMAND_SET_ALREADY_SET.getValue().replace("{1}", player.getName()));
 				return false;
 			}
 		}
@@ -81,6 +81,11 @@ public class SetCommand extends Command {
 		}
 		
 		hat.setPermanent(permanent);
+		if (!permanent) {
+			hat.setCanBeSaved(false);
+			hat.setDemoDuration(demoTime);
+		}
+
 		if (core.getParticleManager().equipHat(player, hat, false))
 		{
 			if (tellPlayer) {
@@ -119,12 +124,16 @@ public class SetCommand extends Command {
 			
 			case 3:
 			case 4:
-			case 5:
 			{
 				return Arrays.asList("true", "false");
 			}
+
+			case 5:
+			{
+				return Collections.singletonList("duration");
+			}
 		}
-		return Arrays.asList("");
+		return Collections.singletonList("");
 	}
 
 	@Override

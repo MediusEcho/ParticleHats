@@ -142,7 +142,7 @@ public class ResourceUtil {
 	
 	public static InputStream getMostCompatibleParticlesMenu ()
 	{
-		int menuVersion = particleMenuCompatibilityMap.getOrDefault(Math.min(ParticleHats.serverVersion, 14), 8);
+		int menuVersion = particleMenuCompatibilityMap.getOrDefault(Math.min((int) ParticleHats.serverVersion, 14), 8);
 		return core.getResource("menus/particles_" + menuVersion + ".yml");
 	}
 }
