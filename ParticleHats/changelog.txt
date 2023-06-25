@@ -1,3 +1,10 @@
+4.3.2
+- Added <duration> time to /h set command to allow for . /h set <player> <label> <permanent> <tellPlayer> <duration>
+- Fixed /h set bug that would allow particles to be saved after a player disconnected even if <permanent> was set to false
+- Updated en_US.lang
+  - Added <duration> argument to /h set
+  - Changed <demo true|false> to <permanent true|false> in /h set to better explain what the parameter does.
+
 4.3.1
 - Fixed particle effects still being visible if a player joins vanished.
 
