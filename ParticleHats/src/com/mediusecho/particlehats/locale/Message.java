@@ -115,6 +115,13 @@ public enum Message {
 	COMMAND_SET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
 	COMMAND_SET_ALREADY_SET ("&c{1} is already wearing this hat"),
 	COMMAND_SET_SUCCESS     ("&aYou were given the {1} &ahat"),
+
+	// Unset Command
+	COMMAND_UNSET_DESCRIPTION ("Unequips the hat with the given label from player"),
+	COMMAND_UNSET_USAGE       ("/h unset <player> <label> <tellPlayer true|false>"),
+	COMMAND_UNSET_LABEL_ERROR ("&cUnable to find label '&7{1}&c'"),
+	COMMAND_UNSET_NOT_WEARING ("&c{1} isn't wearing this hat"),
+	COMMAND_UNSET_SUCCESS     ("&aThe {1} &ahat was taken from you"),
 	
 	// Add Group Command
 	COMMAND_ADD_GROUP_DESCRIPTION ("Add a new group, use weight to determine a groups priority"),
