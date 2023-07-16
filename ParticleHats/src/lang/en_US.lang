@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.10
+version: 1.11
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
