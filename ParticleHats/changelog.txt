@@ -1,3 +1,10 @@
+4.4.0
+- Added /h unset <player> <label> <true/false>
+  - Lets you remove a specified particle from a player.
+  - permission: particlehats.command.unset
+- Updated en_US.lang
+  - Added messages for the unset command.
+
 4.3.2
 - Added <duration> time to /h set command to allow for . /h set <player> <label> <permanent> <tellPlayer> <duration>
 - Fixed /h set bug that would allow particles to be saved after a player disconnected even if <permanent> was set to false

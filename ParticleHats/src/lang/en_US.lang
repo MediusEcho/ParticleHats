@@ -205,6 +205,19 @@ command_set_already_set: "&c{1} is already wearing this hat"
 # {1}: The hat's display name
 command_set_success: "&aYou were given the {1} &ahat"
 
+# Unset Command
+command_unset_description: "Unequips the hat with the given label from player"
+command_unset_usage: "/h unset <player> <label> <tellPlayer true|false>"
+
+# {1}: The label being unset
+command_unset_label_error: "&cUnable to find label '&7{1}&c'"
+
+# {1}: The name of the player
+command_unset_not_wearing: "&c{1} isn't wearing this hat"
+
+# {1}: The hat's display name
+command_unset_success: "&aThe {1} &ahat was taken from you"
+
 # Add Group Command
 command_add_group_description: "Add a new group, use weight to determine a groups priority"
 command_add_group_usage: "/h group add <name> <menu> <weight>"
