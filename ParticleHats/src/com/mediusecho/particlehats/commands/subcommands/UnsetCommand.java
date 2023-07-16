@@ -50,13 +50,11 @@ public class UnsetCommand extends Command {
 		
 		// Check to see if this player is wearing a hat with this label
 		PlayerState playerState = core.getPlayerState(player.getPlayer());
-		for (Hat h : playerState.getActiveHats())
+
+		if (!playerState.getActiveHats().stream().anyMatch(hat -> hat.getLabel().equalsIgnoreCase(hatLabel)))
 		{
-			if (!h.getLabel().equalsIgnoreCase(hatLabel))
-			{
-				sender.sendMessage(Message.COMMAND_UNSET_NOT_WEARING.getValue().replace("{1}", player.getName()));
-				return false;
-			}
+			sender.sendMessage(Message.COMMAND_UNSET_NOT_WEARING.getValue().replace("{1}", player.getName()));
+			return false;
 		}
 		
 		Database database = core.getDatabase();
