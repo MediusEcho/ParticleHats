@@ -1,3 +1,8 @@
+4.4.1
+- Added missing CHERRY_LEAVES particle.
+- Removed experimental cherry particles that were replaced by the CHERRY_LEAVES particle
+- Updated en_US.lang with missing particle description
+
 4.4.0
 - Added /h unset <player> <label> <true/false>
   - Lets you remove a specified particle from a player.

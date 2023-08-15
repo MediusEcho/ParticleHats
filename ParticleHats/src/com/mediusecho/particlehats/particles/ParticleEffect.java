@@ -118,9 +118,7 @@ public enum ParticleEffect {
 	SCULK_CHARGE (98, -1, 19, CompatibleMaterial.SCULK_SENSOR, ParticleProperty.FLOAT),
 	SCULK_CHARGE_POP (99, -1, 19, CompatibleMaterial.SCULK_VEIN),
 	SHRIEK (100, -1, 19, CompatibleMaterial.SCULK_SHRIEKER, ParticleProperty.INTEGER),
-	DRIPPING_CHERRY_LEAVES(101, -1, 19.4, CompatibleMaterial.CHERRY_LEAVES),
-	FALLING_CHERRY_LEAVES(102, -1, 19.4, CompatibleMaterial.CHERRY_LOG),
-	LANDING_CHERRY_LEAVES(103, -1, 19.4, CompatibleMaterial.CHERRY_WOOD),
+	CHERRY_LEAVES(101, -1, 20, CompatibleMaterial.CHERRY_LEAVES),
 	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
