@@ -619,6 +619,7 @@ public class EditorLore {
 		switch (property)
 		{
 			case COLOR:
+			case DUST_OPTIONS:
 			{
 				ColorData color = hat.getParticleData(particleIndex).getColorData();
 				if (color.isRandom())

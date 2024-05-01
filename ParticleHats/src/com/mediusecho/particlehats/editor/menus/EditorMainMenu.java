@@ -660,8 +660,9 @@ public class EditorMainMenu extends AbstractStaticMenu {
 			case NO_DATA:
 				break;
 
-			case COLOR_TRANSITION:
 			case COLOR:
+			case COLOR_TRANSITION:
+			case DUST_OPTIONS:
 			{
 				EditorColorMenu editorColorMenu = new EditorColorMenu(core, editorManager, owner, particleIndex, () ->
 				{
