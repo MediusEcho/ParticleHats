@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.12
+version: 1.13
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -517,6 +517,14 @@ particle_shriek_name: "&bShriek"
 particle_shriek_description: ""
 particle_cherry_leaves_name: "&bCherry Leaves"
 particle_cherry_leaves_description: ""
+particle_entity_effect_name: "&bEntity Effect"
+particle_entity_effect_description: ""
+particle_egg_crack_name: "&bEgg Crack"
+particle_egg_crack_description: "&8Particles that emit from Sniffer Eggs"
+particle_dust_plume_name: "&bDust Plume"
+particle_dust_plume_description: "&8Particles that emit from decorated pots"
+particle_white_smoke_name: "&bWhite Smoke"
+particle_white_smoke_description: ""
 
 ##########################
 #       Locations        #
