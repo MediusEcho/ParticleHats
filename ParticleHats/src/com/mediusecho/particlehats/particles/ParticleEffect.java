@@ -53,7 +53,7 @@ public enum ParticleEffect {
 	SPELL                  (36, 13, (v) -> true, "spell", Material.POTION, "effect"),
 	SPELL_INSTANT          (37, 14, (v) -> true, "instantSpell", CompatibleMaterial.SPLASH_POTION, "instant_effect"),
 	SPELL_MOB              (38, 15, (v) -> v <= 20.4, "mobSpell", CompatibleMaterial.ZOMBIE_HEAD),
-	SPELL_MOB_AMBIENT      (39, 16, (v) -> true, "mobSpellAmbient", Material.POTION),
+	SPELL_MOB_AMBIENT      (39, 16, (v) -> v <= 20.4, "mobSpellAmbient", Material.POTION),
 	SPELL_WITCH            (40, 17, (v) -> true, "witchMagic", CompatibleMaterial.SPLASH_POTION, "witch"),
 	SPIT                   (41, 48, (v) -> v >= 11, "spit", CompatibleMaterial.BONE_MEAL),
 	SQUID_INK              (42, -1, (v) -> v >= 13, CompatibleMaterial.INK_SAC),
