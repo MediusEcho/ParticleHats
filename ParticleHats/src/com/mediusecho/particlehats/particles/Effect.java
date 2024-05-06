@@ -220,13 +220,17 @@ public abstract class Effect {
 					renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed);
 					break;
 				
-				case COLOR:
-					renderer.spawnParticleColor(world, particleEffect, location, count, rxo, ryo, rzo, speed, data.getColorData().getColor(), data.getScale());
+				case DUST_OPTIONS:
+					renderer.spawnParticleColor(world, particleEffect, location, count, rxo, ryo, rzo, speed, data.getColorData().getColor(), data.getScale(), true);
 					break;
 
 				case COLOR_TRANSITION:
 					renderer.spawnParticleColorTransition(world, particleEffect, location, count, rxo, ryo, rzo, speed,
 							data.getColorData().getColor(), data.getColorData().getColor(), data.getScale());
+					break;
+
+				case COLOR:
+					renderer.spawnParticleColor(world, particleEffect, location, count, rxo, ryo, rzo, speed, data.getColorData().getColor(), data.getScale(), false);
 					break;
 				
 				case BLOCK_DATA:

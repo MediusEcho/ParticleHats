@@ -193,10 +193,11 @@ public class PixelEffect extends Effect {
 					renderer.spawnParticle(world, particleEffect, location, count, 0, 0, 0, speed);
 					break;
 				}
-				
+
 				case COLOR:
+				case DUST_OPTIONS:
 				{
-					//ParticleData data = hat.getParticleData(0);
+					boolean useDustOptions = particleEffect.getProperty() == ParticleEffect.ParticleProperty.DUST_OPTIONS;
 					double scale = data.getScale();
 					
 					if (color.getRed() > BLEND_THRESHOLD.getRed()
@@ -204,12 +205,12 @@ public class PixelEffect extends Effect {
 							&& color.getBlue() > BLEND_THRESHOLD.getBlue())
 					{
 						Color c = data.getColorData().getColor();
-						renderer.spawnParticleColor(world, particleEffect, location, count, 0, 0, 0, speed, c, scale);
+						renderer.spawnParticleColor(world, particleEffect, location, count, 0, 0, 0, speed, c, scale, useDustOptions);
 					}
 					
 					else 
 					{
-						renderer.spawnParticleColor(world, particleEffect, location, count, 0, 0, 0, speed, color, scale);
+						renderer.spawnParticleColor(world, particleEffect, location, count, 0, 0, 0, speed, color, scale, useDustOptions);
 					}
 					break;
 				}

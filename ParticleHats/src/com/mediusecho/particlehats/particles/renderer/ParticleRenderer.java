@@ -18,8 +18,8 @@ public interface ParticleRenderer {
 	public void spawnParticleItemData (World world, ParticleEffect particle, Location location, int count,
 			double offsetX, double offsetY, double offsetZ, double extra, ParticleData data);
 	
-	public void spawnParticleColor (World world, ParticleEffect particle, Location location, int count, 
-			double offsetX, double offsetY, double offsetZ, double extra, Color color, double scale);
+	public void spawnParticleColor (World world, ParticleEffect particle, Location location, int count,
+			double offsetX, double offsetY, double offsetZ, double extra, Color color, double scale, boolean useDustOptions);
 
 	void spawnParticleColorTransition (World world, ParticleEffect particle, Location location, int count,
 									   double offsetX, double offsetY, double offsetZ, double extra, Color fromColor,

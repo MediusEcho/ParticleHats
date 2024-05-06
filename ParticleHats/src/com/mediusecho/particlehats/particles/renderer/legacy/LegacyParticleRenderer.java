@@ -71,8 +71,8 @@ public class LegacyParticleRenderer implements ParticleRenderer {
 	}
 	
 	@Override
-	public void spawnParticleColor (World world, ParticleEffect particle, Location location, int count, 
-			double offsetX, double offsetY, double offsetZ, double extra, Color color, double scale) 
+	public void spawnParticleColor (World world, ParticleEffect particle, Location location, int count,
+			double offsetX, double offsetY, double offsetZ, double extra, Color color, double scale, boolean useDustOptions)
 	{
 		if (particle.isSupported()) {
 			new ParticlePacket(particle, color, false).sendTo(location, 100);

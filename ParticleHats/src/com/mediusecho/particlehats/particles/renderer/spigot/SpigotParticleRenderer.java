@@ -24,7 +24,13 @@ public class SpigotParticleRenderer implements ParticleRenderer {
 		{
 			try {
 				particleCache.put(pe, Particle.valueOf(pe.toString()));
-			} catch (IllegalArgumentException e) {}
+			} catch (IllegalArgumentException e) {
+				for (String alias : pe.aliases) {
+					try {
+						particleCache.put(pe, Particle.valueOf(alias));
+					} catch (IllegalArgumentException ignored) {}
+				}
+			}
 		}
 	}
 	
@@ -64,13 +70,17 @@ public class SpigotParticleRenderer implements ParticleRenderer {
 	}
 	
 	@Override
-	public void spawnParticleColor (World world, ParticleEffect particle, Location location, int count, 
-			double offsetX, double offsetY, double offsetZ, double extra, Color color, double scale) 
+	public void spawnParticleColor (World world, ParticleEffect particle, Location location, int count,
+			double offsetX, double offsetY, double offsetZ, double extra, Color color, double scale, boolean useDustOptions)
 	{
 		if (particleCache.containsKey(particle)) 
 		{
-			DustOptions dustOptions = new DustOptions(color, (float) scale);
-			world.spawnParticle(particleCache.get(particle), location, count, offsetX, offsetY, offsetZ, extra, dustOptions);
+			if (useDustOptions) {
+				DustOptions dustOptions = new DustOptions(color, (float) scale);
+				world.spawnParticle(particleCache.get(particle), location, count, offsetX, offsetY, offsetZ, extra, dustOptions);
+			} else {
+				world.spawnParticle(particleCache.get(particle), location, count, offsetX, offsetY, offsetZ, extra, color);
+			}
 		}
 	}
 
