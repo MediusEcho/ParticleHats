@@ -1,3 +1,13 @@
+4.5.0
+- Updated for 1.20.5+
+- Added Particles:
+  - ENTITY_EFFECT, replaces SPELL_MOB in 1.20.5+, now supports color
+  - EGG_CRACK
+  - DUST_PLUME
+  - WHITE_SMOKE
+- Particle SPELL_MOB_AMBIENT now only works in versions 1.20.4 and older since it was removed in 1.20.5
+- Updated en_US.lang with new particle names & descriptions
+
 4.4.1
 - Added missing CHERRY_LEAVES particle.
 - Removed experimental cherry particles that were replaced by the CHERRY_LEAVES particle
