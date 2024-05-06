@@ -920,7 +920,8 @@ public class YamlDatabase implements Database {
 			{
 				case NO_DATA:
 					break;
-					
+
+				case COLOR:
 				case DUST_OPTIONS:
 				{
 					ColorData colorData = data.getColorData();
@@ -1021,7 +1022,8 @@ public class YamlDatabase implements Database {
 					{
 						case NO_DATA:
 							break;
-					
+
+						case COLOR:
 						case DUST_OPTIONS:
 						{
 							hat.setParticleScale(index, config.getDouble(path + "size", 1.0));
