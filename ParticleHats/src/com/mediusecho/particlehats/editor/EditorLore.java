@@ -1,15 +1,5 @@
 package com.mediusecho.particlehats.editor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Sound;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.util.Vector;
-
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
@@ -17,18 +7,19 @@ import com.mediusecho.particlehats.particles.Hat;
 import com.mediusecho.particlehats.particles.ParticleEffect;
 import com.mediusecho.particlehats.particles.ParticleEffect.ParticleProperty;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
-import com.mediusecho.particlehats.particles.properties.IconDisplayMode;
-import com.mediusecho.particlehats.particles.properties.ItemStackData;
-import com.mediusecho.particlehats.particles.properties.ParticleAction;
-import com.mediusecho.particlehats.particles.properties.ParticleAnimation;
-import com.mediusecho.particlehats.particles.properties.ColorData;
-import com.mediusecho.particlehats.particles.properties.ParticleLocation;
-import com.mediusecho.particlehats.particles.properties.ParticleMode;
-import com.mediusecho.particlehats.particles.properties.ParticleTracking;
-import com.mediusecho.particlehats.particles.properties.ParticleType;
+import com.mediusecho.particlehats.particles.properties.*;
 import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Sound;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditorLore {
 
