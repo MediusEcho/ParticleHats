@@ -129,6 +129,20 @@ public enum ParticleEffect {
 	EGG_CRACK (103, -1, (v) -> v >= 20.5, Material.EGG),
 	DUST_PLUME (104, -1, (v) -> v >= 20.5, Material.REDSTONE),
 	WHITE_SMOKE (105, -1, (v) -> v >= 20.5, CompatibleMaterial.WHITE_DYE),
+
+	GUST (106, -1, (v) -> v >= 21, CompatibleMaterial.WIND_CHARGE),
+	SMALL_GUST (107, -1, (v) -> v >= 21, CompatibleMaterial.MACE),
+	GUST_EMITTER_LARGE (108, -1, (v) -> v >= 21, CompatibleMaterial.GUSTER_POTTERY_SHERD),
+	GUST_EMITTER_SMALL (109, -1, (v) -> v >= 21, CompatibleMaterial.BREEZE_ROD),
+	TRIAL_SPAWNER_DETECTION (110, -1, (v) -> v >= 21, CompatibleMaterial.TRIAL_KEY),
+	TRIAL_SPAWNER_DETECTION_OMINOUS (111, -1, (v) -> v >= 21, CompatibleMaterial.TRIAL_SPAWNER),
+	VAULT_CONNECTION (112, -1, (v) -> v >= 21, CompatibleMaterial.VAULT),
+	INFESTED (113, -1, (v) -> v >= 21, CompatibleMaterial.SPIDER_EYE),
+	ITEM_COBWEB (114, -1, (v) -> v >= 21, CompatibleMaterial.COBWEB),
+	DUST_PILLAR (115, -1, (v) -> v >= 21, Material.REDSTONE, ParticleProperty.BLOCK_DATA),
+	OMINOUS_SPAWNING (116, -1, (v) -> v >= 21, CompatibleMaterial.OMINOUS_TRIAL_KEY),
+	RAID_OMEN (117, -1, (v) -> v >= 21, CompatibleMaterial.OMINOUS_BOTTLE),
+	TRIAL_OMEN (118, -1, (v) -> v >= 21, CompatibleMaterial.TRIAL_KEY),
 	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
