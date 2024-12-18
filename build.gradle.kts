@@ -58,7 +58,7 @@ dependencies {
 
 tasks.withType<ShadowJar> {
     archiveBaseName.set("ParticleHats")
-    //archiveClassifier.set("")
-    //archiveVersion.set("")
+    archiveClassifier.set("")
+    archiveVersion.set("")
     relocate("org.bstats", "com.mediusecho.particlehats.metrics")
 }
