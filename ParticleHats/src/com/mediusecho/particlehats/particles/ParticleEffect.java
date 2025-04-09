@@ -143,6 +143,11 @@ public enum ParticleEffect {
 	OMINOUS_SPAWNING (116, -1, (v) -> v >= 21, CompatibleMaterial.OMINOUS_TRIAL_KEY),
 	RAID_OMEN (117, -1, (v) -> v >= 21, CompatibleMaterial.OMINOUS_BOTTLE),
 	TRIAL_OMEN (118, -1, (v) -> v >= 21, CompatibleMaterial.TRIAL_KEY),
+
+	PALE_OAK_LEAVES(119, -1, (v) -> v >= 21.4, CompatibleMaterial.PALE_OAK_LEAVES),
+
+	TINTED_LEAVES(120, -1, (v) -> v >= 21.5, CompatibleMaterial.OAK_LEAVES, ParticleProperty.COLOR),
+	FIREFLY(121, -1, (v) -> v >= 21.5, Material.TORCH),
 	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();

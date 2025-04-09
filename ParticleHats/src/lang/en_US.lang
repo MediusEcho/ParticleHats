@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.14
+version: 1.15
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -551,6 +551,12 @@ particle_raid_omen_name: "&bRaid Omen"
 particle_raid_omen_description: "&8Particles from the Raid Omen effect"
 particle_trial_omen_name: "&bTrial Omen"
 particle_trial_omen_description: "&8Particles from the Trial Omen effect"
+particle_pale_oak_leaves_name: "&bPale Oak Leaves"
+particle_pale_oak_leaves_description: ""
+particle_tinted_leaves_name: "&bTinted Leaves"
+particle_tinted_leaves_description: ""
+particle_firefly_name: "&bFirefly"
+particle_firefly_description: ""
 
 
 ##########################

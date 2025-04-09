@@ -592,7 +592,13 @@ public class ItemUtil {
 	private static void addItemFlags (ItemMeta itemMeta)
 	{
 		try {
-			itemMeta.addItemFlags(ItemFlag.values());
+			if (ParticleHats.serverVersion < 21.5) {
+				itemMeta.addItemFlags(ItemFlag.values());
+			} else {
+				itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+				itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+				itemMeta.addItemFlags(ItemFlag.HIDE_DYE);
+			}
 		} catch (NoClassDefFoundError e) {}
 	}
 }

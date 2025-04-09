@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val buildId = "com.mediusecho"
-val buildVersion = "4.6.0"
+val buildVersion = "4.7.0"
 
 plugins {
     java
@@ -20,8 +20,8 @@ sourceSets {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 repositories {
@@ -60,5 +60,6 @@ tasks.withType<ShadowJar> {
     archiveBaseName.set("ParticleHats")
     archiveClassifier.set("")
     archiveVersion.set("")
+    minimize()
     relocate("org.bstats", "com.mediusecho.particlehats.metrics")
 }

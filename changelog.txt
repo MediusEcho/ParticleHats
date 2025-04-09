@@ -1,3 +1,13 @@
+4.7.0
+- Updated to 1.21.5
+- Added Particles:
+  - PALE_OAK_LEAVES
+  - TINTED_LEAVES
+  - FIREFLY
+- Fixed item name / lore not displaying correctly in 1.21.5
+- Updated en_US.lang with new particle names & descriptions.
+- Switched to Gradle build system
+
 4.6.0
 - Updated to 1.21
 - Added Particles:
