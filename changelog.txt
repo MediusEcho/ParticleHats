@@ -1,3 +1,6 @@
+4.7.1
+- Reverted HikariCP dependency version to fix Java 8 Compatability. Thanks Koora7334 for the PR.
+
 4.7.0
 - Updated to 1.21.5
 - Added Particles:

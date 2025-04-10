@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val buildId = "com.mediusecho"
-val buildVersion = "4.7.0"
+val buildVersion = "4.7.1"
 
 plugins {
     java
