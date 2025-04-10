@@ -52,7 +52,7 @@ dependencies {
     }
 
     implementation("org.bstats:bstats-bukkit:2.2.1")
-    implementation("com.zaxxer:HikariCP:6.2.1")
+    implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.jetbrains:annotations:16.0.2")
 }
 
