@@ -4,6 +4,7 @@ import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.util.ItemUtil;
+import com.mediusecho.particlehats.util.VersionInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -15,33 +16,33 @@ import java.util.function.Predicate;
 public enum ParticleEffect {
 
 	NONE                   (0,  0, (v) -> true, CompatibleMaterial.SCUTE),
-	BARRIER                (1,  35, (v) -> v >= 8, "barrier", CompatibleMaterial.BARRIER),
+	BARRIER                (1,  35, (v) -> v.minor >= 8, "barrier", CompatibleMaterial.BARRIER),
 	BLOCK_CRACK            (2,  37, (v) -> true, "blockcrack", Material.DIAMOND_PICKAXE, ParticleProperty.BLOCK_DATA, "block"),
-	BLOCK_DUST             (3,  38, (v) -> v >= 7, "blockdust", CompatibleMaterial.GUNPOWDER, ParticleProperty.BLOCK_DATA),
-	BUBBLE_COLUMN_UP       (4,  -1, (v) -> v >= 13, CompatibleMaterial.HORN_CORAL),
-	BUBBLE_POP             (5,  -1, (v) -> v >= 13, CompatibleMaterial.PURPLE_DYE),
+	BLOCK_DUST             (3,  38, (v) -> v.minor >= 7, "blockdust", CompatibleMaterial.GUNPOWDER, ParticleProperty.BLOCK_DATA),
+	BUBBLE_COLUMN_UP       (4,  -1, (v) -> v.minor >= 13, CompatibleMaterial.HORN_CORAL),
+	BUBBLE_POP             (5,  -1, (v) -> v.minor >= 13, CompatibleMaterial.PURPLE_DYE),
 	CLOUD                  (6,  29, (v) -> true, "cloud", CompatibleMaterial.BONE_MEAL),
 	CRIT                   (7,  9, (v) -> true, "crit", Material.DIAMOND_CHESTPLATE),
 	CRIT_MAGIC             (8,  10, (v) -> true, "magicCrit", Material.DIAMOND_SWORD, "enchanted_hit"),
-	CURRENT_DOWN           (9,  -1, (v) -> v >= 13, CompatibleMaterial.LAPIS_LAZULI),
-	DAMAGE_INDICATOR       (10, 44, (v) -> v >= 9, "damageIndicator", Material.IRON_SWORD),
-	DRAGON_BREATH          (11, 42, (v) -> v >= 9, "dragonbreath", CompatibleMaterial.DRAGON_HEAD),
+	CURRENT_DOWN           (9,  -1, (v) -> v.minor >= 13, CompatibleMaterial.LAPIS_LAZULI),
+	DAMAGE_INDICATOR       (10, 44, (v) -> v.minor >= 9, "damageIndicator", Material.IRON_SWORD),
+	DRAGON_BREATH          (11, 42, (v) -> v.minor >= 9, "dragonbreath", CompatibleMaterial.DRAGON_HEAD, ParticleProperty.FLOAT),
 	DRIP_LAVA              (12, 19, (v) -> true, "dripLava", Material.LAVA_BUCKET, "dripping_lava"),
 	DRIP_WATER             (13, 18, (v) -> true, "dripWater", Material.WATER_BUCKET, "dripping_water"),
-	DOLPHIN                (14, -1, (v) -> v >= 13, CompatibleMaterial.PRISMARINE_SHARD),
+	DOLPHIN                (14, -1, (v) -> v.minor >= 13, CompatibleMaterial.PRISMARINE_SHARD),
 	ENCHANTMENT_TABLE      (15, 25, (v) -> true, "enchantmenttable", CompatibleMaterial.ENCHANTING_TABLE, "enchant"),
-	END_ROD                (16, 43, (v) -> v >= 9, "endRod", CompatibleMaterial.END_ROD),
+	END_ROD                (16, 43, (v) -> v.minor >= 9, "endRod", CompatibleMaterial.END_ROD),
 	EXPLOSION_HUGE         (17, 2, (v) -> true, "hugeexplosion", Material.TNT, "explosion_emitter"),
 	EXPLOSION_LARGE        (18, 1, (v) -> true, "largeexplode", Material.TNT, "explosion"),
 	EXPLOSION_NORMAL       (19, 0, (v) -> true, "explode", Material.TNT, "poof"),
-	FALLING_DUST           (20, 46, (v) -> v >= 10, "fallingdust", Material.SAND, ParticleProperty.BLOCK_DATA),
+	FALLING_DUST           (20, 46, (v) -> v.minor >= 10, "fallingdust", Material.SAND, ParticleProperty.BLOCK_DATA),
 	FIREWORKS_SPARK        (21, 3, (v) -> true, "fireworksSpark", CompatibleMaterial.FIREWORK_ROCKET, "firework"),
 	FLAME                  (22, 26, (v) -> true, "flame", Material.TORCH),
 	HEART                  (23, 34, (v) -> true, "heart", Material.REDSTONE_BLOCK),
 	ITEM_CRACK             (24, 36, (v) -> true, "iconcrack", Material.APPLE, ParticleProperty.ITEM_DATA, "item"),
 	LAVA                   (25, 27, (v) -> true, "lava", CompatibleMaterial.MAGMA_BLOCK),
-	MOB_APPEARANCE         (26, 41, (v) -> v >= 8, "mobappearance", CompatibleMaterial.PLAYER_HEAD, "elder_guardian"),
-	NAUTILUS               (27, -1, (v) -> v >= 13, CompatibleMaterial.CONDUIT),
+	MOB_APPEARANCE         (26, 41, (v) -> v.minor >= 8, "mobappearance", CompatibleMaterial.PLAYER_HEAD, "elder_guardian"),
+	NAUTILUS               (27, -1, (v) -> v.minor >= 13, CompatibleMaterial.CONDUIT),
 	NOTE                   (28, 23, (v) -> true, "note", Material.NOTE_BLOCK),
 	PORTAL                 (29, 24, (v) -> true, "portal", Material.SOUL_SAND),
 	REDSTONE               (30, 30, (v) -> true, "reddust", Material.REDSTONE, ParticleProperty.DUST_OPTIONS, "dust"),
@@ -50,104 +51,113 @@ public enum ParticleEffect {
 	SMOKE_NORMAL           (33, 11, (v) -> true, "smoke", Material.FLINT_AND_STEEL, "smoke"),
 	SNOW_SHOVEL            (34, 32, (v) -> true, Material.SNOW_BLOCK),
 	SNOWBALL               (35, 31, (v) -> true, "snowballpoof", CompatibleMaterial.SNOWBALL, "item_snowball"),
-	SPELL                  (36, 13, (v) -> true, "spell", Material.POTION, "effect"),
-	SPELL_INSTANT          (37, 14, (v) -> true, "instantSpell", CompatibleMaterial.SPLASH_POTION, "instant_effect"),
-	SPELL_MOB              (38, 15, (v) -> v <= 20.4, "mobSpell", CompatibleMaterial.ZOMBIE_HEAD),
-	SPELL_MOB_AMBIENT      (39, 16, (v) -> v <= 20.4, "mobSpellAmbient", Material.POTION),
+	SPELL                  (36, 13, (v) -> true, "spell", Material.POTION,
+			ParticleHats.versionInfo.supports(21, 9) ? ParticleProperty.SPELL : ParticleProperty.NO_DATA, "effect"),
+	SPELL_INSTANT          (37, 14, (v) -> true, "instantSpell", CompatibleMaterial.SPLASH_POTION,
+            ParticleHats.versionInfo.supports(21, 9) ? ParticleProperty.SPELL : ParticleProperty.NO_DATA, "instant_effect"),
+	SPELL_MOB              (38, 15, (v) -> v.supports(20, 4), "mobSpell", CompatibleMaterial.ZOMBIE_HEAD),
+	SPELL_MOB_AMBIENT      (39, 16, (v) -> v.supports(20, 4), "mobSpellAmbient", Material.POTION),
 	SPELL_WITCH            (40, 17, (v) -> true, "witchMagic", CompatibleMaterial.SPLASH_POTION, "witch"),
-	SPIT                   (41, 48, (v) -> v >= 11, "spit", CompatibleMaterial.BONE_MEAL),
-	SQUID_INK              (42, -1, (v) -> v >= 13, CompatibleMaterial.INK_SAC),
+	SPIT                   (41, 48, (v) -> v.minor >= 11, "spit", CompatibleMaterial.BONE_MEAL),
+	SQUID_INK              (42, -1, (v) -> v.minor >= 13, CompatibleMaterial.INK_SAC),
 	SUSPENDED              (43, 7, (v) -> true, "suspended", Material.BEDROCK, "underwater"),
 	SUSPENDED_DEPTH        (44, 8, (v) -> true, "depthSuspend", Material.BEDROCK),
-	SWEEP_ATTACK           (45, 45, (v) -> v >= 9, "sweepAttack", Material.DIAMOND_SWORD),
-	TOTEM                  (46, 47, (v) -> v >= 11, "totem", CompatibleMaterial.TOTEM_OF_UNDYING, "totem_of_undying"),
+	SWEEP_ATTACK           (45, 45, (v) -> v.minor >= 9, "sweepAttack", Material.DIAMOND_SWORD),
+	TOTEM                  (46, 47, (v) -> v.minor >= 11, "totem", CompatibleMaterial.TOTEM_OF_UNDYING, "totem_of_undying"),
 	TOWN_AURA              (47, 22, (v) -> true, "townaura", Material.BEACON, "mycelium"),
 	VILLAGER_ANGRY         (48, 20, (v) -> true, "angryVillager", CompatibleMaterial.WITHER_SKELETON_SKULL, "angry_villager"),
 	VILLAGER_HAPPY         (49, 21, (v) -> true, "happyVillager", CompatibleMaterial.PLAYER_HEAD, "happy_villager"),
 	WATER_BUBBLE           (50, 4, (v) -> true, "bubble", Material.FISHING_ROD, "bubble"),
-	WATER_DROP             (51, 39, (v) -> v >= 8, Material.WATER_BUCKET, "rain"),
+	WATER_DROP             (51, 39, (v) -> v.minor >= 8, Material.WATER_BUCKET, "rain"),
 	WATER_SPLASH           (52, 5, (v) -> true, "splash", CompatibleMaterial.BIRCH_BOAT, "splash"),
-	WATER_WAKE             (53, 6, (v) -> v >= 7, "wake", CompatibleMaterial.OAK_BOAT, "fishing"),
+	WATER_WAKE             (53, 6, (v) -> v.minor >= 7, "wake", CompatibleMaterial.OAK_BOAT, "fishing"),
 	ITEMSTACK              (54, -1, (v) -> true, Material.DIAMOND, ParticleProperty.ITEMSTACK_DATA),
-	CAMPFIRE_COSY_SMOKE    (55, -1, (v) -> v >= 14, CompatibleMaterial.CAMPFIRE),
-	CAMPFIRE_SIGNAL_SMOKE  (56, -1, (v) -> v >= 14, CompatibleMaterial.CAMPFIRE),
-	COMPOSTER              (57, -1, (v) -> v >= 14, CompatibleMaterial.COMPOSTER),
-	FALLING_LAVA           (58, -1, (v) -> v >= 14, Material.LAVA_BUCKET),
-	FALLING_WATER          (59, -1, (v) -> v >= 14, Material.WATER_BUCKET),
-	FLASH                  (60, -1, (v) -> v >= 14, CompatibleMaterial.LANTERN),
-	SNEEZE                 (61, -1, (v) -> v >= 14, CompatibleMaterial.GRAY_DYE),
+	CAMPFIRE_COSY_SMOKE    (55, -1, (v) -> v.minor >= 14, CompatibleMaterial.CAMPFIRE),
+	CAMPFIRE_SIGNAL_SMOKE  (56, -1, (v) -> v.minor >= 14, CompatibleMaterial.CAMPFIRE),
+	COMPOSTER              (57, -1, (v) -> v.minor >= 14, CompatibleMaterial.COMPOSTER),
+	FALLING_LAVA           (58, -1, (v) -> v.minor >= 14, Material.LAVA_BUCKET),
+	FALLING_WATER          (59, -1, (v) -> v.minor >= 14, Material.WATER_BUCKET),
+	FLASH                  (60, -1, (v) -> v.minor >= 14, CompatibleMaterial.LANTERN,
+            ParticleHats.versionInfo.supports(21, 9) ? ParticleProperty.COLOR : ParticleProperty.NO_DATA),
+	SNEEZE                 (61, -1, (v) -> v.minor >= 14, CompatibleMaterial.GRAY_DYE),
 	EMPTY_SPACE            (62, -1, (v) -> true, CompatibleMaterial.BARRIER),
-	LANDING_LAVA           (63, -1, (v) -> v >= 14, Material.MAGMA_CREAM),
-	DRIPPING_HONEY         (64, -1, (v) -> v >= 15, CompatibleMaterial.HONEY_BOTTLE),
-	FALLING_HONEY          (65, -1, (v) -> v >= 15, CompatibleMaterial.HONEYCOMB),
-	FALLING_NECTAR         (66, -1, (v) -> v >= 15, CompatibleMaterial.DANDELION),
-	LANDING_HONEY          (67, -1, (v) -> v >= 15, CompatibleMaterial.HONEY_BOTTLE),
-	SOUL_FIRE_FLAME        (68, -1, (v) -> v >= 16, CompatibleMaterial.SOUL_CAMPFIRE),
-	ASH                    (69, -1, (v) -> v >= 16, CompatibleMaterial.BLACK_DYE),
-	CRIMSON_SPORE          (70, -1, (v) -> v >= 16, CompatibleMaterial.CRIMSON_FUNGUS),
-	WARPED_SPORE           (71, -1, (v) -> v >= 16, CompatibleMaterial.WARPED_FUNGUS),
-	SOUL                   (72, -1, (v) -> v >= 16, CompatibleMaterial.SOUL_LANTERN),
-	DRIPPING_OBSIDIAN_TEAR (73, -1, (v) -> v >= 16, CompatibleMaterial.CRYING_OBSIDIAN),
-	FALLING_OBSIDIAN_TEAR  (74, -1, (v) -> v >= 16, CompatibleMaterial.CRYING_OBSIDIAN),
-	LANDING_OBSIDIAN_TEAR  (75, -1, (v) -> v >= 16, CompatibleMaterial.CRYING_OBSIDIAN),
-	REVERSE_PORTAL         (76, -1, (v) -> v >= 16, Material.OBSIDIAN),
-	WHITE_ASH              (77, -1, (v) -> v >= 16, CompatibleMaterial.WHITE_DYE),
-	LIGHT (78, -1, (v) -> v >= 17, CompatibleMaterial.LIGHT),
+	LANDING_LAVA           (63, -1, (v) -> v.minor >= 14, Material.MAGMA_CREAM),
+	DRIPPING_HONEY         (64, -1, (v) -> v.minor >= 15, CompatibleMaterial.HONEY_BOTTLE),
+	FALLING_HONEY          (65, -1, (v) -> v.minor >= 15, CompatibleMaterial.HONEYCOMB),
+	FALLING_NECTAR         (66, -1, (v) -> v.minor >= 15, CompatibleMaterial.DANDELION),
+	LANDING_HONEY          (67, -1, (v) -> v.minor >= 15, CompatibleMaterial.HONEY_BOTTLE),
+	SOUL_FIRE_FLAME        (68, -1, (v) -> v.minor >= 16, CompatibleMaterial.SOUL_CAMPFIRE),
+	ASH                    (69, -1, (v) -> v.minor >= 16, CompatibleMaterial.BLACK_DYE),
+	CRIMSON_SPORE          (70, -1, (v) -> v.minor >= 16, CompatibleMaterial.CRIMSON_FUNGUS),
+	WARPED_SPORE           (71, -1, (v) -> v.minor >= 16, CompatibleMaterial.WARPED_FUNGUS),
+	SOUL                   (72, -1, (v) -> v.minor >= 16, CompatibleMaterial.SOUL_LANTERN),
+	DRIPPING_OBSIDIAN_TEAR (73, -1, (v) -> v.minor >= 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	FALLING_OBSIDIAN_TEAR  (74, -1, (v) -> v.minor >= 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	LANDING_OBSIDIAN_TEAR  (75, -1, (v) -> v.minor >= 16, CompatibleMaterial.CRYING_OBSIDIAN),
+	REVERSE_PORTAL         (76, -1, (v) -> v.minor >= 16, Material.OBSIDIAN),
+	WHITE_ASH              (77, -1, (v) -> v.minor >= 16, CompatibleMaterial.WHITE_DYE),
+	LIGHT (78, -1, (v) -> v.minor >= 17, CompatibleMaterial.LIGHT),
 
-	DUST_COLOR_TRANSITION (79, -1, (v) -> v >= 17, Material.REDSTONE, ParticleProperty.COLOR_TRANSITION),
+	DUST_COLOR_TRANSITION (79, -1, (v) -> v.minor >= 17, Material.REDSTONE, ParticleProperty.COLOR_TRANSITION),
 
 	// TODO: Implement way for storing vibration particle data
 	//VIBRATION (80, -1, 17, Material.BEDROCK),
 
-	FALLING_SPORE_BLOSSOM (81, -1, (v) -> v >= 17, CompatibleMaterial.SPORE_BLOSSOM),
-	SPORE_BLOSSOM_AIR (82, -1, (v) -> v >= 17, CompatibleMaterial.SPORE_BLOSSOM),
-	SMALL_FLAME (83, -1, (v) -> v >= 17, CompatibleMaterial.CYAN_CANDLE),
-	SNOWFLAKE (84, -1, (v) -> v >= 17, CompatibleMaterial.POWDER_SNOW_BUCKET),
-	DRIPPING_DRIPSTONE_LAVA (85, -1, (v) -> v >= 17, CompatibleMaterial.POINTED_DRIPSTONE),
-	FALLING_DRIPSTONE_LAVA (86, -1, (v) -> v >= 17, CompatibleMaterial.DRIPSTONE_BLOCK),
-	DRIPPING_DRIPSTONE_WATER (87, -1, (v) -> v >= 17, CompatibleMaterial.POINTED_DRIPSTONE),
-	FALLING_DRIPSTONE_WATER (88, -1, (v) -> v >= 17, CompatibleMaterial.DRIPSTONE_BLOCK),
-	GLOW_SQUID_INK (89, -1, (v) -> v >= 17, CompatibleMaterial.GLOW_INK_SAC),
-	GLOW (90, -1, (v) -> v >= 17, CompatibleMaterial.GLOW_INK_SAC),
-	WAX_ON (91, -1, (v) -> v >= 17, CompatibleMaterial.COPPER_BLOCK),
-	WAX_OFF (92, -1, (v) -> v >= 17, CompatibleMaterial.WEATHERED_COPPER),
-	ELECTRIC_SPARK (93, -1, (v) -> v >= 17, CompatibleMaterial.LIGHTNING_ROD),
-	SCRAPE (94, -1, (v) -> v >= 17, CompatibleMaterial.OXIDIZED_COPPER),
+	FALLING_SPORE_BLOSSOM (81, -1, (v) -> v.minor >= 17, CompatibleMaterial.SPORE_BLOSSOM),
+	SPORE_BLOSSOM_AIR (82, -1, (v) -> v.minor >= 17, CompatibleMaterial.SPORE_BLOSSOM),
+	SMALL_FLAME (83, -1, (v) -> v.minor >= 17, CompatibleMaterial.CYAN_CANDLE),
+	SNOWFLAKE (84, -1, (v) -> v.minor >= 17, CompatibleMaterial.POWDER_SNOW_BUCKET),
+	DRIPPING_DRIPSTONE_LAVA (85, -1, (v) -> v.minor >= 17, CompatibleMaterial.POINTED_DRIPSTONE),
+	FALLING_DRIPSTONE_LAVA (86, -1, (v) -> v.minor >= 17, CompatibleMaterial.DRIPSTONE_BLOCK),
+	DRIPPING_DRIPSTONE_WATER (87, -1, (v) -> v.minor >= 17, CompatibleMaterial.POINTED_DRIPSTONE),
+	FALLING_DRIPSTONE_WATER (88, -1, (v) -> v.minor >= 17, CompatibleMaterial.DRIPSTONE_BLOCK),
+	GLOW_SQUID_INK (89, -1, (v) -> v.minor >= 17, CompatibleMaterial.GLOW_INK_SAC),
+	GLOW (90, -1, (v) -> v.minor >= 17, CompatibleMaterial.GLOW_INK_SAC),
+	WAX_ON (91, -1, (v) -> v.minor >= 17, CompatibleMaterial.COPPER_BLOCK),
+	WAX_OFF (92, -1, (v) -> v.minor >= 17, CompatibleMaterial.WEATHERED_COPPER),
+	ELECTRIC_SPARK (93, -1, (v) -> v.minor >= 17, CompatibleMaterial.LIGHTNING_ROD),
+	SCRAPE (94, -1, (v) -> v.minor >= 17, CompatibleMaterial.OXIDIZED_COPPER),
 
-	BLOCK_MARKER (95, -1, (v) -> v >= 18, Material.ITEM_FRAME, ParticleProperty.BLOCK_DATA),
+	BLOCK_MARKER (95, -1, (v) -> v.minor >= 18, Material.ITEM_FRAME, ParticleProperty.BLOCK_DATA),
 
-	SONIC_BOOM (96, -1, (v) -> v >= 19, CompatibleMaterial.SCULK),
-	SCULK_SOUL (97, -1, (v) -> v >= 19, CompatibleMaterial.SCULK_CATALYST),
-	SCULK_CHARGE (98, -1, (v) -> v >= 19, CompatibleMaterial.SCULK_SENSOR, ParticleProperty.FLOAT),
-	SCULK_CHARGE_POP (99, -1, (v) -> v >= 19, CompatibleMaterial.SCULK_VEIN),
-	SHRIEK (100, -1, (v) -> v >= 19, CompatibleMaterial.SCULK_SHRIEKER, ParticleProperty.INTEGER),
+	SONIC_BOOM (96, -1, (v) -> v.minor >= 19, CompatibleMaterial.SCULK),
+	SCULK_SOUL (97, -1, (v) -> v.minor >= 19, CompatibleMaterial.SCULK_CATALYST),
+	SCULK_CHARGE (98, -1, (v) -> v.minor >= 19, CompatibleMaterial.SCULK_SENSOR, ParticleProperty.FLOAT),
+	SCULK_CHARGE_POP (99, -1, (v) -> v.minor >= 19, CompatibleMaterial.SCULK_VEIN),
+	SHRIEK (100, -1, (v) -> v.minor >= 19, CompatibleMaterial.SCULK_SHRIEKER, ParticleProperty.INTEGER),
 
-	CHERRY_LEAVES(101, -1, (v) -> v >= 20, CompatibleMaterial.CHERRY_LEAVES),
+	CHERRY_LEAVES(101, -1, (v) -> v.minor >= 20, CompatibleMaterial.CHERRY_LEAVES),
 
 	// Changes in 1.20.5
-	ENTITY_EFFECT (102, -1, (v) -> v >= 20.5, CompatibleMaterial.ZOMBIE_HEAD, ParticleProperty.COLOR),
-	EGG_CRACK (103, -1, (v) -> v >= 20.5, Material.EGG),
-	DUST_PLUME (104, -1, (v) -> v >= 20.5, Material.REDSTONE),
-	WHITE_SMOKE (105, -1, (v) -> v >= 20.5, CompatibleMaterial.WHITE_DYE),
+	ENTITY_EFFECT (102, -1, (v) -> v.supports(20, 5), CompatibleMaterial.ZOMBIE_HEAD,
+			ParticleProperty.COLOR),
+	EGG_CRACK (103, -1, (v) -> v.supports(20, 5), Material.EGG),
+	DUST_PLUME (104, -1, (v) -> v.supports(20, 5), Material.REDSTONE),
+	WHITE_SMOKE (105, -1, (v) -> v.supports(20, 5), CompatibleMaterial.WHITE_DYE),
 
-	GUST (106, -1, (v) -> v >= 21, CompatibleMaterial.WIND_CHARGE),
-	SMALL_GUST (107, -1, (v) -> v >= 21, CompatibleMaterial.MACE),
-	GUST_EMITTER_LARGE (108, -1, (v) -> v >= 21, CompatibleMaterial.GUSTER_POTTERY_SHERD),
-	GUST_EMITTER_SMALL (109, -1, (v) -> v >= 21, CompatibleMaterial.BREEZE_ROD),
-	TRIAL_SPAWNER_DETECTION (110, -1, (v) -> v >= 21, CompatibleMaterial.TRIAL_KEY),
-	TRIAL_SPAWNER_DETECTION_OMINOUS (111, -1, (v) -> v >= 21, CompatibleMaterial.TRIAL_SPAWNER),
-	VAULT_CONNECTION (112, -1, (v) -> v >= 21, CompatibleMaterial.VAULT),
-	INFESTED (113, -1, (v) -> v >= 21, CompatibleMaterial.SPIDER_EYE),
-	ITEM_COBWEB (114, -1, (v) -> v >= 21, CompatibleMaterial.COBWEB),
-	DUST_PILLAR (115, -1, (v) -> v >= 21, Material.REDSTONE, ParticleProperty.BLOCK_DATA),
-	OMINOUS_SPAWNING (116, -1, (v) -> v >= 21, CompatibleMaterial.OMINOUS_TRIAL_KEY),
-	RAID_OMEN (117, -1, (v) -> v >= 21, CompatibleMaterial.OMINOUS_BOTTLE),
-	TRIAL_OMEN (118, -1, (v) -> v >= 21, CompatibleMaterial.TRIAL_KEY),
+	GUST (106, -1, (v) -> v.minor >= 21, CompatibleMaterial.WIND_CHARGE),
+	SMALL_GUST (107, -1, (v) -> v.minor >= 21, CompatibleMaterial.MACE),
+	GUST_EMITTER_LARGE (108, -1, (v) -> v.minor >= 21, CompatibleMaterial.GUSTER_POTTERY_SHERD),
+	GUST_EMITTER_SMALL (109, -1, (v) -> v.minor >= 21, CompatibleMaterial.BREEZE_ROD),
+	TRIAL_SPAWNER_DETECTION (110, -1, (v) -> v.minor >= 21, CompatibleMaterial.TRIAL_KEY),
+	TRIAL_SPAWNER_DETECTION_OMINOUS (111, -1, (v) -> v.minor >= 21, CompatibleMaterial.TRIAL_SPAWNER),
+	VAULT_CONNECTION (112, -1, (v) -> v.minor >= 21, CompatibleMaterial.VAULT),
+	INFESTED (113, -1, (v) -> v.minor >= 21, CompatibleMaterial.SPIDER_EYE),
+	ITEM_COBWEB (114, -1, (v) -> v.minor >= 21, CompatibleMaterial.COBWEB),
+	DUST_PILLAR (115, -1, (v) -> v.minor >= 21, Material.REDSTONE, ParticleProperty.BLOCK_DATA),
+	OMINOUS_SPAWNING (116, -1, (v) -> v.minor >= 21, CompatibleMaterial.OMINOUS_TRIAL_KEY),
+	RAID_OMEN (117, -1, (v) -> v.minor >= 21, CompatibleMaterial.OMINOUS_BOTTLE),
+	TRIAL_OMEN (118, -1, (v) -> v.minor >= 21, CompatibleMaterial.TRIAL_KEY),
 
-	PALE_OAK_LEAVES(119, -1, (v) -> v >= 21.4, CompatibleMaterial.PALE_OAK_LEAVES),
+	PALE_OAK_LEAVES(119, -1, (v) -> v.supports(21, 4), CompatibleMaterial.PALE_OAK_LEAVES),
 
-	TINTED_LEAVES(120, -1, (v) -> v >= 21.5, CompatibleMaterial.OAK_LEAVES, ParticleProperty.COLOR),
-	FIREFLY(121, -1, (v) -> v >= 21.5, Material.TORCH),
+	TINTED_LEAVES(120, -1, (v) -> v.supports(21, 5), CompatibleMaterial.OAK_LEAVES, ParticleProperty.COLOR),
+	FIREFLY(121, -1, (v) -> v.supports(21, 5), Material.TORCH),
+
+    COPPER_FIRE_FLAME(122, -1, (v) -> v.supports(21, 9), CompatibleMaterial.COPPER_BLOCK),
+
+	PAUSE_MOB_GROWTH(123, -1, (v) -> v.supports(26, 1), Material.STONE),
+	RESET_MOB_GROWTH(124, -1, (v) -> v.supports(26, 1), Material.STONE),
 	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
@@ -156,7 +166,7 @@ public enum ParticleEffect {
 	
 	private final int id;
 	private final int legacyID;
-	private final Predicate<Double> predicate;
+	private final Predicate<VersionInfo> predicate;
 	private final String legacyName;
 	private final ItemStack item;
 	private final ParticleProperty property;
@@ -172,7 +182,7 @@ public enum ParticleEffect {
 		}
 }
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, String legacyName, final ItemStack item, final ParticleProperty property, String... aliases)
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, String legacyName, final ItemStack item, final ParticleProperty property, String... aliases)
 	{
 		this.id = id;
 		this.legacyID = legacyID;
@@ -183,35 +193,35 @@ public enum ParticleEffect {
 		this.aliases = aliases;
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, String legacyName, final Material material, final ParticleProperty property, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, String legacyName, final Material material, final ParticleProperty property, String... aliases) {
 		this(id, legacyID, predicate, legacyName, ItemUtil.createItem(material, 1), property, aliases);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, final String legacyName, final CompatibleMaterial material, final ParticleProperty property, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, final String legacyName, final CompatibleMaterial material, final ParticleProperty property, String... aliases) {
 		this(id, legacyID, predicate, legacyName, material.getItem(), property, aliases);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, final String legacyName, final Material material, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, final String legacyName, final Material material, String... aliases) {
 		this(id, legacyID, predicate, legacyName, ItemUtil.createItem(material, 1), ParticleProperty.NO_DATA, aliases);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, final String legacyName, final CompatibleMaterial material, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, final String legacyName, final CompatibleMaterial material, String... aliases) {
 		this(id, legacyID, predicate, legacyName, material.getItem(), ParticleProperty.NO_DATA, aliases);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, final CompatibleMaterial material, final ParticleProperty property, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, final CompatibleMaterial material, final ParticleProperty property, String... aliases) {
 		this(id, legacyID, predicate, "", material.getItem(), property, aliases);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, final Material material, final ParticleProperty property, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, final Material material, final ParticleProperty property, String... aliases) {
 		this(id, legacyID, predicate, "", ItemUtil.createItem(material, 1), property, aliases);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, final CompatibleMaterial material, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, final CompatibleMaterial material, String... aliases) {
 		this(id, legacyID, predicate, "", material.getItem(), ParticleProperty.NO_DATA, aliases);
 	}
 	
-	private ParticleEffect (final int id, final int legacyID, final Predicate<Double> predicate, final Material material, String... aliases) {
+	private ParticleEffect (final int id, final int legacyID, final Predicate<VersionInfo> predicate, final Material material, String... aliases) {
 		this(id, legacyID, predicate, "", ItemUtil.createItem(material, 1), ParticleProperty.NO_DATA, aliases);
 	}
 	
@@ -336,7 +346,7 @@ public enum ParticleEffect {
 	}
 	
 	public boolean isSupported () {
-		return predicate.test(ParticleHats.serverVersion);
+		return predicate.test(ParticleHats.versionInfo);
 	}
 	
 	/**
@@ -422,6 +432,7 @@ public enum ParticleEffect {
 		ITEM_DATA,
 		ITEMSTACK_DATA,
 		INTEGER,
-		FLOAT
+		FLOAT,
+        SPELL,
 	}
 }

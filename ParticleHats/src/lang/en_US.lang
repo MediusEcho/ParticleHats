@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.15
+version: 1.16
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -557,6 +557,12 @@ particle_tinted_leaves_name: "&bTinted Leaves"
 particle_tinted_leaves_description: ""
 particle_firefly_name: "&bFirefly"
 particle_firefly_description: ""
+particle_copper_fire_flame_name: "&bCopper Fire Flame"
+particle_copper_fire_flame_description: ""
+particle_pause_mob_growth_name: "&bPause Mod Growth"
+particle_pause_mob_growth_description: ""
+particle_reset_mob_growth_name: "&bReset Mob Growth"
+particle_reset_mob_growth_description: ""
 
 
 ##########################

@@ -1,3 +1,11 @@
+4.7.2
+- Added support for 26.1
+- Added particles:
+  - COPPER_FIRE_FLAME
+  - PAUSE_MOB_GROWTH
+  - RESET_MOB_GROWTH
+- Updated en_US.lang with new particle names & descriptions
+
 4.7.1
 - Reverted HikariCP dependency version to fix Java 8 Compatability. Thanks Koora7334 for the PR.
 

@@ -508,7 +508,10 @@ public class ItemUtil {
 		{
 			ItemMeta itemMeta = item.getItemMeta();
 			addItemFlags(itemMeta);
-			itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 0, true);
+
+			Enchantment arrowDamage = (ParticleHats.serverVersion <= 20) ?
+					Enchantment.getByName("ARROW_DAMAGE") : Enchantment.POWER;
+			itemMeta.addEnchant(arrowDamage, 0, true);
 			
 			item.setItemMeta(itemMeta);
 		}
@@ -521,7 +524,10 @@ public class ItemUtil {
 	public static void stripHighlight (ItemStack item)
 	{
 		ItemMeta itemMeta = item.getItemMeta();
-		itemMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
+
+		Enchantment arrowDamage = (ParticleHats.serverVersion <= 20) ?
+				Enchantment.getByName("ARROW_DAMAGE") : Enchantment.POWER;
+		itemMeta.removeEnchant(arrowDamage);
 		
 		item.setItemMeta(itemMeta);
 	}
@@ -592,12 +598,12 @@ public class ItemUtil {
 	private static void addItemFlags (ItemMeta itemMeta)
 	{
 		try {
-			if (ParticleHats.serverVersion < 21.5) {
-				itemMeta.addItemFlags(ItemFlag.values());
-			} else {
+			if (ParticleHats.versionInfo.supports(21, 5)) {
 				itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 				itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 				itemMeta.addItemFlags(ItemFlag.HIDE_DYE);
+			} else {
+				itemMeta.addItemFlags(ItemFlag.values());
 			}
 		} catch (NoClassDefFoundError e) {}
 	}

@@ -9,6 +9,7 @@ import com.mediusecho.particlehats.particles.renderer.ParticleRenderer;
 import com.mediusecho.particlehats.util.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -256,6 +257,10 @@ public abstract class Effect {
 				case INTEGER:
 					renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed, 0);
 					break;
+
+                case SPELL:
+                    Particle.Spell spellData = new Particle.Spell(data.getColorData().getColor(), 1.0f);
+                    renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed, spellData);
 			}
 		}
 	}

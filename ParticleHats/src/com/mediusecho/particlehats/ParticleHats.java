@@ -19,6 +19,7 @@ import com.mediusecho.particlehats.tasks.EntityTask;
 import com.mediusecho.particlehats.tasks.MenuTask;
 import com.mediusecho.particlehats.tasks.PromptTask;
 import com.mediusecho.particlehats.ui.MenuManagerFactory;
+import com.mediusecho.particlehats.util.VersionInfo;
 import com.mediusecho.particlehats.util.YamlUtil;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -27,6 +28,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +41,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
 public class ParticleHats extends JavaPlugin {
@@ -65,6 +70,7 @@ public class ParticleHats extends JavaPlugin {
 	// Have a separate block menu that shows nearby particles for the player to edit.
 	
 	public static ParticleHats instance;
+	public static VersionInfo versionInfo;
 	public static double serverVersion;
 	private static Logger logger;
 	private static ParticleHatsAPI hatAPI;
@@ -88,7 +94,7 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.15;
+	private final double LANG_VERSION = 1.16;
 	
 	private ConcurrentHashMap<UUID, EntityState> entityState;
 	
@@ -105,12 +111,22 @@ public class ParticleHats extends JavaPlugin {
 	
 	// Debugging
 	public static final boolean debugging = false;
-	
+
+	// Pre-2026 update versioning (1.x.x)
+	private Pattern semanticVersionPattern = Pattern.compile("[1-9]\\d*\\.(\\d+)\\.(\\d+)?");
+
+	// New versioning (year.x)
+	private Pattern yearVersionPattern = Pattern.compile("(\\d+)\\.(\\d+)?");
+
+
 	@Override
 	public void onEnable ()
 	{
-		instance = this;	
-		serverVersion = getServerVersion();
+		instance = this;
+
+		versionInfo = getVersion();
+		serverVersion = versionInfo.minor;
+
 		logger = getServer().getLogger();
 		hatAPI = new HatAPI(this);
 		
@@ -418,16 +434,6 @@ public class ParticleHats extends JavaPlugin {
 	}
 	
 	/**
-	 * Gets the current server version
-	 * @return
-	 */
-	public double getServerVersion()
-	{
-		String version = Bukkit.getBukkitVersion().split("-")[0].substring(2);
-		return Double.parseDouble(version);
-	}
-	
-	/**
 	 * Get this plugins CommandManager
 	 * @return
 	 */
@@ -546,5 +552,21 @@ public class ParticleHats extends JavaPlugin {
 				createDefaultLang();
 			}
 		}
+	}
+
+	@Contract(" -> new")
+	private @NonNull VersionInfo getVersion() {
+		String rawVersion = Bukkit.getBukkitVersion().split("-")[0];
+		Pattern versionPattern = (rawVersion.charAt(0) == '1') ? semanticVersionPattern : yearVersionPattern;
+		Matcher matcher = versionPattern.matcher(rawVersion);
+
+		if (matcher.find()) {
+			int minor = Integer.parseInt(matcher.group(1));
+			int patch = Integer.parseInt(matcher.group(2));
+			return new VersionInfo(minor, patch);
+		}
+
+		getLogger().warning("Unable to parse version info correctly");
+		return new VersionInfo(7, 0);
 	}
 }
