@@ -2,10 +2,8 @@ package com.mediusecho.particlehats.editor.menus;
 
 import java.util.Arrays;
 
-import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -65,7 +63,8 @@ public class EditorSlotMenu extends AbstractStaticMenu {
 		
 		final MenuAction secretAction = (event, slot) ->
 		{
-			CompatibleSound.ENTITY_VILLAGER_NO.play(owner, 0.5f, 1.0f);
+			ParticleHats.getCompatibleFactory().ifPresent(factory ->
+					factory.getVillagerNoSound().play(owner, 0.5f, 1.0f));
 			return MenuClickResult.NONE;
 		};
 		

@@ -2,7 +2,9 @@ package com.mediusecho.particlehats.database.type.mysql;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.commands.Sender;
+import com.mediusecho.particlehats.compatibility.CompatibleFactory;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.properties.Group;
@@ -24,7 +26,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -1557,13 +1558,14 @@ public class MySQLDatabase implements Database {
 		String soundName = set.getString("sound");
 		if (!set.wasNull())
 		{
-			try 
-			{
-				Sound sound = Sound.valueOf(soundName);
+			if (ParticleHats.getCompatibleFactory().isPresent()) {
+				CompatibleFactory factory = ParticleHats.getCompatibleFactory().get();
+				CompatibleSound sound = factory.getCompatibleSound(soundName);
+
 				if (sound != null) {
 					hat.setSound(sound);
 				}
-			} catch (IllegalArgumentException e) {}	
+			}
 		}
 		
 		String customName = set.getString("custom_type");

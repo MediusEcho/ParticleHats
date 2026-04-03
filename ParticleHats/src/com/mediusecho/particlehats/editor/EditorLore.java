@@ -1,6 +1,7 @@
 package com.mediusecho.particlehats.editor;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -13,7 +14,6 @@ import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
@@ -293,7 +293,8 @@ public class EditorLore {
 	 * @param currentSound
 	 * @param description
 	 */
-	public static void updateSoundDescription (ItemStack item, Sound sound, Sound currentSound, Message description)
+	public static void updateSoundDescription (
+			ItemStack item, CompatibleSound sound, CompatibleSound currentSound, Message description)
 	{
 		String[] selectedParse = StringUtil.parseValue(description.getValue(), "1");
 		String selectedSuffix = (currentSound != null && currentSound.equals(sound)) ? selectedParse[1] : "";
@@ -307,7 +308,7 @@ public class EditorLore {
 		String description = Message.EDITOR_MAIN_MENU_SOUND_DESCRIPTION.getValue();
 		String soundInfo[] = StringUtil.parseValue(description, "1");
 		String clearInfo[] = StringUtil.parseValue(description, "4");
-		Sound sound = hat.getSound();
+		CompatibleSound sound = hat.getSound();
 		
 		boolean nullSound = sound == null;
 		String soundName = !nullSound ? StringUtil.capitalizeFirstLetter(sound.toString().toLowerCase()) : soundInfo[1];
@@ -611,6 +612,7 @@ public class EditorLore {
 		{
 			case COLOR:
 			case DUST_OPTIONS:
+			case SPELL:
 			{
 				ColorData color = hat.getParticleData(particleIndex).getColorData();
 				if (color.isRandom())

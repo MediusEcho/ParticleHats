@@ -54,12 +54,24 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:2.2.1")
     implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.jetbrains:annotations:16.0.2")
+    implementation(project(":compatibility"))
+    implementation(project(":compatibility:pre_1_21"))
+    implementation(project(":compatibility:post_1_21"))
 }
 
 tasks.withType<ShadowJar> {
     archiveBaseName.set("ParticleHats")
     archiveClassifier.set("")
     archiveVersion.set("")
-    minimize()
     relocate("org.bstats", "com.mediusecho.particlehats.metrics")
+}
+
+subprojects {
+    apply(plugin = "java")
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    }
 }

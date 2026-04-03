@@ -1,6 +1,8 @@
 package com.mediusecho.particlehats.editor.menus;
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.compatibility.CompatibleFactory;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import com.mediusecho.particlehats.editor.EditorLore;
 import com.mediusecho.particlehats.editor.EditorMenuManager;
 import com.mediusecho.particlehats.locale.Message;
@@ -34,15 +36,15 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 	private Map<Integer, Inventory> blockMenus;
 	private Map<Integer, Inventory> entityMenus;
 	
-	private List<Sound> miscSounds;
-	private List<Sound> blockSounds;
-	private List<Sound> entitySounds;
+	private List<CompatibleSound> miscSounds;
+	private List<CompatibleSound> blockSounds;
+	private List<CompatibleSound> entitySounds;
 	
 	private int currentMiscPage = 0;
 	private int currentBlockPage = 0;
 	private int currentEntityPage = 0;
 	
-	private Sound currentPlayingSound;
+	private CompatibleSound currentPlayingSound;
 	
 	private SoundFilter currentFilter = SoundFilter.MISC;
 	
@@ -130,9 +132,9 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 		this.miscMenus = new HashMap<Integer, Inventory>();
 		this.blockMenus = new HashMap<Integer, Inventory>();
 		this.entityMenus = new HashMap<Integer, Inventory>();
-		this.miscSounds = new ArrayList<Sound>();
-		this.blockSounds = new ArrayList<Sound>();
-		this.entitySounds = new ArrayList<Sound>();
+		this.miscSounds = new ArrayList<>();
+		this.blockSounds = new ArrayList<>();
+		this.entitySounds = new ArrayList<>();
 		
 		this.volumeItem = ItemUtil.createItem(Material.LEVER, Message.EDITOR_SOUND_MENU_SET_VOLUME);
 		EditorLore.updateDoubleDescription(volumeItem, targetHat.getSoundVolume(), Message.EDITOR_SOUND_MENU_PITCH_DESCRIPTION);
@@ -141,23 +143,30 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 		EditorLore.updateDoubleDescription(pitchItem, targetHat.getSoundPitch(), Message.EDITOR_SOUND_MENU_PITCH_DESCRIPTION);
 		
 		boolean useBlacklist = SettingsManager.EDITOR_SHOW_BLACKLISTED_SOUNDS.getBoolean();
-		for (Sound sound : Sound.values())
-		{
-			if (!useBlacklist && blacklist.contains(sound.toString())) {
-				continue;
-			}
-			
-			String category = sound.toString().split("_")[0];
-			switch (category)
-			{
-			case "BLOCK":
-				blockSounds.add(sound);
-				break;
-			case "ENTITY":
-				entitySounds.add(sound);
-				break;
-			default:
-				miscSounds.add(sound);
+		if (ParticleHats.getCompatibleFactory().isPresent()) {
+			CompatibleFactory factory = ParticleHats.getCompatibleFactory().get();
+			for (String soundName : factory.getSounds()) {
+
+				if (!useBlacklist && blacklist.contains(soundName)) {
+					continue;
+				}
+
+				String category = soundName.split("_")[0];
+				CompatibleSound sound = factory.getCompatibleSound(soundName);
+
+				if (sound != null) {
+					switch (category)
+					{
+						case "BLOCK":
+							blockSounds.add(sound);
+							break;
+						case "ENTITY":
+							entitySounds.add(sound);
+							break;
+						default:
+							miscSounds.add(sound);
+					}
+				}
 			}
 		}
 		
@@ -277,11 +286,11 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 		
 		MenuAction setSoundAction = (event, slot) ->
 		{
-			final List<Sound> sounds = getCurrentFilterSounds();
+			final List<CompatibleSound> sounds = getCurrentFilterSounds();
 			final int currentPage = getCurrentFilterPage();
 			
 			int index = slot + (currentPage * 45);
-			Sound sound = sounds.get(index);
+			CompatibleSound sound = sounds.get(index);
 			if (sound != null)
 			{
 				if (event.isLeftClick()) {
@@ -293,7 +302,7 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 					stopSound();
 					
 					currentPlayingSound = sound;
-					owner.playSound(owner.getLocation(), sound, (float) targetHat.getSoundVolume(), (float) targetHat.getSoundPitch());
+					sound.play(owner, (float) targetHat.getSoundVolume(), (float) targetHat.getSoundPitch());
 					return MenuClickResult.NONE;
 				}
 			}
@@ -368,18 +377,18 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 		}
 	}
 	
-	private void populateSoundMenu (List<Sound> sounds, Map<Integer, Inventory> menus, CompatibleMaterial disc, int blockSoundSize, int entitySoundSize)
+	private void populateSoundMenu (List<CompatibleSound> sounds, Map<Integer, Inventory> menus, CompatibleMaterial disc, int blockSoundSize, int entitySoundSize)
 	{
 		int index = 0;
 		int page = 0;
 		
-		for (Sound s : sounds)
+		for (CompatibleSound s : sounds)
 		{
 			String songName = StringUtil.capitalizeFirstLetter(s.toString().toLowerCase());
 			String title = Message.EDITOR_SOUND_MENU_SOUND_PREFIX.getValue().replace("{1}", songName);
 			ItemStack item = ItemUtil.createItem(disc, title);
 			
-			Sound targetHatSound = targetHat.getSound();
+			CompatibleSound targetHatSound = targetHat.getSound();
 			EditorLore.updateSoundDescription(item, s, targetHatSound, Message.EDITOR_SOUND_MENU_SOUND_DESCRIPTION);
 			
 			if (targetHatSound != null && targetHatSound.equals(s)) {
@@ -451,7 +460,7 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 		}
 	}
 	
-	private List<Sound> getCurrentFilterSounds ()
+	private List<CompatibleSound> getCurrentFilterSounds ()
 	{
 		switch (currentFilter)
 		{
@@ -486,11 +495,8 @@ public class EditorSoundMenu extends AbstractStaticMenu {
 	
 	private void stopSound ()
 	{
-		if (currentPlayingSound != null) 
-		{
-			try {
-				owner.stopSound(currentPlayingSound);
-			} catch (NoSuchMethodError e) {}
+		if (currentPlayingSound != null) {
+			currentPlayingSound.stop(owner);
 		}
 	}
 	

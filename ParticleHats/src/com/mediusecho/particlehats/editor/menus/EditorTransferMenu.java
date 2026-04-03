@@ -1,8 +1,6 @@
 package com.mediusecho.particlehats.editor.menus;
 
-import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -66,7 +64,8 @@ public class EditorTransferMenu extends AbstractStaticMenu {
 			
 			else
 			{
-				CompatibleSound.ENTITY_VILLAGER_NO.play(owner, 1.0f, 1.0f);
+				ParticleHats.getCompatibleFactory().ifPresent(factory ->
+						factory.getVillagerNoSound().play(owner, 1.0f, 1.0f));
 				return MenuClickResult.NONE;
 			}
 		};

@@ -18,7 +18,6 @@ import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -98,7 +97,8 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		
 		noParticle4U = (event, slot) ->
 		{
-			CompatibleSound.ENTITY_VILLAGER_NO.play(owner, 1.0f, 1.0f);
+			ParticleHats.getCompatibleFactory().ifPresent(factory ->
+					factory.getVillagerNoSound().play(owner, 1.0f, 1.0f));
 			return MenuClickResult.NONE;
 		};
 		
@@ -162,8 +162,8 @@ public class EditorMainMenu extends AbstractStaticMenu {
 					if (sound == null) {
 						return;
 					}
-					
-					Sound s = (Sound)sound;
+
+					CompatibleSound s = (CompatibleSound)sound;
 					
 					targetHat.setSound(s);
 					EditorLore.updateSoundItemDescription(getItem(28), targetHat);
@@ -663,6 +663,7 @@ public class EditorMainMenu extends AbstractStaticMenu {
 			case COLOR:
 			case COLOR_TRANSITION:
 			case DUST_OPTIONS:
+			case SPELL:
 			{
 				EditorColorMenu editorColorMenu = new EditorColorMenu(core, editorManager, owner, particleIndex, () ->
 				{

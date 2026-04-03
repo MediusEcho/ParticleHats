@@ -1,8 +1,8 @@
 package com.mediusecho.particlehats.editor.purchase.menus;
 
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -161,7 +161,7 @@ public class PurchaseEditorMainMenu extends AbstractStaticMenu {
 						return;
 					}
 					
-					Sound s = (Sound)sound;
+					CompatibleSound s = (CompatibleSound)sound;
 					
 					targetHat.setSound(s);
 					EditorLore.updateSoundItemDescription(getItem(23), targetHat);

@@ -230,7 +230,13 @@ public enum ParticleEffect {
 	 * @return True if this ParticleEffect uses color data
 	 */
 	public boolean hasColorData () {
-		return property.equals(ParticleProperty.DUST_OPTIONS) || property.equals(ParticleProperty.COLOR_TRANSITION) || property.equals(ParticleProperty.COLOR);
+		switch (property) {
+			case DUST_OPTIONS:
+			case COLOR_TRANSITION:
+			case COLOR:
+			case SPELL: return true;
+			default: return false;
+		}
 	}
 	
 	/**

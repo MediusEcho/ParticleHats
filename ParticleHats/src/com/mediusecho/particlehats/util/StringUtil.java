@@ -108,7 +108,7 @@ public class StringUtil {
 	 */
 	public static String capitalizeFirstLetter (String s)
 	{
-		String original = s.replaceAll("_", " ");
+		String original = s.replace("_", " ").replaceAll("\\.", " ");
 		String[] words = original.split(" ");
 		StringBuilder builder = new StringBuilder();
 		

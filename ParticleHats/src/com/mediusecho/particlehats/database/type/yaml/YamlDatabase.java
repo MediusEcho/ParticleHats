@@ -1,7 +1,9 @@
 package com.mediusecho.particlehats.database.type.yaml;
 
 import com.mediusecho.particlehats.ParticleHats;
+import com.mediusecho.particlehats.compatibility.CompatibleFactory;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import com.mediusecho.particlehats.configuration.CustomConfig;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.properties.Group;
@@ -19,7 +21,6 @@ import com.mediusecho.particlehats.ui.MenuInventory;
 import com.mediusecho.particlehats.util.*;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -1258,7 +1259,7 @@ public class YamlDatabase implements Database {
 			config.set(path + "icons", null);
 		}
 		
-		Sound sound = hat.getSound();
+		CompatibleSound sound = hat.getSound();
 		if (sound != null)
 		{
 			config.set(path + "sound.id", sound.toString());
@@ -1409,16 +1410,16 @@ public class YamlDatabase implements Database {
 		String soundName = config.getString(path + "sound.id", "");
 		if (!soundName.equals(""))
 		{
-			try
-			{
-				Sound sound = Sound.valueOf(soundName);
-				if (sound != null) 
-				{
+			if (ParticleHats.getCompatibleFactory().isPresent()) {
+				CompatibleFactory factory = ParticleHats.getCompatibleFactory().get();
+				CompatibleSound sound = factory.getCompatibleSound(soundName);
+
+				if (sound != null) {
 					hat.setSound(sound);
 					hat.setSoundVolume(config.getDouble(path + "sound.volume", 1.0));
 					hat.setSoundPitch(config.getDouble(path + "sound.pitch", 1.0));
 				}
-			} catch (IllegalArgumentException e) {}
+			}
 		}
 		
 		hat.setLoaded(true);

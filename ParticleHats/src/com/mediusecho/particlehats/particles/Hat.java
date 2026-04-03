@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.particles;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleMaterial;
+import com.mediusecho.particlehats.compatibility.CompatibleSound;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.particles.effects.PixelEffect;
 import com.mediusecho.particlehats.particles.properties.*;
@@ -11,7 +12,6 @@ import com.mediusecho.particlehats.util.ItemUtil;
 import com.mediusecho.particlehats.util.MathUtil;
 import com.mediusecho.particlehats.util.PlayerUtil;
 import com.mediusecho.particlehats.util.StringUtil;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -84,7 +84,7 @@ public class Hat {
 	private Map<Integer, ParticleData> particleData;
 	private Map<Integer, Integer> animationIndex;
 	
-	private Sound sound;
+	private CompatibleSound sound;
 	private double volume = 1D;
 	private double pitch  = 1D;
 	
@@ -1372,7 +1372,7 @@ public class Hat {
 	 * Set the sound this hat will play when clicked
 	 * @param sound
 	 */
-	public void setSound (Sound sound)
+	public void setSound (CompatibleSound sound)
 	{
 		this.sound = sound;
 		setProperty("sound", "'" + sound.toString() + "'");
@@ -1391,7 +1391,7 @@ public class Hat {
 	 * Get the sound this hat should make when clicked
 	 * @return
 	 */
-	public Sound getSound () {
+	public CompatibleSound getSound () {
 		return sound;
 	}
 	
@@ -1405,8 +1405,8 @@ public class Hat {
 		if (sound == null) {
 			return false;
 		}
-		
-		player.playSound(player.getLocation(), sound, (float) volume, (float) pitch);
+
+		sound.play(player, (float) volume, (float) pitch);
 		return true;
 	}
 	

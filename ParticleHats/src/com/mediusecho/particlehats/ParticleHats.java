@@ -2,6 +2,7 @@ package com.mediusecho.particlehats;
 
 import com.mediusecho.particlehats.api.HatAPI;
 import com.mediusecho.particlehats.api.ParticleHatsAPI;
+import com.mediusecho.particlehats.compatibility.CompatibleFactory;
 import com.mediusecho.particlehats.database.Database;
 import com.mediusecho.particlehats.database.type.DatabaseType;
 import com.mediusecho.particlehats.editor.MetaState;
@@ -34,9 +35,11 @@ import org.jspecify.annotations.NonNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -72,6 +75,8 @@ public class ParticleHats extends JavaPlugin {
 	public static ParticleHats instance;
 	public static VersionInfo versionInfo;
 	public static double serverVersion;
+
+	private static CompatibleFactory compatibleFactory;
 	private static Logger logger;
 	private static ParticleHatsAPI hatAPI;
 	
@@ -129,7 +134,23 @@ public class ParticleHats extends JavaPlugin {
 
 		logger = getServer().getLogger();
 		hatAPI = new HatAPI(this);
-		
+
+		try {
+			// Pre 1.21.3
+			if (!versionInfo.supports(21, 3)) {
+				Class<?> clazz = Class
+						.forName("com.mediusecho.particlehats.compatibility.pre_1_21.CompatibleFactoryImpl");
+				compatibleFactory = (CompatibleFactory) clazz.getDeclaredConstructor().newInstance();
+			} else {
+				Class<?> clazz = Class
+						.forName("com.mediusecho.particlehats.compatibility.post_1_21.CompatibleFactoryImpl");
+				compatibleFactory = (CompatibleFactory) clazz.getDeclaredConstructor().newInstance();
+			}
+		} catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+				 InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+
 		// Make sure we're running on a supported version
 		if (serverVersion < 13)
 		{
@@ -489,6 +510,10 @@ public class ParticleHats extends JavaPlugin {
 		if (debugging) {
 			logger.log(Level.INFO, "[ParticleHats Debug] " + obj.toString());
 		}
+	}
+
+	public static Optional<CompatibleFactory> getCompatibleFactory() {
+		return Optional.of(compatibleFactory);
 	}
 	
 	private void loadLang ()
