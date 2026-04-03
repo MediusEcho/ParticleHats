@@ -156,8 +156,8 @@ public enum ParticleEffect {
 
     COPPER_FIRE_FLAME(122, -1, (v) -> v.supports(21, 9), CompatibleMaterial.COPPER_BLOCK),
 
-	PAUSE_MOB_GROWTH(123, -1, (v) -> v.supports(26, 1), Material.STONE),
-	RESET_MOB_GROWTH(124, -1, (v) -> v.supports(26, 1), Material.STONE),
+	PAUSE_MOB_GROWTH(123, -1, (v) -> v.supports(26, 1), CompatibleMaterial.GOLDEN_DANDELION),
+	RESET_MOB_GROWTH(124, -1, (v) -> v.supports(26, 1), CompatibleMaterial.GOLDEN_DANDELION),
 	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
