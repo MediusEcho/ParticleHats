@@ -924,6 +924,7 @@ public class YamlDatabase implements Database {
 
 				case COLOR:
 				case DUST_OPTIONS:
+				case SPELL:
 				{
 					ColorData colorData = data.getColorData();
 					if (colorData.isRandom()) {
@@ -1026,6 +1027,7 @@ public class YamlDatabase implements Database {
 
 						case COLOR:
 						case DUST_OPTIONS:
+						case SPELL:
 						{
 							hat.setParticleScale(index, config.getDouble(path + "size", 1.0));
 							
