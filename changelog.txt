@@ -1,4 +1,4 @@
-4.7.2
+4.8.0
 - Added support for 26.1
 - Added particles:
   - COPPER_FIRE_FLAME
