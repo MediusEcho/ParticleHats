@@ -22,6 +22,8 @@ public class ParticleData {
 	private ItemStack block;
 	private double scale;
 	private ItemStackData stackData;
+	private int geyserWaterBlocks;
+	private float geyserBurstImpulse;
 	
 	private int[] legacyItemPacketData;
 	private int[] legacyBlockPacketData;
@@ -38,6 +40,8 @@ public class ParticleData {
 		block = new ItemStack(Material.STONE);
 		scale = 1;
 		stackData = new ItemStackData(this);
+		geyserWaterBlocks = 3;
+		geyserBurstImpulse = 1.0f;
 		
 		supportsLegacy = ParticleHats.serverVersion <= 12;
 		if (supportsLegacy)
@@ -176,6 +180,22 @@ public class ParticleData {
 	public void setItemStackData (ItemStackData stackData) {
 		this.stackData = stackData;
 	}
+
+	public int getGeyserWaterBlocks() {
+		return geyserWaterBlocks;
+	}
+
+	public void setGeyserWaterBlocks(int geyserWaterBlocks) {
+		this.geyserWaterBlocks = geyserWaterBlocks;
+	}
+
+	public float getGeyserBurstImpulse() {
+		return geyserBurstImpulse;
+	}
+
+	public void setGeyserBurstImpulse(float geyserBurstImpulse) {
+		this.geyserBurstImpulse = geyserBurstImpulse;
+	}
 	
 	/**
 	 * Gets the legacy item packet data
@@ -245,6 +265,8 @@ public class ParticleData {
 		data.scale = scale;
 		data.color = color.clone(this);
 		data.stackData = stackData.clone(this);
+		data.geyserWaterBlocks = geyserWaterBlocks;
+		data.geyserBurstImpulse = geyserBurstImpulse;
 		
 		if (supportsLegacy) 
 		{
@@ -271,6 +293,8 @@ public class ParticleData {
 		
 		if (!data.color.equals(color)) return false;
 		if (!data.stackData.equals(stackData)) return false;
+		if (data.geyserWaterBlocks != geyserWaterBlocks) return false;
+		if (data.geyserBurstImpulse != geyserBurstImpulse) return false;
 		
 		return true;
 	}

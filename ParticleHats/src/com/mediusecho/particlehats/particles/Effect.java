@@ -261,6 +261,11 @@ public abstract class Effect {
                 case SPELL:
                     Particle.Spell spellData = new Particle.Spell(data.getColorData().getColor(), 1.0f);
                     renderer.spawnParticle(world, particleEffect, location, count, rxo, ryo, rzo, speed, spellData);
+
+				case GEYSER_BASE:
+					Particle.GeyserBase geyserBase =
+							new Particle.GeyserBase(data.getGeyserWaterBlocks(), data.getGeyserBurstImpulse());
+					renderer.spawnParticle(world,particleEffect,location,count, rxo, ryo, rzo, speed, geyserBase);
 			}
 		}
 	}

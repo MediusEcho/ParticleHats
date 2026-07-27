@@ -158,6 +158,15 @@ public enum ParticleEffect {
 
 	PAUSE_MOB_GROWTH(123, -1, (v) -> v.supports(26, 1), CompatibleMaterial.GOLDEN_DANDELION),
 	RESET_MOB_GROWTH(124, -1, (v) -> v.supports(26, 1), CompatibleMaterial.GOLDEN_DANDELION),
+
+	SULFUR_BUBBLES(125, -1, (v) -> v.supports(26, 2), CompatibleMaterial.HORN_CORAL_BLOCK),
+	NOXIOUS_GAS(126, -1, (v) -> v.supports(26,2), CompatibleMaterial.BONE_MEAL),
+	NOXIOUS_GAS_CLOUD(127, -1, (v) -> v.supports(26, 2), CompatibleMaterial.BONE_MEAL),
+	GEYSER(128, -1, (v) -> v.supports(26, 2), CompatibleMaterial.POTENT_SULFUR, ParticleProperty.INTEGER),
+	GEYSER_BASE(129, -1, (v) -> v.supports(26, 2), CompatibleMaterial.SULFUR, ParticleProperty.GEYSER_BASE),
+	GEYSER_POOF(130, -1, (v) -> v.supports(26, 2), CompatibleMaterial.CINNABAR, ParticleProperty.GEYSER_BASE),
+	GEYSER_PLUME(131, -1, (v) -> v.supports(26, 2), CompatibleMaterial.SULFUR_SPIKE, ParticleProperty.INTEGER),
+	SULFUR_CUBE_GOO(132, -1, (v) -> v.supports(26, 2), CompatibleMaterial.SULFUR_CUBE_BUCKET)
 	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
@@ -440,5 +449,6 @@ public enum ParticleEffect {
 		INTEGER,
 		FLOAT,
         SPELL,
+		GEYSER_BASE,
 	}
 }
