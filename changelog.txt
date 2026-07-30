@@ -1,3 +1,17 @@
+4.9.0
+- Added support for 26.2
+- Added particles:
+  - SULFUR_BUBBLES
+  - NOXIOUS_GAS
+  - NOXIOUS_GAS_CLOUD
+  - GEYSER
+  - GEYSER_BASE
+  - GEYSER_POOF
+  - GEYSER_PLUME
+  - SULFUR_CUBE_GOO
+- Added geyser properties to menu editor.
+- Updated en_US.lang with new particle names, descriptions & editor properties.
+
 4.8.0
 - Added support for 26.1
 - Added particles:

@@ -658,7 +658,8 @@ public enum Message {
 	EDITOR_PARTICLE_BLOCK_DESCRIPTION         ("/n&8Current:/n&8� &e{1}/n/n&8Block:/n&8� &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Block Data"),
 	EDITOR_PARTICLE_ITEM_DESCRIPTION          ("/n&8Current:/n&8� &e{1}/n/n&8Item:/n&8� &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Change Item Data"),
 	EDITOR_PARTICLE_ITEMSTACK_DESCRIPTION     ("/n&8Current:/n&8� &e{1}/n/n&8Items:/n&8� &e{2}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"),
-	
+	EDITOR_PARTICLE_GEYSER_DESCRIPTION        ("/n&8Current:/n&8� &e{1}/n/n&8Height:/n&8� &e{2}/n/n&8Impulse:/n&8� &e{3}/n/n&3Left Click to Change Particle/n&cRight Click to Edit Items"),
+
 	// Base Menu
 	EDITOR_BASE_MENU_TITLE         ("Editing ({1=...}&r)"),
 	EDITOR_EMPTY_SLOT_TITLE        ("&bEmpty Slot"),
@@ -984,6 +985,13 @@ public enum Message {
 	// Search Menu
 	EDITOR_SEARCH_MENU_TITLE ("Results for ({1=...}&r)"),
 	EDITOR_SEARCH_MENU_NO_RESULTS ("&cNo Search Results"),
+
+	// Geyser Menu
+	EDITOR_GEYSER_MENU_TITLE ("Editing Geyser Properties"),
+	EDITOR_GEYSER_MENU_SET_WATER_BLOCKS ("&bSet Height"),
+	EDITOR_GEYSER_MENU_WATER_BLOCKS_DESCRIPTION ("/n&8» &e{1}/n/n&3Left Click to Add 1/n&3Right Click to Subtract 1"),
+	EDITOR_GEYSER_MENU_SET_IMPULSE ("&bSet Impulse"),
+	EDITOR_GEYSER_MENU_IMPULSE_DESCRIPTION ("/n&8» &e{1}/n/n&3Left Click to Add 0.1/n&3Right Click to Subtract 0.1"),
 	
 	/**
 	 * NPC Manager

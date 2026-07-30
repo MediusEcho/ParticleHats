@@ -120,8 +120,23 @@ public class EditorParticleMenuOverview extends AbstractStaticMenu {
 		
 		for (int i = 0; i < targetHat.getType().getParticlesSupported(); i++)
 		{
-			if (targetHat.getParticleData(i).hasPropertyChanges()) {
-				database.saveParticleData(menuName, targetHat, i);
+			switch (core.getDatabaseType())
+			{
+				case YAML:
+				{
+					if (targetHat.getParticleData(i).isModified()) {
+						database.saveParticleData(menuName, targetHat, i);
+					}
+					break;
+				}
+
+				case MYSQL:
+				{
+					if (targetHat.getParticleData(i).hasPropertyChanges()) {
+						database.saveParticleData(menuName, targetHat, i);
+					}
+					break;
+				}
 			}
 		}
 	}

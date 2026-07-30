@@ -74,7 +74,7 @@ public class ParticleHats extends JavaPlugin {
 	
 	public static ParticleHats instance;
 	public static VersionInfo versionInfo;
-	public static double serverVersion;
+	public static int serverVersion;
 
 	private static CompatibleFactory compatibleFactory;
 	private static Logger logger;
@@ -99,7 +99,7 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.16;
+	private final double LANG_VERSION = 1.17;
 	
 	private ConcurrentHashMap<UUID, EntityState> entityState;
 	

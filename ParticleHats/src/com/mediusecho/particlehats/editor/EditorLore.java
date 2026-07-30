@@ -2,6 +2,7 @@ package com.mediusecho.particlehats.editor;
 
 import com.mediusecho.particlehats.ParticleHats;
 import com.mediusecho.particlehats.compatibility.CompatibleSound;
+import com.mediusecho.particlehats.database.type.DatabaseType;
 import com.mediusecho.particlehats.locale.Message;
 import com.mediusecho.particlehats.managers.SettingsManager;
 import com.mediusecho.particlehats.particles.Hat;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -281,8 +283,9 @@ public class EditorLore {
 	 */
 	public static void updateDoubleDescription (ItemStack item, double value, Message description)
 	{
+		DecimalFormat decimalFormat = new DecimalFormat("0.0");
 		String s = description.getValue()
-				.replace("{1}", Double.toString(value));
+				.replace("{1}", decimalFormat.format(value));
 		ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 	}
 	
@@ -668,6 +671,22 @@ public class EditorLore {
 						.replace("{2}", Integer.toString(items));
 				ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
 				break;
+			}
+
+			case GEYSER_BASE:
+			{
+				if (ParticleHats.instance.getDatabaseType() == DatabaseType.YAML) {
+					DecimalFormat decimalFormat = new DecimalFormat("0.0");
+					String description = Message.EDITOR_PARTICLE_GEYSER_DESCRIPTION.getValue();
+					ParticleData particleData = hat.getParticleData(particleIndex);
+					String s = description
+							.replace("{1}", particleName)
+							.replace("{2}", Integer.toString(particleData.getGeyserWaterBlocks()))
+							.replace("{3}", decimalFormat.format(particleData.getGeyserBurstImpulse()));
+
+					ItemUtil.setItemDescription(item, StringUtil.parseDescription(s));
+					break;
+				}
 			}
 			
 			default:

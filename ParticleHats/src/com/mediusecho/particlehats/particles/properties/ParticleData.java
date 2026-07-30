@@ -24,7 +24,8 @@ public class ParticleData {
 	private ItemStackData stackData;
 	private int geyserWaterBlocks;
 	private float geyserBurstImpulse;
-	
+	private boolean isModified;
+
 	private int[] legacyItemPacketData;
 	private int[] legacyBlockPacketData;
 	private boolean supportsLegacy = false;
@@ -42,6 +43,7 @@ public class ParticleData {
 		stackData = new ItemStackData(this);
 		geyserWaterBlocks = 3;
 		geyserBurstImpulse = 1.0f;
+		isModified = false;
 		
 		supportsLegacy = ParticleHats.serverVersion <= 12;
 		if (supportsLegacy)
@@ -185,16 +187,22 @@ public class ParticleData {
 		return geyserWaterBlocks;
 	}
 
-	public void setGeyserWaterBlocks(int geyserWaterBlocks) {
-		this.geyserWaterBlocks = geyserWaterBlocks;
+	public void setGeyserWaterBlocks (int geyserWaterBlocks) {
+		this.geyserWaterBlocks = MathUtil.clamp(geyserWaterBlocks, 1, 10);
+		isModified = true;
 	}
 
-	public float getGeyserBurstImpulse() {
+	public float getGeyserBurstImpulse () {
 		return geyserBurstImpulse;
 	}
 
-	public void setGeyserBurstImpulse(float geyserBurstImpulse) {
-		this.geyserBurstImpulse = geyserBurstImpulse;
+	public void setGeyserBurstImpulse (float geyserBurstImpulse) {
+		this.geyserBurstImpulse = (float) MathUtil.clamp(geyserBurstImpulse, 0.0, 2.0);
+		isModified = true;
+	}
+
+	public boolean isModified () {
+		return isModified;
 	}
 	
 	/**
@@ -226,6 +234,7 @@ public class ParticleData {
 	 */
 	public void clearPropertyChanges () {
 		modifiedProperties.clear();
+		isModified = false;
 	}
 	
 	/**
@@ -253,6 +262,7 @@ public class ParticleData {
 	 */
 	public void setProperty (String key, String value) {
 		modifiedProperties.put(key, value);
+		isModified = true;
 	}
 	
 	public ParticleData clone ()

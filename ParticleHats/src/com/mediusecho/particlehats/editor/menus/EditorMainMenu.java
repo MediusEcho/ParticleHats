@@ -345,8 +345,22 @@ public class EditorMainMenu extends AbstractStaticMenu {
 					
 					else 
 					{
-						if (targetHat.getParticleData(0).hasPropertyChanges()) {
-							core.getDatabase().saveParticleData(editorBaseMenu.getMenuInventory().getName(), targetHat, 0);
+						switch (core.getDatabaseType()) {
+							case YAML:
+							{
+								if (targetHat.getParticleData(0).isModified()) {
+									core.getDatabase().saveParticleData(editorManager.getMenuName(), targetHat, 0);
+								}
+								break;
+							}
+
+							case MYSQL:
+							{
+								if (targetHat.getParticleData(0).hasPropertyChanges()) {
+									core.getDatabase().saveParticleData(editorManager.getMenuName(), targetHat, 0);
+								}
+								break;
+							}
 						}
 					}
 				});
@@ -571,8 +585,22 @@ public class EditorMainMenu extends AbstractStaticMenu {
 		
 		if (targetHat.getType().getParticlesSupported() == 1)
 		{
-			if (targetHat.getParticleData(0).hasPropertyChanges()) {
-				database.saveParticleData(editorManager.getMenuName(), targetHat, 0);
+			switch (core.getDatabaseType()) {
+				case YAML:
+				{
+					if (targetHat.getParticleData(0).isModified()) {
+						database.saveParticleData(editorManager.getMenuName(), targetHat, 0);
+					}
+					break;
+				}
+
+				case MYSQL:
+				{
+					if (targetHat.getParticleData(0).hasPropertyChanges()) {
+						database.saveParticleData(editorManager.getMenuName(), targetHat, 0);
+					}
+					break;
+				}
 			}
 		}
 		
@@ -739,6 +767,17 @@ public class EditorMainMenu extends AbstractStaticMenu {
 				
 				menuManager.addMenu(editorItemStackMenu);
 				editorItemStackMenu.open();
+			}
+			break;
+
+			case GEYSER_BASE:
+			{
+				EditorGeyserMenu editorGeyserMenu = new EditorGeyserMenu(core, editorManager, owner, particleIndex, () -> {
+					EditorLore.updateParticleDescription(item, targetHat, particleIndex);
+				});
+
+				menuManager.addMenu(editorGeyserMenu);
+				editorGeyserMenu.open();
 			}
 			break;
 		}

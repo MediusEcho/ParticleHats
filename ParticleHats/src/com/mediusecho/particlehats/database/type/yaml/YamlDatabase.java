@@ -997,6 +997,18 @@ public class YamlDatabase implements Database {
 					}
 					break;
 				}
+
+				case GEYSER_BASE:
+				{
+					if (data.getGeyserWaterBlocks() != 3) {
+						config.set(path + "water-blocks", data.getGeyserWaterBlocks());
+					}
+
+					if (data.getGeyserBurstImpulse() != 1.0f) {
+						config.set(path + "impulse", data.getGeyserBurstImpulse());
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -1107,6 +1119,19 @@ public class YamlDatabase implements Database {
 							double y = config.getDouble(path + "item-velocity.y", 0);
 							double z = config.getDouble(path + "item-velocity.z", 0);
 							itemStackData.setVelocity(x, y, z);
+							break;
+						}
+
+						case GEYSER_BASE:
+						{
+							ParticleData data = hat.getParticleData(index);
+							if (config.contains(path + "water-blocks")) {
+								data.setGeyserWaterBlocks(config.getInt(path + "water-blocks"));
+							}
+
+							if (config.contains(path + "impulse")) {
+								data.setGeyserBurstImpulse((float) config.getDouble(path + "impulse"));
+							}
 							break;
 						}
 					}

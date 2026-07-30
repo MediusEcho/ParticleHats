@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val buildId = "com.mediusecho"
-val buildVersion = "4.8.0"
+val buildVersion = "4.9.0"
 
 plugins {
     java
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.10-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT")
     compileOnly("com.github.LeonMangler:SuperVanish:6.2.18-3") {
         exclude("*", "*")
     }
