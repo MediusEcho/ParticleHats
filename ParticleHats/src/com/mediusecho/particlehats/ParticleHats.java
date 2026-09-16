@@ -99,7 +99,7 @@ public class ParticleHats extends JavaPlugin {
 	private YamlConfiguration lang;
 	
 	// Update en_US.lang version as well.
-	private final double LANG_VERSION = 1.17;
+	private final double LANG_VERSION = 1.18;
 	
 	private ConcurrentHashMap<UUID, EntityState> entityState;
 	

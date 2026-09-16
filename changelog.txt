@@ -1,5 +1,5 @@
 4.9.0
-- Added support for 26.2
+- Added support for 26.2 & 26.3
 - Added particles:
   - SULFUR_BUBBLES
   - NOXIOUS_GAS
@@ -9,6 +9,9 @@
   - GEYSER_POOF
   - GEYSER_PLUME
   - SULFUR_CUBE_GOO
+  - RED_POPLAR_LEAVES
+  - ORANGE_POPLAR_LEAVES
+  - YELLOW_POPLAR_LEAVES
 - Added geyser properties to menu editor.
 - Updated en_US.lang with new particle names, descriptions & editor properties.
 

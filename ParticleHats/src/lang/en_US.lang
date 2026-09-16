@@ -16,7 +16,7 @@
 #                                                                           #
 #############################################################################
 
-version: 1.17
+version: 1.18
 
 # Called if there was an issue retrieving a message
 unknown: "&cUnknown Message"
@@ -579,6 +579,12 @@ particle_geyser_plume_name: "&bGeyser Plume"
 particle_geyser_plume_description: ""
 particle_sulfur_cube_goo_name: "&bSulfur Cube Goo"
 particle_sulfur_cube_goo_description: ""
+particle_red_poplar_leaves_name: "&bRed Poplar Leaves"
+particle_red_poplar_leaves_description: ""
+particle_orange_poplar_leaves_name: "&bOrange Poplar Leaves"
+particle_orange_poplar_leaves_description: ""
+particle_yellow_poplar_leaves_name: "&bYellow Poplar Leaves"
+particle_yellow_poplar_leaves_description: ""
 
 
 ##########################

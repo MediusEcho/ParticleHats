@@ -166,7 +166,11 @@ public enum ParticleEffect {
 	GEYSER_BASE(129, -1, (v) -> v.supports(26, 2), CompatibleMaterial.SULFUR, ParticleProperty.GEYSER_BASE),
 	GEYSER_POOF(130, -1, (v) -> v.supports(26, 2), CompatibleMaterial.CINNABAR, ParticleProperty.GEYSER_BASE),
 	GEYSER_PLUME(131, -1, (v) -> v.supports(26, 2), CompatibleMaterial.SULFUR_SPIKE, ParticleProperty.INTEGER),
-	SULFUR_CUBE_GOO(132, -1, (v) -> v.supports(26, 2), CompatibleMaterial.SULFUR_CUBE_BUCKET)
+	SULFUR_CUBE_GOO(132, -1, (v) -> v.supports(26, 2), CompatibleMaterial.SULFUR_CUBE_BUCKET),
+
+	RED_POPLAR_LEAVES(133, -1, (v) -> v.supports(26, 3), CompatibleMaterial.RED_POPLAR_LEAVES),
+	ORANGE_POPLAR_LEAVES(134, -1, (v) -> v.supports(26, 3), CompatibleMaterial.ORANGE_POPLAR_LEAVES),
+	YELLOW_POPLAR_LEAVES(135, -1, (v) -> v.supports(26, 3), CompatibleMaterial.YELLOW_POPLAR_LEAVES)
 	;
 	
 	private static final Map<String, ParticleEffect> particleNames   = new HashMap<String, ParticleEffect>();
