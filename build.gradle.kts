@@ -65,13 +65,3 @@ tasks.withType<ShadowJar> {
     archiveVersion.set("")
     relocate("org.bstats", "com.mediusecho.particlehats.metrics")
 }
-
-subprojects {
-    apply(plugin = "java")
-
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    }
-}
